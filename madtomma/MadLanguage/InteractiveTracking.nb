@@ -1,0 +1,1833 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     55467,       1823]
+NotebookOptionsPosition[     47736,       1589]
+NotebookOutlinePosition[     48199,       1607]
+CellTagsIndexPosition[     48156,       1604]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Interactive Tracking with MAD", "Title"],
+
+Cell["John Jowett", "Subtitle"],
+
+Cell["4/7/1998", "Subsubtitle"],
+
+Cell["THIS EXAMPLE NEEDS SOME CLEANING UP", "Text"],
+
+Cell["\<\
+This notebook provides an interactive graphical interface to MAD tracking.  \
+In particular it allows you to pick coordinates off a phase space plot and \
+feed them back to MAD for further tracking.  It also manages a database \
+recording all the tracking cases that have been studied so far.\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell["Setup ", "Section"],
+
+Cell[BoxData[
+ RowBox[{"NotebookOpen", "[", 
+  "\"\<~/public/math/Miscellaneous/LivingWithUnix.nb\>\"", "]"}]], "Input"],
+
+Cell[CellGroupData[{
+
+Cell["Packages needed ", "Subsection",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<Madtomma`MadLanguage`MADinput`\>\"", 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<Madtomma`Mfs`TrackTable`\>\"", "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<Madtomma`Mfs`ColorListPlot`\>\"", "]"}]], "Input",\
+
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<Graphics`MultipleListPlot`\>\"", "]"}]], "Input",
+ InitializationCell->True],
+
+Cell["\<\
+The following packages are useful if the machine to be tracked has been \
+created in the system defined in the notebook \
+Madtomma`Imperf`Imperfections.nb.  \
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<Madtomma`Imperf`ManageCases`\>\"", "]"}]], "Input",\
+
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<Madtomma`Dynap`dynaView`\>\"", "]"}]], "Input",
+ InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Function to generate a name for a new .tfs file", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"newTfsFileName", "[", "]"}], ":=", "\n", "\t", 
+  RowBox[{"\"\<track\>\"", "<>", 
+   RowBox[{"ToString", "[", 
+    RowBox[{"1", "+", 
+     RowBox[{"Max", "[", 
+      RowBox[{"ToExpression", "[", 
+       RowBox[{"StringReplace", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"{", "\"\<0\>\"", "}"}], "\[Union]", 
+          RowBox[{"FileNames", "[", "\"\<track*.tfs\>\"", "]"}]}], ",", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"\"\<track\>\"", "->", "\"\<\>\""}], ",", 
+           RowBox[{"\"\<.tfs\>\"", "->", "\"\<\>\""}]}], "}"}]}], "]"}], 
+       "]"}], "]"}]}], "\n", "\t\t\t", "]"}], "<>", 
+   "\"\<.tfs\>\""}]}]], "Input",
+ InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Functions defining the tracking session", "Subsection"],
+
+Cell["\<\
+A given tracking run is idnetified by a unique tag (which might be a symbol \
+or a short string).  Various functions are assigned values for this tag.   \
+E.g., trackDescription[tag] an informative string describing the case being \
+tracked; trackTableFile[tag] gives the file containing the results of the \
+tracking; trackSpec[tag] is a list of MADinput objects specifying how the \
+tracking is done.\
+\>", "Text"],
+
+Cell["\<\
+Parametrise the tracking run with the following function.  It generates a \
+MADinput object that will do the tracking.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"trackTemplate", "[", 
+   RowBox[{
+   "tag_", ",", "opticsfile_", ",", "deltap_", ",", "damp_", ",", "initials_",
+     ",", "turns_"}], "]"}], ":=", 
+  RowBox[{"{", "\n", "\t\t", 
+   RowBox[{
+    RowBox[{"MADcomment", "[", 
+     RowBox[{"trackDescription", "[", "tag", "]"}], "]"}], ",", "\n", "\t\t", 
+    
+    RowBox[{"MADtitle", "[", 
+     RowBox[{"trackDescription", "[", "tag", "]"}], "]"}], ",", "\n", "\t\t", 
+    "\"\<COGUESS,automatic=True\>\"", ",", "\n", "\t\t", 
+    RowBox[{"MADcall", "[", "opticsfile", "]"}], ",", "\n", "\t\t", 
+    "\"\<BEAM,particle=POSITRON,energy=EGeV,radiate\>\"", ",", "\n", "\t\t", 
+    RowBox[{"\"\<EMIT,deltap=\>\"", "<>", 
+     RowBox[{"ToString", "[", "deltap", "]"}]}], ",", "\n", "\t\t ", 
+    "\"\<Beam,ex=1e-8 , ey=1e-8, et=1e-6\>\"", ",", "\n", "\t\t", 
+    RowBox[{"If", "[", 
+     RowBox[{"damp", ",", "\"\<TRACK,DAMP\>\"", ",", "\"\<TRACK,-DAMP\>\""}], 
+     "]"}], ",", "\n", "\t\t", "initials", ",", "\n", "\t\t", 
+    RowBox[{"MADrun", "[", "turns", "]"}], ",", "\n", "\t\t", 
+    "\"\<ENDTRACK\>\"", ",", "\n", "\t\t", 
+    RowBox[{"MADarchive", "[", 
+     RowBox[{"TRACK", ",", 
+      RowBox[{"trackTableFile", "[", "tag", "]"}]}], "]"}]}], "\n", "\t", 
+   "}"}]}]], "Input",
+ InitializationCell->True],
+
+Cell["\<\
+Set these functions up so that when called without arguments they list the \
+values they have.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"trackDescription", "[", "]"}], ":=", 
+  RowBox[{"trackDescription", " ", "/@", " ", 
+   RowBox[{"domain", "[", "trackDescription", "]"}]}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"trackTableFile", "[", "]"}], ":=", 
+  RowBox[{"trackTableFile", " ", "/@", " ", 
+   RowBox[{"domain", "[", "trackTableFile", "]"}]}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"showTrackDescription", ":=", 
+  RowBox[{"TableForm", "[", "\n", "\t\t", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"#", ",", 
+        RowBox[{"trackTableFile", "[", "#", "]"}], ",", 
+        RowBox[{"trackDescription", "[", "#", "]"}]}], "}"}], "&"}], " ", "/@",
+      " ", 
+     RowBox[{"domain", "[", "trackDescription", "]"}]}], ",", "\n", "\t\t", 
+    RowBox[{"TableHeadings", "->", 
+     RowBox[{"{", 
+      RowBox[{"None", ",", 
+       RowBox[{"{", 
+        RowBox[{
+        "\"\<tag\>\"", ",", "\"\<Track data\>\"", ",", 
+         "\"\<Description\>\""}], "}"}]}], "}"}]}]}], "\n", "\t\t", 
+   "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell["\<\
+Run the following once tag, trackTableFile and trackSpec have been defined.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"doTracking", "[", "tag_", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"madfile", "=", "\"\<trackSpec.mad\>\""}], ",", 
+      RowBox[{"echofile", "=", "\"\<trackSpec.echo\>\""}]}], "}"}], ",", "\n",
+     "\t\t", 
+    RowBox[{
+     RowBox[{"bumpFile", "[", "madfile", "]"}], ";", "\n", "\t\t", 
+     RowBox[{"bumpFile", "[", "\"\<print\>\"", "]"}], ";", "\n", "\t\t", 
+     RowBox[{"bumpFile", "[", "echofile", "]"}], ";", "\n", "\t\t", 
+     RowBox[{"bumpFile", "[", 
+      RowBox[{"trackTableFile", "[", "tag", "]"}], "]"}], ";", "\n", "\t\t", 
+     RowBox[{"makeMADfile", "[", 
+      RowBox[{"\"\<trackSpec.mad\>\"", ",", 
+       RowBox[{"trackSpec", "[", "tag", "]"}]}], "]"}], ";", "\n", "\t\t", 
+     RowBox[{"Run", "[", 
+      RowBox[{
+      "\"\<mad -new < \>\"", " ", "<>", " ", "madfile", " ", "<>", " ", 
+       "\"\< > \>\"", " ", "<>", " ", "echofile"}], "]"}], ";", "\n", "\t\t", 
+     
+     RowBox[{"FileNames", "[", 
+      RowBox[{"trackTableFile", "[", "tag", "]"}], "]"}]}]}], "\n", "\t\t", 
+   "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell["\<\
+The idea is that we maintain a database of interesting tracking cases.   Each \
+case represents a tracking job labelled by a tag (usually a short string that \
+is quite easy to type).  There are some functions that should return values \
+for each tag that is defined.  These contain an English description of the \
+tracking case, a specification of how it was done and the name of the file \
+containing the results.  Other items could be added. The definitions of these \
+functions are stored in a database file by the following function.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"Clear", "[", "saveTrackDescription", "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"saveTrackDescription", "[", "filename_String", "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\n", "\t\t", 
+    RowBox[{
+     RowBox[{"bumpFile", "[", "filename", "]"}], ";", "\n", "\t\t", 
+     RowBox[{"trackingDir", "=", "filename"}], ";", "\n", "\t\t", 
+     RowBox[{"Save", "[", 
+      RowBox[{"f", ",", 
+       RowBox[{"{", 
+        RowBox[{"trackDescription", ",", "trackTableFile", ",", "trackSpec"}],
+         "}"}]}], "]"}]}]}], "\n", "\t", "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"Save", "[", 
+  RowBox[{"\"\<junk.m\>\"", ",", "doTracking"}], "]"}]], "Input"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Define configuration", "Section"],
+
+Cell[BoxData["caseName"], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+  "Get", "[", 
+   "\"\</afs/cern.ch/eng/lep/imperf/lep98/k368physA3n3DT/imperfSettings.m\>\"\
+", "]"}], ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"SetDirectory", "[", 
+  RowBox[{"workDirs", "[", "ideal", "]"}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"FileNames", "[", "]"}]], "Input"],
+
+Cell[BoxData["seeds"], "Input"],
+
+Cell["Load parameter database of quantities already calculated.", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Get", "[", "\"\<imperf.m\>\"", "]"}], ";"}]], "Input"],
+
+Cell["\<\
+Take the first machine, provided there's nothing funny about it.\
+\>", "Text"],
+
+Cell[BoxData["emitt2p0"], "Input"],
+
+Cell[BoxData["emittq2p0"], "Input"],
+
+Cell[BoxData[
+ RowBox[{"varDynapp0", "[", 
+  RowBox[{"[", "1", "]"}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"trackingCase", "=", 
+  RowBox[{"First", "[", 
+   RowBox[{"cases", "[", 
+    RowBox[{"imperf", ",", "p"}], "]"}], "]"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"SetDirectory", "[", 
+  RowBox[{"iDir", "[", "trackingCase", "]"}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Get", "[", "\"\<TrackDescription.m\>\"", "]"}], ";"}]], "Input"],
+
+Cell["\<\
+The following quantities need values;  if they have not, then assign them \
+below.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"EGeV", ",", "deltap", ",", "RFswitch"}], "}"}]], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Tracking ", "Section"],
+
+Cell[CellGroupData[{
+
+Cell["Regularly Tabulated Initial Conditions", "Subsection"],
+
+Cell["\<\
+Before we start we need an initial set of initial conditions to look at.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"initialConditions", "=", 
+  RowBox[{"Table", "[", 
+   RowBox[{
+    RowBox[{"MADstart", "[", 
+     RowBox[{
+      RowBox[{"N", "[", 
+       RowBox[{
+        SuperscriptBox["10", 
+         RowBox[{"-", "5"}]], "+", 
+        RowBox[{"0", "  ", 
+         RowBox[{"0.004", " ", "/", "15"}]}]}], "]"}], ",", "0", ",", 
+      RowBox[{
+       RowBox[{"1.", " ", 
+        SuperscriptBox["10", 
+         RowBox[{"-", "5"}]]}], "+", 
+       RowBox[{"0", "  ", "1.", " ", 
+        SuperscriptBox["10", 
+         RowBox[{"-", "4"}]]}], "+", " ", 
+       RowBox[{"0", " ", 
+        RowBox[{"N", "[", 
+         RowBox[{
+          RowBox[{"60", "/", "16"}], " ", "2", " ", 
+          SuperscriptBox["10", 
+           RowBox[{"-", "4"}]], "k"}], "]"}]}]}], ",", "0", ",", "0", ",", 
+      RowBox[{"0.015", " ", 
+       RowBox[{"k", "/", "16"}]}]}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"k", ",", "1", ",", "16"}], "}"}]}], "]"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"MADcmt", "=", 
+  "\"\<Initial values, vary PT, X=Y=10^-5, damping.\>\""}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"tag", "=", "\"\<VaryPTsmallXYdamp\>\""}]], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Initial conditions read from plots", "Subsection"],
+
+Cell["\<\
+Pick coordinates off it, using the Input/Get Graphics Coordinates mechanism.  \
+This appears to have a bug on Unix, in that instead of getting a point (x,y), \
+we get a pair of points {{x,x},{y,y}}.  This can be fixed as below. Paste the \
+data below,  THEN EVALUATE the cell containing it and the next one.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0.0143589", ",", " ", "0.0143589"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"0.000148853", ",", " ", "0.000148853"}], "}"}]}], "}"}], ",", 
+   "\n", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0.0155526", ",", " ", "0.0155526"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"0.000128711", ",", " ", "0.000128711"}], "}"}]}], "}"}], ",", 
+   "\n", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0.0160301", ",", " ", "0.0160301"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"9.41805", "*", 
+        RowBox[{"10", "^", 
+         RowBox[{"-", "05"}]}]}], ",", " ", 
+       RowBox[{"9.41805", "*", 
+        RowBox[{"10", "^", 
+         RowBox[{"-", "05"}]}]}]}], "}"}]}], "}"}], ",", "\n", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0.0165076", ",", " ", "0.0165076"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"6.25278", "*", 
+        RowBox[{"10", "^", 
+         RowBox[{"-", "05"}]}]}], ",", " ", 
+       RowBox[{"6.25278", "*", 
+        RowBox[{"10", "^", 
+         RowBox[{"-", "05"}]}]}]}], "}"}]}], "}"}], ",", "\n", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0.0163882", ",", " ", "0.0163882"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"3.66301", "*", 
+        RowBox[{"10", "^", 
+         RowBox[{"-", "05"}]}]}], ",", " ", 
+       RowBox[{"3.66301", "*", 
+        RowBox[{"10", "^", 
+         RowBox[{"-", "05"}]}]}]}], "}"}]}], "}"}], ",", "\n", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0.0163882", ",", " ", "0.0163882"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"1.50487", "*", 
+        RowBox[{"10", "^", 
+         RowBox[{"-", "05"}]}]}], ",", " ", 
+       RowBox[{"1.50487", "*", 
+        RowBox[{"10", "^", 
+         RowBox[{"-", "05"}]}]}]}], "}"}]}], "}"}], ",", "\n", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0.0157913", ",", " ", "0.0157913"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"1.36099", "*", 
+        RowBox[{"10", "^", 
+         RowBox[{"-", "05"}]}]}], ",", " ", 
+       RowBox[{"1.36099", "*", 
+        RowBox[{"10", "^", 
+         RowBox[{"-", "05"}]}]}]}], "}"}]}], "}"}], ",", "\n", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0.0136426", ",", " ", "0.0136426"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"0.000118639", ",", " ", "0.000118639"}], "}"}]}], "}"}], ",", 
+   "\n", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0.0130458", ",", " ", "0.0130458"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"0.000108568", ",", " ", "0.000108568"}], "}"}]}], "}"}], ",", 
+   "\n", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0.0122101", ",", " ", "0.0122101"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"0.000161802", ",", " ", "0.000161802"}], "}"}]}], "}"}], ",", 
+   "\n", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0.00994207", ",", " ", "0.00994207"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"0.000204965", ",", " ", "0.000204965"}], "}"}]}], "}"}], ",", 
+   "\n", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0.00624152", ",", " ", "0.00624152"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"0.000217914", ",", " ", "0.000217914"}], "}"}]}], "}"}], ",", 
+   "\n", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0.00337658", ",", " ", "0.00337658"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"0.000219353", ",", " ", "0.000219353"}], "}"}]}], "}"}], ",", 
+   "\n", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0.00839023", ",", " ", "0.00839023"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"0.000238056", ",", " ", "0.000238056"}], "}"}]}], "}"}], ",", 
+   "\n", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0.0148363", ",", " ", "0.0148363"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"0.000207842", ",", " ", "0.000207842"}], "}"}]}], "}"}], ",", 
+   "\n", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0.016985", ",", " ", "0.016985"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"0.000173312", ",", " ", "0.000173312"}], "}"}]}], "}"}], ",", 
+   "\n", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0.0194919", ",", " ", "0.0194919"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"0.000112884", ",", " ", "0.000112884"}], "}"}]}], "}"}]}], 
+  "}"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"0.0136655", ",", " ", 
+     RowBox[{"5.4761", "*", 
+      RowBox[{"10", "^", 
+       RowBox[{"-", "06"}]}]}]}], "}"}], ",", " ", 
+   RowBox[{"{", 
+    RowBox[{"0.0157678", ",", " ", 
+     RowBox[{"3.58825", "*", 
+      RowBox[{"10", "^", 
+       RowBox[{"-", "06"}]}]}]}], "}"}], ",", " ", "\n", 
+   RowBox[{"{", 
+    RowBox[{"0.0176789", ",", " ", 
+     RowBox[{"3.58825", "*", 
+      RowBox[{"10", "^", 
+       RowBox[{"-", "06"}]}]}]}], "}"}], ",", " ", 
+   RowBox[{"{", 
+    RowBox[{"0.0195901", ",", " ", 
+     RowBox[{"3.58825", "*", 
+      RowBox[{"10", "^", 
+       RowBox[{"-", "06"}]}]}]}], "}"}], ",", " ", "\n", 
+   RowBox[{"{", 
+    RowBox[{"0.0182523", ",", " ", 
+     RowBox[{
+      RowBox[{"-", "3.03931"}], "*", 
+      RowBox[{"10", "^", 
+       RowBox[{"-", "05"}]}]}]}], "}"}], ",", " ", 
+   RowBox[{"{", 
+    RowBox[{"0.0182523", ",", " ", 
+     RowBox[{
+      RowBox[{"-", "3.2281"}], "*", 
+      RowBox[{"10", "^", 
+       RowBox[{"-", "05"}]}]}]}], "}"}], ",", " ", "\n", 
+   RowBox[{"{", 
+    RowBox[{"0.0167234", ",", " ", 
+     RowBox[{
+      RowBox[{"-", "6.62623"}], "*", 
+      RowBox[{"10", "^", 
+       RowBox[{"-", "05"}]}]}]}], "}"}], ",", " ", 
+   RowBox[{"{", 
+    RowBox[{"0.0155767", ",", " ", 
+     RowBox[{
+      RowBox[{"-", "9.6468"}], "*", 
+      RowBox[{"10", "^", 
+       RowBox[{"-", "05"}]}]}]}], "}"}], ",", " ", "\n", 
+   RowBox[{"{", 
+    RowBox[{"0.0157678", ",", " ", 
+     RowBox[{
+      RowBox[{"-", "9.6468"}], "*", 
+      RowBox[{"10", "^", 
+       RowBox[{"-", "05"}]}]}]}], "}"}], ",", " ", 
+   RowBox[{"{", 
+    RowBox[{"0.0188256", ",", " ", 
+     RowBox[{"5.45603", "*", 
+      RowBox[{"10", "^", 
+       RowBox[{"-", "05"}]}]}]}], "}"}], ",", " ", "\n", 
+   RowBox[{"{", 
+    RowBox[{"0.0188256", ",", " ", "0.000113084"}], "}"}], ",", " ", 
+   RowBox[{"{", 
+    RowBox[{"0.0190168", ",", " ", "0.000113084"}], "}"}], ",", " ", "\n", 
+   RowBox[{"{", 
+    RowBox[{"0.0174878", ",", " ", "0.000165944"}], "}"}]}], "}"}]], "Input"],
+
+Cell["\<\
+The doubling seems to be fixed (new Mma version?) so we can just do\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"newCoords", "=", 
+  RowBox[{"(*", " ", 
+   RowBox[{"Map", "[", 
+    RowBox[{"First", ",", "%", ",", 
+     RowBox[{"{", "2", "}"}]}], "]"}], " ", "*)"}], " ", "%"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"Length", "[", "newCoords", "]"}]], "Input"],
+
+Cell["\<\
+Since this was an X, PX plot, we can turn this into a set of rules with\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"xpxrules", " ", "=", " ", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"X", "->", 
+       RowBox[{"#", "[", 
+        RowBox[{"[", "1", "]"}], "]"}]}], " ", ",", 
+      RowBox[{"PX", "->", 
+       RowBox[{"#", "[", 
+        RowBox[{"[", "2", "]"}], "]"}]}]}], " ", "}"}], "&"}], " ", "/@", " ",
+    "newCoords"}]}]], "Input"],
+
+Cell["\<\
+Make an informative comment that will go into the initial conditions file to \
+remind us what we were trying to do.   And put something in for the other \
+coordinates.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+  "MADcmt", "=", 
+   "\"\<Particles around resonance amplitude in X, PX. No damping.\>\""}], 
+  ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"initialConditions", "=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"MADstart", "[", 
+     RowBox[{"X", ",", "PX", ",", "Y", ",", "PY", ",", "T", ",", "PT"}], 
+     "]"}], "/.", "xpxrules"}], " ", "/.", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"Y", "->", "0.0002"}], ",", 
+     RowBox[{"PY", "->", "0"}], ",", 
+     RowBox[{"T", "->", "0"}], ",", 
+     RowBox[{"PT", "->", "0"}]}], "}"}]}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"tag", "=", "\"\<vrd3Dres\>\""}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"MADcmt", "=", 
+  "\"\<x,px around former resonance amplitude, small Y, 2SF \>\""}]], "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Define the tracking case and run MAD using the latest initial conditions\
+\>", "Subsection"],
+
+Cell[BoxData["tag"], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"trackDescription", "[", "tag", "]"}], "=", "MADcmt"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"trackTableFile", "[", "tag", "]"}], "=", 
+  RowBox[{"newTfsFileName", "[", "]"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"Directory", "[", "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"trackSpec", "[", "tag", "]"}], "=", 
+  RowBox[{"trackTemplate", "[", 
+   RowBox[{
+   "tag", ",", "\"\<opticdef.mad\>\"", ",", "0", ",", "True", ",", 
+    "initialConditions", ",", "100"}], "]"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"doTracking", "[", "tag", "]"}]], "Input"],
+
+Cell[BoxData["saveTrackDescription"], "Input"],
+
+Cell[BoxData[
+ RowBox[{"trackDescription", "[", "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"trackTableFile", "[", "]"}]], "Input"],
+
+Cell[BoxData["showTrackDescription"], "Input"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Phase space plots", "Section"],
+
+Cell[BoxData["PARTICLES"], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "Setup for ",
+ Cell[BoxData[
+  FormBox["Graphics", TraditionalForm]]]
+}], "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"hueTable", "[", "n_", "]"}], ":=", 
+  RowBox[{"Table", "[", 
+   RowBox[{
+    RowBox[{"Hue", "[", "z", "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"z", ",", ".7", ",", "0", ",", 
+      RowBox[{
+       RowBox[{"-", ".7"}], "/", 
+       RowBox[{"(", 
+        RowBox[{"PARTICLES", "-", "1"}], ")"}]}]}], "}"}]}], "]"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"$TextStyle", "=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"FontFamily", "->", "\"\<Times\>\""}], ",", 
+    RowBox[{"FontSize", "->", "16"}]}], "}"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"SetOptions", "[", 
+  RowBox[{"MultipleListPlot", ",", 
+   RowBox[{"PlotRange", "->", "All"}], ",", 
+   RowBox[{"Background", "->", 
+    RowBox[{"RGBColor", "[", 
+     RowBox[{"0", ",", "0", ",", "0"}], "]"}]}], ",", 
+   RowBox[{"AspectRatio", "->", "1"}], ",", 
+   RowBox[{"PlotJoined", "->", "False"}], ",", 
+   RowBox[{"TextStyle", "->", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"FontFamily", "->", "\"\<Times\>\""}], ",", 
+      RowBox[{"FontSize", "->", "14"}]}], "}"}]}], ",", 
+   RowBox[{"AxesStyle", "->", 
+    RowBox[{"{", 
+     RowBox[{"Thickness", "[", "0.007", "]"}], "}"}]}]}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"xpxplot", ":=", 
+  RowBox[{"MultipleListPlot", "[", 
+   RowBox[{
+    RowBox[{"Sequence", " ", "@@", " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"xpx", "[", "#", "]"}], "&"}], " ", "/@", " ", 
+       RowBox[{"Table", "[", 
+        RowBox[{"k", ",", 
+         RowBox[{"{", 
+          RowBox[{"k", ",", "1", ",", "PARTICLES"}], "}"}]}], "]"}]}], 
+      ")"}]}], ",", 
+    RowBox[{"SymbolStyle", "->", 
+     RowBox[{"hueTable", "[", "PARTICLES", "]"}]}], ",", 
+    RowBox[{"AxesLabel", "->", 
+     RowBox[{"{", 
+      RowBox[{"\"\<x\>\"", ",", "\"\<px\>\""}], "}"}]}], ",", 
+    RowBox[{"Frame", "->", "True"}], ",", 
+    RowBox[{"FrameLabel", "->", 
+     RowBox[{"{", 
+      RowBox[{"MADcmt", ",", "\"\< \>\"", ",", "titleInp", ",", "\"\< \>\""}],
+       "}"}]}]}], "]"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"xpxplot3", ":=", 
+  RowBox[{"MultipleListPlot", "[", 
+   RowBox[{
+    RowBox[{"Sequence", " ", "@@", " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"strobe", "[", 
+         RowBox[{
+          RowBox[{"xpx", "[", "#", "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"3", ",", "1"}], "}"}]}], "]"}], "&"}], " ", "/@", " ", 
+       RowBox[{"Table", "[", 
+        RowBox[{"k", ",", 
+         RowBox[{"{", 
+          RowBox[{"k", ",", "1", ",", "PARTICLES"}], "}"}]}], "]"}]}], 
+      ")"}]}], ",", 
+    RowBox[{"SymbolStyle", "->", 
+     RowBox[{"hueTable", "[", "PARTICLES", "]"}]}], ",", 
+    RowBox[{"AxesLabel", "->", 
+     RowBox[{"{", 
+      RowBox[{"\"\<x\>\"", ",", "\"\<px\>\""}], "}"}]}], ",", 
+    RowBox[{"Frame", "->", "True"}], ",", 
+    RowBox[{"FrameLabel", "->", 
+     RowBox[{"{", 
+      RowBox[{"MADcmt", ",", "\"\< \>\"", ",", "titleInp", ",", "\"\< \>\""}],
+       "}"}]}]}], "]"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"ypyplot", ":=", 
+  RowBox[{"MultipleListPlot", "[", 
+   RowBox[{
+    RowBox[{"Sequence", " ", "@@", " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"ypy", "[", "#", "]"}], "&"}], " ", "/@", " ", 
+       RowBox[{"Table", "[", 
+        RowBox[{"k", ",", 
+         RowBox[{"{", 
+          RowBox[{"k", ",", "1", ",", "PARTICLES"}], "}"}]}], "]"}]}], 
+      ")"}]}], ",", 
+    RowBox[{"SymbolStyle", "->", 
+     RowBox[{"hueTable", "[", "PARTICLES", "]"}]}], ",", 
+    RowBox[{"AxesLabel", "->", 
+     RowBox[{"{", 
+      RowBox[{"\"\<y\>\"", ",", "\"\<py\>\""}], "}"}]}], ",", 
+    RowBox[{"Frame", "->", "True"}], ",", 
+    RowBox[{"FrameLabel", "->", 
+     RowBox[{"{", 
+      RowBox[{"MADcmt", ",", "\"\< \>\"", ",", "titleInp", ",", "\"\< \>\""}],
+       "}"}]}]}], "]"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"tptplot", ":=", 
+  RowBox[{"MultipleListPlot", "[", 
+   RowBox[{
+    RowBox[{"Sequence", " ", "@@", " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"tpt", "[", "#", "]"}], "&"}], " ", "/@", " ", 
+       RowBox[{"Table", "[", 
+        RowBox[{"k", ",", 
+         RowBox[{"{", 
+          RowBox[{"k", ",", "1", ",", "PARTICLES"}], "}"}]}], "]"}]}], 
+      ")"}]}], ",", 
+    RowBox[{"SymbolStyle", "->", 
+     RowBox[{"hueTable", "[", "PARTICLES", "]"}]}], ",", 
+    RowBox[{"AxesLabel", "->", 
+     RowBox[{"{", 
+      RowBox[{"\"\<t\>\"", ",", "\"\<pt\>\""}], "}"}]}], ",", 
+    RowBox[{"Frame", "->", "True"}], ",", 
+    RowBox[{"FrameLabel", "->", 
+     RowBox[{"{", 
+      RowBox[{"MADcmt", ",", "\"\< \>\"", ",", "titleInp", ",", "\"\< \>\""}],
+       "}"}]}]}], "]"}]}]], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Setup to read results of latest tracking", "Subsection"],
+
+Cell["\<\
+Read in the tracking results for a given tag.  This just sets the values of \
+some standard global variables (xpx etc.)\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"setqpdata", "[", "tag_", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", 
+    RowBox[{
+     RowBox[{"tracking", "=", 
+      RowBox[{"makeTrackTable", "[", 
+       RowBox[{"tfsRead", "[", 
+        RowBox[{
+         RowBox[{"trackTableFile", "[", "tag", "]"}], ",", 
+         RowBox[{"Verbose", "->", "False"}]}], "]"}], "]"}]}], ";", 
+     RowBox[{"Print", "[", 
+      RowBox[{"mfsInterpretKeys", "[", "tracking", "]"}], "]"}], ";", "\n", 
+     "\t\t", 
+     RowBox[{"Print", "[", 
+      RowBox[{"mfsColumnNames", "[", "tracking", "]"}], "]"}], ";", "\n", 
+     "\t\t", 
+     RowBox[{"Clear", "[", 
+      RowBox[{"xpx", ",", "ypy", ",", "tpt"}], "]"}], ";", "\n", "\t\t", 
+     RowBox[{
+      RowBox[{"xpx", "[", "n_", "]"}], ":=", 
+      RowBox[{"Transpose", "[", 
+       RowBox[{"notLost", " ", "/@", " ", 
+        RowBox[{"mfsColumn", "[", 
+         RowBox[{"tracking", ",", "n", ",", 
+          RowBox[{"{", 
+           RowBox[{"\"\<X\>\"", ",", "\"\<PX\>\""}], "}"}]}], "]"}]}], 
+       "]"}]}], ";", "\n", "\t\t", 
+     RowBox[{
+      RowBox[{"ypy", "[", "n_", "]"}], ":=", 
+      RowBox[{"Transpose", "[", 
+       RowBox[{"notLost", " ", "/@", " ", 
+        RowBox[{"mfsColumn", "[", 
+         RowBox[{"tracking", ",", "n", ",", 
+          RowBox[{"{", 
+           RowBox[{"\"\<Y\>\"", ",", "\"\<PY\>\""}], "}"}]}], "]"}]}], 
+       "]"}]}], ";", "\n", "\t\t", 
+     RowBox[{
+      RowBox[{"tpt", "[", "n_", "]"}], ":=", 
+      RowBox[{"Transpose", "[", 
+       RowBox[{"notLost", " ", "/@", " ", 
+        RowBox[{"mfsColumn", "[", 
+         RowBox[{"tracking", ",", "n", ",", 
+          RowBox[{"{", 
+           RowBox[{"\"\<T\>\"", ",", "\"\<DELTAP\>\""}], "}"}]}], "]"}]}], 
+       "]"}]}], ";"}]}], "\n", "\t\t", "]"}]}]], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Phase plane plots for cases of interest", "Subsection"],
+
+Cell[BoxData["showTrackDescription"], "Input"],
+
+Cell[CellGroupData[{
+
+Cell["First look, with no damping", "Subsubsection"],
+
+Cell[BoxData[
+ RowBox[{"MemoryInUse", "[", "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"setqpdata", "[", "\"\<FirstLook\>\"", "]"}]], "Input"],
+
+Cell[BoxData["xpxplot"], "Input"],
+
+Cell[BoxData[
+ RowBox[{"MemoryInUse", "[", "]"}]], "Input"],
+
+Cell[BoxData["tptplot"], "Input"],
+
+Cell[BoxData["ypyplot"], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Vary X, samll constant Y, no damping", "Subsubsection"],
+
+Cell[BoxData[
+ RowBox[{"setqpdata", "[", "\"\<VaryXsmallY\>\"", "]"}]], "Input"],
+
+Cell[BoxData["xpxplot"], "Input"],
+
+Cell[BoxData["ypyplot"], "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Vary PT, X=Y snall, no damping", "Subsubsection"],
+
+Cell[BoxData["tag"], "Input"],
+
+Cell[BoxData[
+ RowBox[{"setqpdata", "[", "\"\<VaryPTsmallXY\>\"", "]"}]], "Input"],
+
+Cell[BoxData["xpxplot"], "Input"],
+
+Cell[BoxData["tptplot"], "Input"],
+
+Cell[BoxData["ypyplot"], "Input"]
+}, Closed]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Spectra of the motion", "Section"],
+
+Cell[BoxData[
+ RowBox[{"?", "power*"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"ListPlot", "[", 
+  RowBox[{
+   RowBox[{"powerSpectrum", "[", 
+    RowBox[{"tracking", ",", "13", ",", "\"\<X\>\""}], "]"}], ",", 
+   RowBox[{"PlotJoined", "->", "True"}], ",", 
+   RowBox[{"PlotRange", "->", "All"}]}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"MultipleListPlot", "[", 
+  RowBox[{
+   RowBox[{"Sequence", "@@", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"powerSpectrum", "[", 
+         RowBox[{"tracking", ",", "#", ",", "\"\<X\>\""}], "]"}], ")"}], 
+       "&"}], "/@", 
+      RowBox[{"Table", "[", 
+       RowBox[{"k", ",", 
+        RowBox[{"{", 
+         RowBox[{"k", ",", "1", ",", "PARTICLES"}], "}"}]}], "]"}]}], ")"}]}],
+    ",", 
+   RowBox[{"PlotJoined", "->", "True"}], ",", 
+   RowBox[{"PlotStyle", "->", 
+    RowBox[{"hueTable", "[", "PARTICLES", "]"}]}], ",", 
+   RowBox[{"AxesLabel", "->", 
+    RowBox[{"{", 
+     RowBox[{"\"\<Qx\>\"", ",", "\"\<X\>\""}], "}"}]}], ",", 
+   RowBox[{"Frame", "->", "True"}], ",", 
+   RowBox[{"FrameLabel", "->", 
+    RowBox[{"{", 
+     RowBox[{"MADcmt", ",", "\"\< \>\"", ",", "titleInp", ",", "\"\< \>\""}], 
+     "}"}]}], ",", 
+   RowBox[{"PlotRange", "->", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"0", ",", ".5"}], "}"}], ",", "All"}], "}"}]}]}], 
+  "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"MultipleListPlot", "[", 
+  RowBox[{
+   RowBox[{"Sequence", "@@", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"powerSpectrum", "[", 
+         RowBox[{"tracking", ",", "#", ",", "\"\<Y\>\""}], "]"}], ")"}], 
+       "&"}], "/@", 
+      RowBox[{"Table", "[", 
+       RowBox[{"k", ",", 
+        RowBox[{"{", 
+         RowBox[{"k", ",", "1", ",", "PARTICLES"}], "}"}]}], "]"}]}], ")"}]}],
+    ",", 
+   RowBox[{"PlotJoined", "->", "True"}], ",", 
+   RowBox[{"PlotStyle", "->", 
+    RowBox[{"hueTable", "[", "PARTICLES", "]"}]}], ",", 
+   RowBox[{"AxesLabel", "->", 
+    RowBox[{"{", 
+     RowBox[{"\"\<Qy\>\"", ",", "\"\<Y\>\""}], "}"}]}], ",", 
+   RowBox[{"Frame", "->", "True"}], ",", 
+   RowBox[{"FrameLabel", "->", 
+    RowBox[{"{", 
+     RowBox[{"MADcmt", ",", "\"\< \>\"", ",", "titleInp", ",", "\"\< \>\""}], 
+     "}"}]}], ",", 
+   RowBox[{"PlotRange", "->", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"0.", ",", ".5"}], "}"}], ",", "All"}], "}"}]}]}], 
+  "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"MultipleListPlot", "[", 
+  RowBox[{
+   RowBox[{"Sequence", "@@", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"powerSpectrum", "[", 
+         RowBox[{"tracking", ",", "#", ",", "\"\<DELTAP\>\""}], "]"}], ")"}], 
+       "&"}], "/@", 
+      RowBox[{"Table", "[", 
+       RowBox[{"k", ",", 
+        RowBox[{"{", 
+         RowBox[{"k", ",", "1", ",", "PARTICLES"}], "}"}]}], "]"}]}], ")"}]}],
+    ",", 
+   RowBox[{"PlotJoined", "->", "True"}], ",", 
+   RowBox[{"PlotStyle", "->", 
+    RowBox[{"hueTable", "[", "PARTICLES", "]"}]}], ",", 
+   RowBox[{"AxesLabel", "->", 
+    RowBox[{"{", 
+     RowBox[{"\"\<Qt\>\"", ",", "\"\<PT\>\""}], "}"}]}], ",", 
+   RowBox[{"Frame", "->", "True"}], ",", 
+   RowBox[{"FrameLabel", "->", 
+    RowBox[{"{", 
+     RowBox[{"MADcmt", ",", "\"\< \>\"", ",", "titleInp", ",", "\"\< \>\""}], 
+     "}"}]}], ",", 
+   RowBox[{"PlotRange", "->", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"0.", ",", ".5"}], "}"}], ",", "All"}], "}"}]}]}], 
+  "]"}]], "Input"],
+
+Cell["\<\
+Get the tune of a given particle as the maximum of its power spectrum\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"QxFT", "[", "tracking_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"First", "[", 
+     RowBox[{"First", "[", 
+      RowBox[{"Sort", "[", 
+       RowBox[{
+        RowBox[{"N", "[", 
+         RowBox[{"powerSpectrum", "[", 
+          RowBox[{"tracking", ",", "#", ",", "\"\<X\>\""}], "]"}], "]"}], ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"#2", "[", 
+           RowBox[{"[", "2", "]"}], "]"}], "<", 
+          RowBox[{"#1", "[", 
+           RowBox[{"[", "2", "]"}], "]"}]}], "&"}]}], "]"}], "]"}], "]"}], 
+    "&"}], "/@", 
+   RowBox[{"Table", "[", 
+    RowBox[{"k", ",", 
+     RowBox[{"{", 
+      RowBox[{"k", ",", "1", ",", 
+       RowBox[{"mfsKeyValue", "[", 
+        RowBox[{"tracking", ",", "\"\<PARTICLES\>\""}], "]"}]}], "}"}]}], 
+    "]"}]}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"QyFT", "[", "tracking_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"First", "[", 
+     RowBox[{"First", "[", 
+      RowBox[{"Sort", "[", 
+       RowBox[{
+        RowBox[{"N", "[", 
+         RowBox[{"powerSpectrum", "[", 
+          RowBox[{"tracking", ",", "#", ",", "\"\<Y\>\""}], "]"}], "]"}], ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"#2", "[", 
+           RowBox[{"[", "2", "]"}], "]"}], "<", 
+          RowBox[{"#1", "[", 
+           RowBox[{"[", "2", "]"}], "]"}]}], "&"}]}], "]"}], "]"}], "]"}], 
+    "&"}], "/@", 
+   RowBox[{"Table", "[", 
+    RowBox[{"k", ",", 
+     RowBox[{"{", 
+      RowBox[{"k", ",", "1", ",", 
+       RowBox[{"mfsKeyValue", "[", 
+        RowBox[{"tracking", ",", "\"\<PARTICLES\>\""}], "]"}]}], "}"}]}], 
+    "]"}]}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"QtFT", "[", "tracking_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"First", "[", 
+     RowBox[{"First", "[", 
+      RowBox[{"Sort", "[", 
+       RowBox[{
+        RowBox[{"N", "[", 
+         RowBox[{"powerSpectrum", "[", 
+          RowBox[{"tracking", ",", "#", ",", "\"\<DELTAP\>\""}], "]"}], "]"}],
+         ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"#2", "[", 
+           RowBox[{"[", "2", "]"}], "]"}], "<", 
+          RowBox[{"#1", "[", 
+           RowBox[{"[", "2", "]"}], "]"}]}], "&"}]}], "]"}], "]"}], "]"}], 
+    "&"}], "/@", 
+   RowBox[{"Table", "[", 
+    RowBox[{"k", ",", 
+     RowBox[{"{", 
+      RowBox[{"k", ",", "1", ",", 
+       RowBox[{"mfsKeyValue", "[", 
+        RowBox[{"tracking", ",", "\"\<PARTICLES\>\""}], "]"}]}], "}"}]}], 
+    "]"}]}]}]], "Input"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"QyFT2", "[", "tracking_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"First", "[", 
+    RowBox[{
+     RowBox[{"Sort", "[", 
+      RowBox[{
+       RowBox[{"N", "[", 
+        RowBox[{"powerSpectrum", "[", 
+         RowBox[{"tracking", ",", "#", ",", "\"\<Y\>\""}], "]"}], "]"}], ",", 
+       
+       RowBox[{
+        RowBox[{
+         RowBox[{"#2", "[", 
+          RowBox[{"[", "2", "]"}], "]"}], "<", 
+         RowBox[{"#1", "[", 
+          RowBox[{"[", "2", "]"}], "]"}]}], "&"}]}], "]"}], 
+     "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], "]"}], 
+   "&"}]}], "\n", 
+ RowBox[{"\t\t\t", 
+  RowBox[{"/@", 
+   RowBox[{"Table", "[", 
+    RowBox[{"k", ",", 
+     RowBox[{"{", 
+      RowBox[{"k", ",", "1", ",", 
+       RowBox[{"mfsKeyValue", "[", 
+        RowBox[{"tracking", ",", "\"\<PARTICLES\>\""}], "]"}]}], "}"}]}], 
+    "]"}]}]}]}], "Input"],
+
+Cell[BoxData[
+ RowBox[{"QxFT", "[", "tracking", "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"ListPlot", "[", 
+  RowBox[{
+   RowBox[{"QxFT", "[", "tracking", "]"}], ",", 
+   RowBox[{"PlotJoined", "->", "False"}], ",", 
+   RowBox[{"AxesLabel", "->", 
+    RowBox[{"{", 
+     RowBox[{"\"\<\>\"", ",", "\"\<Qx\>\""}], "}"}]}], ",", 
+   RowBox[{"Prolog", "->", 
+    RowBox[{"PointSize", "[", "0.02", "]"}]}]}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"QyFT", "[", "tracking", "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"ListPlot", "[", 
+  RowBox[{
+   RowBox[{"QyFT", "[", "tracking", "]"}], ",", 
+   RowBox[{"PlotJoined", "->", "False"}], ",", 
+   RowBox[{"AxesLabel", "->", 
+    RowBox[{"{", 
+     RowBox[{"\"\<\>\"", ",", "\"\<Qy\>\""}], "}"}]}], ",", 
+   RowBox[{"Prolog", "->", 
+    RowBox[{"PointSize", "[", "0.02", "]"}]}]}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"QtFT", "[", "tracking", "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"ListPlot", "[", 
+  RowBox[{
+   RowBox[{"QtFT", "[", "tracking", "]"}], ",", 
+   RowBox[{"PlotJoined", "->", "False"}], ",", 
+   RowBox[{"AxesLabel", "->", 
+    RowBox[{"{", 
+     RowBox[{"\"\<\>\"", ",", "\"\<Qt\>\""}], "}"}]}], ",", 
+   RowBox[{"Prolog", "->", 
+    RowBox[{"PointSize", "[", "0.02", "]"}]}]}], "]"}]], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Time-evolution plots", "Section"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"MultipleListPlot", "[", 
+   RowBox[{
+    RowBox[{"Sequence", " ", "@@", " ", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"notLost", "[", 
+        RowBox[{"mfsColumn", "[", 
+         RowBox[{"tracking", ",", "k", ",", "\"\<X\>\""}], "]"}], "]"}], ",", 
+       
+       RowBox[{"{", 
+        RowBox[{"k", ",", "1", ",", "16"}], "}"}]}], "]"}]}], ",", 
+    RowBox[{"PlotRange", "->", "All"}], ",", 
+    RowBox[{"SymbolStyle", "->", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"Hue", "[", "z", "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"z", ",", ".7", ",", "0", ",", 
+         RowBox[{
+          RowBox[{"-", ".7"}], "/", "15"}]}], "}"}]}], "]"}]}], ",", 
+    RowBox[{"Background", "->", 
+     RowBox[{"RGBColor", "[", 
+      RowBox[{"0", ",", "0", ",", "0"}], "]"}]}], ",", 
+    RowBox[{"AspectRatio", "->", "1"}], ",", 
+    RowBox[{"PlotJoined", "->", "True"}]}], "]"}], ";"}]], "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Monitor backup files", "Section"],
+
+Cell[BoxData[
+ RowBox[{"trashFiles", "=", 
+  RowBox[{"FileNames", "[", 
+   RowBox[{"\"\<*\>\"", ",", "\"\<TRASH\>\""}], "]"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"FileInformation", "[", 
+  RowBox[{"First", "[", "trashFiles", "]"}], "]"}]], "Input"],
+
+Cell["Space occupied by trash files.", "Text"],
+
+Cell[BoxData[
+ RowBox[{"Plus", " ", "@@", 
+  RowBox[{"(", " ", 
+   RowBox[{"ByteCount", " ", "/.", 
+    RowBox[{"FileInformation", " ", "/@", " ", "trashFiles"}]}], 
+   ")"}]}]], "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Action-angle coordinates", "Section"],
+
+Cell[BoxData[
+ RowBox[{"tracking", "//", "Short"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"trackIphi", "=", 
+   RowBox[{"toActionAngle", "[", "tracking", "]"}]}], ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"Ixphix", "[", "n_", "]"}], ":=", 
+   RowBox[{"Transpose", "[", 
+    RowBox[{"notLost", " ", "/@", " ", 
+     RowBox[{"mfsColumn", "[", 
+      RowBox[{"trackIphi", ",", "n", ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<IX\>\"", ",", "\"\<PHIX\>\""}], "}"}]}], "]"}]}], 
+    "]"}]}], ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"sIxphix", "[", "n_", "]"}], ":=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"Sqrt", "[", 
+        RowBox[{"#", "[", 
+         RowBox[{"[", "1", "]"}], "]"}], "]"}], ",", 
+       RowBox[{"#", "[", 
+        RowBox[{"[", "2", "]"}], "]"}]}], "}"}], "&"}], " ", "/@", 
+    RowBox[{"Transpose", "[", 
+     RowBox[{"notLost", " ", "/@", " ", 
+      RowBox[{"mfsColumn", "[", 
+       RowBox[{"trackIphi", ",", "n", ",", 
+        RowBox[{"{", 
+         RowBox[{"\"\<IX\>\"", ",", "\"\<PHIX\>\""}], "}"}]}], "]"}]}], 
+     "]"}]}]}], ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"Iyphiy", "[", "n_", "]"}], ":=", 
+   RowBox[{"Transpose", "[", 
+    RowBox[{"notLost", " ", "/@", " ", 
+     RowBox[{"mfsColumn", "[", 
+      RowBox[{"trackIphi", ",", "n", ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<IY\>\"", ",", "\"\<PHIY\>\""}], "}"}]}], "]"}]}], 
+    "]"}]}], ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"sIyphiy", "[", "n_", "]"}], ":=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"Sqrt", "[", 
+        RowBox[{"#", "[", 
+         RowBox[{"[", "1", "]"}], "]"}], "]"}], ",", 
+       RowBox[{"#", "[", 
+        RowBox[{"[", "2", "]"}], "]"}]}], "}"}], "&"}], " ", "/@", 
+    RowBox[{"Transpose", "[", 
+     RowBox[{"notLost", " ", "/@", " ", 
+      RowBox[{"mfsColumn", "[", 
+       RowBox[{"trackIphi", ",", "n", ",", 
+        RowBox[{"{", 
+         RowBox[{"\"\<IY\>\"", ",", "\"\<PHIY\>\""}], "}"}]}], "]"}]}], 
+     "]"}]}]}], ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"Itphit", "[", "n_", "]"}], ":=", 
+   RowBox[{"Transpose", "[", 
+    RowBox[{"notLost", " ", "/@", " ", 
+     RowBox[{"mfsColumn", "[", 
+      RowBox[{"trackIphi", ",", "n", ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<IT\>\"", ",", "\"\<PHIT\>\""}], "}"}]}], "]"}]}], 
+    "]"}]}], ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"sItphit", "[", "n_", "]"}], ":=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"Sqrt", "[", 
+        RowBox[{"#", "[", 
+         RowBox[{"[", "1", "]"}], "]"}], "]"}], ",", 
+       RowBox[{"#", "[", 
+        RowBox[{"[", "2", "]"}], "]"}]}], "}"}], "&"}], " ", "/@", 
+    RowBox[{"Transpose", "[", 
+     RowBox[{"notLost", " ", "/@", " ", 
+      RowBox[{"mfsColumn", "[", 
+       RowBox[{"trackIphi", ",", "n", ",", 
+        RowBox[{"{", 
+         RowBox[{"\"\<IT\>\"", ",", "\"\<PHIT\>\""}], "}"}]}], "]"}]}], 
+     "]"}]}]}], ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"mfsKeyNames", "[", "trackIphi", "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"mfsColumnNames", "[", "trackIphi", "]"}]], "Input"],
+
+Cell[BoxData["PARTICLES"], "Input"],
+
+Cell[BoxData[
+ RowBox[{"MultipleListPlot", "[", 
+  RowBox[{
+   RowBox[{"Sequence", " ", "@@", " ", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"strobe", "[", 
+        RowBox[{
+         RowBox[{"sIxphix", "[", "#", "]"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]}], "]"}], "&"}], " ", "/@", " ", 
+      RowBox[{"Table", "[", 
+       RowBox[{"k", ",", 
+        RowBox[{"{", 
+         RowBox[{"k", ",", "1", ",", "PARTICLES"}], "}"}]}], "]"}]}], ")"}]}],
+    ",", 
+   RowBox[{"SymbolStyle", "->", 
+    RowBox[{"hueTable", "[", "PARTICLES", "]"}]}], ",", 
+   RowBox[{"AxesLabel", "->", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<\!\(\*SqrtBox[SubscriptBox[\(I\), \(x\)]]\)\>\"", ",", 
+      "\"\<\!\(\*SubscriptBox[\(\[Phi]\), \(x\)]\)\>\""}], "}"}]}], ",", 
+   RowBox[{"AxesOrigin", "->", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "0"}], "}"}]}], ",", " ", 
+   RowBox[{"Frame", "->", "True"}], ",", 
+   RowBox[{"FrameLabel", "->", 
+    RowBox[{"{", 
+     RowBox[{"MADcmt", ",", "\"\< \>\"", ",", "titleInp", ",", "\"\< \>\""}], 
+     "}"}]}]}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"MultipleListPlot", "[", 
+  RowBox[{
+   RowBox[{"Sequence", " ", "@@", " ", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"strobe", "[", 
+        RowBox[{
+         RowBox[{"sIyphiy", "[", "#", "]"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]}], "]"}], "&"}], " ", "/@", " ", 
+      RowBox[{"Table", "[", 
+       RowBox[{"k", ",", 
+        RowBox[{"{", 
+         RowBox[{"k", ",", "1", ",", "PARTICLES"}], "}"}]}], "]"}]}], ")"}]}],
+    ",", 
+   RowBox[{"SymbolStyle", "->", 
+    RowBox[{"hueTable", "[", "PARTICLES", "]"}]}], ",", 
+   RowBox[{"AxesLabel", "->", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<\!\(\*SqrtBox[SubscriptBox[\(I\), \(y\)]]\)\>\"", ",", 
+      "\"\<\!\(\*SubscriptBox[\(\[Phi]\), \(y\)]\)\>\""}], "}"}]}], ",", 
+   RowBox[{"AxesOrigin", "->", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "0"}], "}"}]}], ",", " ", 
+   RowBox[{"Frame", "->", "True"}], ",", 
+   RowBox[{"FrameLabel", "->", 
+    RowBox[{"{", 
+     RowBox[{"MADcmt", ",", "\"\< \>\"", ",", "titleInp", ",", "\"\< \>\""}], 
+     "}"}]}]}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"MultipleListPlot", "[", 
+  RowBox[{
+   RowBox[{"Sequence", " ", "@@", " ", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"strobe", "[", 
+        RowBox[{
+         RowBox[{"sItphit", "[", "#", "]"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]}], "]"}], "&"}], " ", "/@", " ", 
+      RowBox[{"Table", "[", 
+       RowBox[{"k", ",", 
+        RowBox[{"{", 
+         RowBox[{"k", ",", "1", ",", "PARTICLES"}], "}"}]}], "]"}]}], ")"}]}],
+    ",", 
+   RowBox[{"SymbolStyle", "->", 
+    RowBox[{"hueTable", "[", "PARTICLES", "]"}]}], ",", 
+   RowBox[{"AxesLabel", "->", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<\!\(\*SqrtBox[SubscriptBox[\(I\), \(t\)]]\)\>\"", ",", 
+      "\"\<\!\(\*SubscriptBox[\(\[Phi]\), \(t\)]\)\>\""}], "}"}]}], ",", 
+   RowBox[{"AxesOrigin", "->", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "0"}], "}"}]}], ",", " ", 
+   RowBox[{"Frame", "->", "True"}], ",", 
+   RowBox[{"FrameLabel", "->", 
+    RowBox[{"{", 
+     RowBox[{"MADcmt", ",", "\"\< \>\"", ",", "titleInp", ",", "\"\< \>\""}], 
+     "}"}]}]}], "]"}]], "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["File Housekeeping", "Section"],
+
+Cell["\<\
+List any TFS files that are not in the database.  These are probably attempts \
+that we want to discard.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"otherTfsFiles", "=", 
+  RowBox[{"Complement", "[", 
+   RowBox[{
+    RowBox[{"FileNames", "[", "\"\<*.tfs\>\"", "]"}], ",", 
+    RowBox[{"trackTableFile", "[", "]"}]}], "]"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"bumpFile", " ", "/@", " ", "otherTfsFiles"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"unwanted", "=", 
+  RowBox[{
+   RowBox[{"FileNames", "[", 
+    RowBox[{"\"\<*\>\"", ",", "\"\<TRASH\>\""}], "]"}], "\[Union]", 
+   RowBox[{"FileNames", "[", 
+    RowBox[{"{", 
+     RowBox[{"\"\<*junk\>\"", ",", "\"\<*temp\>\""}], "}"}], 
+    "]"}]}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"DeleteFile", "[", "unwanted", "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"?", "track*"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"domain", "[", "trackSpec", "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"?", "=."}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"Clear", "[", 
+  RowBox[{"trackSpec", "[", "\"\<junk\>\"", "]"}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"trackSpec", "[", "\"\<junk\>\"", "]"}], "=."}]], "Input"]
+}, Closed]]
+}, Open  ]]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{869, 751},
+WindowMargins->{{180, Automatic}, {Automatic, 60}},
+DockedCells->FEPrivate`FrontEndResource[
+ "FEExpressions", "CompatibilityToolbar"],
+FrontEndVersion->"8.0 for Microsoft Windows (32-bit) (February 23, 2011)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 46, 0, 83, "Title"],
+Cell[628, 24, 31, 0, 49, "Subtitle"],
+Cell[662, 26, 31, 0, 28, "Subsubtitle"],
+Cell[696, 28, 51, 0, 29, "Text"],
+Cell[750, 30, 316, 5, 47, "Text"],
+Cell[CellGroupData[{
+Cell[1091, 39, 25, 0, 71, "Section"],
+Cell[1119, 41, 120, 2, 31, "Input"],
+Cell[CellGroupData[{
+Cell[1264, 47, 65, 1, 36, "Subsection",
+ InitializationCell->True],
+Cell[1332, 50, 125, 3, 31, "Input",
+ InitializationCell->True],
+Cell[1460, 55, 116, 2, 31, "Input",
+ InitializationCell->True],
+Cell[1579, 59, 121, 3, 31, "Input",
+ InitializationCell->True],
+Cell[1703, 64, 118, 2, 31, "Input",
+ InitializationCell->True],
+Cell[1824, 68, 181, 4, 47, "Text"],
+Cell[2008, 74, 122, 3, 31, "Input",
+ InitializationCell->True],
+Cell[2133, 79, 116, 2, 31, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2286, 86, 69, 0, 36, "Subsection"],
+Cell[2358, 88, 723, 19, 132, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3118, 112, 61, 0, 47, "Subsection"],
+Cell[3182, 114, 426, 7, 71, "Text"],
+Cell[3611, 123, 142, 3, 33, "Text"],
+Cell[3756, 128, 1292, 28, 290, "Input",
+ InitializationCell->True],
+Cell[5051, 158, 118, 3, 33, "Text"],
+Cell[5172, 163, 213, 5, 30, "Input",
+ InitializationCell->True],
+Cell[5388, 170, 207, 5, 30, "Input",
+ InitializationCell->True],
+Cell[5598, 177, 702, 20, 90, "Input",
+ InitializationCell->True],
+Cell[6303, 199, 99, 2, 33, "Text"],
+Cell[6405, 203, 1145, 27, 190, "Input",
+ InitializationCell->True],
+Cell[7553, 232, 562, 8, 90, "Text"],
+Cell[8118, 242, 77, 1, 30, "Input"],
+Cell[8198, 245, 564, 14, 110, "Input",
+ InitializationCell->True],
+Cell[8765, 261, 102, 2, 30, "Input"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8916, 269, 39, 0, 59, "Section"],
+Cell[8958, 271, 34, 0, 30, "Input"],
+Cell[8995, 273, 155, 5, 30, "Input"],
+Cell[9153, 280, 104, 2, 30, "Input"],
+Cell[9260, 284, 57, 1, 30, "Input"],
+Cell[9320, 287, 31, 0, 30, "Input"],
+Cell[9354, 289, 73, 0, 33, "Text"],
+Cell[9430, 291, 89, 2, 30, "Input"],
+Cell[9522, 295, 88, 2, 33, "Text"],
+Cell[9613, 299, 34, 0, 30, "Input"],
+Cell[9650, 301, 35, 0, 30, "Input"],
+Cell[9688, 303, 86, 2, 30, "Input"],
+Cell[9777, 307, 155, 4, 30, "Input"],
+Cell[9935, 313, 107, 2, 30, "Input"],
+Cell[10045, 317, 99, 2, 30, "Input"],
+Cell[10147, 321, 106, 3, 33, "Text"],
+Cell[10256, 326, 97, 2, 30, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[10390, 333, 28, 0, 59, "Section"],
+Cell[CellGroupData[{
+Cell[10443, 337, 60, 0, 47, "Subsection"],
+Cell[10506, 339, 96, 2, 33, "Text"],
+Cell[10605, 343, 955, 28, 51, "Input"],
+Cell[11563, 373, 108, 2, 30, "Input"],
+Cell[11674, 377, 75, 1, 30, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[11786, 383, 56, 0, 47, "Subsection"],
+Cell[11845, 385, 331, 5, 70, "Text"],
+Cell[12179, 392, 4673, 146, 70, "Input"],
+Cell[16855, 540, 2060, 63, 70, "Input"],
+Cell[18918, 605, 91, 2, 70, "Text"],
+Cell[19012, 609, 198, 5, 70, "Input"],
+Cell[19213, 616, 67, 1, 70, "Input"],
+Cell[19283, 619, 95, 2, 70, "Text"],
+Cell[19381, 623, 373, 12, 70, "Input"],
+Cell[19757, 637, 191, 4, 70, "Text"],
+Cell[19951, 643, 147, 5, 70, "Input"],
+Cell[20101, 650, 427, 12, 70, "Input"],
+Cell[20531, 664, 66, 1, 70, "Input"],
+Cell[20600, 667, 117, 2, 70, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[20754, 674, 102, 2, 31, "Subsection"],
+Cell[20859, 678, 29, 0, 30, "Input"],
+Cell[20891, 680, 99, 2, 30, "Input"],
+Cell[20993, 684, 128, 3, 30, "Input"],
+Cell[21124, 689, 57, 1, 30, "Input"],
+Cell[21184, 692, 242, 6, 30, "Input"],
+Cell[21429, 700, 65, 1, 30, "Input"],
+Cell[21497, 703, 46, 0, 30, "Input"],
+Cell[21546, 705, 64, 1, 30, "Input"],
+Cell[21613, 708, 62, 1, 30, "Input"],
+Cell[21678, 711, 46, 0, 30, "Input"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[21773, 717, 36, 0, 59, "Section"],
+Cell[21812, 719, 35, 0, 30, "Input"],
+Cell[CellGroupData[{
+Cell[21872, 723, 104, 4, 47, "Subsection"],
+Cell[21979, 729, 362, 11, 30, "Input"],
+Cell[22344, 742, 186, 5, 30, "Input"],
+Cell[22533, 749, 636, 16, 50, "Input"],
+Cell[23172, 767, 833, 23, 70, "Input"],
+Cell[24008, 792, 968, 27, 70, "Input"],
+Cell[24979, 821, 833, 23, 70, "Input"],
+Cell[25815, 846, 833, 23, 70, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[26685, 874, 62, 0, 47, "Subsection"],
+Cell[26750, 876, 143, 3, 33, "Text"],
+Cell[26896, 881, 1809, 47, 170, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[28742, 933, 61, 0, 47, "Subsection"],
+Cell[28806, 935, 46, 0, 30, "Input"],
+Cell[CellGroupData[{
+Cell[28877, 939, 52, 0, 43, "Subsubsection"],
+Cell[28932, 941, 59, 1, 30, "Input"],
+Cell[28994, 944, 78, 1, 30, "Input"],
+Cell[29075, 947, 33, 0, 30, "Input"],
+Cell[29111, 949, 59, 1, 30, "Input"],
+Cell[29173, 952, 33, 0, 30, "Input"],
+Cell[29209, 954, 33, 0, 30, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[29279, 959, 61, 0, 43, "Subsubsection"],
+Cell[29343, 961, 80, 1, 70, "Input"],
+Cell[29426, 964, 33, 0, 70, "Input"],
+Cell[29462, 966, 33, 0, 70, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[29532, 971, 55, 0, 29, "Subsubsection"],
+Cell[29590, 973, 29, 0, 70, "Input"],
+Cell[29622, 975, 82, 1, 70, "Input"],
+Cell[29707, 978, 33, 0, 70, "Input"],
+Cell[29743, 980, 33, 0, 70, "Input"],
+Cell[29779, 982, 33, 0, 70, "Input"]
+}, Closed]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[29873, 989, 40, 0, 59, "Section"],
+Cell[29916, 991, 49, 1, 30, "Input"],
+Cell[29968, 994, 258, 6, 30, "Input"],
+Cell[30229, 1002, 1062, 32, 70, "Input"],
+Cell[31294, 1036, 1063, 32, 70, "Input"],
+Cell[32360, 1070, 1069, 32, 70, "Input"],
+Cell[33432, 1104, 93, 2, 33, "Text"],
+Cell[33528, 1108, 819, 25, 50, "Input"],
+Cell[34350, 1135, 819, 25, 50, "Input"],
+Cell[35172, 1162, 833, 26, 50, "Input"],
+Cell[36008, 1190, 884, 28, 50, "Input"],
+Cell[36895, 1220, 64, 1, 30, "Input"],
+Cell[36962, 1223, 352, 9, 30, "Input"],
+Cell[37317, 1234, 64, 1, 30, "Input"],
+Cell[37384, 1237, 352, 9, 30, "Input"],
+Cell[37739, 1248, 64, 1, 30, "Input"],
+Cell[37806, 1251, 352, 9, 30, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[38195, 1265, 39, 0, 59, "Section"],
+Cell[38237, 1267, 957, 26, 70, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[39231, 1298, 39, 0, 39, "Section"],
+Cell[39273, 1300, 138, 3, 70, "Input"],
+Cell[39414, 1305, 109, 2, 70, "Input"],
+Cell[39526, 1309, 46, 0, 70, "Text"],
+Cell[39575, 1311, 187, 5, 70, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[39799, 1321, 43, 0, 39, "Section"],
+Cell[39845, 1323, 61, 1, 30, "Input"],
+Cell[39909, 1326, 123, 3, 30, "Input"],
+Cell[40035, 1331, 348, 10, 30, "Input"],
+Cell[40386, 1343, 621, 19, 30, "Input"],
+Cell[41010, 1364, 348, 10, 30, "Input"],
+Cell[41361, 1376, 621, 19, 30, "Input"],
+Cell[41985, 1397, 348, 10, 30, "Input"],
+Cell[42336, 1409, 621, 19, 30, "Input"],
+Cell[42960, 1430, 72, 1, 30, "Input"],
+Cell[43035, 1433, 75, 1, 30, "Input"],
+Cell[43113, 1436, 35, 0, 30, "Input"],
+Cell[43151, 1438, 1106, 31, 75, "Input"],
+Cell[44260, 1471, 1106, 31, 79, "Input"],
+Cell[45369, 1504, 1106, 31, 75, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[46512, 1540, 36, 0, 39, "Section"],
+Cell[46551, 1542, 128, 3, 70, "Text"],
+Cell[46682, 1547, 210, 5, 70, "Input"],
+Cell[46895, 1554, 79, 1, 70, "Input"],
+Cell[46977, 1557, 285, 8, 70, "Input"],
+Cell[47265, 1567, 70, 1, 70, "Input"],
+Cell[47338, 1570, 49, 1, 70, "Input"],
+Cell[47390, 1573, 67, 1, 70, "Input"],
+Cell[47460, 1576, 45, 1, 70, "Input"],
+Cell[47508, 1579, 105, 2, 70, "Input"],
+Cell[47616, 1583, 92, 2, 70, "Input"]
+}, Closed]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+

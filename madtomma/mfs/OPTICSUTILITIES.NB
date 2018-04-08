@@ -1,0 +1,3791 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[    128416,       3781]
+NotebookOptionsPosition[     85324,       2685]
+NotebookOutlinePosition[    115299,       3368]
+CellTagsIndexPosition[    114870,       3353]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell["CERN SL Note 97-XXX  (AP)", "Text",
+ TextAlignment->Right],
+
+Cell["\<\
+
+
+\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell["Optics Utilities Package", "Title"],
+
+Cell[TextData[{
+ ButtonBox["John M.Jowett",
+  BaseStyle->"Hyperlink",
+  ButtonData:>{
+    URL["http://wwwslap.cern.ch/~jowett"], None}],
+ ", ",
+ ButtonBox["Krzysztof Goral",
+  BaseStyle->"Hyperlink",
+  ButtonData:>{
+    URL["http://nicewww.cern.ch/~kgoral/welcome.htm"], None}]
+}], "Author"],
+
+Cell["22/09/97", "Author"],
+
+Cell[CellGroupData[{
+
+Cell["Introduction", "Section"],
+
+Cell[TextData[{
+ "This note is the documentation for a ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " [",
+ ButtonBox["1",
+  BaseStyle->"Hyperlink",
+  ButtonData:>"Wolfram book"],
+ ",",
+ ButtonBox["2",
+  BaseStyle->"Hyperlink",
+  ButtonData:>"Maeder book"],
+ "] package designed to "
+}], "Text"],
+
+Cell[TextData[{
+ "These packages and others relating to the use of ",
+ ButtonBox["MAD",
+  BaseStyle->"Hyperlink",
+  ButtonData:>{
+    URL["http://wwwslap.cern.ch/~fci/mad/mad.html"], None}],
+ " will all be made available in the context ",
+ StyleBox["Madtomma", "Input"],
+ "  (the word ",
+ StyleBox["context",
+  FontSlant->"Italic"],
+ " is used in a special sense in ",
+ StyleBox["Mathematica).  ",
+  FontSlant->"Italic"],
+ "Preliminary versions of some are already available; documentation will be \
+released as it is prepared."
+}], "Text"],
+
+Cell[TextData[{
+ "This notebook adheres to the conventions for ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " package structure and documentation set out in [2].  As such it serves as \
+the development medium for the package itself.  ",
+ StyleBox["For this reason , some sections of the printed versions of this \
+document are hidden.  ",
+  FontWeight->"Bold"],
+ "They contain the definitions (\"code\") of the functions.  The visible \
+sections contain the documentation and examples of interest to users."
+}], "Text"],
+
+Cell[TextData[{
+ "To make the package available, you need only copy a couple of commands from \
+the ",
+ ButtonBox["\"Setup\"",
+  BaseStyle->"Hyperlink",
+  ButtonData:>"Setup section"],
+ " section.  The ",
+ ButtonBox["\"Examples\"",
+  BaseStyle->"Hyperlink",
+  ButtonData:>"Examples section"],
+ " section illustrates basic use of the package.  A final subsection \
+illustrating some less useful features is hidden."
+}], "Text"],
+
+Cell["The latest version is available on-line at", "Text"],
+
+Cell[TextData[ButtonBox["http://wwwslap.cern.ch/~jowett/Madtomma/",
+ BaseStyle->"Hyperlink",
+ ButtonData:>{
+   URL["http://wwwslap.cern.ch/~jowett/Madtomma/"], None}]], "Program"],
+
+Cell[TextData[{
+ "This notebook is based on the template for package and notebook development \
+by R. Maeder  and supplied with ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " 3.0."
+}], "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Reference", "Section",
+ CellTags->"Reference section"],
+
+Cell[CellGroupData[{
+
+Cell["Title", "Subsubsection"],
+
+Cell[TextData[StyleBox["Optics Utilities Package",
+ FontSlant->"Italic"]], "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Author", "Subsubsection"],
+
+Cell["John M. Jowett, Krzysztof Goral", "Text"]
+}, Open  ]],
+
+Cell["Summary", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell["Copyright", "Subsubsection"],
+
+Cell[TextData[{
+ "\[Copyright] Copyright ",
+ StyleBox["CERN.1997",
+  FontSlant->"Italic"],
+ "\n\n",
+ "The copyright and all other rights relating to this computer software, in \
+whatever form, including but not\nlimited to the source code, the object code \
+and user documentation, are vested in CERN. \n\nCERN, on a royalty-free and \
+non-exclusive basis, hereby grants permission to use, copy, change, modify,\n\
+translate, display, distribute and make available this computer software, \
+subject to the following conditions:\n\n(1) this computer software is \
+provided on an as-is basis and CERN provides no express or implied\n\
+warranties of any kind, including but not limited to those of \
+merchantability, fitness for a particular purpose\nand non-infringement of \
+the proprietary rights, such as copyrights, patents and trade secrets, of \
+third\nparties. CERN accepts no liability whatsoever for or in connection \
+with the use of this computer software; \n\n(2) all copies made of this \
+computer software or of parts thereof shall include this copyright statement \
+in\nfull; \n\n(3) however, if this computer software or parts thereof are \
+made available in any other form than their\noriginal form, or are included \
+in any other computer software, the following short acknowledgement only\n\
+must be mentioned in the copyright statement and in the user documentation \
+(or, in the absence thereof, in\nany other appropriate place) concerning the \
+computer software thus made available or created: \n\n\"This product includes \
+computer software created and made available by CERN. This acknowledgement\n\
+shall be mentioned in full in any product which includes the CERN computer \
+software included herein or\nparts thereof.\" "
+}], "Text"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Notebook Version", "Subsubsection"],
+
+Cell["2.0", "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " Version"
+}], "Subsubsection"],
+
+Cell["3.0", "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["History", "Subsubsection"],
+
+Cell["Version 1.0, 22 September 1997", "Text"],
+
+Cell[TextData[{
+ "Version 1.1, 26 October 1998.  JMJ added the function ",
+ StyleBox["opticsNotation.  ", "Input"],
+ "However this package is still under development.\nVersion 2.0, 14 September \
+1999, made compatible with Version 2.0 of mfs package.  Still under \
+development."
+}], "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Keywords", "Subsubsection"],
+
+Cell["optics, MAD", "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Warnings", "Subsubsection"],
+
+Cell[TextData[{
+ "Note: all cells marked as \"InitializationCell\" will be written to the \
+Auto-Save package. This package can then be read in programs that use it with \
+",
+ StyleBox["Needs[\"Madtomma`Mfs`OpticsUtilities`\"]", "Input"],
+ ". Cells not intended to belong to the package should not have this property."
+}], "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Limitation", "Subsubsection"],
+
+Cell[TextData[StyleBox["special cases not handled, known problems",
+ FontSlant->"Italic"]], "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Discussion", "Subsubsection"],
+
+Cell[TextData[StyleBox["description of algorithm, information for experts",
+ FontSlant->"Italic"]], "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Requirements", "Subsubsection"],
+
+Cell[TextData[{
+ "Imports a basic mfs package ",
+ StyleBox["Madtomma`Mfs`Mfs", "Input"],
+ " and a standard package ",
+ StyleBox["Graphics`MultipleListPlot ", "Input"],
+ "."
+}], "Text"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Setup", "Section",
+ CellTags->"Setup section"],
+
+Cell[TextData[{
+ "This section contains commands needed to load the corresponding package \
+file.  The contents of this file are equivalent to the following sections \
+(Interface, Implementation, Epilog) in which the package is developed.  These \
+sections are hidden when this notebook is used as the package documentation \
+but may be inspected in the online copy of this notebook that can be found in \
+the appropriate  sub-directory of the directory added to the ",
+ StyleBox["$Path", "Input"],
+ " variable below."
+}], "Text"],
+
+Cell[CellGroupData[{
+
+Cell["Search Path (ESSENTIAL!)", "Subsection",
+ CellTags->"Setup section"],
+
+Cell["\<\
+To have access to my packages, you may need to add my packages directory to \
+your search path.  This is system-dependent and the latest information about \
+arranging it on CERN computer systems can be found at\
+\>", "Text"],
+
+Cell[TextData[ButtonBox["http://wwwslap.cern.ch/~jowett/Madtomma/AboutFiles.\
+html",
+ BaseStyle->"Hyperlink",
+ ButtonData:>{
+   URL["http://wwwslap.cern.ch/~jowett/Madtomma/AboutFiles.html"], 
+   None}]], "Program"],
+
+Cell[TextData[{
+ "and is not reproduced here.  I strongly recommend that you modify your \
+kernel initialisation file once and for all as explained on this page.  Then \
+all my packages will be found as easily as the Standard Packages that come \
+with ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ "."
+}], "Text",
+ CellTags->"Setup section"],
+
+Cell[CellGroupData[{
+
+Cell["Read in the Package", "Subsubsection"],
+
+Cell[TextData[{
+ "Once the package directory is on your search path, the ",
+ StyleBox["Mfs", "Input"],
+ " package can be loaded by evaluating the following cell. ",
+ StyleBox["If you are using a copy of this notebook in order to work through \
+the examples and you are invited to  evaluate all the initialisation cells in \
+it, you should click \"NO\" and then go straight to the ",
+  FontSlant->"Italic",
+  FontColor->RGBColor[1, 0, 0]],
+ StyleBox["\"",
+  FontSlant->"Italic"],
+ StyleBox[ButtonBox["User's Guide and Examples",
+  BaseStyle->"Hyperlink",
+  ButtonData:>"Examples section"],
+  FontSlant->"Italic"],
+ StyleBox["\" ",
+  FontSlant->"Italic"],
+ StyleBox["without evaluating the intermediate sections.",
+  FontSlant->"Italic",
+  FontColor->RGBColor[1, 0, 0]]
+}], "Text",
+ CellTags->"Setup section"],
+
+Cell[TextData[StyleBox["Needs[\"Madtomma`Mfs`OpticsUtilities`\"]", "Input"]], \
+"Input"],
+
+Cell["\<\
+This is all you need to start using the package in your own applications.\
+\>", "Text"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Interface", "Section",
+ InitializationCell->True,
+ CellTags->"Interface section"],
+
+Cell["\<\
+This part declares the publicly visible functions, options, and values.\
+\>", "Text",
+ InitializationCell->True,
+ CellTags->"Interface section"],
+
+Cell[CellGroupData[{
+
+Cell["Set up the package context, including public imports", "Subsection",
+ InitializationCell->True,
+ CellTags->"Interface section"],
+
+Cell["\<\
+BeginPackage[\"Madtomma`Mfs`OpticsUtilities`\",
+\t\"Madtomma`Mfs`Mfs`\",\"Graphics`Legend`\",\"Graphics`MultipleListPlot`\"]
+\
+\>", "Input",
+ InitializationCell->True,
+ CellTags->"Interface section"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Usage messages for the exported functions and the context itself\
+\>", "Subsection",
+ InitializationCell->True,
+ CellTags->"Interface section"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"opticsNotation", "::", "usage"}], "=", 
+  "\"\<opticsNotation[expr] transforms any strings containing MAD notations \
+such as \\\"BETX\\\" appearing in expression expr into conventional notations \
+such as \!\(\*SubscriptBox[\(\[Beta]\), \(x\)]\).  The rules for these are \
+contained in opticsNotationRules.\>\""}]], "Input",
+ InitializationCell->True],
+
+Cell["\<\
+compareOptics::usage = \"compareOptics[mfs1,mfs2,colName] takes two mfs \
+objects and returns a list of elements labelled by colName which are not \
+common to these objects.\";\
+\>", "Input",
+ InitializationCell->True,
+ CellTags->"Interface section"],
+
+Cell["\<\
+opticsRange::usage = \"opticsRange[mfs,{element1Name,element2Name}] returns a \
+mfs data object with elements whose names lie within a range specified by \
+element1Name and element2Name.\";\
+\>", "Input",
+ InitializationCell->True,
+ CellTags->"Interface section"],
+
+Cell["\<\
+opticsPlot::usage = \"opticsPlot[optics,opts] draws a schematic picture of \
+beamline elements contained in the mfs object optics.\\nIf a list of data \
+columns from the same mfs object is given ( opticsPlot[optics,colnames,opts] \
+), it includes their plots as well. Every column name may be substituted by a \
+list of a form {colname,fun} yielding a plot with the function fun applied to \
+the data column labelled by colname.\";\
+\>", "Input",
+ InitializationCell->True,
+ CellTags->"Interface section"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"standardOpticsPlot", "::", "usage"}], "=", 
+   "\"\<standardOpticsPlot[mfs] plots the beta and Dx functions according to \
+data the mfs object with their peaks labelled by appropriate quad \
+names.\>\""}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"compareInsertionPlots", "::", "usage"}], "=", 
+   "\"\<compareInsertionPlots[opt1,opt2,{el0_,el1_}] plots 3 graphs (of beta \
+and Dx functions) comparing on each of them the data from the two mfs data \
+objects, opt1 and opt2.\>\""}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"quadGraphic", "::", "usage"}], "=", 
+   "\"\<quadGraphic is an option for opticsPlot and opticsPlot3D specifying \
+the type of a graphics function to represent quads.\>\""}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"quadRectangle", "::", "usage"}], "=", 
+   "\"\<quadRectangle is a possible value of quadGraphic, an option for the \
+function opticsPlot. It represens quads as rectangles. The S axis is \
+horizontal and quad strength is proportional to rectangle's height.\>\""}], 
+  ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"quadVerticalRectangle", "::", "usage"}], "=", 
+   "\"\<quadVerticalRectangle is a possible value of quadGraphic, an option \
+for the function opticsPlot. It represens quads as rectangles. The S axis is \
+vertical and quad strength is proportional to rectangle's height.\>\""}], 
+  ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"opticsPlot3D", "::", "usage"}], "=", 
+   "\"\<opticsPlot3D[optics,opts] draws a 3-dimensional beamline layout \
+including elements contained in the mfs data object optics.\>\""}], 
+  ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"quadBlock", "::", "usage"}], "=", 
+   "\"\<quadBlock is a default value of quadGraphic, an option for the \
+function opticsPlot3D. It plots quads as blocks.\>\""}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"quadBar", "::", "usage"}], "=", 
+   "\"\<quadBar is a possible value of quadGraphic, an option for the \
+function opticsPlot3D. It plots quads as bar doublets indicating the focusing \
+direction by their orientation.\>\""}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"quadWedge", "::", "usage"}], "=", 
+   "\"\<quadWedge is a possible value of quadGraphic, an option for the \
+function opticsPlot3D. It plots quads as wedge doublets indicating the \
+focusing direction by their orientation.\>\""}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"quadRatio", "::", "usage"}], "=", 
+   "\"\<quadRatio is an option for the opticsPlot function determining the \
+ratio between the biggest quad strength and the maximum plotted function \
+value. Default value is 0.1 .\>\""}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"quadColor", "::", "usage"}], "=", 
+   "\"\<quadColor is an option for opticsPlot determining a type fo color \
+function to be used. Default value is quadPastel.\>\""}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"quadPastel", "::", "usage"}], "=", 
+   "\"\<quadPastel is a possible value of quadColor, an option for the \
+functions opticsPlot. It sets the colours of plotted quads as blue and \
+pink.\>\""}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"quadGray", "::", "usage"}], "=", 
+   "\"\<quadGray is a possible value of quadColor, an option for the \
+functions opticsPlot. It plots the quads in black and light gray.\>\""}], 
+  ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"quadShift", "::", "usage"}], "=", 
+   "\"\<quadShift is an option for opticsPlot specifying the value of a shift \
+of the quad plot (in pixels). The default value is 0 (no shift).\>\""}], 
+  ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"quadShiftAutomatic", "::", "usage"}], "=", 
+   "\"\<quadShiftAutomatic is a possible value of quadShift, an option for \
+the functions opticsPlot. Its value corresponds to a shift replacing the quad \
+plot just below the S axis.\>\""}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"calculateLEPOptics", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}]], "Input",
+ InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Error messages for the exported objects", "Subsection",
+ InitializationCell->True,
+ CellTags->"Interface section"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"opticsRange", "::", "badarg"}], " ", "=", " ", 
+   "\"\<Element `1` does not exist.\>\""}], ";"}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Implementation", "Section",
+ InitializationCell->True,
+ CellTags->"Implementation section"],
+
+Cell["\<\
+This part contains the actual definitions and any auxiliary functions that \
+should not be visible outside.\
+\>", "Text",
+ CellTags->"Implementation section"],
+
+Cell[CellGroupData[{
+
+Cell["Begin the private context (implementation part)", "Subsection",
+ InitializationCell->True,
+ CellTags->"Implementation section"],
+
+Cell["Begin[\"`Private`\"]", "Input",
+ InitializationCell->True,
+ CellTags->"Implementation section"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Read in any hidden imports", "Subsection",
+ InitializationCell->True,
+ CellTags->"Implementation section"],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<Utilities`FilterOptions`\>\"", "]"}]], "Input",
+ InitializationCell->True]
+}, Closed]],
+
+Cell["\<\
+Unprotect any system functions for which definitions will be made\
+\>", "Subsection",
+ InitializationCell->True,
+ CellTags->"Implementation section"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Definition of auxiliary functions and local (static) variables\
+\>", "Subsection",
+ InitializationCell->True,
+ CellTags->"Implementation section"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"OpticsQ", "[", "x_mfs", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"Complement", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<NAME\>\"", ",", "\"\<S\>\"", ",", "\"\<K1L\>\"", ",", 
+       "\"\<BETX\>\"", ",", "\"\<ALFX\>\"", ",", "\"\<MUX\>\"", ",", 
+       "\"\<DX\>\"", ",", "\"\<ALFY\>\"", ",", "\"\<BETY\>\"", ",", 
+       "\"\<MUY\>\""}], "}"}], ",", 
+     RowBox[{"mfsColumnNames", "[", "x", "]"}]}], "]"}], "==", 
+   RowBox[{"{", "}"}]}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"getData", "[", 
+   RowBox[{"optics_mfs", ",", "name_String", ",", "fun_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "cols", "}"}], ",", "\n", "\t", 
+    RowBox[{
+     RowBox[{"cols", "=", 
+      RowBox[{"mfsColumn", "[", 
+       RowBox[{"optics", ",", 
+        RowBox[{"{", 
+         RowBox[{"\"\<S\>\"", ",", "name"}], "}"}]}], "]"}]}], ";", "\n", 
+     "\t", 
+     RowBox[{"Transpose", "@", 
+      RowBox[{"ReplacePart", "[", 
+       RowBox[{"cols", ",", 
+        RowBox[{"fun", "@", 
+         RowBox[{"Last", "[", "cols", "]"}]}], ",", "2"}], "]"}]}]}]}], "\n", 
+   "\t", "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"padArgument", "[", 
+    RowBox[{"x_", "/;", 
+     RowBox[{"StringQ", "[", "x", "]"}]}], "]"}], ":=", 
+   RowBox[{"{", 
+    RowBox[{"x", ",", "Identity"}], "}"}]}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"padArgument", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"a_", ",", "b_"}], "}"}], "/;", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"StringQ", "[", "a", "]"}], "&&", 
+       RowBox[{"NumberQ", "[", "b", "]"}]}], ")"}]}], "]"}], ":=", 
+   RowBox[{"{", 
+    RowBox[{"a", ",", 
+     RowBox[{
+      RowBox[{"Times", "[", 
+       RowBox[{"b", ",", "#"}], "]"}], "&"}]}], "}"}]}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"padArgument", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"a_", ",", "b_"}], "}"}], "/;", 
+     RowBox[{"StringQ", "[", "a", "]"}]}], "]"}], ":=", 
+   RowBox[{"{", 
+    RowBox[{"a", ",", "b"}], "}"}]}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"legendArg", "[", 
+    RowBox[{"x_", "/;", 
+     RowBox[{"StringQ", "[", "x", "]"}]}], "]"}], ":=", "x"}], ";"}]], "Input",\
+
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"legendArg", "[", 
+    RowBox[{"{", 
+     RowBox[{"a_", ",", "b_"}], "}"}], "]"}], ":=", 
+   RowBox[{
+    RowBox[{"ToString", "[", "b", "]"}], "<>", "\"\< \>\"", "<>", "a"}]}], 
+  ";"}]], "Input",
+ InitializationCell->True]
+}, Closed]],
+
+Cell["Definition of the exported functions", "Subsection",
+ InitializationCell->True,
+ CellTags->"Implementation section"],
+
+Cell[CellGroupData[{
+
+Cell["Improving notations appearing in MAD output", "Subsection"],
+
+Cell["\<\
+To improve the output, we can translate MAD's names for functions to \
+traditional notation\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"opticsNotationRules", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"\"\<S\>\"", "\[Rule]", "\"\<s\>\""}], ",", 
+     RowBox[{
+     "\"\<BETX\>\"", "\[Rule]", 
+      "\"\<\!\(\*SubscriptBox[\(\[Beta]\), \(x\)]\)\>\""}], ",", 
+     RowBox[{
+     "\"\<MUX\>\"", "\[Rule]", 
+      "\"\<\!\(\*SubscriptBox[\(\[Mu]\), \(x\)]\)\>\""}], ",", 
+     RowBox[{
+     "\"\<DX\>\"", "\[Rule]", "\"\<\!\(\*SubscriptBox[\(D\), \(x\)]\)\>\""}], 
+     ",", 
+     RowBox[{
+     "\"\<BETY\>\"", "\[Rule]", 
+      "\"\<\!\(\*SubscriptBox[\(\[Beta]\), \(y\)]\)\>\""}], ",", 
+     RowBox[{
+     "\"\<MUY\>\"", "\[Rule]", 
+      "\"\<\!\(\*SubscriptBox[\(\[Mu]\), \(y\)]\)\>\""}], ",", 
+     RowBox[{
+     "\"\<DY\>\"", "\[Rule]", "\"\<\!\(\*SubscriptBox[\(D\), \(y\)]\)\>\""}], 
+     ",", 
+     RowBox[{
+     "\"\<GAMTR\>\"", "\[Rule]", 
+      "\"\<\!\(\*SubscriptBox[\(\[Gamma]\), \(t\)]\)\>\""}], ",", 
+     RowBox[{
+     "\"\<ALFA\>\"", "\[Rule]", 
+      "\"\<\!\(\*SubscriptBox[\(\[Alpha]\), \(c\)]\)\>\""}], ",", 
+     RowBox[{
+     "\"\<XIX\>\"", "\[Rule]", 
+      "\"\<\!\(\*SubscriptBox[\(\[Xi]\), \(x\)]\)\>\""}], ",", 
+     RowBox[{
+     "\"\<QX\>\"", "\[Rule]", "\"\<\!\(\*SubscriptBox[\(Q\), \(x\)]\)\>\""}], 
+     ",", 
+     RowBox[{
+     "\"\<XIY\>\"", "\[Rule]", 
+      "\"\<\!\(\*SubscriptBox[\(\[Xi]\), \(y\)]\)\>\""}], ",", 
+     RowBox[{
+     "\"\<QY\>\"", "\[Rule]", "\"\<\!\(\*SubscriptBox[\(Q\), \(y\)]\)\>\""}], 
+     ",", 
+     RowBox[{"\"\<CIRCUM\>\"", "\[Rule]", "\"\<C\>\""}], ",", 
+     RowBox[{
+     "\"\<DELTA\>\"", "\[Rule]", 
+      "\"\<\!\(\*FractionBox[\(\[Delta]p\), \(p\)]\)\>\""}], ",", "\n", 
+     "\t\t", 
+     RowBox[{
+     "\"\<XN\>\"", "\[Rule]", "\"\<\!\(\*SubscriptBox[\(x\), \(n\)]\)\>\""}], 
+     ",", 
+     RowBox[{
+     "\"\<PXN\>\"", "\[Rule]", 
+      "\"\<\!\(\*SubscriptBox[\(p\), \(xn\)]\)\>\""}], ",", 
+     RowBox[{
+     "\"\<YN\>\"", "\[Rule]", "\"\<\!\(\*SubscriptBox[\(y\), \(n\)]\)\>\""}], 
+     ",", 
+     RowBox[{
+     "\"\<PYN\>\"", "\[Rule]", 
+      "\"\<\!\(\*SubscriptBox[\(p\), \(yn\)]\)\>\""}], ",", 
+     RowBox[{
+     "\"\<TN\>\"", "\[Rule]", "\"\<\!\(\*SubscriptBox[\(t\), \(n\)]\)\>\""}], 
+     ",", 
+     RowBox[{
+     "\"\<PTN\>\"", "\[Rule]", 
+      "\"\<\!\(\*SubscriptBox[\(p\), \(tn\)]\)\>\""}], ",", "\n", "\t", 
+     RowBox[{
+     "\"\<IX\>\"", "\[Rule]", "\"\<\!\(\*SubscriptBox[\(I\), \(x\)]\)\>\""}], 
+     ",", 
+     RowBox[{
+     "\"\<PHIX\>\"", "\[Rule]", 
+      "\"\<\!\(\*SubscriptBox[\(\[Phi]\), \(x\)]\)\>\""}], ",", 
+     RowBox[{
+     "\"\<IY\>\"", "\[Rule]", "\"\<\!\(\*SubscriptBox[\(I\), \(y\)]\)\>\""}], 
+     ",", 
+     RowBox[{
+     "\"\<PHIY\>\"", "\[Rule]", 
+      "\"\<\!\(\*SubscriptBox[\(\[Phi]\), \(y\)]\)\>\""}], ",", 
+     RowBox[{
+     "\"\<IT\>\"", "\[Rule]", "\"\<\!\(\*SubscriptBox[\(I\), \(t\)]\)\>\""}], 
+     ",", 
+     RowBox[{
+     "\"\<PHIT\>\"", "\[Rule]", 
+      "\"\<\!\(\*SubscriptBox[\(\[Phi]\), \(t\)]\)\>\""}], ",", "\n", "\t\t", 
+     
+     RowBox[{"\"\<X\>\"", "\[Rule]", "\"\<x\>\""}], ",", 
+     RowBox[{
+     "\"\<PX\>\"", "\[Rule]", "\"\<\!\(\*SubscriptBox[\(p\), \(x\)]\)\>\""}], 
+     ",", 
+     RowBox[{"\"\<Y\>\"", "\[Rule]", "\"\<y\>\""}], ",", 
+     RowBox[{
+     "\"\<PY\>\"", "\[Rule]", "\"\<\!\(\*SubscriptBox[\(p\), \(y\)]\)\>\""}], 
+     ",", 
+     RowBox[{"\"\<T\>\"", "\[Rule]", "\"\<t\>\""}], ",", 
+     RowBox[{
+     "\"\<DELTAP\>\"", "\[Rule]", 
+      "\"\<\!\(\*SubscriptBox[\(p\), \(t\)]\)\>\""}]}], "}"}]}], 
+  ";"}]], "Input",
+ InitializationCell->True],
+
+Cell["\<\
+Define a recursive, overloaded, pattern-matching, function that will chew its \
+way down to the atoms of any expression and make these transformations.  \
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"opticsNotation", "[", "x_String", "]"}], ":=", 
+  RowBox[{"StringReplace", "[", 
+   RowBox[{"x", ",", "opticsNotationRules"}], "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"opticsNotation", "[", "x_Symbol", "]"}], ":=", "x"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"opticsNotation", "[", 
+   RowBox[{"x_", "/;", 
+    RowBox[{"NumberQ", "[", "x", "]"}]}], "]"}], ":=", "x"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"opticsNotation", "[", "x_", "]"}], ":=", 
+  RowBox[{"Map", "[", 
+   RowBox[{"opticsNotation", ",", "x", ",", "\[Infinity]"}], "]"}]}]], "Input",\
+
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell["compareOptics", "Subsubsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"compareOptics", "[", 
+   RowBox[{"opt1_", ",", "opt2_", ",", "col_String"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", "}"}], ",", "\n", "\t\t", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Drop", "[", 
+        RowBox[{"#", ",", 
+         RowBox[{"{", "3", "}"}]}], "]"}], "&"}], " ", "/@", " ", 
+      RowBox[{"Select", "[", "\n", "\t\t\t", 
+       RowBox[{
+        RowBox[{"Partition", "[", "\n", "\t\t\t\t", 
+         RowBox[{
+          RowBox[{"Flatten", "[", "\t", "\n", "\t\t\t\t\t", 
+           RowBox[{"Transpose", "[", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"Transpose", "[", 
+               RowBox[{"mfsColumn", "[", 
+                RowBox[{"opt1", ",", 
+                 RowBox[{"{", 
+                  RowBox[{"\"\<NAME\>\"", ",", "col"}], "}"}]}], "]"}], "]"}],
+               ",", "\n", "\t\t\t\t\t\t\t", 
+              RowBox[{"Transpose", "[", 
+               RowBox[{"mfsColumn", "[", 
+                RowBox[{"opt2", ",", 
+                 RowBox[{"{", 
+                  RowBox[{"\"\<NAME\>\"", ",", "col"}], "}"}]}], "]"}], 
+               "]"}]}], "\n", "\t\t\t\t\t\t\t", "}"}], "\n", "\t\t\t\t\t", 
+            "]"}], "]"}], ",", "4"}], "]"}], ",", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"!", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{
+              RowBox[{
+              "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], "==", 
+              RowBox[{
+              "#", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}]}], 
+             " ", "&&", "\n", "                 ", 
+             RowBox[{
+              RowBox[{
+              "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], "==", 
+              RowBox[{
+              "#", "\[LeftDoubleBracket]", "4", "\[RightDoubleBracket]"}]}]}],
+             ")"}]}], ")"}], "&"}]}], "]"}]}]}], "\n", "\t\t", "]"}], "   ", "/;",
+    " ", 
+   RowBox[{
+    RowBox[{"OpticsQ", "[", "opt1", "]"}], " ", "&&", " ", 
+    RowBox[{"OpticsQ", "[", "opt2", "]"}], 
+    "                                                             "}]}]}]], \
+"Input",
+ InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["opticsRange", "Subsubsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"opticsRange", "[", 
+   RowBox[{"optics_mfs", ",", 
+    RowBox[{"{", 
+     RowBox[{"element1_String", ",", "element2_String"}], "}"}]}], "]"}], ":=",
+   "\n", "\t\t", 
+  RowBox[{
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{"!", 
+      RowBox[{"MemberQ", "[", 
+       RowBox[{
+        RowBox[{"mfsColumn", "[", 
+         RowBox[{"optics", ",", "\"\<NAME\>\""}], "]"}], ",", "element1"}], 
+       "]"}]}], ",", 
+     RowBox[{"Message", "[", 
+      RowBox[{
+       RowBox[{"opticsRange", "::", "badarg"}], ",", "element1"}], "]"}], ",",
+      "\n", "\t\t", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"!", 
+        RowBox[{"MemberQ", "[", 
+         RowBox[{
+          RowBox[{"mfsColumn", "[", 
+           RowBox[{"optics", ",", "\"\<NAME\>\""}], "]"}], ",", "element2"}], 
+         "]"}]}], ",", 
+       RowBox[{"Message", "[", 
+        RowBox[{
+         RowBox[{"opticsRange", "::", "badarg"}], ",", "element2"}], "]"}], 
+       ",", "\n", "\t", 
+       RowBox[{"(", "\t", 
+        RowBox[{"mfsRange", "[", 
+         RowBox[{"optics", ",", "\"\<S\>\"", ",", "\n", "\t\t", 
+          RowBox[{
+           RowBox[{"Sort", "[", 
+            RowBox[{"mfsColumn", "[", 
+             RowBox[{
+              RowBox[{"mfsMember", "[", 
+               RowBox[{"optics", ",", "\"\<NAME\>\"", ",", 
+                RowBox[{"{", 
+                 RowBox[{"element1", ",", "element2"}], "}"}]}], "]"}], ",", 
+              "\"\<S\>\""}], "]"}], "\n", "\t\t         ", "]"}], "+", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"-", ".001"}], ",", ".001"}], "}"}]}]}], "\t", "]"}], 
+        ")"}]}], "\n", "\t\t\t\t", "]"}]}], "\n", "\t", "]"}], "/;", " ", 
+   RowBox[{"MemberQ", "[", 
+    RowBox[{
+     RowBox[{"mfsColumnNames", "[", "optics", "]"}], ",", "\"\<NAME\>\""}], 
+    "]"}]}]}]], "Input",
+ InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Quad plotting ", "Subsubsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"quadPastel", "[", "K1_", "]"}], ":=", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{"Positive", "[", "K1", "]"}], ",", 
+    RowBox[{"RGBColor", "[", 
+     RowBox[{".7", ",", ".7", ",", "1"}], "]"}], ",", 
+    RowBox[{"RGBColor", "[", 
+     RowBox[{"1", ",", ".7", ",", ".7"}], "]"}]}], "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"quadGray", "[", "K1_", "]"}], ":=", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{"Positive", "[", "K1", "]"}], ",", 
+    RowBox[{"GrayLevel", "[", "0", "]"}], ",", 
+    RowBox[{"GrayLevel", "[", ".9", "]"}]}], "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"quadRectangle", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"s_", ",", "len_", ",", "K1_", ",", "label_"}], "}"}], ",", 
+    "colorFun_", ",", "quadMove_"}], "]"}], ":=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"colorFun", "[", "K1", "]"}], ",", 
+    RowBox[{"Rectangle", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"s", "-", 
+         FractionBox["len", "2"]}], ",", 
+        RowBox[{
+         RowBox[{"-", 
+          FractionBox["K1", "2"]}], "+", "quadMove"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"s", "+", 
+         FractionBox["len", "2"]}], ",", 
+        RowBox[{
+         FractionBox["K1", "2"], "+", "quadMove"}]}], "}"}]}], "]"}], ",", 
+    RowBox[{"RGBColor", "[", 
+     RowBox[{"0", ",", "0", ",", "0"}], "]"}], ",", 
+    RowBox[{"Text", "[", 
+     RowBox[{"label", ",", 
+      RowBox[{"{", 
+       RowBox[{"s", ",", 
+        RowBox[{
+         FractionBox["K1", "2"], "+", "quadMove"}]}], "}"}]}], "]"}]}], 
+   "}"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"quadVerticalRectangle", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"s_", ",", "len_", ",", "K1_", ",", "label_"}], "}"}], ",", 
+     "colorFun_", ",", "quadMove_"}], "]"}], ":=", 
+   RowBox[{
+    RowBox[{"quadRectangle", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"s", ",", "len", ",", "K1", ",", "label"}], "}"}], ",", 
+      "colorFun", ",", "quadMove"}], "]"}], "/.", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Rectangle", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"x_", ",", "y_"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"x1_", ",", "y1_"}], "}"}]}], "]"}], "\[Rule]", 
+       RowBox[{"Rectangle", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"y", ",", "x"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"y1", ",", "x1"}], "}"}]}], "]"}]}], ",", 
+      RowBox[{
+       RowBox[{"Text", "[", 
+        RowBox[{"a_", ",", 
+         RowBox[{"{", 
+          RowBox[{"u_", ",", "v_"}], "}"}]}], "]"}], "\[Rule]", 
+       RowBox[{"Text", "[", 
+        RowBox[{"a", ",", 
+         RowBox[{"{", 
+          RowBox[{"v", ",", "u"}], "}"}]}], "]"}]}]}], "}"}]}]}], 
+  ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"quadBlock", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"s_", ",", "len_", ",", "K1_", ",", "label_"}], "}"}], ",", 
+    "colorFun_"}], "]"}], ":=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"colorFun", "[", "K1", "]"}], ",", 
+    RowBox[{"Cuboid", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"s", "-", 
+         FractionBox["len", "2"]}], ",", 
+        RowBox[{"-", 
+         FractionBox["K1", "2"]}], ",", 
+        RowBox[{"-", 
+         FractionBox["K1", "2"]}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"s", "+", 
+         FractionBox["len", "2"]}], ",", 
+        FractionBox["K1", "2"], ",", 
+        FractionBox["K1", "2"]}], "}"}]}], "]"}], ",", 
+    RowBox[{"RGBColor", "[", 
+     RowBox[{"0", ",", "0", ",", "0"}], "]"}], ",", 
+    RowBox[{"Text", "[", 
+     RowBox[{"label", ",", 
+      RowBox[{"{", 
+       RowBox[{"s", ",", "0", ",", 
+        FractionBox["K1", "2"]}], "}"}]}], "]"}]}], "}"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"quadBar", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"s_", ",", "len_", ",", "K1_", ",", "label_"}], "}"}], ",", 
+    "colorFun_"}], "]"}], ":=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"colorFun", "[", "K1", "]"}], ",", 
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{"Positive", "[", "K1", "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Cuboid", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"s", "-", 
+             FractionBox["len", "2"]}], ",", 
+            FractionBox["K1", "4"], ",", 
+            RowBox[{"-", 
+             FractionBox["K1", "2"]}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"s", "+", 
+             FractionBox["len", "2"]}], ",", 
+            FractionBox["K1", "2"], ",", 
+            FractionBox["K1", "2"]}], "}"}]}], "]"}], ",", 
+        RowBox[{"Cuboid", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"s", "-", 
+             FractionBox["len", "2"]}], ",", 
+            RowBox[{"-", 
+             FractionBox["K1", "4"]}], ",", 
+            RowBox[{"-", 
+             FractionBox["K1", "2"]}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"s", "+", 
+             FractionBox["len", "2"]}], ",", 
+            RowBox[{"-", 
+             FractionBox["K1", "2"]}], ",", 
+            FractionBox["K1", "2"]}], "}"}]}], "]"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Cuboid", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"s", "-", 
+             FractionBox["len", "2"]}], ",", 
+            RowBox[{"-", 
+             FractionBox["K1", "2"]}], ",", 
+            FractionBox["K1", "4"]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"s", "+", 
+             FractionBox["len", "2"]}], ",", 
+            FractionBox["K1", "2"], ",", 
+            FractionBox["K1", "2"]}], "}"}]}], "]"}], ",", 
+        RowBox[{"Cuboid", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"s", "-", 
+             FractionBox["len", "2"]}], ",", 
+            RowBox[{"-", 
+             FractionBox["K1", "2"]}], ",", 
+            RowBox[{"-", 
+             FractionBox["K1", "4"]}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"s", "+", 
+             FractionBox["len", "2"]}], ",", 
+            FractionBox["K1", "2"], ",", 
+            RowBox[{"-", 
+             FractionBox["K1", "2"]}]}], "}"}]}], "]"}]}], "}"}]}], "]"}], 
+    ",", 
+    RowBox[{"Text", "[", 
+     RowBox[{"label", ",", 
+      RowBox[{"{", 
+       RowBox[{"s", ",", "0", ",", 
+        FractionBox[
+         RowBox[{"2", " ", "K1"}], "3"]}], "}"}]}], "]"}]}], "}"}]}]], "Input",\
+
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"quadWedge", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"s_", ",", "len_", ",", "K1_", ",", "label_"}], "}"}], ",", 
+    "colorFun_"}], "]"}], ":=", "\n", "\t", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"colorFun", "[", "K1", "]"}], ",", "\n", "\t\t", 
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{"Positive", "[", "K1", "]"}], ",", "\n", "\t\t\t", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Polygon", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"s", ",", 
+             FractionBox["K1", "4"], ",", "0"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"s", ",", 
+             FractionBox["K1", "2"], ",", 
+             RowBox[{"-", 
+              FractionBox["K1", "4"]}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"s", ",", 
+             FractionBox["K1", "2"], ",", 
+             FractionBox["K1", "4"]}], "}"}]}], "}"}], "]"}], ",", "\n", 
+        "\t\t\t\t", 
+        RowBox[{"Polygon", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"s", ",", 
+             RowBox[{"-", 
+              FractionBox["K1", "4"]}], ",", "0"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"s", ",", 
+             RowBox[{"-", 
+              FractionBox["K1", "2"]}], ",", 
+             RowBox[{"-", 
+              FractionBox["K1", "4"]}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"s", ",", 
+             RowBox[{"-", 
+              FractionBox["K1", "2"]}], ",", 
+             FractionBox["K1", "4"]}], "}"}]}], "}"}], "]"}], ",", 
+        RowBox[{"Line", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"s", ",", 
+             RowBox[{"-", 
+              FractionBox["K1", "4"]}], ",", "0"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"s", ",", 
+             FractionBox["K1", "4"], ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
+        RowBox[{"RGBColor", "[", 
+         RowBox[{"0", ",", "0", ",", "0"}], "]"}], ",", 
+        RowBox[{"Text", "[", 
+         RowBox[{"label", ",", 
+          RowBox[{"{", 
+           RowBox[{"s", ",", 
+            FractionBox[
+             RowBox[{"2", " ", "K1"}], "3"], ",", "0"}], "}"}]}], "]"}]}], 
+       "}"}], ",", "\n", "\t\t\t", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Polygon", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"s", ",", "0", ",", 
+             RowBox[{"-", 
+              FractionBox["K1", "4"]}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"s", ",", 
+             RowBox[{"-", 
+              FractionBox["K1", "4"]}], ",", 
+             RowBox[{"-", 
+              FractionBox["K1", "2"]}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"s", ",", 
+             FractionBox["K1", "4"], ",", 
+             RowBox[{"-", 
+              FractionBox["K1", "2"]}]}], "}"}]}], "}"}], "]"}], ",", 
+        RowBox[{"Polygon", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"s", ",", "0", ",", 
+             FractionBox["K1", "4"]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"s", ",", 
+             RowBox[{"-", 
+              FractionBox["K1", "4"]}], ",", 
+             FractionBox["K1", "2"]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"s", ",", 
+             FractionBox["K1", "4"], ",", 
+             FractionBox["K1", "2"]}], "}"}]}], "}"}], "]"}], ",", 
+        RowBox[{"Line", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"s", ",", "0", ",", 
+             RowBox[{"-", 
+              FractionBox["K1", "4"]}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"s", ",", "0", ",", 
+             FractionBox["K1", "4"]}], "}"}]}], "}"}], "]"}], ",", 
+        RowBox[{"RGBColor", "[", 
+         RowBox[{"0", ",", "0", ",", "0"}], "]"}], ",", 
+        RowBox[{"Text", "[", 
+         RowBox[{"label", ",", 
+          RowBox[{"{", 
+           RowBox[{"s", ",", "0", ",", 
+            FractionBox[
+             RowBox[{"2", " ", "K1"}], "3"]}], "}"}]}], "]"}]}], "}"}]}], 
+     "]"}]}], "}"}]}]], "Input",
+ InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["opticsPlot", "Subsubsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"Options", "[", "opticsPlot", "]"}], "=", 
+   RowBox[{"Join", "[", 
+    RowBox[{
+     RowBox[{"Options", "[", "MultipleListPlot", "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"quadGraphic", "->", "quadRectangle"}], ",", 
+       RowBox[{"quadRatio", "->", ".1"}], ",", 
+       RowBox[{"quadColor", "->", "quadPastel"}], ",", 
+       RowBox[{"quadShift", "->", "0"}], ",", 
+       RowBox[{"Axes", "->", "True"}], ",", 
+       RowBox[{"PlotRange", "->", "All"}], ",", 
+       RowBox[{"AxesOrigin", "->", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0"}], "}"}]}], ",", 
+       RowBox[{"PlotJoined", "->", "True"}], ",", 
+       RowBox[{"LegendSize", "->", 
+        RowBox[{"{", 
+         RowBox[{".6", ",", ".3"}], "}"}]}], ",", 
+       RowBox[{"LegendPosition", "->", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "1"}], ",", 
+          RowBox[{"-", "1.1"}]}], "}"}]}], ",", 
+       RowBox[{"AxesLabel", "->", 
+        RowBox[{"{", 
+         RowBox[{"\"\<S\>\"", ",", "\"\<\>\""}], "}"}]}]}], "}"}]}], "]"}]}], 
+  ";"}]], "Input",
+ InitializationCell->True],
+
+Cell["Need to add a check that the necessary columns are present.", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"opticsPlot", "[", 
+   RowBox[{"optics_mfs", ",", "opts___Rule"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "quadGraph", ",", "quadCol", ",", "quadMove", ",", "tempMove", ",", 
+       "propColNames", ",", "data", ",", "maxQuad", ",", "quadFact", ",", 
+       "gr", ",", "o", ",", "maxData", ",", "grfx"}], "}"}], ",", "\n", 
+     "\t\t", 
+     RowBox[{
+      RowBox[{"quadGraph", "=", 
+       RowBox[{
+        RowBox[{"quadGraphic", "/.", 
+         RowBox[{"{", "opts", "}"}]}], " ", "/.", " ", 
+        RowBox[{"Options", "[", "opticsPlot", "]"}]}]}], ";", "\n", "\t\t", 
+      RowBox[{"quadCol", "=", 
+       RowBox[{
+        RowBox[{"quadColor", "/.", 
+         RowBox[{"{", "opts", "}"}]}], "/.", 
+        RowBox[{"Options", "[", "opticsPlot", "]"}]}]}], ";", "\n", "\t\t\t", 
+      
+      RowBox[{"quadMove", "=", 
+       RowBox[{
+        RowBox[{"quadShift", "/.", 
+         RowBox[{"{", "opts", "}"}]}], "/.", 
+        RowBox[{"Options", "[", "opticsPlot", "]"}]}]}], ";", "\n", 
+      "\t\t\t\t", 
+      RowBox[{"data", "=", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"ReplacePart", "[", 
+           RowBox[{"#", ",", 
+            RowBox[{
+             RowBox[{"#", "[", 
+              RowBox[{"[", "3", "]"}], "]"}], "/", 
+             RowBox[{"#", "[", 
+              RowBox[{"[", "2", "]"}], "]"}]}], ",", "3"}], "]"}], ")"}], 
+         "&"}], "/@", 
+        RowBox[{"Transpose", "[", 
+         RowBox[{"mfsColumn", "[", 
+          RowBox[{"optics", ",", 
+           RowBox[{"{", 
+            RowBox[{
+            "\"\<S\>\"", ",", "\"\<L\>\"", ",", "\"\<K1L\>\"", ",", 
+             "\"\<NAME\>\""}], "}"}]}], "]"}], "]"}]}]}], ";", "\n", "\t\t", 
+      RowBox[{"maxQuad", "=", 
+       RowBox[{"Max", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Abs", "@", 
+           RowBox[{"(", 
+            RowBox[{"#", "[", 
+             RowBox[{"[", "3", "]"}], "]"}], ")"}]}], "&"}], "/@", "data"}], 
+        "]"}]}], ";", "\n", "\t\t", 
+      RowBox[{"data", "=", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"ReplacePart", "[", 
+           RowBox[{"#", ",", 
+            RowBox[{"200", " ", 
+             RowBox[{
+              RowBox[{"#", "[", 
+               RowBox[{"[", "3", "]"}], "]"}], "/", "maxQuad"}]}], ",", "3"}],
+            "]"}], ")"}], "&"}], "/@", "data"}]}], ";", "\n", "\t\t\t", 
+      RowBox[{"gr", "=", 
+       RowBox[{"Map", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"quadGraph", "[", 
+            RowBox[{"#", ",", "quadCol", ",", "tempMove"}], "]"}], ")"}], 
+          "&"}], ",", "data"}], "]"}]}], ";", "\n", "\t", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"quadMove", "===", "quadShiftAutomatic"}], ",", 
+        RowBox[{"tempMove", "=", 
+         RowBox[{"-", "100"}]}], ",", 
+        RowBox[{"tempMove", "=", "quadMove"}]}], "]"}], ";", "\n", "\t\t", 
+      RowBox[{"Show", "[", 
+       RowBox[{"Graphics", "[", 
+        RowBox[{"gr", ",", 
+         RowBox[{"AxesLabel", "->", "None"}], ",", 
+         RowBox[{"FilterOptions", "[", 
+          RowBox[{"Graphics", ",", "opts", ",", 
+           RowBox[{"Options", "[", "opticsPlot", "]"}]}], "]"}]}], "]"}], 
+       "]"}]}]}], "\n", "\t\t", "]"}], "/;", " ", 
+   RowBox[{"OpticsQ", "[", "optics", "]"}]}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"opticsPlot", "[", 
+   RowBox[{"optics_mfs", ",", "colNames_List", ",", 
+    RowBox[{"opts___Rule", "/;", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"quadGraphic", "/.", 
+        RowBox[{"{", "opts", "}"}]}], ")"}], "===", 
+      "quadVerticalRectangle"}]}]}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "propColNames", ",", "qRatio", ",", "quadCol", ",", "quadMove", ",", 
+       "tempMove", ",", "data", ",", "maxQuad", ",", "quadFact", ",", "gr", 
+       ",", "o", ",", "maxData", ",", "grfx"}], "}"}], ",", "\n", "\t\t", 
+     RowBox[{
+      RowBox[{"propColNames", "=", 
+       RowBox[{"padArgument", "/@", "colNames"}]}], ";", "\n", "\t\t", 
+      RowBox[{"qRatio", "=", 
+       RowBox[{
+        RowBox[{"quadRatio", "/.", 
+         RowBox[{"{", "opts", "}"}]}], " ", "/.", " ", 
+        RowBox[{"Options", "[", "opticsPlot", "]"}]}]}], ";", "\n", "\t\t\t", 
+      
+      RowBox[{"quadCol", "=", 
+       RowBox[{
+        RowBox[{"quadColor", "/.", 
+         RowBox[{"{", "opts", "}"}]}], "/.", 
+        RowBox[{"Options", "[", "opticsPlot", "]"}]}]}], ";", "\n", "\t\t", 
+      RowBox[{"quadMove", "=", 
+       RowBox[{
+        RowBox[{"quadShift", "/.", 
+         RowBox[{"{", "opts", "}"}]}], "/.", 
+        RowBox[{"Options", "[", "opticsPlot", "]"}]}]}], ";", "\n", 
+      RowBox[{"data", "=", 
+       RowBox[{"Transpose", "[", 
+        RowBox[{"mfsColumn", "[", 
+         RowBox[{"optics", ",", 
+          RowBox[{"{", 
+           RowBox[{
+           "\"\<S\>\"", ",", "\"\<L\>\"", ",", "\"\<K1L\>\"", ",", 
+            "\"\<NAME\>\""}], "}"}]}], "]"}], "]"}]}], ";", "\n", "\t\t", 
+      RowBox[{"maxQuad", "=", 
+       RowBox[{"Max", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Abs", "@", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"#", "[", 
+              RowBox[{"[", "3", "]"}], "]"}], "/", 
+             RowBox[{"#", "[", 
+              RowBox[{"[", "2", "]"}], "]"}]}], ")"}]}], "&"}], "/@", 
+         "data"}], "]"}]}], ";", "\n", "\t\t", 
+      RowBox[{"data", "=", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"ReplacePart", "[", 
+           RowBox[{"#", ",", 
+            RowBox[{"quadFact", " ", 
+             RowBox[{
+              RowBox[{"#", "[", 
+               RowBox[{"[", "3", "]"}], "]"}], "/", 
+              RowBox[{"#", "[", 
+               RowBox[{"[", "2", "]"}], "]"}]}]}], ",", "3"}], "]"}], ")"}], 
+         "&"}], "/@", "data"}]}], ";", "\n", "\t", 
+      RowBox[{"gr", "=", 
+       RowBox[{"Map", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"quadVerticalRectangle", "[", 
+            RowBox[{"#", ",", "quadCol", ",", "tempMove"}], "]"}], ")"}], 
+          "&"}], ",", "data"}], "]"}]}], ";", "\n", "\t\t", 
+      RowBox[{"o", "=", 
+       RowBox[{"Options", "[", "MultipleListPlot", "]"}]}], ";", "\n", "\t\t", 
+      RowBox[{"SetOptions", "[", 
+       RowBox[{"MultipleListPlot", ",", 
+        RowBox[{"FilterOptions", "[", 
+         RowBox[{"MultipleListPlot", ",", 
+          RowBox[{"Options", "[", "opticsPlot", "]"}], ",", "opts"}], "]"}], 
+        ",", 
+        RowBox[{"DisplayFunction", "->", "Identity"}], ",", 
+        RowBox[{"PlotLegend", "->", 
+         RowBox[{"legendArg", "/@", "colNames"}]}], ",", 
+        RowBox[{"Prolog", "->", 
+         RowBox[{"{", "gr", "}"}]}], ",", 
+        RowBox[{"AxesLabel", "->", 
+         RowBox[{"{", 
+          RowBox[{"\"\< \>\"", ",", "\"\<S\>\""}], "}"}]}]}], "]"}], ";", 
+      "\n", "\t\t", 
+      RowBox[{"data", "=", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"getData", "[", 
+           RowBox[{"optics", ",", 
+            RowBox[{"First", "[", "#", "]"}], ",", 
+            RowBox[{"Last", "[", "#", "]"}]}], "]"}], ")"}], "&"}], "/@", 
+        "propColNames"}]}], ";", "\n", "\t\t", 
+      RowBox[{"maxData", "=", 
+       RowBox[{"Max", "@", 
+        RowBox[{"Abs", "[", 
+         RowBox[{"Flatten", "@", 
+          RowBox[{"Map", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"Last", "[", "#", "]"}], ")"}], "&"}], ",", "data", ",", 
+            RowBox[{"{", "2", "}"}]}], "]"}]}], "]"}]}]}], ";", "\n", 
+      "\t\t\t", 
+      RowBox[{"quadFact", "=", 
+       RowBox[{"2", " ", "qRatio", " ", 
+        RowBox[{"maxData", "/", "maxQuad"}]}]}], ";", "\n", "\t", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"quadMove", "===", "quadShiftAutomatic"}], ",", 
+        RowBox[{"tempMove", "=", 
+         RowBox[{
+          RowBox[{"-", "qRatio"}], " ", "maxData"}]}], ",", 
+        RowBox[{"tempMove", "=", "quadMove"}]}], "]"}], ";", "\n", "\t\t\t\t", 
+      RowBox[{"data", "=", 
+       RowBox[{"Map", "[", 
+        RowBox[{"Reverse", ",", "data", ",", 
+         RowBox[{"{", "2", "}"}]}], "]"}]}], ";", "\n", 
+      RowBox[{"grfx", "=", 
+       RowBox[{"MultipleListPlot", "[", 
+        RowBox[{"(", "data", ")"}], "]"}]}], ";", "\n", "\t\t", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"SetOptions", "[", 
+          RowBox[{"MultipleListPlot", ",", "#1"}], "]"}], "&"}], ")"}], "/@", 
+       "o"}], ";", "\n", "\t\t", 
+      RowBox[{"Show", "[", 
+       RowBox[{"grfx", "/.", 
+        RowBox[{"Identity", "->", "$DisplayFunction"}]}], "]"}]}]}], "\n", 
+    "\t\t", "]"}], "/;", " ", 
+   RowBox[{"OpticsQ", "[", "optics", "]"}]}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"opticsPlot", "[", 
+   RowBox[{"optics_mfs", ",", "colNames_List", ",", "opts___Rule"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "quadGraph", ",", "qRatio", ",", "quadCol", ",", "quadMove", ",", 
+       "tempMove", ",", "propColNames", ",", "data", ",", "maxQuad", ",", 
+       "quadFact", ",", "gr", ",", "o", ",", "maxData", ",", "grfx"}], "}"}], 
+     ",", "\n", "\t\t", 
+     RowBox[{
+      RowBox[{"quadGraph", "=", 
+       RowBox[{
+        RowBox[{"quadGraphic", "/.", 
+         RowBox[{"{", "opts", "}"}]}], " ", "/.", " ", 
+        RowBox[{"Options", "[", "opticsPlot", "]"}]}]}], ";", "\n", "\t\t", 
+      RowBox[{"qRatio", "=", 
+       RowBox[{
+        RowBox[{"quadRatio", "/.", 
+         RowBox[{"{", "opts", "}"}]}], " ", "/.", " ", 
+        RowBox[{"Options", "[", "opticsPlot", "]"}]}]}], ";", "\n", "\t\t\t", 
+      
+      RowBox[{"quadCol", "=", 
+       RowBox[{
+        RowBox[{"quadColor", "/.", 
+         RowBox[{"{", "opts", "}"}]}], "/.", 
+        RowBox[{"Options", "[", "opticsPlot", "]"}]}]}], ";", "\n", "\t\t\t", 
+      
+      RowBox[{"quadMove", "=", 
+       RowBox[{
+        RowBox[{"quadShift", "/.", 
+         RowBox[{"{", "opts", "}"}]}], "/.", 
+        RowBox[{"Options", "[", "opticsPlot", "]"}]}]}], ";", "\n", "\t\t", 
+      RowBox[{"propColNames", "=", 
+       RowBox[{"padArgument", "/@", "colNames"}]}], ";", "\n", 
+      RowBox[{"data", "=", 
+       RowBox[{"Transpose", "[", 
+        RowBox[{"mfsColumn", "[", 
+         RowBox[{"optics", ",", 
+          RowBox[{"{", 
+           RowBox[{
+           "\"\<S\>\"", ",", "\"\<L\>\"", ",", "\"\<K1L\>\"", ",", 
+            "\"\<NAME\>\""}], "}"}]}], "]"}], "]"}]}], ";", "\n", "\t\t", 
+      RowBox[{"maxQuad", "=", 
+       RowBox[{"Max", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Abs", "@", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"#", "[", 
+              RowBox[{"[", "3", "]"}], "]"}], "/", 
+             RowBox[{"#", "[", 
+              RowBox[{"[", "2", "]"}], "]"}]}], ")"}]}], "&"}], "/@", 
+         "data"}], "]"}]}], ";", "\n", "\t\t", 
+      RowBox[{"data", "=", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"ReplacePart", "[", 
+           RowBox[{"#", ",", 
+            RowBox[{"quadFact", " ", 
+             RowBox[{
+              RowBox[{"#", "[", 
+               RowBox[{"[", "3", "]"}], "]"}], "/", 
+              RowBox[{"#", "[", 
+               RowBox[{"[", "2", "]"}], "]"}]}]}], ",", "3"}], "]"}], ")"}], 
+         "&"}], "/@", "data"}]}], ";", "\n", "\t", 
+      RowBox[{"gr", "=", 
+       RowBox[{"Map", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"quadGraph", "[", 
+            RowBox[{"#", ",", "quadCol", ",", "tempMove"}], "]"}], ")"}], 
+          "&"}], ",", "data"}], "]"}]}], ";", "\n", "\t\t", 
+      RowBox[{"o", "=", 
+       RowBox[{"Options", "[", "MultipleListPlot", "]"}]}], ";", "\n", "\t\t", 
+      RowBox[{"SetOptions", "[", 
+       RowBox[{"MultipleListPlot", ",", 
+        RowBox[{"FilterOptions", "[", 
+         RowBox[{"MultipleListPlot", ",", 
+          RowBox[{"Options", "[", "opticsPlot", "]"}], ",", "opts"}], "]"}], 
+        ",", 
+        RowBox[{"DisplayFunction", "->", "Identity"}], ",", 
+        RowBox[{"PlotLegend", "->", 
+         RowBox[{"legendArg", "/@", "colNames"}]}], ",", 
+        RowBox[{"Prolog", "->", 
+         RowBox[{"{", "gr", "}"}]}]}], "]"}], ";", "\n", "\t\t", 
+      RowBox[{"data", "=", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"getData", "[", 
+           RowBox[{"optics", ",", 
+            RowBox[{"First", "[", "#", "]"}], ",", 
+            RowBox[{"Last", "[", "#", "]"}]}], "]"}], ")"}], "&"}], "/@", 
+        "propColNames"}]}], ";", "\n", "\t\t", 
+      RowBox[{"maxData", "=", 
+       RowBox[{"Max", "@", 
+        RowBox[{"Abs", "[", 
+         RowBox[{"Flatten", "@", 
+          RowBox[{"Map", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"Last", "[", "#", "]"}], ")"}], "&"}], ",", "data", ",", 
+            RowBox[{"{", "2", "}"}]}], "]"}]}], "]"}]}]}], ";", "\n", "\t\t", 
+      
+      RowBox[{"quadFact", "=", 
+       RowBox[{"2", " ", "qRatio", " ", 
+        RowBox[{"maxData", "/", "maxQuad"}]}]}], ";", "\n", "\t\t\t\t", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"quadMove", "===", "quadShiftAutomatic"}], ",", 
+        RowBox[{"tempMove", "=", 
+         RowBox[{
+          RowBox[{"-", "qRatio"}], " ", "maxData"}]}], ",", 
+        RowBox[{"tempMove", "=", "quadMove"}]}], "]"}], ";", "\n", 
+      RowBox[{"grfx", "=", 
+       RowBox[{"MultipleListPlot", "[", 
+        RowBox[{"(", "data", ")"}], "]"}]}], ";", "\n", "\t\t", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"SetOptions", "[", 
+          RowBox[{"MultipleListPlot", ",", "#1"}], "]"}], "&"}], ")"}], "/@", 
+       "o"}], ";", "\n", "\t\t", 
+      RowBox[{"Show", "[", 
+       RowBox[{"grfx", "/.", 
+        RowBox[{"Identity", "->", "$DisplayFunction"}]}], "]"}]}]}], "\n", 
+    "\t\t", "]"}], "/;", " ", 
+   RowBox[{"OpticsQ", "[", "optics", "]"}]}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"opticsPlot", "[", 
+   RowBox[{"optics_mfs", ",", "colNames_String", ",", "opts___Rule"}], "]"}], 
+  ":=", 
+  RowBox[{"opticsPlot", "[", 
+   RowBox[{"optics", ",", 
+    RowBox[{"{", "colNames", "}"}], ",", "opts"}], "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"opticsPlot", "[", 
+   RowBox[{
+   "optics_mfs", ",", "colNames_String", ",", "fun_", ",", "opts___Rule"}], 
+   "]"}], ":=", 
+  RowBox[{"opticsPlot", "[", 
+   RowBox[{"optics", ",", 
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{"colNames", ",", "fun"}], "}"}], "}"}], ",", "opts"}], 
+   "]"}]}]], "Input",
+ InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["opticsPlot3D", "Subsubsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"Options", "[", "opticsPlot3D", "]"}], "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"quadGraphic", "->", "quadBlock"}], ",", 
+     RowBox[{"quadColor", "->", "quadPastel"}], ",", 
+     RowBox[{"Axes", "->", "True"}], ",", 
+     RowBox[{"PlotRange", "->", "All"}], ",", 
+     RowBox[{"AxesLabel", "->", 
+      RowBox[{"{", 
+       RowBox[{"\"\<S\>\"", ",", "\"\<\>\"", ",", "\"\< \>\""}], "}"}]}], ",", 
+     RowBox[{"ViewPoint", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"-", "1.157"}], ",", 
+        RowBox[{"-", "3.162"}], ",", "0.9"}], "}"}]}], ",", 
+     RowBox[{"Lighting", "\[Rule]", "False"}], ",", 
+     RowBox[{"BoxRatios", "\[Rule]", "Automatic"}]}], "}"}]}], ";"}]], "Input",\
+
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"opticsPlot3D", "[", 
+   RowBox[{"optics_mfs", ",", "opts___Rule"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "quadGraph", ",", "quadCol", ",", "data", ",", "maxQuad", ",", "gr"}], 
+     "}"}], ",", "\n", "\t\t", 
+    RowBox[{
+     RowBox[{"quadGraph", "=", 
+      RowBox[{
+       RowBox[{"quadGraphic", "/.", 
+        RowBox[{"{", "opts", "}"}]}], "/.", 
+       RowBox[{"Options", "[", "opticsPlot3D", "]"}]}]}], ";", "\n", "\t\t\t", 
+     RowBox[{"quadCol", "=", 
+      RowBox[{
+       RowBox[{"quadColor", "/.", 
+        RowBox[{"{", "opts", "}"}]}], "/.", 
+       RowBox[{"Options", "[", "opticsPlot", "]"}]}]}], ";", "\n", "\t\t", 
+     RowBox[{"data", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"ReplacePart", "[", 
+          RowBox[{"#", ",", 
+           RowBox[{
+            RowBox[{"#", "[", 
+             RowBox[{"[", "3", "]"}], "]"}], "/", 
+            RowBox[{"#", "[", 
+             RowBox[{"[", "2", "]"}], "]"}]}], ",", "3"}], "]"}], ")"}], 
+        "&"}], "/@", 
+       RowBox[{"Transpose", "[", 
+        RowBox[{"mfsColumn", "[", 
+         RowBox[{"optics", ",", 
+          RowBox[{"{", 
+           RowBox[{
+           "\"\<S\>\"", ",", "\"\<L\>\"", ",", "\"\<K1L\>\"", ",", 
+            "\"\<NAME\>\""}], "}"}]}], "]"}], "]"}]}]}], ";", "\n", "\t\t", 
+     RowBox[{"maxQuad", "=", 
+      RowBox[{"Max", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Abs", "@", 
+          RowBox[{"(", 
+           RowBox[{"#", "[", 
+            RowBox[{"[", "3", "]"}], "]"}], ")"}]}], "&"}], "/@", "data"}], 
+       "]"}]}], ";", "\n", "\t\t", 
+     RowBox[{"data", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"ReplacePart", "[", 
+          RowBox[{"#", ",", 
+           RowBox[{"200", " ", 
+            RowBox[{
+             RowBox[{"#", "[", 
+              RowBox[{"[", "3", "]"}], "]"}], "/", "maxQuad"}]}], ",", "3"}], 
+          "]"}], ")"}], "&"}], "/@", "data"}]}], ";", "\n", 
+     RowBox[{"gr", "=", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Map", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"quadGraph", "[", 
+             RowBox[{"#", ",", "quadCol"}], "]"}], ")"}], "&"}], ",", 
+          "data"}], "]"}], ",", 
+        RowBox[{"RGBColor", "[", 
+         RowBox[{"0.7", ",", "0.7", ",", ".5"}], "]"}], ",", 
+        RowBox[{"Line", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"First", "[", 
+              RowBox[{"First", "[", "data", "]"}], "]"}], ",", "0", ",", 
+             "0"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"First", "[", 
+              RowBox[{"Last", "[", "data", "]"}], "]"}], ",", "0", ",", "0"}],
+             "}"}]}], "}"}], "]"}]}], "}"}]}], ";", "\n", "\t\t", 
+     RowBox[{"Show", "[", 
+      RowBox[{"Graphics3D", "[", 
+       RowBox[{"gr", ",", 
+        RowBox[{"FilterOptions", "[", 
+         RowBox[{"Graphics3D", ",", "opts", ",", 
+          RowBox[{"Options", "[", "opticsPlot3D", "]"}]}], "]"}]}], "]"}], 
+      "]"}]}]}], "\n", "\t\t", "]"}]}]], "Input",
+ InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["standardOpticsPlot", "Subsubsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"standardOpticsPlot", "[", "optics_mfs", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "Dxfac", "}"}], ",", "\n", "\t\t", 
+    RowBox[{
+     RowBox[{"Print", "[", 
+      RowBox[{"mfsKeyValue", "[", 
+       RowBox[{"optics", ",", "\"\<COMMENT\>\""}], "]"}], "]"}], ";", "\n", 
+     "\t\t", 
+     RowBox[{"Dxfac", "=", "100"}], ";", "\n", "\t\t", 
+     RowBox[{"MultipleListPlot", "[", 
+      RowBox[{
+       RowBox[{"Transpose", "[", 
+        RowBox[{"mfsColumn", "[", 
+         RowBox[{"optics", ",", 
+          RowBox[{"{", 
+           RowBox[{"\"\<S\>\"", ",", "\"\<BETX\>\""}], "}"}]}], "]"}], "]"}], 
+       ",", "\n", "\t\t\t", 
+       RowBox[{"Transpose", "[", 
+        RowBox[{"mfsColumn", "[", 
+         RowBox[{"optics", ",", 
+          RowBox[{"{", 
+           RowBox[{"\"\<S\>\"", ",", "\"\<BETY\>\""}], "}"}]}], "]"}], "]"}], 
+       ",", "\t\t\t", "\n", "\t\t\t", 
+       RowBox[{"Transpose", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"1", ",", "Dxfac"}], "}"}], 
+         RowBox[{"mfsColumn", "[", 
+          RowBox[{"optics", ",", 
+           RowBox[{"{", 
+            RowBox[{"\"\<S\>\"", ",", "\"\<DX\>\""}], "}"}]}], "]"}]}], "]"}],
+        ",", "\n", "\t\t\t", 
+       RowBox[{"PlotRange", "->", "All"}], ",", "\n", "\t\t\t", 
+       RowBox[{"PlotLegend", "->", 
+        RowBox[{"{", 
+         RowBox[{
+         "\"\<\\!\\(\[Beta]\\_x\\)\>\"", ",", "\"\<\\!\\(\[Beta]\\_y\\)\>\"", 
+          ",", "\"\<100\\!\\(D\\_x\\)\>\""}], "}"}]}], ",", "\n", "\t\t\t", 
+       RowBox[{"LegendPosition", "->", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "1"}], ",", 
+          RowBox[{"-", "1.1"}]}], "}"}]}], ",", "\n", "\t\t\t", 
+       RowBox[{"LegendSize", "->", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "0.3"}], "}"}]}], ",", "\n", "\t\t\t", 
+       RowBox[{"PlotJoined", "->", "True"}], ",", "\n", "\t\t\t", 
+       RowBox[{"Epilog", "->", 
+        RowBox[{"(", "\n", "\t\t\t\t\t", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"Text", "[", 
+             RowBox[{
+              RowBox[{
+              "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+              ",", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{
+                "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+                ",", 
+                RowBox[{"1.05", 
+                 RowBox[{"Max", "[", 
+                  RowBox[{
+                   RowBox[{
+                   "#", "\[LeftDoubleBracket]", "3", 
+                    "\[RightDoubleBracket]"}], ",", 
+                   RowBox[{
+                   "#", "\[LeftDoubleBracket]", "4", 
+                    "\[RightDoubleBracket]"}]}], "]"}]}]}], "}"}]}], "]"}], 
+            ")"}], " ", "&"}], " ", "/@", " ", "\n", "\t\t\t\t", 
+          RowBox[{"(", 
+           RowBox[{"Transpose", "[", 
+            RowBox[{"mfsColumn", "[", 
+             RowBox[{"optics", ",", 
+              RowBox[{"{", 
+               RowBox[{
+               "\"\<NAME\>\"", ",", "\"\<S\>\"", ",", "\"\<BETX\>\"", ",", 
+                "\"\<BETY\>\""}], "}"}]}], "]"}], "]"}], ")"}]}], "\n", 
+         "\t\t\t\t\t", ")"}]}]}], "\n", "\t\t\t", "]"}]}]}], "\n", "\t", 
+   "]"}]}]], "Input",
+ InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["compareInsertionPlot", "Subsubsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"compareInsertionPlots", "[", 
+   RowBox[{"opt1_mfs", ",", "opt2_mfs", ",", 
+    RowBox[{"{", 
+     RowBox[{"el0_", ",", "el1_"}], "}"}]}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", "}"}], ",", "\n", 
+     RowBox[{
+      RowBox[{"MultipleListPlot", "[", "\n", "\t", 
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"mfsColumn", "[", 
+          RowBox[{
+           RowBox[{"opticsRange", "[", 
+            RowBox[{"opt1", ",", 
+             RowBox[{"{", 
+              RowBox[{"el0", ",", "el1"}], "}"}]}], "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"\"\<S\>\"", ",", "\"\<BETX\>\""}], "}"}]}], "]"}], "]"}],
+         ",", "\n", "\t", 
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"mfsColumn", "[", 
+            RowBox[{
+             RowBox[{"opticsRange", "[", 
+              RowBox[{"opt1", ",", 
+               RowBox[{"{", 
+                RowBox[{"el0", ",", "el1"}], "}"}]}], "]"}], ",", 
+             "\"\<S\>\""}], "]"}], ",", 
+           RowBox[{"mfsColumn", "[", 
+            RowBox[{"opt2", ",", "\"\<BETX\>\""}], "]"}]}], "}"}], "]"}], ",",
+         "\n", "\t", 
+        RowBox[{"AxesLabel", "->", 
+         RowBox[{"{", 
+          RowBox[{"\"\<S\>\"", ",", "\"\<BETX\>\""}], "}"}]}], ",", 
+        RowBox[{"PlotJoined", "->", "True"}]}], "\n", "\t", "]"}], ";", "\n", 
+      "\t", 
+      RowBox[{"MultipleListPlot", "[", "\n", "\t", 
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"mfsColumn", "[", 
+          RowBox[{
+           RowBox[{"opticsRange", "[", 
+            RowBox[{"opt1", ",", 
+             RowBox[{"{", 
+              RowBox[{"el0", ",", "el1"}], "}"}]}], "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"\"\<S\>\"", ",", "\"\<BETY\>\""}], "}"}]}], "]"}], "]"}],
+         ",", "\n", "\t", 
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"mfsColumn", "[", 
+            RowBox[{
+             RowBox[{"opticsRange", "[", 
+              RowBox[{"opt1", ",", 
+               RowBox[{"{", 
+                RowBox[{"el0", ",", "el1"}], "}"}]}], "]"}], ",", 
+             "\"\<S\>\""}], "]"}], ",", 
+           RowBox[{"mfsColumn", "[", 
+            RowBox[{"opt2", ",", "\"\<BETY\>\""}], "]"}]}], "}"}], "]"}], ",",
+         "\n", "\t", 
+        RowBox[{"AxesLabel", "->", 
+         RowBox[{"{", 
+          RowBox[{"\"\<S\>\"", ",", "\"\<BETY\>\""}], "}"}]}], ",", 
+        RowBox[{"PlotJoined", "->", "True"}]}], "\n", "\t", "]"}], ";", "\n", 
+      "\t", 
+      RowBox[{"MultipleListPlot", "[", "\n", "\t", 
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"mfsColumn", "[", 
+          RowBox[{
+           RowBox[{"opticsRange", "[", 
+            RowBox[{"opt1", ",", 
+             RowBox[{"{", 
+              RowBox[{"el0", ",", "el1"}], "}"}]}], "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"\"\<S\>\"", ",", "\"\<DX\>\""}], "}"}]}], "]"}], "]"}], 
+        ",", "\n", "\t", 
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"mfsColumn", "[", 
+            RowBox[{
+             RowBox[{"opticsRange", "[", 
+              RowBox[{"opt1", ",", 
+               RowBox[{"{", 
+                RowBox[{"el0", ",", "el1"}], "}"}]}], "]"}], ",", 
+             "\"\<S\>\""}], "]"}], ",", 
+           RowBox[{"mfsColumn", "[", 
+            RowBox[{"opt2", ",", "\"\<DX\>\""}], "]"}]}], "}"}], "\t", "]"}], 
+        ",", "\n", "\t", 
+        RowBox[{"AxesLabel", "->", 
+         RowBox[{"{", 
+          RowBox[{"\"\<S\>\"", ",", "\"\<DX\>\""}], "}"}]}], ",", 
+        RowBox[{"PlotJoined", "->", "True"}]}], "\n", "]"}]}]}], "\n", "\t", 
+    "]"}], "/;", " ", 
+   RowBox[{
+    RowBox[{"OpticsQ", "[", "opt1", "]"}], " ", "&&", " ", 
+    RowBox[{"OpticsQ", "[", "opt2", "]"}]}]}]}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Restore protection of system symbols", "Subsection",
+ InitializationCell->True,
+ CellTags->"Implementation section"],
+
+Cell["Protect[ Evaluate[protected] ]", "Input",
+ InitializationCell->True,
+ CellTags->"Implementation section"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["End the private context", "Subsection",
+ InitializationCell->True,
+ CellTags->"Implementation section"],
+
+Cell["End[ ]", "Input",
+ InitializationCell->True,
+ CellTags->"Implementation section"]
+}, Closed]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Epilog", "Section",
+ InitializationCell->True,
+ CellTags->"Epilog section"],
+
+Cell["This section protects exported symbols and ends the package.", "Text",
+ CellTags->"Epilog section"],
+
+Cell[CellGroupData[{
+
+Cell["Protect exported symbol", "Subsection",
+ InitializationCell->True,
+ CellTags->"Epilog section"],
+
+Cell["\<\
+Protect[ compareOptics,opticsRange,opticsPlot,opticsPlot3D,standardOpticsPlot,\
+compareInsertionPlots,quadRectangle,quadVerticalRectangle,quadBlock,quadBar,\
+quadWedge,quadGraphic,quadRatio,quadColor,quadPastel,quadGray,quadShift,\
+quadShiftAutomatic,calculateLEPOptics]\
+\>", "Input",
+ InitializationCell->True,
+ CellTags->"Epilog section"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["End the package context", "Subsection",
+ InitializationCell->True,
+ CellTags->"Epilog section"],
+
+Cell["EndPackage[ ]", "Input",
+ InitializationCell->True,
+ CellTags->"Epilog section"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Examples, Tests", "Section",
+ CellTags->"Examples section"],
+
+Cell[CellGroupData[{
+
+Cell["Data preparation", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AppendTo", "[", 
+   RowBox[{"$Path", ",", 
+    RowBox[{"ToFileName", "[", 
+     RowBox[{"{", 
+      RowBox[{
+      "$AfsRoot", ",", "\"\<cern.ch\>\"", ",", "\"\<user\>\"", ",", 
+       "\"\<j\>\"", ",", "\"\<jowett\>\"", ",", "\"\<public\>\"", ",", 
+       "\"\<math\>\"", ",", "\"\<Madtomma\>\"", ",", "\"\<Mfs\>\"", ",", 
+       "\"\<Examples\>\""}], "}"}], "]"}]}], "]"}], ";"}]], "Input"],
+
+Cell["This is data preparation.", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"optmfs", "=", 
+   RowBox[{"tfsRead", "[", 
+    RowBox[{"\"\<sq97.tfs\>\"", ",", 
+     RowBox[{"Verbose", "->", "False"}]}], "]"}]}], ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"optmfs", "=", 
+   RowBox[{"mfsRange", "[", 
+    RowBox[{"optmfs", ",", "\"\<S\>\"", ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "500"}], "}"}]}], "]"}]}], ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"Length", "[", 
+  RowBox[{"Last", "@", "optmfs"}], "]"}]], "Input"],
+
+Cell["\<\
+Adding a fixed length of quads.  REMOVE THIS BY GETTING BETTER EXAMPLE FILE.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"optmfs", "[", 
+    RowBox[{"[", "3", "]"}], "]"}], "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"Append", "[", 
+       RowBox[{"#", ",", "2"}], "]"}], ")"}], "&"}], "/@", 
+    RowBox[{"Last", "[", "optmfs", "]"}]}]}], ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AppendTo", "[", 
+   RowBox[{
+    RowBox[{"optmfs", "[", 
+     RowBox[{"[", "2", "]"}], "]"}], ",", "\"\<L\>\""}], "]"}], 
+  ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"mfsColumnNames", "[", "optmfs", "]"}]], "Input"],
+
+Cell["Removing tilted quads.", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"removeQTs", "[", "optics_mfs", "]"}], ":=", 
+  RowBox[{"mfsSelect", "[", 
+   RowBox[{"optics", ",", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"!", 
+       RowBox[{"StringMatchQ", "[", 
+        RowBox[{
+         RowBox[{"mfsColumnValue", "[", 
+          RowBox[{"optics", ",", "#", ",", "\"\<NAME\>\""}], "]"}], ",", 
+         "\"\<*QT*\>\""}], "]"}]}], ")"}], "&"}]}], "]"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"optmfs", "=", 
+   RowBox[{"removeQTs", "[", "optmfs", "]"}]}], ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"Length", "[", 
+  RowBox[{"Last", "@", "optmfs"}], "]"}]], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Transforming MAD notation to conventional notations", "Subsection"],
+
+Cell[TextData[{
+ "The function ",
+ StyleBox["opticsNotation", "Input"],
+ " will replace any occurrences of strings containing MAD notations for \
+optical functions with more conventional notations.  The list of \
+substitutions that are made is kept in the variable ",
+ StyleBox["opticsNotationRules", "Input"],
+ "."
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{"opticsNotation", "[", 
+  RowBox[{
+   FractionBox[
+    SqrtBox[
+     RowBox[{"\"\<BETX\>\"", "<>", "\"\<[2]\>\""}]], 
+    SqrtBox[
+     RowBox[{"\"\<BETX\>\"", "<>", "\"\<[1]\>\""}]]], 
+   RowBox[{"(", GridBox[{
+      {
+       RowBox[{"Cos", "[", 
+        RowBox[{"2", "\[Pi]", "\"\<MUX\>\""}], "]"}], 
+       RowBox[{"Sin", "[", 
+        RowBox[{"\[Pi]", 
+         RowBox[{"(", 
+          RowBox[{"\"\<MUX\>\"", "-", "\"\<MUY\>\""}], ")"}]}], "]"}]},
+      {
+       RowBox[{"Sin", "[", 
+        RowBox[{"\[Pi]", 
+         RowBox[{"(", 
+          RowBox[{"\"\<MUX\>\"", "+", "\"\<MUY\>\""}], ")"}]}], "]"}], 
+       RowBox[{"Cos", "[", 
+        RowBox[{"2", "\[Pi]", "\"\<MUY\>\""}], "]"}]}
+     }], ")"}], 
+   RowBox[{"(", 
+    RowBox[{"1", "+", "\"\<DELTA\>\""}], ")"}]}], "\n", "]"}]], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Plotting optics functions in 2D", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{"?", "opticsPlot"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"?", "quadRectangle"}]], "Input"],
+
+Cell[TextData[{
+ "The simplest use of opticsPlot is just to plot a beamline layout.   \
+Quadrupoles are shown as coloured boxes whose transverse size is proportional \
+to the quadrupole strength ",
+ StyleBox["K1", "Input"],
+ ".   By default, horizontally/vertically focusing quadrupoles are shown in \
+pastel blue/pink.   This corresponds to the option setting ",
+ StyleBox["quadColor->quadPastel. ", "Input"]
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{"pic", "=", 
+  RowBox[{"opticsPlot", "[", "optmfs", "]"}]}]], "Input"],
+
+Cell["\<\
+The orientation can be changed by specifying a different value for the \
+function that produces the graphical representation of a quadrupole.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"?", "quadGraphic"}]], "Input"],
+
+Cell["IMPROVE USAGE MESSAGE, explain arguments", "Text"],
+
+Cell[BoxData[
+ RowBox[{"?", "quadRectangle"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"pic", "=", 
+  RowBox[{"opticsPlot", "[", 
+   RowBox[{"optmfs", ",", 
+    RowBox[{"quadGraphic", "->", "quadVerticalRectangle"}]}], 
+   "]"}]}]], "Input"],
+
+Cell[TextData[{
+ "The setting ",
+ StyleBox["quadColor->quadGray ", "Input"],
+ "which is  used in the following example is an alternative that is useful \
+for printing in black and white."
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{"pic", "=", 
+  RowBox[{"opticsPlot", "[", 
+   RowBox[{"optmfs", ",", 
+    RowBox[{"{", 
+     RowBox[{"\"\<BETX\>\"", ",", "\"\<BETY\>\""}], "}"}], ",", 
+    RowBox[{"quadGraphic", "->", "quadRectangle"}], ",", 
+    RowBox[{"quadColor", "->", "quadGray"}], ",", 
+    RowBox[{"quadShift", "->", "quadShiftAutomatic"}], ",", 
+    RowBox[{"quadRatio", "->", "0.25"}]}], "]"}]}]], "Input"],
+
+Cell["\<\
+First a standard version with horizontal rectangles with one function to plot.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"pic", "=", 
+  RowBox[{"opticsPlot", "[", 
+   RowBox[{"optmfs", ",", "\"\<BETX\>\""}], "]"}]}]], "Input"],
+
+Cell["\<\
+Now a list of functions.   Then multipliers.  Then functions to be applied.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"pic", "=", 
+  RowBox[{"opticsPlot", "[", 
+   RowBox[{"optmfs", ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"\"\<BETX\>\"", ",", "Sqrt"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"\"\<BETY\>\"", ",", "Sqrt"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"\"\<MUX\>\"", ",", 
+        RowBox[{"N", "[", 
+         RowBox[{"2", "\[Pi]"}], "]"}]}], "}"}]}], "}"}]}], "]"}]}]], "Input"],
+
+Cell[BoxData[
+ FormBox[
+  RowBox[{
+   RowBox[{"The", " ", "mechanism", " ", "of", " ", "pure", " ", 
+    RowBox[{"functions", " ", "[", 
+     RowBox[{"Ref", " ", "Wolfram"}], "]"}], " ", "can", " ", "be", " ", 
+    "used", "  ", "to", " ", "plot", " ", "many", " ", "other", " ", 
+    RowBox[{"quantities", ".", "  ", "Here"}]}], ",", " ", 
+   RowBox[{
+   "for", " ", "example", " ", "is", " ", "a", " ", "plot", " ", "of", " ", 
+    RowBox[{
+     SubscriptBox["\[Beta]", "y"], "/", 
+     SubscriptBox["\[Beta]", "x"]}], " ", "in", " ", "the", " ", "same", " ", 
+    
+    RowBox[{"insertion", "."}]}]}], TextForm]], "Text"],
+
+Cell[BoxData[
+ RowBox[{"pic", "=", 
+  RowBox[{"opticsPlot", "[", 
+   RowBox[{"optmfs", ",", 
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{"\"\<BETY\>\"", ",", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"Times", "[", 
+          RowBox[{"#", ",", 
+           RowBox[{"1", "/", 
+            RowBox[{"mfsColumn", "[", 
+             RowBox[{"optmfs", ",", "\"\<BETX\>\""}], "]"}]}]}], "]"}], ")"}],
+         "&"}]}], "}"}], "}"}]}], "]"}]}]], "Input"],
+
+Cell["Add some parameters.", "Text"],
+
+Cell[BoxData[
+ RowBox[{"pic", "=", 
+  RowBox[{"opticsPlot", "[", 
+   RowBox[{"optmfs", ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"\"\<BETX\>\"", ",", "Sqrt"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"\"\<BETY\>\"", ",", ".5"}], "}"}]}], "}"}], ",", 
+    RowBox[{"quadGraphic", "->", "quadRectangle"}]}], "]"}]}]], "Input"],
+
+Cell["\<\
+quadRatio=1 means that the biggest quad matches the biggest function value \
+(default value 0.35).\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"pic", "=", 
+  RowBox[{"opticsPlot", "[", 
+   RowBox[{"optmfs", ",", 
+    RowBox[{"{", 
+     RowBox[{"\"\<BETX\>\"", ",", "\"\<BETY\>\"", ",", 
+      RowBox[{"{", 
+       RowBox[{"\"\<MUX\>\"", ",", "100"}], "}"}]}], "}"}], ",", 
+    RowBox[{"quadGraphic", "->", "quadRectangle"}], ",", 
+    RowBox[{"quadRatio", "->", ".1"}]}], "]"}]}]], "Input"],
+
+Cell["This syntax works as well.", "Text"],
+
+Cell[BoxData[
+ RowBox[{"pic", "=", 
+  RowBox[{"opticsPlot", "[", 
+   RowBox[{"optmfs", ",", "\"\<BETX\>\"", ",", ".7", ",", 
+    RowBox[{"quadGraphic", "->", "quadRectangle"}], ",", 
+    RowBox[{"quadRatio", "->", ".1"}]}], "]"}]}]], "Input"],
+
+Cell["Now vertical rectangles.", "Text"],
+
+Cell[BoxData[
+ RowBox[{"pic", "=", 
+  RowBox[{"opticsPlot", "[", 
+   RowBox[{"optmfs", ",", 
+    RowBox[{"{", 
+     RowBox[{"\"\<BETX\>\"", ",", "\"\<BETY\>\""}], "}"}], ",", 
+    RowBox[{"quadGraphic", "->", "quadVerticalRectangle"}], ",", " ", 
+    RowBox[{"quadShift", "->", "250"}], ",", 
+    RowBox[{"AspectRatio", "->", "Automatic"}], ",", 
+    RowBox[{"LegendPosition", "->", 
+     RowBox[{"{", 
+      RowBox[{".5", ",", ".3"}], "}"}]}]}], "]"}]}]], "Input"],
+
+Cell[BoxData[""], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["A standard optics plot in 2D", "Subsection"],
+
+Cell[TextData[{
+ "The function ",
+ StyleBox["opticsPlot", "Input"],
+ " defined in the previous section is very flexible and supports a long list \
+of options.  Often however,  the user needs a standard plot of the ",
+ Cell[BoxData[
+  FormBox["\[Beta]", TraditionalForm]]],
+ "-functions and dispersion.  For this purpose a special \"canned\" function \
+with no options exists.  "
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{"standardOpticsPlot", "[", "optmfs", "]"}]], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Plotting optics functions in 3D", "Subsection"],
+
+Cell["A default version. - Block", "Text"],
+
+Cell[BoxData[
+ RowBox[{"opticsPlot3D", "[", "optmfs", "]"}]], "Input"],
+
+Cell["Bars.", "Text"],
+
+Cell[BoxData[
+ RowBox[{"opticsPlot3D", "[", 
+  RowBox[{"optmfs", ",", 
+   RowBox[{"quadGraphic", "->", "quadBar"}]}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"InterpolatingFunction", "["}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"bx", "=", 
+  RowBox[{"Interpolation", "[", 
+   RowBox[{"Transpose", "[", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"mfsColumn", "[", 
+       RowBox[{"optmfs", ",", "\"\<S\>\""}], "]"}], ",", 
+      RowBox[{"mfsColumn", "[", 
+       RowBox[{"optmfs", ",", "\"\<BETX\>\""}], "]"}]}], "}"}], "]"}], 
+   "]"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"by", "=", 
+  RowBox[{"Interpolation", "[", 
+   RowBox[{"Transpose", "[", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"mfsColumn", "[", 
+       RowBox[{"optmfs", ",", "\"\<S\>\""}], "]"}], ",", 
+      RowBox[{"mfsColumn", "[", 
+       RowBox[{"optmfs", ",", "\"\<BETY\>\""}], "]"}]}], "}"}], "]"}], 
+   "]"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"?", "ParametricPlot3D"}]], "Input"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Ex", "=", "40"}], ";", 
+  RowBox[{"Ey", "=", "1"}], ";"}], "\n", 
+ RowBox[{"ParametricPlot3D", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"s", ",", 
+     RowBox[{
+      SqrtBox[
+       RowBox[{"Ex", " ", 
+        RowBox[{"bx", "[", "s", "]"}]}]], " ", 
+      RowBox[{"Cos", "[", "u", "]"}]}], ",", 
+     RowBox[{
+      SqrtBox[
+       RowBox[{"Ey", " ", 
+        RowBox[{"by", "[", "s", "]"}]}]], " ", 
+      RowBox[{"Sin", "[", "u", "]"}]}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"u", ",", "0", ",", 
+     RowBox[{"2", " ", "\[Pi]"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"s", ",", "100", ",", "400"}], "}"}]}], "]"}]}], "Input"],
+
+Cell[BoxData[
+ RowBox[{"Plot", "[", 
+  RowBox[{
+   RowBox[{"bx", "[", "s", "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"s", ",", "100", ",", "400"}], "}"}]}], "]"}]], "Input"],
+
+Cell["\<\
+And wedges - faster than blocks and bars, and may allow some extra \
+information to be shown.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"opticsPlot3D", "[", 
+  RowBox[{"optmfs", ",", 
+   RowBox[{"quadGraphic", "->", "quadWedge"}]}], "]"}]], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Comparing two different optics in the same insertion", "Subsection"],
+
+Cell["\<\
+This is example is absolutely trivial, but I didn't have files for a \
+comparison.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"mfsColumn", "[", 
+  RowBox[{"optmfs", ",", "\"\<NAME\>\""}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"compareInsertionPlots", "[", 
+  RowBox[{"optmfs", ",", "optmfs", ",", 
+   RowBox[{"{", 
+    RowBox[{"\"\<QL1A.R1\>\"", ",", "\"\<QF19.R1\>\""}], "}"}]}], 
+  "]"}]], "Input"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Bibliography", "Section"],
+
+Cell[TextData[{
+ StyleBox["[1] Stephen Wolfram, ", "SR"],
+ StyleBox["The Mathematica Book", "SO",
+  FontSlant->"Italic"],
+ StyleBox[", 3rd ed., Wolfram Media/Cambridge University Press, 1996.", "SR"]
+}], "Text",
+ CellTags->"Wolfram book"],
+
+Cell[TextData[{
+ "[2]  Roman Maeder, ",
+ StyleBox["Programming in Mathematica",
+  FontSlant->"Italic"],
+ ", 3rd ed. Addison-Wesley, 1996 and"
+}], "Text",
+ CellTags->"Meader book"],
+
+Cell[TextData[ButtonBox["\thttp://www.wolfram.com/~maeder/ProgInMath/",
+ BaseStyle->"Hyperlink",
+ ButtonData:>{
+   URL["http://www.wolfram.com/~maeder/ProgInMath/"], None}]], "Program"],
+
+Cell["\<\
+[3] Hans Grote, F. Christoph Iselin, The MAD Program, User's Reference \
+Manual, CERN/SL/90-13 (AP), and \
+\>", "Text",
+ CellTags->"MAD manual"],
+
+Cell[TextData[ButtonBox["\thttp://wwwslap.cern.ch/~fci/mad/mad.html",
+ BaseStyle->"Hyperlink",
+ ButtonData:>{
+   URL["http://wwwslap.cern.ch/~fci/mad/mad.html"], None}]], "Program"],
+
+Cell[TextData[{
+ "[4] J.M. Jowett, ",
+ StyleBox["Basic MAD Tables in Mathematica",
+  FontSlant->"Italic"],
+ ", CERN SL Note 97-55   (1997) and"
+}], "Text",
+ CellTags->"Mfs.nb"],
+
+Cell[TextData[ButtonBox["\t\
+http://wwwslap.cern.ch/~jowett/Madtomma/Mfs/Mfs.html",
+ BaseStyle->"Hyperlink",
+ ButtonData:>{
+   URL["http://wwwslap.cern.ch/~jowett/Madtomma/Mfs/Mfs.html"], 
+   None}]], "Program"],
+
+Cell[TextData[{
+ "[5] K. Goral and J.M. Jowett, ",
+ StyleBox["Time Evolution and Colour",
+  FontSlant->"Italic"],
+ ", CERN SL Note 97-56  (1997) and"
+}], "Text",
+ CellTags->"ColorListPlot.nb"],
+
+Cell[TextData[ButtonBox["\t\
+http://wwwslap.cern.ch/~jowett/Madtomma/Mfs/ColorListPlot.html",
+ BaseStyle->"Hyperlink",
+ ButtonData:>{
+   URL["http://wwwslap.cern.ch/~jowett/Madtomma/Mfs/ColorListPlot.html"], 
+   None}]], "Program"]
+}, Open  ]]
+}, Open  ]]
+},
+AutoGeneratedPackage->Automatic,
+ScreenStyleEnvironment->"Working",
+WindowToolbars->{},
+CellGrouping->Automatic,
+WindowSize->{782, 753},
+WindowMargins->{{116, Automatic}, {Automatic, 0}},
+DockedCells->FEPrivate`FrontEndResource[
+ "FEExpressions", "CompatibilityToolbar"],
+PrivateNotebookOptions->{"ColorPalette"->{RGBColor, 128}},
+ShowCellLabel->True,
+RenderingOptions->{"ObjectDithering"->True,
+"RasterDithering"->False},
+FrontEndVersion->"8.0 for Microsoft Windows (32-bit) (February 23, 2011)",
+StyleDefinitions->Notebook[{
+   Cell[
+    CellGroupData[{
+      Cell["Style Definitions", "Subtitle"], 
+      Cell[
+      "Modify the definitions below to change the default appearance of all \
+cells in a given style.\nMake modifications to any definition using commands \
+in the Format menu.", "Text"], 
+      Cell[
+       CellGroupData[{
+         Cell["Style Environment Names", "Section"], 
+         Cell[
+          StyleData[All, "Working"], PageWidth -> WindowWidth, 
+          CellBracketOptions -> {"Color" -> RGBColor[0.4, 0, 0.239994]}, 
+          ScriptMinSize -> 9, Background -> None], 
+         Cell[
+          StyleData[All, "Presentation"], PageWidth -> PaperWidth, 
+          CellBracketOptions -> {"Color" -> RGBColor[0, 0, 1]}, ScriptMinSize -> 
+          9], 
+         Cell[
+          StyleData[All, "Printout"], PageWidth -> PaperWidth, ShowCellLabel -> 
+          False, ImageSize -> {200, 200}, 
+          PrivateFontOptions -> {"FontType" -> "Outline"}]}, Open]], 
+      Cell[
+       CellGroupData[{
+         Cell["Notebook Options", "Section"], 
+         Cell[
+         "The options defined for the style below will be used at the \
+Notebook level.", "Text"], 
+         Cell[
+          StyleData["Notebook"], PageHeaders -> {{
+             Cell[
+              TextData[{
+                CounterBox["Page"]}], "PageNumber"], None, 
+             Cell[
+              TextData[{
+                ValueBox["FileName"]}], "Header"]}, {
+             Cell[
+              TextData[{
+                ValueBox["FileName"]}], "Header"], None, 
+             Cell[
+              TextData[{
+                CounterBox["Page"]}], "PageNumber"]}}, CellFrameLabelMargins -> 
+          6, StyleMenuListing -> None]}, Open]], 
+      Cell[
+       CellGroupData[{
+         Cell["Styles for Headings", "Section"], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Title"], CellFrame -> {{0, 0}, {0, 0.25}}, 
+             CellMargins -> {{18, 10}, {0, 20}}, 
+             CellGroupingRules -> {"TitleGrouping", 0}, PageBreakBelow -> 
+             False, CellFrameMargins -> 6, CellFrameColor -> GrayLevel[0], 
+             LineSpacing -> {0.95, 0}, 
+             CounterAssignments -> {{"Section", 0}, {"Equation", 0}, {
+               "Figure", 0}}, FontFamily -> "Helvetica", FontSize -> 36, 
+             FontWeight -> "Bold", FontColor -> RGBColor[0.4, 0, 0.239994]], 
+            Cell[
+             StyleData["Title", "Presentation"], 
+             CellMargins -> {{20, 10}, {2, 20}}, CellFrameMargins -> 5, 
+             FontColor -> RGBColor[0, 0, 1]], 
+            Cell[
+             StyleData["Title", "Printout"], 
+             CellMargins -> {{18, 30}, {0, 0}}, CellFrameMargins -> 4, 
+             FontSize -> 24]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Subtitle"], CellMargins -> {{20, 30}, {2, 10}}, 
+             CellGroupingRules -> {"TitleGrouping", 10}, PageBreakBelow -> 
+             False, CellFrameMargins -> {{0, 4}, {8, 4}}, 
+             LineSpacing -> {1, 0}, 
+             CounterAssignments -> {{"Section", 0}, {"Equation", 0}, {
+               "Figure", 0}}, FontFamily -> "Helvetica", FontSize -> 24], 
+            Cell[
+             StyleData["Subtitle", "Presentation"], 
+             CellMargins -> {{20, 10}, {2, 10}}], 
+            Cell[
+             StyleData["Subtitle", "Printout"], 
+             CellMargins -> {{18, 30}, {0, 10}}, FontSize -> 18]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Section 1"], CellFrame -> {{0, 0}, {0, 3}}, 
+             CellMargins -> {{18, 10}, {10, 30}}, 
+             CellGroupingRules -> {"SectionGrouping", 40}, PageBreakBelow -> 
+             False, CellFrameMargins -> {{0, 4}, {8, 4}}, CellFrameColor -> 
+             RGBColor[0.4, 0, 0.239994], CounterIncrements -> "Section", 
+             CounterAssignments -> {{"Subsection", 0}, {"Subsubsection", 0}}, 
+             FontFamily -> "Helvetica", FontSize -> 18, FontWeight -> "Bold"], 
+            Cell[
+             StyleData["Section 1", "Presentation"], 
+             CellMargins -> {{20, 10}, {6, 30}}, CellFrameMargins -> 5], 
+            Cell[
+             StyleData["Section 1", "Printout"], 
+             CellMargins -> {{18, 30}, {4, 30}}, CellFrameMargins -> 4, 
+             FontSize -> 14]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Section"], CellFrame -> False, 
+             CellMargins -> {{18, 10}, {10, 30}}, 
+             CellGroupingRules -> {"SectionGrouping", 40}, PageBreakBelow -> 
+             False, CellFrameMargins -> 4, CellFrameLabels -> {{
+                Cell[
+                 TextData[{
+                   CounterBox["Section"]}]], None}, {None, None}}, 
+             CounterIncrements -> "Section", 
+             CounterAssignments -> {{"Subsection", 0}, {"Subsubsection", 0}}, 
+             FontFamily -> "Helvetica", FontSize -> 18, FontWeight -> "Bold"], 
+            Cell[
+             StyleData["Section", "Presentation"], 
+             CellMargins -> {{20, 10}, {0, 30}}], 
+            Cell[
+             StyleData["Section", "Printout"], 
+             CellMargins -> {{18, 30}, {0, 30}}, CellFrameMargins -> 5, 
+             FontSize -> 14]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Subsection"], CellDingbat -> None, 
+             CellMargins -> {{38, 30}, {2, 20}}, 
+             CellGroupingRules -> {"SectionGrouping", 50}, PageBreakBelow -> 
+             False, CellFrameLabels -> {{
+                Cell[
+                 TextData[{
+                   CounterBox["Section"], ".", 
+                   CounterBox["Subsection"]}]], None}, {None, None}}, 
+             CounterIncrements -> "Subsection", 
+             CounterAssignments -> {{"Subsubsection", 0}}, FontFamily -> 
+             "Times", FontSize -> 14, FontWeight -> "Bold"], 
+            Cell[
+             StyleData["Subsection", "Presentation"], 
+             CellMargins -> {{35, 30}, {0, 20}}], 
+            Cell[
+             StyleData["Subsection", "Printout"], 
+             CellMargins -> {{18, 30}, {0, 10}}, FontSize -> 12]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Subsubsection"], CellDingbat -> None, 
+             CellMargins -> {{55, 30}, {4, 10}}, 
+             CellGroupingRules -> {"SectionGrouping", 60}, PageBreakBelow -> 
+             False, CellFrameLabels -> {{
+                Cell[
+                 TextData[{
+                   CounterBox["Section"], ".", 
+                   CounterBox["Subsection"], ".", 
+                   CounterBox["Subsubsection"]}]], None}, {None, None}}, 
+             CounterIncrements -> "Subsubsection", FontFamily -> "Times", 
+             FontSize -> 12, FontWeight -> "Bold"], 
+            Cell[
+             StyleData["Subsubsection", "Presentation"], 
+             CellMargins -> {{31, 30}, {0, 12}}], 
+            Cell[
+             StyleData["Subsubsection", "Printout"], 
+             CellMargins -> {{18, 30}, {0, 12}}, FontSize -> 10]}, Open]]}, 
+        Open]], 
+      Cell[
+       CellGroupData[{
+         Cell["Styles for Body Text", "Section"], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Text"], CellMargins -> {{55, 10}, {6, 6}}, 
+             TextJustification -> 1, LineSpacing -> {1, 2}, FontFamily -> 
+             "Times"], 
+            Cell[
+             StyleData["Text", "Presentation"], 
+             CellMargins -> {{20, 10}, {6, 6}}, TextAlignment -> Left, 
+             TextJustification -> 0, LineSpacing -> {1.3, 0}, FontSize -> 14], 
+            Cell[
+             StyleData["Text", "Printout"], CellMargins -> {{18, 4}, {4, 4}}, 
+             LineSpacing -> {1, 3}, FontSize -> 10]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Commentary"], CellMargins -> {{55, 10}, {2, 6}}, 
+             TextJustification -> 1, LineSpacing -> {1, 2}, FontFamily -> 
+             "Helvetica", FontSize -> 10, FontColor -> RGBColor[0, 0, 0.4]], 
+            Cell[
+             StyleData["Commentary", "Presentation"], 
+             CellMargins -> {{60, 30}, {2, 6}}, TextJustification -> 1, 
+             LineSpacing -> {1.3, 0}, FontSize -> 12], 
+            Cell[
+             StyleData["Commentary", "Printout"], 
+             CellMargins -> {{18, 30}, {3, 0}}, LineSpacing -> {1, 3}, 
+             FontFamily -> "Times", FontSize -> 10]}, Open]]}, Closed]], 
+      Cell[
+       CellGroupData[{
+         Cell["Styles for Input/Output", "Section"], 
+         Cell[
+         "The cells in this section define styles used for input and output \
+to the kernel.  Be careful when modifying, renaming, or removing these \
+styles, because the front end associates special meanings with these style \
+names.", "Text"], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Input"], CellFrame -> {{1, 1}, {0, 1}}, 
+             CellMargins -> {{55, 10}, {0, 0}}, Evaluatable -> True, 
+             CellGroupingRules -> "InputGrouping", CellHorizontalScrolling -> 
+             True, PageBreakWithin -> False, GroupPageBreakWithin -> False, 
+             CellLabelPositioning -> Automatic, 
+             CellLabelMargins -> {{23, Inherited}, {Inherited, Inherited}}, 
+             DefaultFormatType -> DefaultInputFormatType, FormatType -> 
+             InputForm, ShowStringCharacters -> True, NumberMarks -> True, 
+             FontSize -> 12, FontWeight -> "Bold", Background -> None], 
+            Cell[
+             StyleData["Input", "Presentation"], 
+             CellMargins -> {{60, 10}, {0, 10}}, Background -> None], 
+            Cell[
+             StyleData["Input", "Printout"], 
+             CellMargins -> {{55, 10}, {0, 10}}, FontSize -> 10, Background -> 
+             None]}, Open]], 
+         Cell[
+          StyleData["InlineInput"], Evaluatable -> True, CellGroupingRules -> 
+          "InputGrouping", CellHorizontalScrolling -> True, PageBreakWithin -> 
+          False, GroupPageBreakWithin -> False, DefaultFormatType -> 
+          DefaultInputFormatType, AutoItalicWords -> {}, FormatType -> 
+          InputForm, ShowStringCharacters -> True, NumberMarks -> True, 
+          CounterIncrements -> "Input", FontWeight -> "Bold"], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Output"], CellFrame -> {{1, 1}, {1, 0}}, 
+             CellMargins -> {{55, 10}, {15, 0}}, CellEditDuplicate -> True, 
+             CellGroupingRules -> "OutputGrouping", CellHorizontalScrolling -> 
+             True, PageBreakWithin -> False, GroupPageBreakWithin -> False, 
+             GeneratedCell -> True, CellAutoOverwrite -> True, 
+             CellLabelMargins -> {{23, Inherited}, {Inherited, Inherited}}, 
+             DefaultFormatType -> DefaultOutputFormatType, FormatType -> 
+             InputForm, FontSize -> 12, Background -> None], 
+            Cell[
+             StyleData["Output", "Presentation"], 
+             CellMargins -> {{60, Inherited}, {10, 0}}, Background -> None], 
+            Cell[
+             StyleData["Output", "Printout"], 
+             CellMargins -> {{55, Inherited}, {10, 0}}, FontSize -> 10, 
+             Background -> None]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["InputOnly"], CellFrame -> 1, 
+             CellMargins -> {{55, 10}, {15, 0}}, Evaluatable -> True, 
+             CellGroupingRules -> "InputGrouping", CellHorizontalScrolling -> 
+             True, PageBreakWithin -> False, GroupPageBreakWithin -> False, 
+             CellLabelPositioning -> Automatic, 
+             CellLabelMargins -> {{23, Inherited}, {Inherited, Inherited}}, 
+             DefaultFormatType -> DefaultInputFormatType, FormatType -> 
+             InputForm, ShowStringCharacters -> True, NumberMarks -> True, 
+             FontSize -> 12, FontWeight -> "Bold", Background -> 
+             GrayLevel[0.966674]], 
+            Cell[
+             StyleData["InputOnly", "Presentation"], 
+             CellMargins -> {{60, Inherited}, {10, 10}}], 
+            Cell[
+             StyleData["InputOnly", "Printout"], 
+             CellMargins -> {{55, Inherited}, {10, 10}}, FontSize -> 10]}, 
+           Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Message"], CellFrame -> {{1, 1}, {0, 0}}, CellDingbat -> 
+             "\[LongDash]", CellMargins -> {{55, 10}, {0, 0}}, 
+             CellGroupingRules -> "OutputGrouping", PageBreakWithin -> False, 
+             GroupPageBreakWithin -> False, GeneratedCell -> True, 
+             CellAutoOverwrite -> True, ShowCellLabel -> False, 
+             CellLabelMargins -> {{23, Inherited}, {Inherited, Inherited}}, 
+             DefaultFormatType -> DefaultOutputFormatType, FormatType -> 
+             InputForm, StyleMenuListing -> None, FontFamily -> "Helvetica", 
+             FontSize -> 10, FontSlant -> "Oblique", FontColor -> 
+             GrayLevel[0], Background -> GrayLevel[1]], 
+            Cell[
+             StyleData["Message", "Presentation"], 
+             CellMargins -> {{60, Inherited}, {Inherited, Inherited}}, 
+             LineSpacing -> {1, 0}], 
+            Cell[
+             StyleData["Message", "Printout"], 
+             CellMargins -> {{55, Inherited}, {0, 0}}, FontSize -> 8]}, 
+           Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Print"], CellFrame -> True, 
+             CellMargins -> {{55, 26}, {1, 6}}, CellGroupingRules -> 
+             "OutputGrouping", CellHorizontalScrolling -> True, 
+             PageBreakWithin -> False, GroupPageBreakWithin -> False, 
+             GeneratedCell -> True, CellAutoOverwrite -> True, ShowCellLabel -> 
+             False, CellLabelMargins -> {{23, Inherited}, {
+               Inherited, Inherited}}, DefaultFormatType -> 
+             DefaultOutputFormatType, TextAlignment -> Left, FormatType -> 
+             InputForm, StyleMenuListing -> None, FontSize -> 9, Background -> 
+             GrayLevel[0.849989]], 
+            Cell[
+             StyleData["Print", "Presentation"], CellFrame -> True, 
+             CellMargins -> {{60, Inherited}, {10, 2}}, Background -> 
+             GrayLevel[0.849989]], 
+            Cell[
+             StyleData["Print", "Printout"], CellFrame -> True, 
+             CellMargins -> {{54, Inherited}, {2, 6}}, FontSize -> 10, 
+             Background -> GrayLevel[0.849989]]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Graphics"], CellFrame -> {{1, 1}, {0, 0}}, 
+             CellMargins -> {{55, 10}, {0, 0}}, CellGroupingRules -> 
+             "GraphicsGrouping", CellHorizontalScrolling -> True, 
+             PageBreakWithin -> False, GeneratedCell -> True, 
+             CellAutoOverwrite -> True, ShowCellLabel -> False, 
+             DefaultFormatType -> DefaultOutputFormatType, FormatType -> 
+             InputForm, ImageSize -> {288, 288}, 
+             ImageMargins -> {{35, Inherited}, {Inherited, 0}}, 
+             StyleMenuListing -> None, Background -> GrayLevel[1]], 
+            Cell[
+             StyleData["Graphics", "Presentation"], 
+             CellMargins -> {{60, Inherited}, {0, 0}}, 
+             ImageMargins -> {{10, 10}, {10, 10}}], 
+            Cell[
+             StyleData["Graphics", "Printout"], 
+             CellMargins -> {{55, Inherited}, {0, 0}}, 
+             ImageSize -> {288, 288}]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["CellLabel"], StyleMenuListing -> None, FontFamily -> 
+             "Helvetica", FontSize -> 10, FontSlant -> "Oblique", FontColor -> 
+             RGBColor[0, 0, 1]], 
+            Cell[
+             StyleData["CellLabel", "Presentation"], 
+             CellMargins -> {{18, Inherited}, {Inherited, Inherited}}], 
+            Cell[
+             StyleData["CellLabel", "Printout"], 
+             CellMargins -> {{0, Inherited}, {Inherited, Inherited}}, 
+             FontSize -> 8]}, Open]]}, Open]], 
+      Cell[
+       CellGroupData[{
+         Cell["Unique Styles", "Section"], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Author"], CellMargins -> {{20, 30}, {45, 5}}, 
+             CellGroupingRules -> {"TitleGrouping", 20}, PageBreakBelow -> 
+             False, CellFrameMargins -> {{0, 4}, {8, 4}}, 
+             LineSpacing -> {1, 0}, 
+             CounterAssignments -> {{"Section", 0}, {"Equation", 0}, {
+               "Figure", 0}}, FontFamily -> "Helvetica", FontSize -> 16, 
+             FontSlant -> "Italic"], 
+            Cell[
+             StyleData["Author", "Presentation"], 
+             CellMargins -> {{20, 30}, {45, 10}}, FontSize -> 18], 
+            Cell[
+             StyleData["Author", "Printout"], 
+             CellMargins -> {{18, 30}, {45, 5}}, FontSize -> 16]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Abstract"], CellFrame -> False, 
+             CellMargins -> {{18, 140}, {4, 30}}, LineSpacing -> {0.9, 0}, 
+             FontFamily -> "Times", FontSize -> 12], 
+            Cell[
+             StyleData["Abstract", "Presentation"], CellFrame -> True, 
+             CellMargins -> {{20, 10}, {Inherited, 30}}], 
+            Cell[
+             StyleData["Abstract", "Printout"], LineSpacing -> {1, 2}, 
+             FontSize -> 10]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Caption"], CellMargins -> {{55, 10}, {5, 3}}, 
+             FontFamily -> "Helvetica", FontSize -> 9], 
+            Cell[
+             StyleData["Caption", "Presentation"], 
+             CellMargins -> {{60, 65}, {6, 4}}, FontSize -> 10], 
+            Cell[
+             StyleData["Caption", "Printout"], 
+             CellMargins -> {{55, 55}, {5, 4}}, LineSpacing -> {1, 2}, 
+             FontSize -> 8]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Reference"], CellMargins -> {{24, 40}, {6, 6}}, 
+             TextJustification -> 1, LineSpacing -> {1, 0}, FontFamily -> 
+             "Times"], 
+            Cell[
+             StyleData["Reference", "Presentation"], 
+             CellMargins -> {{20, 40}, {Inherited, 6}}, TextJustification -> 
+             0, LineSpacing -> {1, 4}, FontSize -> 12], 
+            Cell[
+             StyleData["Reference", "Printout"], 
+             CellMargins -> {{18, 4}, {4, 4}}, FontSize -> 9]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["PictureGroup"], CellFrame -> {{1, 1}, {0, 0}}, 
+             CellMargins -> {{55, Inherited}, {0, 0}}, CellGroupingRules -> 
+             "GraphicsGrouping", CellHorizontalScrolling -> True, 
+             PageBreakWithin -> False, ShowCellLabel -> False, 
+             ImageMargins -> {{35, Inherited}, {Inherited, 0}}, 
+             StyleMenuListing -> None, Background -> None], 
+            Cell[
+             StyleData["PictureGroup", "Presentation"], 
+             CellMargins -> {{60, Inherited}, {0, 0}}, 
+             ImageMargins -> {{10, 10}, {10, 10}}, Background -> None], 
+            Cell[
+             StyleData["PictureGroup", "Printout"], 
+             CellMargins -> {{55, Inherited}, {0, 0}}, 
+             ImageSize -> {288, 288}, Background -> None]}, Open]]}, Open]], 
+      Cell[
+       CellGroupData[{
+         Cell["Formulas and Programming", "Section"], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["DisplayFormula"], 
+             CellMargins -> {{55, Inherited}, {Inherited, Inherited}}, 
+             CellHorizontalScrolling -> True, ScriptLevel -> 0, 
+             SingleLetterItalics -> True, StyleMenuListing -> None, 
+             UnderoverscriptBoxOptions -> {LimitsPositioning -> True}], 
+            Cell[
+             StyleData["DisplayFormula", "Presentation"], 
+             CellMargins -> {{60, 10}, {Inherited, 6}}, 
+             LineSpacing -> {1, 5}], 
+            Cell[
+             StyleData["DisplayFormula", "Printout"], 
+             CellMargins -> {{18, 4}, {4, 4}}]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["ChemicalFormula"], 
+             CellMargins -> {{55, 10}, {Inherited, 0}}, 
+             CellHorizontalScrolling -> True, TextJustification -> 1, 
+             AutoSpacing -> False, ScriptBaselineShifts -> {0.6, Automatic}, 
+             ScriptLevel -> 1, SingleLetterItalics -> False, ZeroWidthTimes -> 
+             True], 
+            Cell[
+             StyleData["ChemicalFormula", "Presentation"], 
+             CellMargins -> {{60, 10}, {Inherited, 6}}], 
+            Cell[
+             StyleData["ChemicalFormula", "Printout"], 
+             CellMargins -> {{18, 4}, {4, 4}}, LineSpacing -> {1, 3}, 
+             FontSize -> 10]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Program"], CellMargins -> {{55, 10}, {Inherited, 0}}, 
+             CellHorizontalScrolling -> True, FontFamily -> "Courier"], 
+            Cell[
+             StyleData["Program", "Presentation"], 
+             CellMargins -> {{60, 10}, {Inherited, 6}}], 
+            Cell[
+             StyleData["Program", "Printout"], 
+             CellMargins -> {{18, 4}, {4, 4}}, LineSpacing -> {1, 3}, 
+             FontSize -> 9.5]}, Open]]}, Closed]], 
+      Cell[
+       CellGroupData[{
+         Cell["Styles for Automatic Numbering", "Section"], 
+         Cell[
+         "The following styles are useful for numbered equations, figures, \
+etc.  They automatically give the cell a FrameLabel containing a reference to \
+a particular counter, and also increment that counter.", "Text"], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["NumberedEquation"], 
+             CellMargins -> {{55, 85}, {Inherited, Inherited}}, 
+             CellFrameLabels -> {{None, 
+                Cell[
+                 TextData[{"(", 
+                   CounterBox["NumberedEquation"], ")"}]]}, {None, None}}, 
+             DefaultFormatType -> DefaultInputFormatType, CounterIncrements -> 
+             "NumberedEquation", FormatTypeAutoConvert -> False, FontFamily -> 
+             "Times"], 
+            Cell[
+             StyleData["NumberedEquation", "Presentation"], 
+             CellMargins -> {{60, 10}, {Inherited, 6}}, 
+             LineSpacing -> {1, 0}], 
+            Cell[
+             StyleData["NumberedEquation", "Printout"], 
+             CellMargins -> {{18, 4}, {4, 4}}, FontSize -> 8]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["NumberedFigure"], 
+             CellMargins -> {{55, 95}, {Inherited, Inherited}}, 
+             CellFrameLabels -> {{None, None}, {
+                Cell[
+                 TextData[{"Figure ", 
+                   CounterBox["NumberedFigure"]}], FontWeight -> "Bold"], 
+                None}}, CounterIncrements -> "NumberedFigure", 
+             FormatTypeAutoConvert -> False, FontFamily -> "Times"], 
+            Cell[
+             StyleData["NumberedFigure", "Presentation"], 
+             CellMargins -> {{60, 80}, {Inherited, 6}}, 
+             LineSpacing -> {1, 0}], 
+            Cell[
+             StyleData["NumberedFigure", "Printout"], 
+             CellMargins -> {{18, 80}, {4, 4}}, FontSize -> 8]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["NumberedTable"], 
+             CellMargins -> {{55, 95}, {Inherited, Inherited}}, 
+             CellFrameLabels -> {{None, None}, {
+                Cell[
+                 TextData[{"Table ", 
+                   CounterBox["NumberedTable"]}], FontWeight -> "Bold"], 
+                None}}, TextAlignment -> Center, CounterIncrements -> 
+             "NumberedTable", FormatTypeAutoConvert -> False, FontFamily -> 
+             "Times"], 
+            Cell[
+             StyleData["NumberedTable", "Presentation"], 
+             CellMargins -> {{60, 80}, {Inherited, 6}}, 
+             LineSpacing -> {1, 0}], 
+            Cell[
+             StyleData["NumberedTable", "Printout"], 
+             CellMargins -> {{18, 80}, {4, 4}}, FontSize -> 8]}, Open]]}, 
+        Open]], 
+      Cell[
+       CellGroupData[{
+         Cell["Styles for Headers and Footers", "Section"], 
+         Cell[
+          StyleData["Header"], StyleMenuListing -> None, FontFamily -> 
+          "Helvetica", FontSize -> 9], 
+         Cell[
+          StyleData["PageNumber"], StyleMenuListing -> None, FontFamily -> 
+          "Helvetica", FontSize -> 9, FontWeight -> "Bold"], 
+         Cell[
+          StyleData["Footer"], TextAlignment -> Center, StyleMenuListing -> 
+          None, FontFamily -> "Helvetica", FontSize -> 9]}, Closed]]}, 
+     Open]]}, Visible -> False, FrontEndVersion -> 
+  "8.0 for Microsoft Windows (32-bit) (February 23, 2011)", StyleDefinitions -> 
+  "Default.nb"]
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{
+ "Reference section"->{
+  Cell[3385, 129, 60, 1, 61, "Section",
+   CellTags->"Reference section"]},
+ "Setup section"->{
+  Cell[7408, 268, 52, 1, 37, "Section",
+   CellTags->"Setup section"],
+  Cell[8018, 284, 74, 1, 41, "Subsection",
+   CellTags->"Setup section"],
+  Cell[8550, 300, 348, 9, 46, "Text",
+   CellTags->"Setup section"],
+  Cell[8970, 315, 807, 21, 62, "Text",
+   CellTags->"Setup section"]},
+ "Interface section"->{
+  Cell[10029, 350, 87, 2, 63, "Section",
+   InitializationCell->True,
+   CellTags->"Interface section"],
+  Cell[10119, 354, 154, 4, 29, "Text",
+   InitializationCell->True,
+   CellTags->"Interface section"],
+  Cell[10298, 362, 133, 2, 41, "Subsection",
+   InitializationCell->True,
+   CellTags->"Interface section"],
+  Cell[10434, 366, 209, 6, 63, "Input",
+   InitializationCell->True,
+   CellTags->"Interface section"],
+  Cell[10680, 377, 153, 4, 41, "Subsection",
+   InitializationCell->True,
+   CellTags->"Interface section"],
+  Cell[11227, 392, 260, 6, 45, "Input",
+   InitializationCell->True,
+   CellTags->"Interface section"],
+  Cell[11490, 400, 273, 6, 45, "Input",
+   InitializationCell->True,
+   CellTags->"Interface section"],
+  Cell[11766, 408, 515, 9, 99, "Input",
+   InitializationCell->True,
+   CellTags->"Interface section"],
+  Cell[17034, 563, 120, 2, 41, "Subsection",
+   InitializationCell->True,
+   CellTags->"Interface section"]},
+ "Implementation section"->{
+  Cell[17388, 578, 97, 2, 37, "Section",
+   InitializationCell->True,
+   CellTags->"Implementation section"],
+  Cell[17488, 582, 168, 4, 29, "Text",
+   CellTags->"Implementation section"],
+  Cell[17681, 590, 133, 2, 41, "Subsection",
+   InitializationCell->True,
+   CellTags->"Implementation section"],
+  Cell[17817, 594, 101, 2, 70, "Input",
+   InitializationCell->True,
+   CellTags->"Implementation section"],
+  Cell[17955, 601, 112, 2, 25, "Subsection",
+   InitializationCell->True,
+   CellTags->"Implementation section"],
+  Cell[18201, 610, 159, 4, 25, "Subsection",
+   InitializationCell->True,
+   CellTags->"Implementation section"],
+  Cell[18385, 618, 156, 4, 41, "Subsection",
+   InitializationCell->True,
+   CellTags->"Implementation section"],
+  Cell[21295, 723, 122, 2, 25, "Subsection",
+   InitializationCell->True,
+   CellTags->"Implementation section"],
+  Cell[69405, 2114, 122, 2, 25, "Subsection",
+   InitializationCell->True,
+   CellTags->"Implementation section"],
+  Cell[69530, 2118, 111, 2, 70, "Input",
+   InitializationCell->True,
+   CellTags->"Implementation section"],
+  Cell[69678, 2125, 109, 2, 25, "Subsection",
+   InitializationCell->True,
+   CellTags->"Implementation section"],
+  Cell[69790, 2129, 87, 2, 70, "Input",
+   InitializationCell->True,
+   CellTags->"Implementation section"]},
+ "Epilog section"->{
+  Cell[69926, 2137, 81, 2, 63, "Section",
+   InitializationCell->True,
+   CellTags->"Epilog section"],
+  Cell[70010, 2141, 105, 1, 29, "Text",
+   CellTags->"Epilog section"],
+  Cell[70140, 2146, 101, 2, 41, "Subsection",
+   InitializationCell->True,
+   CellTags->"Epilog section"],
+  Cell[70244, 2150, 351, 7, 99, "Input",
+   InitializationCell->True,
+   CellTags->"Epilog section"],
+  Cell[70632, 2162, 101, 2, 41, "Subsection",
+   InitializationCell->True,
+   CellTags->"Epilog section"],
+  Cell[70736, 2166, 86, 2, 27, "Input",
+   InitializationCell->True,
+   CellTags->"Epilog section"]},
+ "Examples section"->{
+  Cell[70871, 2174, 65, 1, 37, "Section",
+   CellTags->"Examples section"]},
+ "Wolfram book"->{
+  Cell[83525, 2621, 238, 6, 29, "Text",
+   CellTags->"Wolfram book"]},
+ "Meader book"->{
+  Cell[83766, 2629, 179, 6, 29, "Text",
+   CellTags->"Meader book"]},
+ "MAD manual"->{
+  Cell[84136, 2642, 154, 4, 29, "Text",
+   CellTags->"MAD manual"]},
+ "Mfs.nb"->{
+  Cell[84477, 2653, 176, 6, 29, "Text",
+   CellTags->"Mfs.nb"]},
+ "ColorListPlot.nb"->{
+  Cell[84870, 2668, 192, 6, 29, "Text",
+   CellTags->"ColorListPlot.nb"]}
+ }
+*)
+(*CellTagsIndex
+CellTagsIndex->{
+ {"Reference section", 110989, 3238},
+ {"Setup section", 111085, 3241},
+ {"Interface section", 111394, 3250},
+ {"Implementation section", 112375, 3278},
+ {"Epilog section", 113714, 3314},
+ {"Examples section", 114330, 3332},
+ {"Wolfram book", 114426, 3335},
+ {"Meader book", 114515, 3338},
+ {"MAD manual", 114602, 3341},
+ {"Mfs.nb", 114684, 3344},
+ {"ColorListPlot.nb", 114772, 3347}
+ }
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 64, 1, 27, "Text"],
+Cell[624, 23, 26, 4, 61, "Text"],
+Cell[CellGroupData[{
+Cell[675, 31, 41, 0, 69, "Title"],
+Cell[719, 33, 291, 10, 69, "Author"],
+Cell[1013, 45, 26, 0, 69, "Author"],
+Cell[CellGroupData[{
+Cell[1064, 49, 31, 0, 61, "Section"],
+Cell[1098, 51, 302, 13, 27, "Text"],
+Cell[1403, 66, 540, 16, 45, "Text"],
+Cell[1946, 84, 527, 11, 61, "Text"],
+Cell[2476, 97, 426, 12, 44, "Text"],
+Cell[2905, 111, 58, 0, 27, "Text"],
+Cell[2966, 113, 179, 3, 19, "Program"],
+Cell[3148, 118, 200, 6, 27, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3385, 129, 60, 1, 61, "Section",
+ CellTags->"Reference section"],
+Cell[CellGroupData[{
+Cell[3470, 134, 30, 0, 31, "Subsubsection"],
+Cell[3503, 136, 82, 1, 29, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3622, 142, 31, 0, 31, "Subsubsection"],
+Cell[3656, 144, 47, 0, 29, "Text"]
+}, Open  ]],
+Cell[3718, 147, 32, 0, 31, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[3775, 151, 34, 0, 31, "Subsubsection"],
+Cell[3812, 153, 1759, 27, 70, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[5608, 185, 41, 0, 25, "Subsubsection"],
+Cell[5652, 187, 19, 0, 29, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5708, 192, 97, 4, 31, "Subsubsection"],
+Cell[5808, 198, 19, 0, 29, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5864, 203, 32, 0, 31, "Subsubsection"],
+Cell[5899, 205, 46, 0, 29, "Text"],
+Cell[5948, 207, 291, 6, 81, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6276, 218, 33, 0, 31, "Subsubsection"],
+Cell[6312, 220, 27, 0, 29, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6376, 225, 33, 0, 31, "Subsubsection"],
+Cell[6412, 227, 330, 6, 64, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6779, 238, 35, 0, 31, "Subsubsection"],
+Cell[6817, 240, 99, 1, 29, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6953, 246, 35, 0, 31, "Subsubsection"],
+Cell[6991, 248, 107, 1, 29, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7135, 254, 37, 0, 31, "Subsubsection"],
+Cell[7175, 256, 184, 6, 48, "Text"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[7408, 268, 52, 1, 37, "Section",
+ CellTags->"Setup section"],
+Cell[7463, 271, 530, 9, 81, "Text"],
+Cell[CellGroupData[{
+Cell[8018, 284, 74, 1, 41, "Subsection",
+ CellTags->"Setup section"],
+Cell[8095, 287, 234, 4, 46, "Text"],
+Cell[8332, 293, 215, 5, 21, "Program"],
+Cell[8550, 300, 348, 9, 46, "Text",
+ CellTags->"Setup section"],
+Cell[CellGroupData[{
+Cell[8923, 313, 44, 0, 31, "Subsubsection"],
+Cell[8970, 315, 807, 21, 62, "Text",
+ CellTags->"Setup section"],
+Cell[9780, 338, 88, 1, 27, "Input"],
+Cell[9871, 341, 97, 2, 29, "Text"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[10029, 350, 87, 2, 63, "Section",
+ InitializationCell->True,
+ CellTags->"Interface section"],
+Cell[10119, 354, 154, 4, 29, "Text",
+ InitializationCell->True,
+ CellTags->"Interface section"],
+Cell[CellGroupData[{
+Cell[10298, 362, 133, 2, 41, "Subsection",
+ InitializationCell->True,
+ CellTags->"Interface section"],
+Cell[10434, 366, 209, 6, 63, "Input",
+ InitializationCell->True,
+ CellTags->"Interface section"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[10680, 377, 153, 4, 41, "Subsection",
+ InitializationCell->True,
+ CellTags->"Interface section"],
+Cell[10836, 383, 388, 7, 87, "Input",
+ InitializationCell->True],
+Cell[11227, 392, 260, 6, 45, "Input",
+ InitializationCell->True,
+ CellTags->"Interface section"],
+Cell[11490, 400, 273, 6, 45, "Input",
+ InitializationCell->True,
+ CellTags->"Interface section"],
+Cell[11766, 408, 515, 9, 99, "Input",
+ InitializationCell->True,
+ CellTags->"Interface section"],
+Cell[12284, 419, 296, 7, 67, "Input",
+ InitializationCell->True],
+Cell[12583, 428, 325, 7, 67, "Input",
+ InitializationCell->True],
+Cell[12911, 437, 265, 6, 47, "Input",
+ InitializationCell->True],
+Cell[13179, 445, 357, 8, 87, "Input",
+ InitializationCell->True],
+Cell[13539, 455, 371, 8, 87, "Input",
+ InitializationCell->True],
+Cell[13913, 465, 273, 7, 47, "Input",
+ InitializationCell->True],
+Cell[14189, 474, 255, 6, 47, "Input",
+ InitializationCell->True],
+Cell[14447, 482, 315, 7, 67, "Input",
+ InitializationCell->True],
+Cell[14765, 491, 321, 7, 67, "Input",
+ InitializationCell->True],
+Cell[15089, 500, 315, 7, 67, "Input",
+ InitializationCell->True],
+Cell[15407, 509, 259, 6, 47, "Input",
+ InitializationCell->True],
+Cell[15669, 517, 286, 7, 47, "Input",
+ InitializationCell->True],
+Cell[15958, 526, 272, 7, 47, "Input",
+ InitializationCell->True],
+Cell[16233, 535, 281, 7, 47, "Input",
+ InitializationCell->True],
+Cell[16517, 544, 327, 7, 67, "Input",
+ InitializationCell->True],
+Cell[16847, 553, 150, 5, 27, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[17034, 563, 120, 2, 41, "Subsection",
+ InitializationCell->True,
+ CellTags->"Interface section"],
+Cell[17157, 567, 182, 5, 27, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[17388, 578, 97, 2, 37, "Section",
+ InitializationCell->True,
+ CellTags->"Implementation section"],
+Cell[17488, 582, 168, 4, 29, "Text",
+ CellTags->"Implementation section"],
+Cell[CellGroupData[{
+Cell[17681, 590, 133, 2, 41, "Subsection",
+ InitializationCell->True,
+ CellTags->"Implementation section"],
+Cell[17817, 594, 101, 2, 70, "Input",
+ InitializationCell->True,
+ CellTags->"Implementation section"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[17955, 601, 112, 2, 25, "Subsection",
+ InitializationCell->True,
+ CellTags->"Implementation section"],
+Cell[18070, 605, 116, 2, 70, "Input",
+ InitializationCell->True]
+}, Closed]],
+Cell[18201, 610, 159, 4, 25, "Subsection",
+ InitializationCell->True,
+ CellTags->"Implementation section"],
+Cell[CellGroupData[{
+Cell[18385, 618, 156, 4, 41, "Subsection",
+ InitializationCell->True,
+ CellTags->"Implementation section"],
+Cell[18544, 624, 531, 14, 70, "Input",
+ InitializationCell->True],
+Cell[19078, 640, 684, 20, 70, "Input",
+ InitializationCell->True],
+Cell[19765, 662, 254, 8, 70, "Input",
+ InitializationCell->True],
+Cell[20022, 672, 481, 16, 70, "Input",
+ InitializationCell->True],
+Cell[20506, 690, 301, 10, 70, "Input",
+ InitializationCell->True],
+Cell[20810, 702, 198, 7, 70, "Input",
+ InitializationCell->True],
+Cell[21011, 711, 269, 9, 70, "Input",
+ InitializationCell->True]
+}, Closed]],
+Cell[21295, 723, 122, 2, 25, "Subsection",
+ InitializationCell->True,
+ CellTags->"Implementation section"],
+Cell[CellGroupData[{
+Cell[21442, 729, 65, 0, 41, "Subsection"],
+Cell[21510, 731, 115, 3, 29, "Text"],
+Cell[21628, 736, 3515, 97, 145, "Input",
+ InitializationCell->True],
+Cell[25146, 835, 177, 3, 46, "Text"],
+Cell[25326, 840, 207, 5, 27, "Input",
+ InitializationCell->True],
+Cell[25536, 847, 125, 3, 27, "Input",
+ InitializationCell->True],
+Cell[25664, 852, 180, 5, 27, "Input",
+ InitializationCell->True],
+Cell[25847, 859, 208, 6, 27, "Input",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[26080, 869, 38, 0, 31, "Subsubsection"],
+Cell[26121, 871, 2223, 57, 207, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[28381, 933, 36, 0, 31, "Subsubsection"],
+Cell[28420, 935, 1883, 52, 207, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[30340, 992, 39, 0, 31, "Subsubsection"],
+Cell[30382, 994, 367, 10, 27, "Input",
+ InitializationCell->True],
+Cell[30752, 1006, 292, 8, 27, "Input",
+ InitializationCell->True],
+Cell[31047, 1016, 1067, 34, 94, "Input",
+ InitializationCell->True],
+Cell[32117, 1052, 1258, 39, 87, "Input",
+ InitializationCell->True],
+Cell[33378, 1093, 1037, 33, 94, "Input",
+ InitializationCell->True],
+Cell[34418, 1128, 2875, 89, 162, "Input",
+ InitializationCell->True],
+Cell[37296, 1219, 4267, 122, 272, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[41600, 1346, 35, 0, 31, "Subsubsection"],
+Cell[41638, 1348, 1142, 31, 87, "Input",
+ InitializationCell->True],
+Cell[42783, 1381, 75, 0, 29, "Text"],
+Cell[42861, 1383, 3460, 93, 307, "Input",
+ InitializationCell->True],
+Cell[46324, 1478, 5508, 143, 507, "Input",
+ InitializationCell->True],
+Cell[51835, 1623, 5271, 136, 507, "Input",
+ InitializationCell->True],
+Cell[57109, 1761, 295, 8, 27, "Input",
+ InitializationCell->True],
+Cell[57407, 1771, 372, 12, 47, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[57816, 1788, 37, 0, 31, "Subsubsection"],
+Cell[57856, 1790, 787, 21, 67, "Input",
+ InitializationCell->True],
+Cell[58646, 1813, 3254, 92, 227, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[61937, 1910, 43, 0, 31, "Subsubsection"],
+Cell[61983, 1912, 3337, 85, 70, "Input",
+ InitializationCell->True]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[65357, 2002, 45, 0, 25, "Subsubsection"],
+Cell[65405, 2004, 3951, 104, 407, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[69405, 2114, 122, 2, 25, "Subsection",
+ InitializationCell->True,
+ CellTags->"Implementation section"],
+Cell[69530, 2118, 111, 2, 70, "Input",
+ InitializationCell->True,
+ CellTags->"Implementation section"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[69678, 2125, 109, 2, 25, "Subsection",
+ InitializationCell->True,
+ CellTags->"Implementation section"],
+Cell[69790, 2129, 87, 2, 70, "Input",
+ InitializationCell->True,
+ CellTags->"Implementation section"]
+}, Closed]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[69926, 2137, 81, 2, 63, "Section",
+ InitializationCell->True,
+ CellTags->"Epilog section"],
+Cell[70010, 2141, 105, 1, 29, "Text",
+ CellTags->"Epilog section"],
+Cell[CellGroupData[{
+Cell[70140, 2146, 101, 2, 41, "Subsection",
+ InitializationCell->True,
+ CellTags->"Epilog section"],
+Cell[70244, 2150, 351, 7, 99, "Input",
+ InitializationCell->True,
+ CellTags->"Epilog section"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[70632, 2162, 101, 2, 41, "Subsection",
+ InitializationCell->True,
+ CellTags->"Epilog section"],
+Cell[70736, 2166, 86, 2, 27, "Input",
+ InitializationCell->True,
+ CellTags->"Epilog section"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[70871, 2174, 65, 1, 37, "Section",
+ CellTags->"Examples section"],
+Cell[CellGroupData[{
+Cell[70961, 2179, 38, 0, 41, "Subsection"],
+Cell[71002, 2181, 427, 10, 47, "Input"],
+Cell[71432, 2193, 41, 0, 29, "Text"],
+Cell[71476, 2195, 184, 5, 27, "Input"],
+Cell[71663, 2202, 211, 6, 27, "Input"],
+Cell[71877, 2210, 90, 2, 27, "Input"],
+Cell[71970, 2214, 100, 2, 29, "Text"],
+Cell[72073, 2218, 300, 10, 27, "Input"],
+Cell[72376, 2230, 175, 6, 27, "Input"],
+Cell[72554, 2238, 72, 1, 27, "Input"],
+Cell[72629, 2241, 38, 0, 29, "Text"],
+Cell[72670, 2243, 427, 12, 47, "Input"],
+Cell[73100, 2257, 114, 3, 27, "Input"],
+Cell[73217, 2262, 90, 2, 27, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[73344, 2269, 73, 0, 41, "Subsection"],
+Cell[73420, 2271, 327, 8, 48, "Text"],
+Cell[73750, 2281, 820, 25, 98, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[74607, 2311, 53, 0, 41, "Subsection"],
+Cell[74663, 2313, 53, 1, 27, "Input"],
+Cell[74719, 2316, 56, 1, 27, "Input"],
+Cell[74778, 2319, 421, 8, 65, "Text"],
+Cell[75202, 2329, 93, 2, 27, "Input"],
+Cell[75298, 2333, 165, 3, 29, "Text"],
+Cell[75466, 2338, 54, 1, 27, "Input"],
+Cell[75523, 2341, 56, 0, 29, "Text"],
+Cell[75582, 2343, 56, 1, 27, "Input"],
+Cell[75641, 2346, 177, 5, 27, "Input"],
+Cell[75821, 2353, 199, 5, 47, "Text"],
+Cell[76023, 2360, 407, 9, 47, "Input"],
+Cell[76433, 2371, 102, 2, 29, "Text"],
+Cell[76538, 2375, 128, 3, 27, "Input"],
+Cell[76669, 2380, 99, 2, 29, "Text"],
+Cell[76771, 2384, 444, 13, 27, "Input"],
+Cell[77218, 2399, 623, 14, 48, "Text"],
+Cell[77844, 2415, 465, 14, 27, "Input"],
+Cell[78312, 2431, 36, 0, 29, "Text"],
+Cell[78351, 2433, 362, 10, 27, "Input"],
+Cell[78716, 2445, 122, 3, 29, "Text"],
+Cell[78841, 2450, 370, 9, 47, "Input"],
+Cell[79214, 2461, 42, 0, 29, "Text"],
+Cell[79259, 2463, 242, 5, 27, "Input"],
+Cell[79504, 2470, 40, 0, 29, "Text"],
+Cell[79547, 2472, 465, 11, 47, "Input"],
+Cell[80015, 2485, 26, 0, 27, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[80078, 2490, 50, 0, 41, "Subsection"],
+Cell[80131, 2492, 390, 9, 47, "Text"],
+Cell[80524, 2503, 76, 1, 27, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[80637, 2509, 53, 0, 41, "Subsection"],
+Cell[80693, 2511, 42, 0, 29, "Text"],
+Cell[80738, 2513, 70, 1, 27, "Input"],
+Cell[80811, 2516, 21, 0, 29, "Text"],
+Cell[80835, 2518, 134, 3, 27, "Input"],
+Cell[80972, 2523, 64, 1, 27, "Input"],
+Cell[81039, 2526, 347, 10, 27, "Input"],
+Cell[81389, 2538, 347, 10, 27, "Input"],
+Cell[81739, 2550, 59, 1, 27, "Input"],
+Cell[81801, 2553, 682, 22, 50, "Input"],
+Cell[82486, 2577, 173, 5, 27, "Input"],
+Cell[82662, 2584, 117, 3, 29, "Text"],
+Cell[82782, 2589, 136, 3, 27, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[82955, 2597, 74, 0, 41, "Subsection"],
+Cell[83032, 2599, 106, 3, 29, "Text"],
+Cell[83141, 2604, 101, 2, 27, "Input"],
+Cell[83245, 2608, 197, 5, 27, "Input"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[83491, 2619, 31, 0, 63, "Section"],
+Cell[83525, 2621, 238, 6, 29, "Text",
+ CellTags->"Wolfram book"],
+Cell[83766, 2629, 179, 6, 29, "Text",
+ CellTags->"Meader book"],
+Cell[83948, 2637, 185, 3, 21, "Program"],
+Cell[84136, 2642, 154, 4, 29, "Text",
+ CellTags->"MAD manual"],
+Cell[84293, 2648, 181, 3, 21, "Program"],
+Cell[84477, 2653, 176, 6, 29, "Text",
+ CellTags->"Mfs.nb"],
+Cell[84656, 2661, 211, 5, 21, "Program"],
+Cell[84870, 2668, 192, 6, 29, "Text",
+ CellTags->"ColorListPlot.nb"],
+Cell[85065, 2676, 231, 5, 21, "Program"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+

@@ -1,0 +1,2480 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 6.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     76238,       2471]
+NotebookOptionsPosition[     60060,       1976]
+NotebookOutlinePosition[     60749,       1998]
+CellTagsIndexPosition[     60706,       1995]
+WindowFrame->Normal
+ContainsDynamic->False*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{"<<", "madtomma`madinput`readinmadfiles`"}]], "Input",
+ CellChangeTimes->{{3.410101352903042*^9, 3.41010135884058*^9}}],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"Version 2.21 of Madtomma`Mfs`Mfs` loaded.  Note function name \
+changes since Version 1.x:\\n\"\>", "\[InvisibleSpace]", 
+   TagBox[
+    TagBox[GridBox[{
+       {
+        RowBox[{"\<\"interpretDescriptors\"\>", 
+         "\[Rule]", "\<\"mfsInterpretKeys\"\>"}]},
+       {
+        RowBox[{"\<\"keyValue\"\>", "\[Rule]", "\<\"mfsKeyValue\"\>"}]},
+       {
+        RowBox[{"\<\"columnNames\"\>", 
+         "\[Rule]", "\<\"mfsColumnNames\"\>"}]},
+       {
+        RowBox[{"\<\"descriptorNames\"\>", 
+         "\[Rule]", "\<\"mfsKeyNames\"\>"}]},
+       {
+        RowBox[{"\<\"colValue\"\>", "\[Rule]", "\<\"mfsColumnValue\"\>"}]},
+       {
+        RowBox[{"\<\"addDescriptor\"\>", "\[Rule]", "\<\"mfsAddKey\"\>"}]},
+       {
+        RowBox[{"\<\"editDescriptor\"\>", "\[Rule]", "\<\"mfsEditKey\"\>"}]},
+       {
+        RowBox[{"\<\"deleteDescriptor\"\>", 
+         "\[Rule]", "\<\"mfsDeleteKey\"\>"}]},
+       {
+        RowBox[{"\<\"symplecticJ\"\>", "\[Rule]", "\<\"SymplecticJ\"\>"}]}
+      },
+      GridBoxAlignment->{
+       "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+        "RowsIndexed" -> {}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.5599999999999999]}, 
+          Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}, "RowsIndexed" -> {}}],
+     Column],
+    Function[BoxForm`e$, 
+     TableForm[BoxForm`e$]]]}],
+  SequenceForm[
+  "Version 2.21 of Madtomma`Mfs`Mfs` loaded.  Note function name changes \
+since Version 1.x:\n", 
+   TableForm[{
+    "interpretDescriptors" -> "mfsInterpretKeys", "keyValue" -> "mfsKeyValue",
+      "columnNames" -> "mfsColumnNames", "descriptorNames" -> "mfsKeyNames", 
+     "colValue" -> "mfsColumnValue", "addDescriptor" -> "mfsAddKey", 
+     "editDescriptor" -> "mfsEditKey", "deleteDescriptor" -> "mfsDeleteKey", 
+     "symplecticJ" -> "SymplecticJ"}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.4190727142501802`*^9, 3.4190728259313464`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RunMAD", "::", "\<\"shdw\"\>"}], 
+  RowBox[{
+  ":", " "}], "\<\"Symbol \\!\\(\\\"RunMAD\\\"\\) appears in multiple \
+contexts \\!\\({\\\"Madtomma`MADInput`MADInput`\\\", \\\"Global`\\\"}\\); \
+definitions in context \\!\\(\\\"Madtomma`MADInput`MADInput`\\\"\\) may \
+shadow or be shadowed by other definitions. \\!\\(\\*ButtonBox[\\\"\
+\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/shdw\\\", ButtonNote -> \
+\\\"Madtomma`MADInput`MADInput`RunMAD::shdw\\\"]\\)\"\>"}]], "Message", "MSG",
+ 
+ CellChangeTimes->{3.419069731432309*^9, 3.419072615036813*^9, 
+  3.4190727149846163`*^9, 3.4190728266501565`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Global`Thin", "::", "\<\"shdw\"\>"}], 
+  RowBox[{
+  ":", " "}], "\<\"Symbol \\!\\(\\\"Thin\\\"\\) appears in multiple contexts \
+\\!\\({\\\"Global`\\\", \\\"System`\\\"}\\); definitions in context \
+\\!\\(\\\"Global`\\\"\\) may shadow or be shadowed by other definitions. \
+\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
+ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/shdw\\\", \
+ButtonNote -> \\\"Global`Thin::shdw\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.419069731432309*^9, 3.419072615036813*^9, 
+  3.4190727149846163`*^9, 3.4190728267595406`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Needs", "::", "\<\"nocont\"\>"}], 
+  RowBox[{
+  ":", " "}], "\<\"Context \\!\\(\\\"MadtoMMA`MADInput`MADInput`\\\"\\) was \
+not created when Needs was evaluated. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\
+\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Needs/nocont\\\", ButtonNote -> \
+\\\"Needs::nocont\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.419069731432309*^9, 3.419072615036813*^9, 
+  3.4190727149846163`*^9, 3.4190728268220453`*^9}]
+}, Open  ]],
+
+Cell["FormatMADFile[\"c:\\\\mad2\\\\lc\\\\dr\\\\dco\\\\dco.xsif\"]", "Text",
+ CellChangeTimes->{{3.4101013483717628`*^9, 3.410101392012667*^9}, {
+   3.415448576369614*^9, 3.415448601729314*^9}, 3.4190724278854656`*^9}],
+
+Cell[CellGroupData[{
+
+Cell["Element Definitions - Orig", "Subsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4190734181755877`*^9, 3.41907341908189*^9}}],
+
+Cell[BoxData[
+ RowBox[{"E0", ":=", "5.0"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.4154486178701453`*^9}],
+
+Cell[BoxData[
+ RowBox[{"BLENGTH", ":=", "2.00"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.4154486195107913`*^9}],
+
+Cell[BoxData[
+ RowBox[{"QLENGTH", ":=", "0.30"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.415448620495179*^9}],
+
+Cell[BoxData[
+ RowBox[{"SLENGTH", ":=", "0.25"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.415448621885822*^9}],
+
+Cell[BoxData[
+ RowBox[{"ANGARCB", ":=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"2", "\[Pi]"}], ")"}], "/", "192"}], "//", "N"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4154486256202445`*^9, 3.4154486563862634`*^9}, {
+  3.4190569896595554`*^9, 3.41905699006534*^9}}],
+
+Cell[BoxData[
+ RowBox[{"LDBPM", ":=", "0.10"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"LDCOR", ":=", "0.10"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"LCOR", ":=", "0.15"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"SXTON", ":=", "1"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"ANGDSP1", ":=", 
+  RowBox[{"ANGARCB", "*", "0.35"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"ANGDSP2", ":=", 
+  RowBox[{"ANGARCB", "*", "0.65"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"ANGCCH1", ":=", 
+  RowBox[{"ANGARCB", "/", "2"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"ANGCCH2", ":=", 
+  RowBox[{
+   RowBox[{"-", "ANGARCB"}], "/", "2"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"RFON", ":=", "1"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"ANGDLG1", ":=", 
+  RowBox[{"-", "ANGARCB"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"ANGDLG2", ":=", "ANGARCB"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"WIGBMAX", ":=", "1.6"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.4154486294484186`*^9}],
+
+Cell[BoxData[
+ RowBox[{"WIGPERD", ":=", "0.4"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.4154486315109453`*^9}],
+
+Cell[BoxData[
+ RowBox[{"WANGLE", ":=", 
+  RowBox[{"WIGBMAX", "*", 
+   RowBox[{"(", 
+    RowBox[{"WIGPERD", "/", "4"}], ")"}], "*", 
+   RowBox[{
+    RowBox[{"299792458", "/", "E0"}], "/", 
+    SuperscriptBox["10", "9"]}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.415448633760974*^9, 3.4154487007618313`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"ANGPSD1", ":=", 
+  RowBox[{"ANGARCB", "*", "0.25"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"ANGPSD2", ":=", 
+  RowBox[{"ANGARCB", "*", "0.75"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell["Quadrupoles & Bends", "Subsubsection",
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"N", "[", 
+  RowBox[{"\[Pi]", "/", "4"}], "]"}]], "Input",
+ CellChangeTimes->{{3.419074190144781*^9, 3.419074195768629*^9}}],
+
+Cell[BoxData["0.7853981633974483`"], "Output",
+ CellChangeTimes->{3.4190741972370777`*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"SKQRNG", ",", "0.2", ",", "0.", ",", "\"\<SKQRNG\>\"", ",", 
+   RowBox[{"Tilt", "\[Rule]", "\"\<PI/4\>\""}]}], "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4190741823495026`*^9, 3.419074203079631*^9}, {
+  3.4215601133092165`*^9, 3.4215601161840687`*^9}, {3.421560162869179*^9, 
+  3.4215601629473*^9}}],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QARCF", ",", "QLENGTH", ",", "K1QARCF", ",", "\"\<QARCF\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QARCD", ",", "QLENGTH", ",", "K1QARCD", ",", "\"\<QARCD\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QDSP0", ",", "QLENGTH", ",", "K1QDSP0", ",", "\"\<QDSP0\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QDSP1", ",", "QLENGTH", ",", "K1QDSP1", ",", "\"\<QDSP1\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QDSP2", ",", "QLENGTH", ",", "K1QDSP2", ",", "\"\<QDSP2\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QDSP3", ",", "QLENGTH", ",", "K1QDSP3", ",", "\"\<QDSP3\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QDSP4", ",", "QLENGTH", ",", "K1QDSP4", ",", "\"\<QDSP4\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QDSP5", ",", "QLENGTH", ",", "K1QDSP5", ",", "\"\<QDSP5\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QDSP6", ",", "QLENGTH", ",", "K1QDSP6", ",", "\"\<QDSP6\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QDSP7", ",", "QLENGTH", ",", "K1QDSP7", ",", "\"\<QDSP7\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QPHT1", ",", "QLENGTH", ",", "K1QPHT1", ",", "\"\<QPHT1\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QPHT2", ",", "QLENGTH", ",", "K1QPHT2", ",", "\"\<QPHT2\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QPHT3", ",", "QLENGTH", ",", "K1QPHT3", ",", "\"\<QPHT3\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QPHT4", ",", "QLENGTH", ",", "K1QPHT4", ",", "\"\<QPHT4\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QPHT5", ",", "QLENGTH", ",", "K1QPHT5", ",", "\"\<QPHT5\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QPHT6", ",", "QLENGTH", ",", "K1QPHT6", ",", "\"\<QPHT6\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QMPC1", ",", "QLENGTH", ",", "K1QMPC1", ",", "\"\<QMPC1\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QMPC2", ",", "QLENGTH", ",", "K1QMPC2", ",", "\"\<QMPC2\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QMPC3", ",", "QLENGTH", ",", "K1QMPC3", ",", "\"\<QMPC3\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QMPC4", ",", "QLENGTH", ",", "K1QMPC4", ",", "\"\<QMPC4\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QCCH1", ",", "QLENGTH", ",", "K1QCCH1", ",", "\"\<QCCH1\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QCCH2", ",", "QLENGTH", ",", "K1QCCH2", ",", "\"\<QCCH2\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QMCI1", ",", "QLENGTH", ",", "K1QMCI1", ",", "\"\<QMCI1\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QMCI2", ",", "QLENGTH", ",", "K1QMCI2", ",", "\"\<QMCI2\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QMCI3", ",", "QLENGTH", ",", "K1QMCI3", ",", "\"\<QMCI3\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QMCI4", ",", "QLENGTH", ",", "K1QMCI4", ",", "\"\<QMCI4\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QINJ1", ",", "QLENGTH", ",", "K1QINJ1", ",", "\"\<QINJ1\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QINJ2", ",", "QLENGTH", ",", "K1QINJ2", ",", "\"\<QINJ2\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QMIR1", ",", "QLENGTH", ",", "K1QMIR1", ",", "\"\<QMIR1\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QMIR2", ",", "QLENGTH", ",", "K1QMIR2", ",", "\"\<QMIR2\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QMIR3", ",", "QLENGTH", ",", "K1QMIR3", ",", "\"\<QMIR3\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QMIR4", ",", "QLENGTH", ",", "K1QMIR4", ",", "\"\<QMIR4\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QRFC1", ",", "QLENGTH", ",", "K1QRFC1", ",", "\"\<QRFC1\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QRFC2", ",", "QLENGTH", ",", "K1QRFC2", ",", "\"\<QRFC2\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QMRD1", ",", "QLENGTH", ",", "K1QMRD1", ",", "\"\<QMRD1\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QMRD2", ",", "QLENGTH", ",", "K1QMRD2", ",", "\"\<QMRD2\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QMRD3", ",", "QLENGTH", ",", "K1QMRD3", ",", "\"\<QMRD3\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QMRD4", ",", "QLENGTH", ",", "K1QMRD4", ",", "\"\<QMRD4\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QDLG1", ",", "QLENGTH", ",", "K1QDLG1", ",", "\"\<QDLG1\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QDLG2", ",", "QLENGTH", ",", "K1QDLG2", ",", "\"\<QDLG2\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QMDW1", ",", "QLENGTH", ",", "K1QMDW1", ",", "\"\<QMDW1\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QMDW2", ",", "QLENGTH", ",", "K1QMDW2", ",", "\"\<QMDW2\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QMDW3", ",", "QLENGTH", ",", "K1QMDW3", ",", "\"\<QMDW3\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QMDW4", ",", "QLENGTH", ",", "K1QMDW4", ",", "\"\<QMDW4\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QWGC1", ",", "QLENGTH", ",", "K1QWGC1", ",", "\"\<QWGC1\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QWGC2", ",", "QLENGTH", ",", "K1QWGC2", ",", "\"\<QWGC2\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QPSD0", ",", "QLENGTH", ",", "K1QPSD0", ",", "\"\<QPSD0\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QPSD1", ",", "QLENGTH", ",", "K1QPSD1", ",", "\"\<QPSD1\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QPSD2", ",", "QLENGTH", ",", "K1QPSD2", ",", "\"\<QPSD2\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QPSD3", ",", "QLENGTH", ",", "K1QPSD3", ",", "\"\<QPSD3\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QPSD4", ",", "QLENGTH", ",", "K1QPSD4", ",", "\"\<QPSD4\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QPSD5", ",", "QLENGTH", ",", "K1QPSD5", ",", "\"\<QPSD5\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QPSD6", ",", "QLENGTH", ",", "K1QPSD6", ",", "\"\<QPSD6\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"quad", "[", 
+  RowBox[{"QPSD7", ",", "QLENGTH", ",", "K1QPSD7", ",", "\"\<QPSD7\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"sbend", "[", 
+  RowBox[{
+  "BARC", ",", "BLENGTH", ",", "0", ",", "ANGARCB", ",", "\"\<BARC\>\"", ",", 
+   
+   RowBox[{"E1", "\[Rule]", 
+    RowBox[{"0.5", "ANGARCB"}]}], ",", 
+   RowBox[{"E2", "\[Rule]", 
+    RowBox[{"0.5", "ANGARCB"}]}]}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"sbend", "[", 
+  RowBox[{
+  "BDSP1", ",", "BLENGTH", ",", "0", ",", "ANGDSP1", ",", "\"\<BDSP1\>\"", 
+   ",", 
+   RowBox[{"E1", "\[Rule]", 
+    RowBox[{"0.5", "ANGDSP1"}]}], ",", 
+   RowBox[{"E2", "\[Rule]", 
+    RowBox[{"0.5", "ANGDSP1"}]}]}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"sbend", "[", 
+  RowBox[{
+  "BDSP2", ",", "BLENGTH", ",", "0", ",", "ANGDSP2", ",", "\"\<BDSP2\>\"", 
+   ",", 
+   RowBox[{"E1", "\[Rule]", 
+    RowBox[{"0.5", "ANGDSP2"}]}], ",", 
+   RowBox[{"E2", "\[Rule]", 
+    RowBox[{"0.5", "ANGDSP2"}]}]}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"sbend", "[", 
+  RowBox[{"BCCH1", ",", 
+   RowBox[{"0.5", "BLENGTH"}], ",", "0", ",", "ANGCCH1", ",", "\"\<BCCH1\>\"",
+    ",", 
+   RowBox[{"E1", "\[Rule]", 
+    RowBox[{"0.5", "ANGCCH1"}]}], ",", 
+   RowBox[{"E2", "\[Rule]", 
+    RowBox[{"0.5", "ANGCCH1"}]}]}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"sbend", "[", 
+  RowBox[{"BCCH2", ",", 
+   RowBox[{"0.5", "BLENGTH"}], ",", "0", ",", "ANGCCH2", ",", "\"\<BCCH2\>\"",
+    ",", 
+   RowBox[{"E1", "\[Rule]", 
+    RowBox[{"0.5", "ANGCCH2"}]}], ",", 
+   RowBox[{"E2", "\[Rule]", 
+    RowBox[{"0.5", "ANGCCH2"}]}]}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"sbend", "[", 
+  RowBox[{
+  "BDLG1", ",", "BLENGTH", ",", "0", ",", "ANGDLG1", ",", "\"\<BDLG1\>\"", 
+   ",", 
+   RowBox[{"E1", "\[Rule]", 
+    RowBox[{"0.5", "ANGDLG1"}]}], ",", 
+   RowBox[{"E2", "\[Rule]", 
+    RowBox[{"0.5", "ANGDLG1"}]}]}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"sbend", "[", 
+  RowBox[{
+  "BDLG2", ",", "BLENGTH", ",", "0", ",", "ANGDLG2", ",", "\"\<BDLG2\>\"", 
+   ",", 
+   RowBox[{"E1", "\[Rule]", 
+    RowBox[{"0.5", "ANGDLG2"}]}], ",", 
+   RowBox[{"E2", "\[Rule]", 
+    RowBox[{"0.5", "ANGDLG2"}]}]}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"sbend", "[", 
+  RowBox[{"BWIGP", ",", 
+   RowBox[{"0.25", "WIGPERD"}], ",", "0", ",", "WANGLE", ",", "\"\<BWIGP\>\"",
+    ",", 
+   RowBox[{"E1", "\[Rule]", 
+    RowBox[{"0.5", "WANGLE"}]}], ",", 
+   RowBox[{"E2", "\[Rule]", 
+    RowBox[{"0.5", "WANGLE"}]}]}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"sbend", "[", 
+  RowBox[{"BWIGM", ",", 
+   RowBox[{"0.25", "WIGPERD"}], ",", "0", ",", 
+   RowBox[{
+    RowBox[{"-", "1."}], "WANGLE"}], ",", "\"\<BWIGM\>\"", ",", 
+   RowBox[{"E1", "\[Rule]", 
+    RowBox[{
+     RowBox[{"-", "0.5"}], "WANGLE"}]}], ",", 
+   RowBox[{"E2", "\[Rule]", 
+    RowBox[{
+     RowBox[{"-", "0.5"}], "WANGLE"}]}]}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"sbend", "[", 
+  RowBox[{"BWIGPH", ",", 
+   RowBox[{"0.125", "WIGPERD"}], ",", "0", ",", 
+   RowBox[{"0.5", "WANGLE"}], ",", "\"\<BWIGPH\>\"", ",", 
+   RowBox[{"E1", "\[Rule]", 
+    RowBox[{"0.25", "WANGLE"}]}], ",", 
+   RowBox[{"E2", "\[Rule]", 
+    RowBox[{"0.25", "WANGLE"}]}]}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"sbend", "[", 
+  RowBox[{"BWIGMH", ",", 
+   RowBox[{"0.125", "WIGPERD"}], ",", "0", ",", 
+   RowBox[{
+    RowBox[{"-", "0.5"}], "WANGLE"}], ",", "\"\<BWIGMH\>\"", ",", 
+   RowBox[{"E1", "\[Rule]", 
+    RowBox[{
+     RowBox[{"-", "0.25"}], "WANGLE"}]}], ",", 
+   RowBox[{"E2", "\[Rule]", 
+    RowBox[{
+     RowBox[{"-", "0.25"}], "WANGLE"}]}]}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"sbend", "[", 
+  RowBox[{
+  "BPSD1", ",", "BLENGTH", ",", "0", ",", "ANGPSD1", ",", "\"\<BPSD1\>\"", 
+   ",", 
+   RowBox[{"E1", "\[Rule]", 
+    RowBox[{"0.5", "ANGPSD1"}]}], ",", 
+   RowBox[{"E2", "\[Rule]", 
+    RowBox[{"0.5", "ANGPSD1"}]}]}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"sbend", "[", 
+  RowBox[{
+  "BPSD2", ",", "BLENGTH", ",", "0", ",", "ANGPSD2", ",", "\"\<BPSD2\>\"", 
+   ",", 
+   RowBox[{"E1", "\[Rule]", 
+    RowBox[{"0.5", "ANGPSD2"}]}], ",", 
+   RowBox[{"E2", "\[Rule]", 
+    RowBox[{"0.5", "ANGPSD2"}]}]}], "]"}]], "Input",
+ InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Sextupoles", "Subsubsection",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"sext", "[", 
+  RowBox[{
+  "SARC1", ",", "SLENGTH", ",", "K2SARC1", ",", "\"\<SARC1\>\"", ",", 
+   RowBox[{"Thin", "\[Rule]", "usethin"}]}], "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.4154489964687414`*^9}],
+
+Cell[BoxData[
+ RowBox[{"sext", "[", 
+  RowBox[{
+  "SARC2", ",", "SLENGTH", ",", "K2SARC2", ",", "\"\<SARC2\>\"", ",", 
+   RowBox[{"Thin", "\[Rule]", "usethin"}]}], "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.4154489998281593`*^9}],
+
+Cell[BoxData[
+ RowBox[{"sext", "[", 
+  RowBox[{
+  "SARC3", ",", "SLENGTH", ",", "K2SARC3", ",", "\"\<SARC3\>\"", ",", 
+   RowBox[{"Thin", "\[Rule]", "usethin"}]}], "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.4154490012656775`*^9}],
+
+Cell[BoxData[
+ RowBox[{"sext", "[", 
+  RowBox[{
+  "SARC4", ",", "SLENGTH", ",", "K2SARC4", ",", "\"\<SARC4\>\"", ",", 
+   RowBox[{"Thin", "\[Rule]", "usethin"}]}], "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.4154490031250763`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Monitors & Kickers", "Subsubsection",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"bpm", "[", 
+  RowBox[{"BPMRNG", ",", "0", ",", "\"\<BPMRNG\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"kick", "[", 
+  RowBox[{
+  "CORRNG", ",", "LCOR", ",", "0.", ",", "0.", ",", "\"\<CORRNG\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"hkick", "[", 
+  RowBox[{"KINJ1", ",", "0.3", ",", "0", ",", "\"\<KINJ1\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.419074218014072*^9, 3.4190742443055615`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"hkick", "[", 
+  RowBox[{"PINJ1", ",", "1.", ",", "0", ",", "\"\<PINJ1\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4190742185295916`*^9, 3.419074246976889*^9}}],
+
+Cell[BoxData[
+ RowBox[{"hkick", "[", 
+  RowBox[{"PINJ2", ",", "1.", ",", "0", ",", "\"\<PINJ2\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{
+  3.419074219154464*^9, {3.419074249304538*^9, 3.419074249429512*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Drifts", "Subsubsection",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DBPM", ",", "LDBPM", ",", "\"\<DBPM\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DCOR", ",", "LDCOR", ",", "\"\<DCOR\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DARCX", ",", "SLENGTH", ",", "\"\<DARCX\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DARCB", ",", "BLENGTH", ",", "\"\<DARCB\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DARCS", ",", "0.2", ",", "\"\<DARCS\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DARC1", ",", "5.95", ",", "\"\<DARC1\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DARC2", ",", "1.45", ",", "\"\<DARC2\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DARC4", ",", 
+   RowBox[{"0.2", "-", 
+    RowBox[{"1.", "LDBPM"}]}], ",", "\"\<DARC4\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DARC5", ",", "0.15", ",", "\"\<DARC5\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DARC6", ",", 
+   RowBox[{"5.45", "-", 
+    RowBox[{"1.", "LCOR"}]}], ",", "\"\<DARC6\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DARC7", ",", 
+   RowBox[{"0.95", "-", 
+    RowBox[{"1.", "LCOR"}]}], ",", "\"\<DARC7\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DDSP1", ",", 
+   RowBox[{"1.5", "-", 
+    RowBox[{"1.", "LDBPM"}]}], ",", "\"\<DDSP1\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DDSP2", ",", 
+   RowBox[{"3.1", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DDSP2\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DDSP3", ",", 
+   RowBox[{"3.1", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DDSP3\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DDSP4", ",", 
+   RowBox[{"2.35", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DDSP4\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DDSP5", ",", 
+   RowBox[{"4.1", "-", 
+    RowBox[{"1.", "LDBPM"}]}], ",", "\"\<DDSP5\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DDSP6", ",", 
+   RowBox[{"1.8", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DDSP6\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DDSP7", ",", 
+   RowBox[{"3.7", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DDSP7\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DDSP8", ",", 
+   RowBox[{"4.7", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DDSP8\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DDSP9", ",", 
+   RowBox[{"7.25", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DDSP9\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DDSPA", ",", 
+   RowBox[{"9.2", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DDSPA\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DPHT1", ",", 
+   RowBox[{"12.043604589", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DPHT1\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DMPC1", ",", 
+   RowBox[{"5.3", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DMPC1\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DCCH0", ",", 
+   RowBox[{"4.", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DCCH0\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DCCH1", ",", 
+   RowBox[{"4.", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DCCH1\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DCCH2", ",", 
+   RowBox[{"3.6", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DCCH2\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DCCH3", ",", 
+   RowBox[{"0.5", "-", 
+    RowBox[{"1.", "LDBPM"}]}], ",", "\"\<DCCH3\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DCCH4", ",", "1.", ",", "\"\<DCCH4\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DCCH5", ",", "0.5", ",", "\"\<DCCH5\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DCCH6", ",", "3.", ",", "\"\<DCCH6\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DCCH7", ",", 
+   RowBox[{"0.5", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DCCH7\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DCCH8", ",", 
+   RowBox[{"4.", "-", 
+    RowBox[{"1.", "LDBPM"}]}], ",", "\"\<DCCH8\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DMCI1", ",", 
+   RowBox[{"5.", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DMCI1\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DMCI2", ",", 
+   RowBox[{"5.", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DMCI2\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DMCI3", ",", 
+   RowBox[{"5.", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DMCI3\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DMCI4", ",", 
+   RowBox[{"4.", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DMCI4\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DINJ0", ",", "10.", ",", "\"\<DINJ0\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DINJ1", ",", 
+   RowBox[{"10.", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DINJ1\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DINJ2", ",", 
+   RowBox[{"6.7", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DINJ2\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DINJ3", ",", 
+   RowBox[{"17.", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DINJ3\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DINJ4", ",", 
+   RowBox[{"0.25", "-", 
+    RowBox[{"1.", "LDBPM"}]}], ",", "\"\<DINJ4\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DINJ5", ",", 
+   RowBox[{"0.25", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DINJ5\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DINJ6", ",", 
+   RowBox[{"7.25", "-", 
+    RowBox[{"1.", "LDBPM"}]}], ",", "\"\<DINJ6\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DINJ7", ",", "0.5", ",", "\"\<DINJ7\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DINJ8", ",", 
+   RowBox[{"7.25", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DINJ8\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DINJK", ",", "0.2", ",", "\"\<DINJK\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DMIR1", ",", 
+   RowBox[{"4.", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DMIR1\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DMIR2", ",", 
+   RowBox[{"7.5", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DMIR2\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DMIR3", ",", 
+   RowBox[{"5.", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DMIR3\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DMIR4", ",", 
+   RowBox[{"8.", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DMIR4\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DRFC1", ",", 
+   RowBox[{"3.06277573", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DRFC1\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DRFC2", ",", "3.11322937", ",", "\"\<DRFC2\>\""}], "]"}]], "Input",\
+
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DRFC3", ",", 
+   RowBox[{"3.06277573", "-", 
+    RowBox[{"1.", "LDBPM"}]}], ",", "\"\<DRFC3\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DMRD1", ",", 
+   RowBox[{"7.5", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DMRD1\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DMRD2", ",", 
+   RowBox[{"6.5", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DMRD2\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DMRD3", ",", 
+   RowBox[{"6.", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DMRD3\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DMRD4", ",", 
+   RowBox[{"4.5", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DMRD4\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DDLG1", ",", 
+   RowBox[{"2.", "-", 
+    RowBox[{"1.", "LDBPM"}]}], ",", "\"\<DDLG1\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DDLG3", ",", 
+   RowBox[{"9.6", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DDLG3\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DDLG2", ",", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"-", "1."}], "BLENGTH"}], "-", 
+    RowBox[{"1.", 
+     RowBox[{"DDLG1", "[", 
+      RowBox[{"[", 
+       RowBox[{"1", ",", "3"}], "]"}], "]"}]}], "+", 
+    RowBox[{"DDLG3", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "3"}], "]"}], "]"}]}], ",", "\"\<DDLG2\>\""}], 
+  "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.415449551975852*^9, 3.4154495572727947`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DMDW1", ",", 
+   RowBox[{"6.", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DMDW1\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DMDW2", ",", 
+   RowBox[{"6.", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DMDW2\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DMDW3", ",", 
+   RowBox[{"5.", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DMDW3\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DMDW4", ",", 
+   RowBox[{"4.", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DMDW4\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DWIG2", ",", "0.1", ",", "\"\<DWIG2\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DWIG3", ",", "0.025", ",", "\"\<DWIG3\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DWGC1", ",", "0.75", ",", "\"\<DWGC1\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DWGC2", ",", 
+   RowBox[{"0.75", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DWGC2\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DPSD1", ",", 
+   RowBox[{"1.5", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DPSD1\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DPSD2", ",", 
+   RowBox[{"1.3", "-", 
+    RowBox[{"1.", "LDBPM"}]}], ",", "\"\<DPSD2\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DPSD3", ",", 
+   RowBox[{"4.", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DPSD3\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DPSD4", ",", 
+   RowBox[{"1.7", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DPSD4\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DPSD5", ",", 
+   RowBox[{"5.65", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DPSD5\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DPSD6", ",", 
+   RowBox[{"2.5", "-", 
+    RowBox[{"1.", "LDBPM"}]}], ",", "\"\<DPSD6\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DPSD7", ",", 
+   RowBox[{"2.8", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DPSD7\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DPSD8", ",", 
+   RowBox[{"5.8", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DPSD8\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DPSD9", ",", 
+   RowBox[{"10.4", "-", 
+    RowBox[{"1.", "LCOR"}], "-", 
+    RowBox[{"1.", "LDBPM"}], "-", 
+    RowBox[{"1.", "LDCOR"}]}], ",", "\"\<DPSD9\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"drift", "[", 
+  RowBox[{"DPSDA", ",", "2.6", ",", "\"\<DPSDA\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"marker", "[", 
+  RowBox[{"MRK1", ",", "\"\<MRK1\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"marker", "[", 
+  RowBox[{"MRK2", ",", "\"\<MRK2\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"marker", "[", 
+  RowBox[{"MRK3", ",", "\"\<MRK3\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"marker", "[", 
+  RowBox[{"MRK4", ",", "\"\<MRK4\>\""}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell["\<\
+VRFC1 : RFCAVITY, L = 0.2306096, VOLT = RFVOLT, LAG = RFPHSE, HARMON = 14042
+VRFC0 : RFCAVITY, L = 0.2306096, VOLT = 0, LAG = RFPHSE, HARMON = 14042
+\
+\>", "Text",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4154493600515203`*^9, 3.415449364723455*^9}}],
+
+Cell[BoxData[
+ RowBox[{"rfc", "[", 
+  RowBox[{"VRFC1", ",", "0.2306096", ",", "\"\<\>\"", ",", 
+   RowBox[{"MADVolt", "\[Rule]", "RFVOLT"}], ",", 
+   RowBox[{"Lag", "\[Rule]", "RFPHSE"}], ",", 
+   RowBox[{"Harmon", "\[Rule]", "14042"}]}], "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4154493714579163`*^9, 3.415449426239867*^9}, {
+  3.4154546560389977`*^9, 3.4154546645391064`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"rfc", "[", 
+  RowBox[{"VRFC0", ",", "0.2306096", ",", "\"\<\>\"", ",", 
+   RowBox[{"MADVolt", "\[Rule]", "0"}], ",", 
+   RowBox[{"Lag", "\[Rule]", "RFPHSE"}], ",", 
+   RowBox[{"Harmon", "\[Rule]", "14042"}]}], "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4154493714579163`*^9, 3.4154494452401104`*^9}, 
+   3.4154546654453683`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Lines", "Subsubsection",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"CQB", "[", "Q1_", "]"}], ":=", 
+  RowBox[{"{", 
+   RowBox[{"CORRNG", ",", "DCOR", ",", "Q1", ",", "DBPM", ",", "BPMRNG"}], 
+   "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.415449034109848*^9, 3.4154490433130913`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ARCTM", "[", 
+   RowBox[{"S1_", ",", "S2_"}], "]"}], ":=", 
+  RowBox[{"{", 
+   RowBox[{
+   "DBPM", ",", "BPMRNG", ",", "DARC4", ",", "DARCX", ",", "DARC2", ",", 
+    "BARC", ",", "DARC6", ",", "CORRNG", ",", "DARC5", ",", "SKQRNG", ",", 
+    "DARC5", ",", "S1", ",", "DARCS", ",", "QARCF", ",", "DBPM", ",", 
+    "BPMRNG", ",", "DARC4", ",", "DARCX", ",", "DARC1", ",", "DARCB", ",", 
+    "DARC7", ",", "CORRNG", ",", "DARC5", ",", "SKQRNG", ",", "DARC5", ",", 
+    "S2", ",", "DARCS"}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.41544903735989*^9, 3.415449048422531*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ARCT1", "[", 
+   RowBox[{"S1_", ",", "S2_"}], "]"}], ":=", 
+  RowBox[{"{", 
+   RowBox[{"QARCD", ",", 
+    RowBox[{"ARCTM", "[", 
+     RowBox[{"S1", ",", "S2"}], "]"}]}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4154490520944533`*^9, 3.415449056719513*^9}, {
+  3.4154495870388007`*^9, 3.415449588788823*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ARCT2", "[", 
+   RowBox[{"S1_", ",", "S2_"}], "]"}], ":=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"ARCTM", "[", 
+     RowBox[{"S1", ",", "S2"}], "]"}], ",", "QARCD"}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.415449058407034*^9, 3.415449062766465*^9}, {
+  3.415449592163866*^9, 3.415449593585759*^9}}],
+
+Cell[BoxData[
+ RowBox[{"ARC", ":=", 
+  RowBox[{"{", 
+   RowBox[{"ARCT1", "[", 
+    RowBox[{"SARC1", ",", "SARC2"}], "]"}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4154490690165453`*^9, 3.4154490700321827`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"ARC0", ":=", 
+  RowBox[{"{", 
+   RowBox[{"ARCT1", "[", 
+    RowBox[{"SARC3", ",", "SARC4"}], "]"}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4154490715790777`*^9, 3.415449073079097*^9}}],
+
+Cell[BoxData[
+ RowBox[{"ARC2", ":=", 
+  RowBox[{"{", 
+   RowBox[{"ARCT2", "[", 
+    RowBox[{"SARC1", ",", "SARC2"}], "]"}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4154490740634847`*^9, 3.4154490753760014`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"ARCM", ":=", 
+  RowBox[{"{", 
+   RowBox[{"ARCTM", "[", 
+    RowBox[{"SARC3", ",", "SARC4"}], "]"}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4154490768447704`*^9, 3.415449078860421*^9}}],
+
+Cell[BoxData[
+ RowBox[{"ARC5", ":=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"ARCT1", "[", 
+     RowBox[{"SARC1", ",", "SARC4"}], "]"}], ",", 
+    RowBox[{"ARCT1", "[", 
+     RowBox[{"SARC3", ",", "SARC4"}], "]"}], ",", 
+    RowBox[{"ARCT1", "[", 
+     RowBox[{"SARC1", ",", "SARC2"}], "]"}], ",", 
+    RowBox[{"ARCT1", "[", 
+     RowBox[{"SARC3", ",", "SARC4"}], "]"}], ",", 
+    RowBox[{"ARCT1", "[", 
+     RowBox[{"SARC3", ",", "SARC2"}], "]"}]}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.415449080797946*^9, 3.415449093985615*^9}}],
+
+Cell[BoxData[
+ RowBox[{"DSP", ":=", 
+  RowBox[{"{", 
+   RowBox[{
+   "QDSP0", ",", "DBPM", ",", "BPMRNG", ",", "DDSP1", ",", "BDSP1", ",", 
+    "DDSP2", ",", 
+    RowBox[{"CQB", "[", "QDSP1", "]"}], ",", "DDSP3", ",", 
+    RowBox[{"CQB", "[", "QDSP2", "]"}], ",", "DDSP4", ",", 
+    RowBox[{"CQB", "[", "QDSP3", "]"}], ",", "DDSP5", ",", "BDSP2", ",", 
+    "DDSP6", ",", 
+    RowBox[{"CQB", "[", "QDSP4", "]"}], ",", "DDSP7", ",", 
+    RowBox[{"CQB", "[", "QDSP5", "]"}], ",", "DDSP8", ",", 
+    RowBox[{"CQB", "[", "QDSP6", "]"}], ",", "DDSP9", ",", 
+    RowBox[{"CQB", "[", "QDSP7", "]"}], ",", "DDSPA"}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.415449099970066*^9, 3.415449119532817*^9}}],
+
+Cell[BoxData[
+ RowBox[{"ARCDSP", ":=", 
+  RowBox[{"{", 
+   RowBox[{"ARC", ",", "DSP"}], "}"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"PHT", ":=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"CQB", "[", "QPHT1", "]"}], ",", "DPHT1", ",", 
+    RowBox[{"CQB", "[", "QPHT2", "]"}], ",", "DPHT1", ",", 
+    RowBox[{"CQB", "[", "QPHT3", "]"}], ",", "DPHT1", ",", 
+    RowBox[{"CQB", "[", "QPHT4", "]"}], ",", "DPHT1", ",", 
+    RowBox[{"CQB", "[", "QPHT5", "]"}], ",", "DPHT1", ",", 
+    RowBox[{"CQB", "[", "QPHT6", "]"}], ",", "DPHT1"}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.415449127736047*^9, 3.4154491447675147`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"MPC", ":=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"CQB", "[", "QMPC1", "]"}], ",", "DMPC1", ",", 
+    RowBox[{"CQB", "[", "QMPC2", "]"}], ",", "DMPC1", ",", 
+    RowBox[{"CQB", "[", "QMPC3", "]"}], ",", "DMPC1", ",", 
+    RowBox[{"CQB", "[", "QMPC4", "]"}]}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.415449148314435*^9, 3.415449157627054*^9}}],
+
+Cell[BoxData[
+ RowBox[{"CCH1", ":=", 
+  RowBox[{"{", 
+   RowBox[{"DCCH1", ",", 
+    RowBox[{"CQB", "[", "QCCH1", "]"}], ",", "DCCH2", ",", 
+    RowBox[{"CQB", "[", "QCCH2", "]"}], ",", "DCCH3", ",", "BCCH1", ",", 
+    "DCCH4", ",", "BCCH2", ",", "DCCH5", ",", "BCCH2", ",", "DCCH6", ",", 
+    "BCCH1", ",", "DCCH5", ",", "BCCH1", ",", "DCCH4", ",", "BCCH2", ",", 
+    "DCCH7", ",", 
+    RowBox[{"CQB", "[", "QCCH2", "]"}], ",", "DCCH2", ",", 
+    RowBox[{"CQB", "[", "QCCH1", "]"}], ",", "DCCH8"}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4154491717834854`*^9, 3.415449172455369*^9}, {
+  3.415449203627643*^9, 3.4154492098152223`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"CCH0", ":=", 
+  RowBox[{"{", 
+   RowBox[{"DCCH0", ",", 
+    RowBox[{"CQB", "[", "QCCH1", "]"}], ",", "DCCH2", ",", 
+    RowBox[{"CQB", "[", "QCCH2", "]"}], ",", "DCCH3", ",", "BCCH1", ",", 
+    "DCCH4", ",", "BCCH2", ",", "DCCH5", ",", "BCCH2", ",", "DCCH6", ",", 
+    "BCCH1", ",", "DCCH5", ",", "BCCH1", ",", "DCCH4", ",", "BCCH2", ",", 
+    "DCCH7", ",", 
+    RowBox[{"CQB", "[", "QCCH2", "]"}], ",", "DCCH2", ",", 
+    RowBox[{"CQB", "[", "QCCH1", "]"}], ",", "DCCH8"}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4154491729241247`*^9, 3.415449175955414*^9}, {
+  3.4154492121746273`*^9, 3.4154492179090757`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"CCH", ":=", 
+  RowBox[{"{", 
+   RowBox[{"CCH1", ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Table", "[", 
+       RowBox[{"#", ",", 
+        RowBox[{"{", "3", "}"}]}], "]"}], "&"}], "@", "CCH0"}]}], 
+   "}"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"MCI", ":=", 
+  RowBox[{"{", 
+   RowBox[{"DMCI1", ",", 
+    RowBox[{"CQB", "[", "QMCI1", "]"}], ",", "DMCI2", ",", 
+    RowBox[{"CQB", "[", "QMCI2", "]"}], ",", "DMCI3", ",", 
+    RowBox[{"CQB", "[", "QMCI3", "]"}], ",", "DMCI4", ",", 
+    RowBox[{"CQB", "[", "QMCI4", "]"}]}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.415449176908551*^9, 3.41544917759606*^9}, {
+  3.415449221299744*^9, 3.415449231846754*^9}}],
+
+Cell[BoxData[
+ RowBox[{"IJ0", ":=", 
+  RowBox[{"{", 
+   RowBox[{"DINJ1", ",", 
+    RowBox[{"CQB", "[", "QINJ1", "]"}], ",", "DINJ2", ",", 
+    RowBox[{"CQB", "[", "QINJ2", "]"}], ",", "DINJ3", ",", 
+    RowBox[{"CQB", "[", "QINJ2", "]"}], ",", "DINJ2", ",", 
+    RowBox[{"CQB", "[", "QINJ1", "]"}], ",", "DINJ0"}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4154491780179405`*^9, 3.415449178611698*^9}, {
+  3.4154492221122546`*^9, 3.4154492306748643`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"IJP", ":=", 
+  RowBox[{"{", 
+   RowBox[{"DINJ1", ",", 
+    RowBox[{"CQB", "[", "QINJ1", "]"}], ",", "DINJ2", ",", 
+    RowBox[{"CQB", "[", "QINJ2", "]"}], ",", "DINJ6", ",", "PINJ1", ",", 
+    "DINJ7", ",", "PINJ2", ",", "DINJ8", ",", 
+    RowBox[{"CQB", "[", "QINJ2", "]"}], ",", "DINJ2", ",", 
+    RowBox[{"CQB", "[", "QINJ1", "]"}], ",", "DINJ0"}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4154491790492034`*^9, 3.4154491804710965`*^9}, {
+  3.4154492230341415`*^9, 3.415449235096796*^9}}],
+
+Cell[BoxData[
+ RowBox[{"KCKMD", ":=", 
+  RowBox[{"{", 
+   RowBox[{"DINJK", ",", "KINJ1"}], "}"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"IJK", ":=", 
+  RowBox[{"{", 
+   RowBox[{"DINJ1", ",", 
+    RowBox[{"CQB", "[", "QINJ1", "]"}], ",", "DINJ2", ",", 
+    RowBox[{"CQB", "[", "QINJ2", "]"}], ",", "DINJ4", ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Table", "[", 
+       RowBox[{"#", ",", 
+        RowBox[{"{", "33", "}"}]}], "]"}], "&"}], "@", "KCKMD"}], ",", 
+    "DINJ5", ",", 
+    RowBox[{"CQB", "[", "QINJ2", "]"}], ",", "DINJ2", ",", 
+    RowBox[{"CQB", "[", "QINJ1", "]"}], ",", "DINJ1"}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.41544918114298*^9, 3.4154491830180044`*^9}, {
+  3.4154492387218423`*^9, 3.4154492442531633`*^9}, {3.4154513173578234`*^9, 
+  3.415451319498476*^9}}],
+
+Cell[BoxData[
+ RowBox[{"INJ", ":=", 
+  RowBox[{"{", 
+   RowBox[{"IJ0", ",", "IJP", ",", "IJK"}], "}"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"MIR", ":=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"CQB", "[", "QMIR1", "]"}], ",", "DMIR1", ",", 
+    RowBox[{"CQB", "[", "QMIR2", "]"}], ",", "DMIR2", ",", 
+    RowBox[{"CQB", "[", "QMIR3", "]"}], ",", "DMIR3", ",", 
+    RowBox[{"CQB", "[", "QMIR4", "]"}], ",", "DMIR4"}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.415449183939891*^9, 3.415449184486773*^9}, {
+  3.4154492469563227`*^9, 3.4154492571752033`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"RFC", ":=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"CQB", "[", "QRFC1", "]"}], ",", "DRFC3", ",", "VRFC1", ",", 
+    "DRFC2", ",", "VRFC1", ",", "DRFC1", ",", 
+    RowBox[{"CQB", "[", "QRFC2", "]"}], ",", "DRFC3", ",", "VRFC1", ",", 
+    "DRFC2", ",", "VRFC1", ",", "DRFC1"}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4154491846899004`*^9, 3.415449184955529*^9}, {
+  3.415449247862584*^9, 3.4154492596596103`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"RFX", ":=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"CQB", "[", "QRFC1", "]"}], ",", "DRFC3", ",", "VRFC1", ",", 
+    "DRFC2", ",", "VRFC1", ",", "DRFC1", ",", 
+    RowBox[{"CQB", "[", "QRFC2", "]"}], ",", "DRFC3", ",", "VRFC0", ",", 
+    "DRFC2", ",", "VRFC0", ",", "DRFC1"}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.415449185127406*^9, 3.4154491852992835`*^9}, {
+  3.4154492489250975`*^9, 3.4154492614877586`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"MRD", ":=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"CQB", "[", "QMRD1", "]"}], ",", "DMRD1", ",", 
+    RowBox[{"CQB", "[", "QMRD2", "]"}], ",", "DMRD2", ",", 
+    RowBox[{"CQB", "[", "QMRD3", "]"}], ",", "DMRD3", ",", 
+    RowBox[{"CQB", "[", "QMRD4", "]"}], ",", "DMRD4"}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.415449185486786*^9, 3.415449186346172*^9}, {
+  3.4154492501126127`*^9, 3.4154492686753507`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"DLG", ":=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"CQB", "[", "QDLG1", "]"}], ",", "DDLG1", ",", "BDLG1", ",", 
+    "DDLG2", ",", 
+    RowBox[{"CQB", "[", "QDLG2", "]"}], ",", "DDLG3", ",", 
+    RowBox[{"CQB", "[", "QDLG1", "]"}], ",", "DDLG3", ",", 
+    RowBox[{"CQB", "[", "QDLG2", "]"}], ",", "DDLG3", ",", 
+    RowBox[{"CQB", "[", "QDLG1", "]"}], ",", "DDLG3", ",", 
+    RowBox[{"CQB", "[", "QDLG2", "]"}], ",", "DDLG3", ",", 
+    RowBox[{"CQB", "[", "QDLG1", "]"}], ",", "DDLG1", ",", "BDLG2", ",", 
+    "DDLG2", ",", 
+    RowBox[{"CQB", "[", "QDLG2", "]"}], ",", "DDLG3"}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4154491867211766`*^9, 3.415449188236821*^9}, {
+  3.415449251190752*^9, 3.4154492805192523`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"MDW", ":=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"CQB", "[", "QMDW1", "]"}], ",", "DMDW1", ",", 
+    RowBox[{"CQB", "[", "QMDW2", "]"}], ",", "DMDW2", ",", 
+    RowBox[{"CQB", "[", "QMDW3", "]"}], ",", "DMDW3", ",", 
+    RowBox[{"CQB", "[", "QMDW4", "]"}], ",", "DMDW4"}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.415449188424323*^9, 3.4154491893930855`*^9}, {
+  3.4154492837224183`*^9, 3.41544928853498*^9}}],
+
+Cell[BoxData[
+ RowBox[{"WIGPRD", ":=", 
+  RowBox[{"{", 
+   RowBox[{"BWIGM", ",", "DWIG2", ",", "BWIGP", ",", "DWIG2"}], 
+   "}"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"WIG", ":=", 
+  RowBox[{"{", 
+   RowBox[{"BWIGPH", ",", "DWIG3", ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Table", "[", 
+       RowBox[{"#", ",", 
+        RowBox[{"{", "5", "}"}]}], "]"}], "&"}], "@", "WIGPRD"}], ",", 
+    "BWIGM", ",", "DWIG2", ",", "BWIGP", ",", "DWIG3", ",", "BWIGMH"}], 
+   "}"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"WGC", ":=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"CQB", "[", "QWGC1", "]"}], ",", "DWGC1", ",", "WIG", ",", 
+    "DWGC2", ",", 
+    RowBox[{"CQB", "[", "QWGC2", "]"}], ",", "DWGC1", ",", 
+    RowBox[{"Reverse", "@", 
+     RowBox[{"MADFlatten", "@", "WIG"}]}], ",", "DWGC2"}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.415449190471225*^9, 3.4154491908618546`*^9}, {
+  3.415449292769409*^9, 3.4154492941756773`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"PSD", ":=", 
+  RowBox[{"{", 
+   RowBox[{"DPSDA", ",", 
+    RowBox[{"CQB", "[", "QPSD7", "]"}], ",", "DPSD9", ",", 
+    RowBox[{"CQB", "[", "QPSD6", "]"}], ",", "DPSD8", ",", 
+    RowBox[{"CQB", "[", "QPSD5", "]"}], ",", "DPSD7", ",", 
+    RowBox[{"CQB", "[", "QPSD4", "]"}], ",", "DPSD6", ",", "BPSD2", ",", 
+    "DPSD5", ",", 
+    RowBox[{"CQB", "[", "QPSD3", "]"}], ",", "DPSD4", ",", 
+    RowBox[{"CQB", "[", "QPSD2", "]"}], ",", "DPSD3", ",", 
+    RowBox[{"CQB", "[", "QPSD1", "]"}], ",", "DPSD2", ",", "BPSD1", ",", 
+    "DPSD1", ",", "CORRNG", ",", "DCOR", ",", "QPSD0"}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.415449191705615*^9, 3.4154491935025134`*^9}, {
+  3.415449296363205*^9, 3.415449307597724*^9}}],
+
+Cell[BoxData[
+ RowBox[{"STRT", ":=", 
+  RowBox[{"{", 
+   RowBox[{"ARC0", ",", "MRK1", ",", "DSP", ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Table", "[", 
+       RowBox[{"#", ",", 
+        RowBox[{"{", "6", "}"}]}], "]"}], "&"}], "@", "PHT"}], ",", "MPC", 
+    ",", "CCH", ",", "MCI", ",", "MRK2", ",", "INJ", ",", "MRK3", ",", "MIR", 
+    ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Table", "[", 
+       RowBox[{"#", ",", 
+        RowBox[{"{", "2", "}"}]}], "]"}], "&"}], "@", "RFC"}], ",", "RFX", 
+    ",", "MRD", ",", "DLG", ",", "MDW", ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Table", "[", 
+       RowBox[{"#", ",", 
+        RowBox[{"{", "22", "}"}]}], "]"}], "&"}], "@", "WGC"}], ",", "PSD", 
+    ",", "MRK4", ",", "ARCM"}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4154512412630997`*^9, 3.4154512429037457`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"HRING", ":=", 
+  RowBox[{"{", 
+   RowBox[{"MRK1", ",", "DSP", ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Table", "[", 
+       RowBox[{"#", ",", 
+        RowBox[{"{", "6", "}"}]}], "]"}], "&"}], "@", "PHT"}], ",", "MPC", 
+    ",", "CCH", ",", "MCI", ",", "MRK2", ",", "INJ", ",", "MRK3", ",", "MIR", 
+    ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Table", "[", 
+       RowBox[{"#", ",", 
+        RowBox[{"{", "2", "}"}]}], "]"}], "&"}], "@", "RFC"}], ",", "RFX", 
+    ",", "MRD", ",", "DLG", ",", "MDW", ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Table", "[", 
+       RowBox[{"#", ",", 
+        RowBox[{"{", "22", "}"}]}], "]"}], "&"}], "@", "WGC"}], ",", "PSD", 
+    ",", "MRK4", ",", "ARCM", ",", "ARC0", ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Table", "[", 
+       RowBox[{"#", ",", 
+        RowBox[{"{", "18", "}"}]}], "]"}], "&"}], "@", "ARC5"}], ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Table", "[", 
+       RowBox[{"#", ",", 
+        RowBox[{"{", "2", "}"}]}], "]"}], "&"}], "@", "ARC0"}]}], 
+   "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.415451168184039*^9, 3.415451174434119*^9}}],
+
+Cell[BoxData[
+ RowBox[{"RING", ":=", 
+  RowBox[{"MADFlatten", "[", 
+   RowBox[{"{", 
+    RowBox[{"HRING", ",", "HRING"}], "}"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4154542067669115`*^9, 3.415454211626411*^9}}],
+
+Cell[BoxData[
+ RowBox[{"HRNGI", ":=", 
+  RowBox[{"{", 
+   RowBox[{"MIR", ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Table", "[", 
+       RowBox[{"#", ",", 
+        RowBox[{"{", "2", "}"}]}], "]"}], "&"}], "@", "RFC"}], ",", "RFX", 
+    ",", "MRD", ",", "DLG", ",", "MDW", ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Table", "[", 
+       RowBox[{"#", ",", 
+        RowBox[{"{", "22", "}"}]}], "]"}], "&"}], "@", "WGC"}], ",", "PSD", 
+    ",", "ARCM", ",", "ARC0", ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Table", "[", 
+       RowBox[{"#", ",", 
+        RowBox[{"{", "18", "}"}]}], "]"}], "&"}], "@", "ARC5"}], ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Table", "[", 
+       RowBox[{"#", ",", 
+        RowBox[{"{", "2", "}"}]}], "]"}], "&"}], "@", "ARC0"}], ",", "DSP", 
+    ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Table", "[", 
+       RowBox[{"#", ",", 
+        RowBox[{"{", "6", "}"}]}], "]"}], "&"}], "@", "PHT"}], ",", "MPC", 
+    ",", "CCH", ",", "MCI", ",", "INJ"}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.415451158855795*^9, 3.415451178512296*^9}}],
+
+Cell[BoxData[
+ RowBox[{"RNGI", ":=", 
+  RowBox[{"{", 
+   RowBox[{"MRK1", ",", "HRNGI", ",", "HRNGI", ",", "MRK2"}], 
+   "}"}]}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{1672, 950},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+ShowSelection->True,
+FrontEndVersion->"6.0 for Microsoft Windows (32-bit) (February 7, 2008)",
+StyleDefinitions->Notebook[{
+   Cell[
+    StyleData[StyleDefinitions -> "Default.nb"]]}, WindowSize -> {616, 750}, 
+  WindowMargins -> {{0, Automatic}, {Automatic, 0}}, Visible -> False, 
+  FrontEndVersion -> "6.0 for Microsoft Windows (32-bit) (February 7, 2008)", 
+  StyleDefinitions -> "PrivateStylesheetFormatting.nb"]
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[590, 23, 142, 2, 31, "Input"],
+Cell[735, 27, 2118, 52, 172, "Print"],
+Cell[2856, 81, 705, 13, 21, "Message"],
+Cell[3564, 96, 642, 11, 21, "Message"],
+Cell[4209, 109, 528, 10, 21, "Message"]
+}, Open  ]],
+Cell[4752, 122, 218, 2, 29, "Text"],
+Cell[CellGroupData[{
+Cell[4995, 128, 142, 2, 36, "Subsection",
+ InitializationCell->True],
+Cell[5140, 132, 124, 3, 31, "Input",
+ InitializationCell->True],
+Cell[5267, 137, 130, 3, 31, "Input",
+ InitializationCell->True],
+Cell[5400, 142, 128, 3, 31, "Input",
+ InitializationCell->True],
+Cell[5531, 147, 128, 3, 31, "Input",
+ InitializationCell->True],
+Cell[5662, 152, 303, 8, 31, "Input",
+ InitializationCell->True],
+Cell[5968, 162, 84, 2, 31, "Input",
+ InitializationCell->True],
+Cell[6055, 166, 84, 2, 31, "Input",
+ InitializationCell->True],
+Cell[6142, 170, 83, 2, 31, "Input",
+ InitializationCell->True],
+Cell[6228, 174, 81, 2, 31, "Input",
+ InitializationCell->True],
+Cell[6312, 178, 115, 3, 31, "Input",
+ InitializationCell->True],
+Cell[6430, 183, 115, 3, 31, "Input",
+ InitializationCell->True],
+Cell[6548, 188, 112, 3, 31, "Input",
+ InitializationCell->True],
+Cell[6663, 193, 131, 4, 31, "Input",
+ InitializationCell->True],
+Cell[6797, 199, 80, 2, 31, "Input",
+ InitializationCell->True],
+Cell[6880, 203, 107, 3, 31, "Input",
+ InitializationCell->True],
+Cell[6990, 208, 89, 2, 31, "Input",
+ InitializationCell->True],
+Cell[7082, 212, 129, 3, 31, "Input",
+ InitializationCell->True],
+Cell[7214, 217, 129, 3, 31, "Input",
+ InitializationCell->True],
+Cell[7346, 222, 329, 9, 33, "Input",
+ InitializationCell->True],
+Cell[7678, 233, 115, 3, 31, "Input",
+ InitializationCell->True],
+Cell[7796, 238, 115, 3, 31, "Input",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[7936, 245, 71, 1, 28, "Subsubsection",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[8032, 250, 147, 3, 31, "Input"],
+Cell[8182, 255, 90, 1, 30, "Output"]
+}, Open  ]],
+Cell[8287, 259, 370, 7, 31, "Input",
+ InitializationCell->True],
+Cell[8660, 268, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[8821, 274, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[8982, 280, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[9143, 286, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[9304, 292, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[9465, 298, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[9626, 304, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[9787, 310, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[9948, 316, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[10109, 322, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[10270, 328, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[10431, 334, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[10592, 340, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[10753, 346, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[10914, 352, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[11075, 358, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[11236, 364, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[11397, 370, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[11558, 376, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[11719, 382, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[11880, 388, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[12041, 394, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[12202, 400, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[12363, 406, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[12524, 412, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[12685, 418, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[12846, 424, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[13007, 430, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[13168, 436, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[13329, 442, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[13490, 448, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[13651, 454, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[13812, 460, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[13973, 466, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[14134, 472, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[14295, 478, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[14456, 484, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[14617, 490, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[14778, 496, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[14939, 502, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[15100, 508, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[15261, 514, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[15422, 520, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[15583, 526, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[15744, 532, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[15905, 538, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[16066, 544, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[16227, 550, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[16388, 556, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[16549, 562, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[16710, 568, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[16871, 574, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[17032, 580, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[17193, 586, 158, 4, 31, "Input",
+ InitializationCell->True],
+Cell[17354, 592, 309, 9, 31, "Input",
+ InitializationCell->True],
+Cell[17666, 603, 311, 9, 31, "Input",
+ InitializationCell->True],
+Cell[17980, 614, 311, 9, 31, "Input",
+ InitializationCell->True],
+Cell[18294, 625, 329, 9, 31, "Input",
+ InitializationCell->True],
+Cell[18626, 636, 329, 9, 31, "Input",
+ InitializationCell->True],
+Cell[18958, 647, 311, 9, 31, "Input",
+ InitializationCell->True],
+Cell[19272, 658, 311, 9, 31, "Input",
+ InitializationCell->True],
+Cell[19586, 669, 327, 9, 31, "Input",
+ InitializationCell->True],
+Cell[19916, 680, 405, 12, 31, "Input",
+ InitializationCell->True],
+Cell[20324, 694, 349, 9, 31, "Input",
+ InitializationCell->True],
+Cell[20676, 705, 411, 12, 31, "Input",
+ InitializationCell->True],
+Cell[21090, 719, 311, 9, 31, "Input",
+ InitializationCell->True],
+Cell[21404, 730, 311, 9, 31, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[21752, 744, 62, 1, 28, "Subsubsection",
+ InitializationCell->True],
+Cell[21817, 747, 251, 6, 31, "Input",
+ InitializationCell->True],
+Cell[22071, 755, 251, 6, 31, "Input",
+ InitializationCell->True],
+Cell[22325, 763, 251, 6, 31, "Input",
+ InitializationCell->True],
+Cell[22579, 771, 251, 6, 31, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[22867, 782, 70, 1, 28, "Subsubsection",
+ InitializationCell->True],
+Cell[22940, 785, 134, 3, 31, "Input",
+ InitializationCell->True],
+Cell[23077, 790, 166, 5, 31, "Input",
+ InitializationCell->True],
+Cell[23246, 797, 217, 5, 31, "Input",
+ InitializationCell->True],
+Cell[23466, 804, 216, 5, 31, "Input",
+ InitializationCell->True],
+Cell[23685, 811, 239, 6, 31, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[23961, 822, 58, 1, 28, "Subsubsection",
+ InitializationCell->True],
+Cell[24022, 825, 136, 3, 31, "Input",
+ InitializationCell->True],
+Cell[24161, 830, 136, 3, 31, "Input",
+ InitializationCell->True],
+Cell[24300, 835, 140, 3, 31, "Input",
+ InitializationCell->True],
+Cell[24443, 840, 140, 3, 31, "Input",
+ InitializationCell->True],
+Cell[24586, 845, 136, 3, 31, "Input",
+ InitializationCell->True],
+Cell[24725, 850, 137, 3, 31, "Input",
+ InitializationCell->True],
+Cell[24865, 855, 137, 3, 31, "Input",
+ InitializationCell->True],
+Cell[25005, 860, 185, 5, 31, "Input",
+ InitializationCell->True],
+Cell[25193, 867, 137, 3, 31, "Input",
+ InitializationCell->True],
+Cell[25333, 872, 185, 5, 31, "Input",
+ InitializationCell->True],
+Cell[25521, 879, 185, 5, 31, "Input",
+ InitializationCell->True],
+Cell[25709, 886, 185, 5, 31, "Input",
+ InitializationCell->True],
+Cell[25897, 893, 219, 6, 31, "Input",
+ InitializationCell->True],
+Cell[26119, 901, 254, 7, 31, "Input",
+ InitializationCell->True],
+Cell[26376, 910, 255, 7, 31, "Input",
+ InitializationCell->True],
+Cell[26634, 919, 185, 5, 31, "Input",
+ InitializationCell->True],
+Cell[26822, 926, 219, 6, 31, "Input",
+ InitializationCell->True],
+Cell[27044, 934, 254, 7, 31, "Input",
+ InitializationCell->True],
+Cell[27301, 943, 254, 7, 31, "Input",
+ InitializationCell->True],
+Cell[27558, 952, 255, 7, 31, "Input",
+ InitializationCell->True],
+Cell[27816, 961, 254, 7, 31, "Input",
+ InitializationCell->True],
+Cell[28073, 970, 263, 7, 31, "Input",
+ InitializationCell->True],
+Cell[28339, 979, 254, 7, 31, "Input",
+ InitializationCell->True],
+Cell[28596, 988, 218, 6, 31, "Input",
+ InitializationCell->True],
+Cell[28817, 996, 253, 7, 31, "Input",
+ InitializationCell->True],
+Cell[29073, 1005, 254, 7, 31, "Input",
+ InitializationCell->True],
+Cell[29330, 1014, 185, 5, 31, "Input",
+ InitializationCell->True],
+Cell[29518, 1021, 135, 3, 31, "Input",
+ InitializationCell->True],
+Cell[29656, 1026, 136, 3, 31, "Input",
+ InitializationCell->True],
+Cell[29795, 1031, 135, 3, 31, "Input",
+ InitializationCell->True],
+Cell[29933, 1036, 219, 6, 31, "Input",
+ InitializationCell->True],
+Cell[30155, 1044, 184, 5, 31, "Input",
+ InitializationCell->True],
+Cell[30342, 1051, 218, 6, 31, "Input",
+ InitializationCell->True],
+Cell[30563, 1059, 253, 7, 31, "Input",
+ InitializationCell->True],
+Cell[30819, 1068, 253, 7, 31, "Input",
+ InitializationCell->True],
+Cell[31075, 1077, 253, 7, 31, "Input",
+ InitializationCell->True],
+Cell[31331, 1086, 136, 3, 31, "Input",
+ InitializationCell->True],
+Cell[31470, 1091, 254, 7, 31, "Input",
+ InitializationCell->True],
+Cell[31727, 1100, 254, 7, 31, "Input",
+ InitializationCell->True],
+Cell[31984, 1109, 254, 7, 31, "Input",
+ InitializationCell->True],
+Cell[32241, 1118, 186, 5, 31, "Input",
+ InitializationCell->True],
+Cell[32430, 1125, 220, 6, 31, "Input",
+ InitializationCell->True],
+Cell[32653, 1133, 186, 5, 31, "Input",
+ InitializationCell->True],
+Cell[32842, 1140, 136, 3, 31, "Input",
+ InitializationCell->True],
+Cell[32981, 1145, 220, 6, 31, "Input",
+ InitializationCell->True],
+Cell[33204, 1153, 136, 3, 31, "Input",
+ InitializationCell->True],
+Cell[33343, 1158, 253, 7, 31, "Input",
+ InitializationCell->True],
+Cell[33599, 1167, 254, 7, 31, "Input",
+ InitializationCell->True],
+Cell[33856, 1176, 253, 7, 31, "Input",
+ InitializationCell->True],
+Cell[34112, 1185, 253, 7, 31, "Input",
+ InitializationCell->True],
+Cell[34368, 1194, 226, 6, 31, "Input",
+ InitializationCell->True],
+Cell[34597, 1202, 145, 4, 31, "Input",
+ InitializationCell->True],
+Cell[34745, 1208, 192, 5, 31, "Input",
+ InitializationCell->True],
+Cell[34940, 1215, 254, 7, 31, "Input",
+ InitializationCell->True],
+Cell[35197, 1224, 254, 7, 31, "Input",
+ InitializationCell->True],
+Cell[35454, 1233, 253, 7, 31, "Input",
+ InitializationCell->True],
+Cell[35710, 1242, 254, 7, 31, "Input",
+ InitializationCell->True],
+Cell[35967, 1251, 184, 5, 31, "Input",
+ InitializationCell->True],
+Cell[36154, 1258, 254, 7, 31, "Input",
+ InitializationCell->True],
+Cell[36411, 1267, 485, 15, 31, "Input",
+ InitializationCell->True],
+Cell[36899, 1284, 253, 7, 31, "Input",
+ InitializationCell->True],
+Cell[37155, 1293, 253, 7, 31, "Input",
+ InitializationCell->True],
+Cell[37411, 1302, 253, 7, 31, "Input",
+ InitializationCell->True],
+Cell[37667, 1311, 253, 7, 31, "Input",
+ InitializationCell->True],
+Cell[37923, 1320, 136, 3, 31, "Input",
+ InitializationCell->True],
+Cell[38062, 1325, 138, 3, 31, "Input",
+ InitializationCell->True],
+Cell[38203, 1330, 137, 3, 31, "Input",
+ InitializationCell->True],
+Cell[38343, 1335, 255, 7, 31, "Input",
+ InitializationCell->True],
+Cell[38601, 1344, 219, 6, 31, "Input",
+ InitializationCell->True],
+Cell[38823, 1352, 185, 5, 31, "Input",
+ InitializationCell->True],
+Cell[39011, 1359, 253, 7, 31, "Input",
+ InitializationCell->True],
+Cell[39267, 1368, 254, 7, 31, "Input",
+ InitializationCell->True],
+Cell[39524, 1377, 220, 6, 31, "Input",
+ InitializationCell->True],
+Cell[39747, 1385, 185, 5, 31, "Input",
+ InitializationCell->True],
+Cell[39935, 1392, 254, 7, 31, "Input",
+ InitializationCell->True],
+Cell[40192, 1401, 254, 7, 31, "Input",
+ InitializationCell->True],
+Cell[40449, 1410, 255, 7, 31, "Input",
+ InitializationCell->True],
+Cell[40707, 1419, 136, 3, 31, "Input",
+ InitializationCell->True],
+Cell[40846, 1424, 123, 3, 31, "Input",
+ InitializationCell->True],
+Cell[40972, 1429, 123, 3, 31, "Input",
+ InitializationCell->True],
+Cell[41098, 1434, 123, 3, 31, "Input",
+ InitializationCell->True],
+Cell[41224, 1439, 123, 3, 31, "Input",
+ InitializationCell->True],
+Cell[41350, 1444, 268, 6, 65, "Text",
+ InitializationCell->True],
+Cell[41621, 1452, 403, 8, 31, "Input",
+ InitializationCell->True],
+Cell[42027, 1462, 375, 8, 31, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[42439, 1475, 57, 1, 28, "Subsubsection",
+ InitializationCell->True],
+Cell[42499, 1478, 275, 7, 31, "Input",
+ InitializationCell->True],
+Cell[42777, 1487, 633, 13, 31, "Input",
+ InitializationCell->True],
+Cell[43413, 1502, 369, 10, 31, "Input",
+ InitializationCell->True],
+Cell[43785, 1514, 365, 10, 31, "Input",
+ InitializationCell->True],
+Cell[44153, 1526, 238, 6, 31, "Input",
+ InitializationCell->True],
+Cell[44394, 1534, 237, 6, 31, "Input",
+ InitializationCell->True],
+Cell[44634, 1542, 239, 6, 31, "Input",
+ InitializationCell->True],
+Cell[44876, 1550, 237, 6, 31, "Input",
+ InitializationCell->True],
+Cell[45116, 1558, 563, 15, 31, "Input",
+ InitializationCell->True],
+Cell[45682, 1575, 718, 15, 31, "Input",
+ InitializationCell->True],
+Cell[46403, 1592, 133, 4, 31, "Input",
+ InitializationCell->True],
+Cell[46539, 1598, 534, 11, 31, "Input",
+ InitializationCell->True],
+Cell[47076, 1611, 398, 9, 31, "Input",
+ InitializationCell->True],
+Cell[47477, 1622, 663, 13, 31, "Input",
+ InitializationCell->True],
+Cell[48143, 1637, 665, 13, 31, "Input",
+ InitializationCell->True],
+Cell[48811, 1652, 275, 10, 31, "Input",
+ InitializationCell->True],
+Cell[49089, 1664, 460, 10, 31, "Input",
+ InitializationCell->True],
+Cell[49552, 1676, 481, 10, 31, "Input",
+ InitializationCell->True],
+Cell[50036, 1688, 542, 11, 31, "Input",
+ InitializationCell->True],
+Cell[50581, 1701, 136, 4, 31, "Input",
+ InitializationCell->True],
+Cell[50720, 1707, 704, 17, 31, "Input",
+ InitializationCell->True],
+Cell[51427, 1726, 142, 4, 31, "Input",
+ InitializationCell->True],
+Cell[51572, 1732, 465, 10, 31, "Input",
+ InitializationCell->True],
+Cell[52040, 1744, 467, 10, 31, "Input",
+ InitializationCell->True],
+Cell[52510, 1756, 469, 10, 31, "Input",
+ InitializationCell->True],
+Cell[52982, 1768, 465, 10, 31, "Input",
+ InitializationCell->True],
+Cell[53450, 1780, 771, 16, 31, "Input",
+ InitializationCell->True],
+Cell[54224, 1798, 464, 10, 31, "Input",
+ InitializationCell->True],
+Cell[54691, 1810, 169, 5, 31, "Input",
+ InitializationCell->True],
+Cell[54863, 1817, 369, 11, 31, "Input",
+ InitializationCell->True],
+Cell[55235, 1830, 468, 11, 31, "Input",
+ InitializationCell->True],
+Cell[55706, 1843, 765, 15, 31, "Input",
+ InitializationCell->True],
+Cell[56474, 1860, 861, 24, 31, "Input",
+ InitializationCell->True],
+Cell[57338, 1886, 1167, 35, 31, "Input",
+ InitializationCell->True],
+Cell[58508, 1923, 242, 6, 31, "Input",
+ InitializationCell->True],
+Cell[58753, 1931, 1111, 34, 31, "Input",
+ InitializationCell->True],
+Cell[59867, 1967, 165, 5, 31, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

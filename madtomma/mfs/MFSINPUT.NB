@@ -1,0 +1,217 @@
+(***********************************************************************
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used on any computer system with Mathematica 3.0,
+MathReader 3.0, or any compatible application. The data for the notebook 
+starts with the line of stars above.
+
+To get the notebook into a Mathematica-compatible application, do one of 
+the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing the 
+word CacheID, otherwise Mathematica-compatible applications may try to 
+use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+***********************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[      4900,        149]*)
+(*NotebookOutlinePosition[      6004,        189]*)
+(*  CellTagsIndexPosition[      5960,        185]*)
+(*WindowFrame->Palette*)
+
+
+
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Handling TFS tables from MAD", NotebookDefault,
+  CellMargins->{{Inherited, Inherited}, {7, Inherited}},
+  CellGroupingRules->{"SectionGrouping", 10},
+  PageBreakAbove->True,
+  LineSpacing->{1, 3},
+  ScriptMinSize->9,
+  CounterIncrements->"Text",
+  FontFamily->"Helvetica",
+  FontSize->14,
+  FontWeight->"Bold"],
+
+Cell["The basic functions from the Mfs package.  ", NotebookDefault,
+  CellMargins->{{Inherited, Inherited}, {7, Inherited}},
+  PageBreakAbove->True,
+  LineSpacing->{1, 3},
+  ScriptMinSize->9,
+  CounterIncrements->"Text"],
+
+Cell[BoxData[GridBox[{
+        {
+          ButtonBox[
+            StyleBox[
+              RowBox[{"Needs", "[", "\"\<Madtomma`Mfs`Mfs`\>\"", "]"}],
+              "Input"]]},
+        {
+          ButtonBox[
+            RowBox[{"tfsRead", "[", "\[SelectionPlaceholder]", "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{
+            "descriptorNames", "[", "\[SelectionPlaceholder]", "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{"keyValue", "[", 
+              RowBox[{"\[SelectionPlaceholder]", ",", "\[Placeholder]"}], 
+              "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{"columnNames", "[", "\[SelectionPlaceholder]", "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{"mfsColumn", "[", 
+              RowBox[{
+              "\[SelectionPlaceholder]", ",", "\"\<\[Placeholder]\>\""}], 
+              "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{"mfsColumn", "[", 
+              RowBox[{"\[SelectionPlaceholder]", ",", 
+                RowBox[{"{", 
+                  RowBox[{
+                  "\"\<\[Placeholder]\>\"", ",", "\"\<\[Placeholder]\>\""}], 
+                  "}"}]}], "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{"mfsMember", "[", 
+              RowBox[{
+              "\[SelectionPlaceholder]", ",", "\"\<\[Placeholder]\>\"", ",", 
+                "\"\<\[Placeholder]\>\""}], "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{"mfsRange", "[", 
+              RowBox[{
+              "\[SelectionPlaceholder]", ",", "\"\<\[Placeholder]\>\"", ",", 
+                RowBox[{"{", 
+                  RowBox[{"\[Placeholder]", ",", "\[Placeholder]"}], "}"}]}], 
+              "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{"mfsReverse", "[", "\[SelectionPlaceholder]", "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{
+            "interpretDescriptors", "[", "\[SelectionPlaceholder]", "]"}]]}
+        },
+      RowSpacings->0,
+      ColumnSpacings->0,
+      GridDefaultElement:>ButtonBox[ "\\[Placeholder]"]]], NotebookDefault,
+  CellMargins->{{Inherited, Inherited}, {5, Inherited}},
+  Evaluatable->True,
+  CellGroupingRules->"InputGrouping",
+  PageBreakAbove->True,
+  PageBreakWithin->False,
+  GroupPageBreakWithin->False,
+  CellLabelMargins->{{11, Inherited}, {Inherited, Inherited}},
+  DefaultFormatType->DefaultInputFormatType,
+  LineSpacing->{1.25, 0},
+  AutoItalicWords->{},
+  FormatType->InputForm,
+  ScriptMinSize->9,
+  ShowStringCharacters->True,
+  NumberMarks->True,
+  CounterIncrements->"Input",
+  StyleMenuListing->None,
+  FontFamily->"Courier",
+  FontWeight->"Bold"]
+}, Open  ]]
+},
+FrontEndVersion->"Microsoft Windows 3.0",
+ScreenRectangle->{{0, 1024}, {0, 712}},
+Editable->False,
+WindowToolbars->{},
+PageWidth->424,
+WindowSize->{230, 246},
+WindowMargins->{{112, Automatic}, {Automatic, 93}},
+WindowFrame->"Palette",
+WindowElements->"VerticalScrollBar",
+WindowFrameElements->"CloseBox",
+WindowClickSelect->False,
+ScrollingOptions->{"PagewiseScrolling"->True},
+ShowCellBracket->False,
+ShowGroupOpenCloseIcon->True,
+CellMargins->{{0, 0}, {Inherited, 0}},
+Active->True,
+CellOpen->True,
+ShowCellLabel->False,
+ShowCellTags->False,
+ImageMargins->{{0, Inherited}, {Inherited, 0}},
+Magnification->1
+]
+
+
+(***********************************************************************
+Cached data follows.  If you edit this Notebook file directly, not using
+Mathematica, you must remove the line containing CacheID at the top of 
+the file.  The cache data will then be recreated when you save this file 
+from within Mathematica.
+***********************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[1732, 51, 317, 9, 27, NotebookDefault,
+  CellGroupingRules->{"SectionGrouping", 10},
+  PageBreakAbove->True,
+  CounterIncrements->"Text"],
+Cell[2052, 62, 221, 5, 26, NotebookDefault,
+  PageBreakAbove->True,
+  CounterIncrements->"Text"],
+Cell[2276, 69, 2608, 77, 186, NotebookDefault,
+  Evaluatable->True,
+  CellGroupingRules->"InputGrouping",
+  PageBreakAbove->True,
+  PageBreakWithin->False,
+  CounterIncrements->"Input"]
+}, Open  ]]
+}
+]
+*)
+
+
+
+
+(***********************************************************************
+End of Mathematica Notebook file.
+***********************************************************************)
+

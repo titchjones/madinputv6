@@ -1,0 +1,277 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     10605,        269]
+NotebookOptionsPosition[      9230,        229]
+NotebookOutlinePosition[      9605,        245]
+CellTagsIndexPosition[      9562,        242]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"BeginPackage", "[", "\"\<ASTRARun`\>\"", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.635233681103771*^9, 3.6352337014718075`*^9}, {
+  3.7074768149075365`*^9, 
+  3.7074768153155365`*^9}},ExpressionUUID->"57c2ba0d-36a9-4934-9849-\
+3624bb81fa18"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"$ASTRAExecutable", "=", "\"\<Astra.exe\>\""}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.7074751884875364`*^9, 3.7074751990275364`*^9}, {
+  3.7074771493415365`*^9, 
+  3.7074771547335362`*^9}},ExpressionUUID->"ed315f2f-ef5a-4f7d-91e4-\
+61e0e9ff7d44"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ASTRARun", "::", "usage"}], "=", 
+  "\"\<ASTRARun[filename]\>\""}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.707476837082536*^9, 
+  3.707476847753536*^9}},ExpressionUUID->"cd8fe166-f736-491e-8875-\
+5095611d64da"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ASTRARunInteractive", "::", "usage"}], 
+  "\"\<ASTRARunInteractive[filename,opts];\\nOutput\[Rule]True prints output \
+from ASTRA to the screen\>\""}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.7074768530885363`*^9, 
+  3.707476910813536*^9}},ExpressionUUID->"bf220734-3457-4822-ba4b-\
+912c1e432104"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.707476914177536*^9, 
+  3.7074769187655363`*^9}},ExpressionUUID->"e93a31ad-d4b3-4301-826b-\
+c3c0d543e180"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ASTRARun", "[", "filename_", "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"dir", ",", "output"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"dir", "=", 
+      RowBox[{"Directory", "[", "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"SetDirectory", "[", 
+      RowBox[{"DirectoryName", "[", "filename", "]"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"output", "=", 
+      RowBox[{"ReadList", "[", 
+       RowBox[{
+        RowBox[{
+        "\"\<!\>\"", "<>", "$ASTRAExecutable", "<>", "\"\< \\\"\>\"", "<>", 
+         RowBox[{"FileBaseName", "[", "filename", "]"}], "<>", 
+         "\"\<\\\"\>\""}], ",", "Record"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"SetDirectory", "[", "dir", "]"}], ";", "\[IndentingNewLine]", 
+     "output"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.7074728744925365`*^9, 3.707472929165536*^9}, {
+   3.707472969939536*^9, 3.707473003136536*^9}, {3.707473051941536*^9, 
+   3.7074731359285364`*^9}, {3.707475203628536*^9, 3.7074752053155365`*^9}, {
+   3.707476821747536*^9, 3.707476822939536*^9}, 
+   3.707477077781536*^9},ExpressionUUID->"197467eb-2c44-41b4-a2a2-\
+04a2fce8d51b"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Clear", "[", "ASTRARunInteractive", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ASTRARunInteractive", "[", 
+   RowBox[{"filename_", ",", "opts___Rule"}], "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"dir", ",", "output", ",", "process", ",", "verbose", ",", 
+      RowBox[{"nolines", "=", "0"}]}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"scrollposition", "=", 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "1"}], "}"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"verbose", "=", 
+      RowBox[{
+       RowBox[{"Global`Output", "/.", 
+        RowBox[{"{", "opts", "}"}]}], "/.", 
+       RowBox[{"{", 
+        RowBox[{"Global`Output", "\[Rule]", "True"}], "}"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"processString", "=", "\"\<\>\""}], ";", "\[IndentingNewLine]", 
+     RowBox[{"dir", "=", 
+      RowBox[{"Directory", "[", "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"SetDirectory", "[", 
+      RowBox[{"DirectoryName", "[", "filename", "]"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"process", "=", 
+      RowBox[{"StartProcess", "[", 
+       RowBox[{"{", 
+        RowBox[{"$ASTRAExecutable", ",", 
+         RowBox[{"\"\<\\\"\>\"", "<>", 
+          RowBox[{"FileBaseName", "[", "filename", "]"}], "<>", 
+          "\"\<\\\"\>\""}]}], "}"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{"verbose", ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"Quiet", "@", 
+         RowBox[{"Print", "[", 
+          RowBox[{"Column", "[", 
+           RowBox[{"{", "\[IndentingNewLine]", 
+            RowBox[{
+             RowBox[{"Pane", "[", 
+              RowBox[{
+               RowBox[{"Dynamic", "[", "processString", "]"}], ",", 
+               RowBox[{"ImageSize", "\[Rule]", 
+                RowBox[{"{", 
+                 RowBox[{"800", ",", "400"}], "}"}]}], ",", 
+               RowBox[{"Scrollbars", "\[Rule]", 
+                RowBox[{"{", 
+                 RowBox[{"False", ",", "True"}], "}"}]}], ",", 
+               RowBox[{"ScrollPosition", "\[Rule]", 
+                RowBox[{"Dynamic", "[", "scrollposition", "]"}]}]}], "]"}], 
+             ",", "\[IndentingNewLine]", 
+             RowBox[{"Button", "[", 
+              RowBox[{"\"\<Kill!\>\"", ",", 
+               RowBox[{
+                RowBox[{"KillProcess", "[", "process", "]"}], ";"}]}], 
+              "]"}]}], "\[IndentingNewLine]", "}"}], "]"}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"Pause", "[", ".1", "]"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"While", "[", 
+         RowBox[{
+          RowBox[{"ProcessStatus", "[", 
+           RowBox[{"process", ",", "\"\<Running\>\""}], "]"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"processString", "=", 
+            RowBox[{"processString", "<>", 
+             RowBox[{"Quiet", "[", 
+              RowBox[{"Check", "[", 
+               RowBox[{
+                RowBox[{"ReadString", "[", 
+                 RowBox[{"process", ",", "EndOfBuffer"}], "]"}], ",", 
+                "\"\<\>\""}], "]"}], "]"}]}]}], ";", "\[IndentingNewLine]", 
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"StringCount", "[", 
+               RowBox[{"processString", ",", "\"\<\\n\>\""}], "]"}], ">", 
+              "nolines"}], ",", "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{"nolines", "=", 
+               RowBox[{"StringCount", "[", 
+                RowBox[{"processString", ",", "\"\<\\n\>\""}], "]"}]}], 
+              ";"}]}], "\[IndentingNewLine]", 
+            RowBox[{"(*", 
+             RowBox[{
+              RowBox[{"scrollposition", "=", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"-", "1"}], ",", 
+                 RowBox[{"nolines", "*", "33"}]}], "}"}]}], ";"}], "*)"}], 
+            "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+           RowBox[{"Pause", "[", ".1", "]"}], ";"}]}], "\[IndentingNewLine]", 
+         "]"}], ";"}]}], "\[IndentingNewLine]", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"SetDirectory", "[", "dir", "]"}], ";"}]}], 
+   "\[IndentingNewLine]", "]"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.7074728744925365`*^9, 3.707472929165536*^9}, {
+   3.707472969939536*^9, 3.707473003136536*^9}, {3.707473051941536*^9, 
+   3.7074731359285364`*^9}, {3.707473272919536*^9, 3.7074733700815363`*^9}, {
+   3.7074735337495365`*^9, 3.707473584123536*^9}, {3.707473637977536*^9, 
+   3.707473644464536*^9}, {3.7074736846735363`*^9, 3.7074736975085363`*^9}, {
+   3.7074737311245365`*^9, 3.7074737971975365`*^9}, {3.707473831479536*^9, 
+   3.707473874729536*^9}, {3.7074741185865364`*^9, 3.7074741359285364`*^9}, {
+   3.707474317269536*^9, 3.7074744123345366`*^9}, {3.707474449799536*^9, 
+   3.707474451227536*^9}, {3.707474481472536*^9, 3.707474568420536*^9}, {
+   3.7074747431145363`*^9, 3.7074747691455364`*^9}, {3.707474816637536*^9, 
+   3.7074748197725363`*^9}, {3.707474877241536*^9, 3.707474948563536*^9}, {
+   3.707474988181536*^9, 3.707475037398536*^9}, {3.707475075493536*^9, 
+   3.7074751128105364`*^9}, {3.707475144721536*^9, 3.707475170023536*^9}, {
+   3.7074752141005363`*^9, 3.707475237521536*^9}, {3.707476825837536*^9, 
+   3.707476831603536*^9}, 
+   3.707477082070536*^9},ExpressionUUID->"8f704d2d-80fa-4363-8b17-\
+4b3893a41149"],
+
+Cell[BoxData[
+ RowBox[{"End", "[", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.707476925669536*^9, 
+  3.707476926484536*^9}},ExpressionUUID->"34c64e62-9e49-49a9-ac2a-\
+5b344084d1c1"],
+
+Cell[BoxData[
+ RowBox[{"EndPackage", "[", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.707476927807536*^9, 
+  3.707476930444536*^9}},ExpressionUUID->"f08d0599-bacd-4aa9-abc7-\
+53366ecae710"]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{1904, 998},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"11.1 for Microsoft Windows (64-bit) (April 18, 2017)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 289, 6, 46, "Input", "ExpressionUUID" -> \
+"ef9a5c6d-4a97-4326-ac32-8310e2157133",
+ InitializationCell->True],
+Cell[850, 28, 308, 7, 46, "Input", "ExpressionUUID" -> \
+"ed315f2f-ef5a-4f7d-91e4-61e0e9ff7d44",
+ InitializationCell->True],
+Cell[1161, 37, 265, 7, 46, "Input", "ExpressionUUID" -> \
+"0472395b-2fdd-4b33-8291-053e80454b86",
+ InitializationCell->True],
+Cell[1429, 46, 351, 8, 46, "Input", "ExpressionUUID" -> \
+"9abc8674-74c4-43d4-96c6-46b623135e4f",
+ InitializationCell->True],
+Cell[1783, 56, 247, 6, 46, "Input", "ExpressionUUID" -> \
+"8d58c8e7-7f47-4040-8cb0-a74dfe92d586",
+ InitializationCell->True],
+Cell[2033, 64, 1285, 29, 167, "Input", "ExpressionUUID" -> \
+"ef186704-8e84-479d-bf53-41ce70e568ea",
+ InitializationCell->True],
+Cell[3321, 95, 5484, 118, 509, "Input", "ExpressionUUID" -> \
+"8f704d2d-80fa-4363-8b17-4b3893a41149",
+ InitializationCell->True],
+Cell[8808, 215, 204, 5, 46, "Input", "ExpressionUUID" -> \
+"5810b94e-810a-4be8-bcaf-cef6d9d2d30e",
+ InitializationCell->True],
+Cell[9015, 222, 211, 5, 46, "Input", "ExpressionUUID" -> \
+"b154b36c-8dd1-444d-aa42-a2f8a000bb03",
+ InitializationCell->True]
+}
+]
+*)
+

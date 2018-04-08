@@ -1,0 +1,5015 @@
+(***********************************************************************
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used on any computer system with Mathematica 4.0,
+MathReader 4.0, or any compatible application. The data for the notebook 
+starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do one of 
+the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing the 
+word CacheID, otherwise Mathematica-compatible applications may try to 
+use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+***********************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     88719,       3671]*)
+(*NotebookOutlinePosition[    114103,       4560]*)
+(*  CellTagsIndexPosition[    113661,       4544]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell["CERN SL Note 97-XXX  (AP)", "Text",
+  TextAlignment->Right],
+
+Cell["", "Text"],
+
+Cell[CellGroupData[{
+
+Cell["MDdata Package", "Title"],
+
+Cell[TextData[{
+  ButtonBox["Krzysztof Goral",
+    ButtonData:>{
+      URL[ "http://nicewww.cern.ch/~kgoral/welcome.htm"], None},
+    ButtonStyle->"Hyperlink"],
+  "\n20/08/97"
+}], "Author"],
+
+Cell[CellGroupData[{
+
+Cell["Introduction", "Section"],
+
+Cell[TextData[{
+  "This note is the documentation for a ",
+  StyleBox["Mathematica",
+    FontSlant->"Italic"],
+  " [",
+  ButtonBox["1",
+    ButtonData:>"Wolfram book",
+    ButtonStyle->"Hyperlink"],
+  ",",
+  ButtonBox["2",
+    ButtonData:>"Maeder book",
+    ButtonStyle->"Hyperlink"],
+  "] package designed to "
+}], "Text"],
+
+Cell[TextData[{
+  "These packages and others relating to the use of ",
+  ButtonBox["MAD",
+    ButtonData:>{
+      URL[ "http://wwwslap.cern.ch/~fci/mad/mad.html"], None},
+    ButtonStyle->"Hyperlink"],
+  " will all be made available in the context ",
+  StyleBox["Madtomma", "Input"],
+  "  (the word ",
+  StyleBox["context",
+    FontSlant->"Italic"],
+  " is used in a special sense in ",
+  StyleBox["Mathematica).  ",
+    FontSlant->"Italic"],
+  "Preliminary versions of some are already available; documentation will be \
+released as it is prepared."
+}], "Text"],
+
+Cell[TextData[{
+  "This notebook adheres to the conventions for ",
+  StyleBox["Mathematica",
+    FontSlant->"Italic"],
+  " package structure and documentation set out in [",
+  ButtonBox["2",
+    ButtonData:>"Meader book",
+    ButtonStyle->"Hyperlink"],
+  "].  As such it serves as the development medium for the package itself.  ",
+  
+  StyleBox[
+  "For this reason , some sections of the printed versions of this document \
+are hidden.  ",
+    FontWeight->"Bold"],
+  "They contain the definitions (\"code\") of the functions.  The visible \
+sections contain the documentation and examples of interest to users."
+}], "Text"],
+
+Cell[TextData[{
+  "To make the package available, you need only copy a couple of commands \
+from the \"Setup\" section.  The ",
+  ButtonBox["\"Examples\"",
+    ButtonData:>"Examples section",
+    ButtonStyle->"Hyperlink"],
+  " section illustrates basic use of the package.  A final subsection \
+illustrating some less useful features is hidden."
+}], "Text"],
+
+Cell["The latest version is available on-line at", "Text"],
+
+Cell[TextData[ButtonBox["http://wwwslap.cern.ch/~jowett/Madtomma/",
+  ButtonData:>{
+    URL[ "http://wwwslap.cern.ch/~jowett/Madtomma/"], None},
+  ButtonStyle->"Hyperlink"]], "Program"],
+
+Cell[TextData[{
+  "This notebook is based on the template for package and notebook \
+development by R. Maeder  and supplied with ",
+  StyleBox["Mathematica",
+    FontSlant->"Italic"],
+  " 3.0."
+}], "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Reference", "Section",
+  CellTags->"Reference section"],
+
+Cell[CellGroupData[{
+
+Cell["Title", "Subsubsection"],
+
+Cell[TextData[StyleBox["MDdata Package",
+  FontSlant->"Italic"]], "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Author", "Subsubsection"],
+
+Cell["Krzysztof Goral", "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Summary", "Subsubsection"],
+
+Cell["", "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Copyright", "Subsubsection"],
+
+Cell[TextData[{
+  "\[Copyright] Copyright ",
+  StyleBox["CERN.1997",
+    FontSlant->"Italic"],
+  "\n\n",
+  "The copyright and all other rights relating to this computer software, in \
+whatever form, including but not\nlimited to the source code, the object code \
+and user documentation, are vested in CERN. \n\nCERN, on a royalty-free and \
+non-exclusive basis, hereby grants permission to use, copy, change, modify,\n\
+translate, display, distribute and make available this computer software, \
+subject to the following conditions:\n\n(1) this computer software is \
+provided on an as-is basis and CERN provides no express or implied\n\
+warranties of any kind, including but not limited to those of \
+merchantability, fitness for a particular purpose\nand non-infringement of \
+the proprietary rights, such as copyrights, patents and trade secrets, of \
+third\nparties. CERN accepts no liability whatsoever for or in connection \
+with the use of this computer software; \n\n(2) all copies made of this \
+computer software or of parts thereof shall include this copyright statement \
+in\nfull; \n\n(3) however, if this computer software or parts thereof are \
+made available in any other form than their\noriginal form, or are included \
+in any other computer software, the following short acknowledgement only\n\
+must be mentioned in the copyright statement and in the user documentation \
+(or, in the absence thereof, in\nany other appropriate place) concerning the \
+computer software thus made available or created: \n\n\"This product includes \
+computer software created and made available by CERN. This acknowledgement\n\
+shall be mentioned in full in any product which includes the CERN computer \
+software included herein or\nparts thereof.\" "
+}], "Text"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Notebook Version", "Subsubsection"],
+
+Cell["1.0", "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+  StyleBox["Mathematica",
+    FontSlant->"Italic"],
+  " Version"
+}], "Subsubsection"],
+
+Cell["3.0", "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["History", "Subsubsection"],
+
+Cell["\<\
+Version 1.0 Made by KG in 1997.
+Version 2.0 14 September 1999, updated for Version 2.0 of mfs package by JMJ. \
+  Still under development.\
+\>", "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Keywords", "Subsubsection"],
+
+Cell["MAD, data, table, mfs", "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Source", "Subsubsection"],
+
+Cell[TextData[{
+  "Maeder, R. ",
+  StyleBox["Programming in ",
+    FontSlant->"Italic"],
+  StyleBox["Mathematica",
+    FontSlant->"Italic"],
+  ", 3rd ed. Addison-Wesley, 1996."
+}], "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Warnings", "Subsubsection"],
+
+Cell[TextData[StyleBox["description of global effects, incompatibilities",
+  FontSlant->"Italic"]], "Text"],
+
+Cell[TextData[{
+  "Note: all cells marked as \"InitializationCell\" will be written to the \
+Auto-Save package. This package can then be read in programs that use it with \
+",
+  StyleBox["Needs[\"Madtomma`Mfs'MDdata`\"]", "Input"],
+  ". Cells not intended to belong to the package should not have this \
+property."
+}], "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Limitation", "Subsubsection"],
+
+Cell[TextData[StyleBox["special cases not handled, known problems",
+  FontSlant->"Italic"]], "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Discussion", "Subsubsection"],
+
+Cell[TextData[StyleBox["description of algorithm, information for experts",
+  FontSlant->"Italic"]], "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Requirements", "Subsubsection"],
+
+Cell[TextData[{
+  "Package imports",
+  StyleBox[" ",
+    FontFamily->"Courier"],
+  StyleBox["Madtomma`Mfs`Mfs. ",
+    FontFamily->"Courier",
+    FontWeight->"Bold",
+    FontSlant->"Italic"],
+  "[",
+  ButtonBox["4",
+    ButtonData:>"Mfs.nb",
+    ButtonStyle->"Hyperlink"],
+  "]"
+}], "Text"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Setup", "Section",
+  CellTags->"Setup section"],
+
+Cell[TextData[{
+  "This section contains commands needed to load the corresponding package \
+file.  The contents of this file are equivalent to the following sections \
+(Interface, Implementation, Epilog) in which the package is developed.  These \
+sections are hidden when this notebook is used as the package documentation \
+but may be inspected in the online copy of this notebook that can be found in \
+the appropriate  sub-directory of the directory added to the ",
+  StyleBox["$Path", "Input"],
+  " variable below."
+}], "Text"],
+
+Cell[CellGroupData[{
+
+Cell["Search Path (ESSENTIAL!)", "Subsection",
+  CellTags->"Setup section"],
+
+Cell["\<\
+To have access to my packages, you may need to add my packages \
+directory to your search path.  This is system-dependent and the latest \
+information about arranging it on CERN computer systems can be found at\
+\>", 
+  "Text"],
+
+Cell[TextData[ButtonBox[
+"http://wwwslap.cern.ch/~jowett/Madtomma/AboutFiles.html",
+  ButtonData:>{
+    URL[ "http://wwwslap.cern.ch/~jowett/Madtomma/AboutFiles.html"], None},
+  ButtonStyle->"Hyperlink"]], "Program"],
+
+Cell[TextData[{
+  "and is not reproduced here.  I strongly recommend that you modify your \
+kernel initialisation file once and for all as explained on this page.  Then \
+all my packages will be found as easily as the Standard Packages that come \
+with ",
+  StyleBox["Mathematica",
+    FontSlant->"Italic"],
+  "."
+}], "Text",
+  CellTags->"Setup section"],
+
+Cell[CellGroupData[{
+
+Cell["Read in the Package", "Subsubsection"],
+
+Cell[TextData[{
+  "Once the package directory is on your search path, the ",
+  StyleBox["Mfs", "Input"],
+  " package can be loaded by evaluating the following cell. ",
+  StyleBox[
+  "If you are using a copy of this notebook in order to work through the \
+examples and you are invited to  evaluate all the initialisation cells in it, \
+you should click \"NO\" and then go straight to the ",
+    FontSlant->"Italic",
+    FontColor->RGBColor[1, 0, 0]],
+  StyleBox["\"",
+    FontSlant->"Italic"],
+  StyleBox[ButtonBox["User's Guide and Examples",
+    ButtonData:>"Examples section",
+    ButtonStyle->"Hyperlink"],
+    FontSlant->"Italic"],
+  StyleBox["\" ",
+    FontSlant->"Italic"],
+  StyleBox["without evaluating the intermediate sections.",
+    FontSlant->"Italic",
+    FontColor->RGBColor[1, 0, 0]]
+}], "Text",
+  CellTags->"Setup section"],
+
+Cell[TextData[StyleBox["Needs[\"Madtomma`Mfs`MDdata`\"]", "Input"]], "Input"],
+
+Cell["\<\
+This is all you need to start using the package in your own \
+applications.\
+\>", "Text"],
+
+Cell[TextData[{
+  "Standard packages needed for the examples [",
+  ButtonBox["5",
+    ButtonData:>"ColorListPlot.nb",
+    ButtonStyle->"Hyperlink"],
+  "]:"
+}], "Text"],
+
+Cell["Needs[\"Madtomma`Mfs`ColorListPlot`\"]", "Input"]
+}, Open  ]]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Interface", "Section",
+  InitializationCell->True,
+  CellTags->"Interface section"],
+
+Cell["\<\
+This part declares the publicly visible functions, options, and \
+values.\
+\>", "Text",
+  InitializationCell->True,
+  CellTags->"Interface section"],
+
+Cell[CellGroupData[{
+
+Cell["Set up the package context, including public imports", "Subsection",
+  InitializationCell->True,
+  CellTags->"Interface section"],
+
+Cell[TextData[{
+  "BeginPackage[",
+  StyleBox["\"Madtomma`Mfs`MDdata`\",", "Input"],
+  "\"",
+  StyleBox["Madtomma`Mfs`Mfs`\"", "Input"],
+  "]"
+}], "Input",
+  InitializationCell->True,
+  CellTags->"Interface section"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Usage messages for the exported functions and the context \
+itself\
+\>", "Subsection",
+  InitializationCell->True,
+  CellTags->"Interface section"],
+
+Cell["\<\
+readThousandTurns::usage = \"readThousandTurns[file] returns an mfs \
+data object containing all the information in a file.\";\
+\>", "Input",
+  InitializationCell->True,
+  CellTags->"Interface section"],
+
+Cell["\<\
+parseHeader::usage = \"parseHeader[file] returns the information in \
+the header block of a file as a structured list. It is normally used inside \
+readThousandTurns.\";\
+\>", "Input",
+  InitializationCell->True,
+  CellTags->"Interface section"]
+}, Open  ]],
+
+Cell["Error messages for the exported objects", "Subsection",
+  InitializationCell->True,
+  CellTags->"Interface section"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Implementation", "Section",
+  InitializationCell->True,
+  CellTags->"Implementation section"],
+
+Cell["\<\
+This part contains the actual definitions and any auxiliary \
+functions that should not be visible outside.\
+\>", "Text",
+  CellTags->"Implementation section"],
+
+Cell[CellGroupData[{
+
+Cell["Begin the private context (implementation part)", "Subsection",
+  InitializationCell->True,
+  CellTags->"Implementation section"],
+
+Cell["Begin[\"`Private`\"]", "Input",
+  InitializationCell->True,
+  CellTags->"Implementation section"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Unprotect any system functions for which definitions will be made\
+\
+\>", "Subsection",
+  InitializationCell->True,
+  CellTags->"Implementation section"],
+
+Cell[BoxData[
+    \(\(protected\  = Unprotect[tfsRead]; \)\)], "Input",
+  InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Definition of auxiliary functions and local (static) variables\
+\>",
+   "Subsection",
+  InitializationCell->True,
+  CellTags->"Implementation section"],
+
+Cell[CellGroupData[{
+
+Cell["Fixing a date format", "Subsubsection"],
+
+Cell[BoxData[
+    \(fixDateFormat[str_String] := 
+      Module[{}, \n
+        StringReplace[
+          str, {"\<Jan\>" -> "\</1/\>", "\<Feb\>" -> "\</2/\>", 
+            "\<Mar\>" -> "\</3/\>", "\<Apr\>" -> "\</4/\>", 
+            "\<May\>" -> "\</5/\>", "\<Jun\>" -> "\</6/\>", 
+            "\<Jul\>" -> "\</7/\>", "\<Aug\>" -> "\</8/\>", 
+            "\<Sep\>" -> "\</9/\>", "\<Oct\>" -> "\</10/\>", 
+            "\<Nov\>" -> "\</11/\>", "\<Dec\>" -> "\</12/\>"}]\n\t]\)], 
+  "Input",
+  InitializationCell->True]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Definition of the exported functions", "Subsection",
+  InitializationCell->True,
+  CellTags->"Implementation section"],
+
+Cell[CellGroupData[{
+
+Cell["parseHeader []", "Subsubsection"],
+
+Cell[BoxData[
+    \(parseHeader[file_String] := 
+      Module[{inpstr, ll, el, line1, line2, descriptors, columns, lastpos}, \n
+        inpstr = OpenRead[file]; \nll = Find[inpstr, "\<Dataset\>"]; \n
+        el = ReadList[StringToStream[ll], Word, WordSeparators -> "\< \>"]; \n
+        el = ReplacePart[el, el[\([\(-3\)]\)]<>"\< \>"<>el[\([\(-2\)]\)], 
+            \(-3\)]; \nline1 = Partition[Delete[el, \(-2\)], 2]; \n\t\t
+        line1 = Map[
+            \(({ToUpperCase[StringDrop[First[#], \(-1\)]], Last[#]})\)&, 
+            line1]; \nll = Find[inpstr, "\<Energy\>"]; \n
+        el = Flatten@
+            ReadList[
+              StringToStream[ll], {Word, Number, Word, Word, Number, Word}, 
+              WordSeparators -> {"\< \>"}]; \n
+        el = ReplacePart[el, el[\([\(-4\)]\)]<>"\< \>"<>el[\([\(-3\)]\)], 
+              \(-3\)] // Delete[#, \(-4\)]&; \n
+        line2 = \(ReplacePart[el, 
+                el[\([\(-2\)]\)]*ToExpression[el[\([\(-1\)]\)]], \(-2\)] // 
+              Delete[#, \(-1\)]&\) // Partition[#, 2]&; \n\t\t
+        line2 = Map[
+            \(({ToUpperCase[StringDrop[First[#], \(-1\)]], Last[#]})\)&, 
+            line2]; \ndescriptors = Join[line1, line2]; \n\t\t
+        ll = Find[inpstr, "\<turn\>"]; \n\t\t
+        columns = 
+          ToUpperCase/@
+            ReadList[StringToStream[ll], Word, 
+              WordSeparators -> {"\<,\>", "\< \>"}]; \n\t\t
+        lastpos = StreamPosition[inpstr]; \n\t\tClose[inpstr]; \n
+        \t\t{descriptors, columns, lastpos}\n\t\t]\)], "Input",
+  InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["readThousandTurn []", "Subsubsection",
+  InitializationCell->True,
+  CellTags->"Implementation section"],
+
+Cell[BoxData[
+    \(readThousandTurns[mdFile_String] := 
+      Module[{hh, ts, data, str, dat, test}, \n\thh = parseHeader[mdFile]; \n
+        \ \ ts = OpenRead[mdFile]; \n\t\t
+        SetStreamPosition[ts, hh[\([\(-1\)]\)]]; \n\t\t
+        data = Partition[
+            ReadList[ts, Word, WordSeparators -> {"\<,\>", "\< \>"}], 6]; \n
+        \t\tdata = Map[ToExpression, data, {2}]; \n\t\tClose[ts]; \n\t\t
+        str = StringDrop[hh[\([1, 1, 2]\)], 4]; \n\t\t
+        dat = ReadList[StringToStream[str], Word, 
+            WordSeparators -> {"\<_\>", "\<.\>"}]; \n
+        test = mfs[First[hh], \n\t\t\thh[\([2]\)], data]; \n\t\t
+        test = mfsAddKey[
+            test, {"\<DATE\>", 
+              First[dat]<>"\</\>"<>dat[\([2]\)]<>"\</\>"<>dat[\([3]\)]}]; \n
+        \t\tmfsAddKey[
+          test, {"\<TIME\>", 
+            dat[\([4]\)]<>"\<:\>"<>dat[\([5]\)]<>"\<:\>"<>"\<00\>"}]\n\t\t]
+        \)], "Input",
+  InitializationCell->True]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+  "Additional definitions for  functions in the basic mfs package ",
+  StyleBox["[", "Text",
+    FontSize->12,
+    FontWeight->"Plain"],
+  ButtonBox["4",
+    ButtonData:>"Mfs.nb",
+    ButtonStyle->"Hyperlink"],
+  StyleBox["]", "Text",
+    FontSize->12,
+    FontWeight->"Plain"]
+}], "Subsection"],
+
+Cell[BoxData[
+    \(\( (*Q_FFT*) \n
+    tfsRead[tfsFile_String, opts___Rule] := 
+      Module[{tempStream, tempFile, tempMfs}, \n\t\t
+          tempStream = OpenTemporary[]; \t\n
+          removeUnwantedLines[tfsFile, tempStream, "\<#\>", 
+            Verbose -> False]; \n\t\tClose[tempStream]; \n\t\t
+          tempFile = First[tempStream]; \n\t\t
+          tempMfs = tfsRead[tempFile, opts]; \n\t\tDeleteFile[tempFile]; \n
+          \t\ttempMfs = 
+            mfsAddKey[
+              tempMfs, {"\<TIME\>", 
+                StringDrop[mfsKeyValue[tempMfs, "\<TIMESTAMP\>"], 3]}]; \n\t\t
+          tempMfs = mfsDeleteKey[tempMfs, "\<TIMESTAMP\>"]; \n\t\t
+          tempMfs = mfsAddKey[tempMfs, {"\<TFSFILENAME\>", \ tfsFile}]; \n
+          tempMfs = 
+            mfsAddKey[
+              tempMfs, {"\<DATE\>", 
+                fixDateFormat@
+                  StringTake[tfsFile, 
+                    \n{StringLength[tfsFile] - 17, 
+                      Last@\(Flatten@StringPosition[tfsFile, "\<97\>"]\)}]}]; 
+          \n\t\ttempMfs\n\t\t]\  /; \ 
+        StringMatchQ[tfsFile, "\<Q_FFT*\>"]\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\( (*XY*) \n
+    tfsRead[tfsFile_String, opts___Rule] := 
+      Module[{tempStream, tempFile, tempMfs}, \n\t\t
+          tempStream = OpenTemporary[]; \t\n
+          removeUnwantedLines[tfsFile, tempStream, "\<#\>", 
+            Verbose -> False]; \n\t\tClose[tempStream]; \n\t\t
+          tempFile = First[tempStream]; \n\t\t
+          tempMfs = tfsRead[tempFile, opts]; \n\t\tDeleteFile[tempFile]; \n
+          \t\ttempMfs = mfsAddKey[tempMfs, {"\<TFSFILENAME\>", \ tfsFile}]; \n
+          \t\ttempMfs = 
+            mfsAddKey[
+              tempMfs, {"\<DATE\>", 
+                fixDateFormat@
+                  StringTake[tfsFile, 
+                    \n{StringLength[tfsFile] - 17, 
+                      Last@\(Flatten@StringPosition[tfsFile, "\<97\>"]\)}]}]; 
+          \n\t\ttempMfs\n\t\t]\  /; \ StringMatchQ[tfsFile, "\<XY*\>"]\)\)], 
+  "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\( (*Q_TNH*) \n
+    tfsRead[tfsFile_String, opts___Rule] := 
+      Module[{tempStream, tempFile, ll, tempMfs, newCols, bc, newDescr}, \n\t
+          tempStream = OpenRead[tfsFile]; \n\t
+          ll\  = \ Find[tempStream, "\<$\>", \ AnchoredSearch\  -> \ True]; \n
+          \tClose[tempStream]; \n\ttempStream = OpenTemporary[]; \n\t\t
+          WriteString[tempStream, ll<>"\< %10.5f %10.5f\>"<>"\<\n\>"]; \n\t\t
+          removeUnwantedLines[tfsFile, tempStream, "\<#\>", 
+            Verbose -> False]; \n\t\tClose[tempStream]; \n\t\t
+          tempFile = First[tempStream]; \n\t\t
+          tempMfs = tfsRead[tempFile, opts]; \n\t\tDeleteFile[tempFile]; \n
+          \t\tnewCols = \(\((Drop[#, \(-2\)])\)&\)/@Last[tempMfs]; \n\t\t
+          tempMfs = ReplacePart[tempMfs, newCols, 3]; \n\t\t
+          tempMfs = mfsAddKey[tempMfs, {"\<TFSFILENAME\>", \ tfsFile}]; \n\t\t
+          tempMfs = 
+            mfsAddKey[
+              tempMfs, {"\<DATE\>", 
+                fixDateFormat@
+                  StringTake[tfsFile, 
+                    \n{StringLength[tfsFile] - 17, 
+                      Last@\(Flatten@StringPosition[tfsFile, "\<97\>"]\)}]}]; 
+          \nbc = \(First[tempMfs]\)[\([5]\)]; \n
+          newDescr = 
+            ReplacePart[
+              First[tempMfs], {
+                First[bc], {bc[\([2]\)], bc[\([3]\)], bc[\([4]\)], 
+                  bc[\([5]\)]}}, 5]; \t\t\n
+          ReplacePart[tempMfs, newDescr, 1]\n]\  /; \ 
+        StringMatchQ[tfsFile, "\<Q_TNH*\>"]\)\)], "Input",
+  InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Restore protection of system symbols", "Subsection",
+  InitializationCell->True,
+  CellTags->"Implementation section"],
+
+Cell["Protect[ Evaluate[protected] ];", "Input",
+  InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["End the private context", "Subsection",
+  InitializationCell->True,
+  CellTags->"Implementation section"],
+
+Cell["End[ ]", "Input",
+  InitializationCell->True,
+  CellTags->"Implementation section"]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Epilog", "Section",
+  InitializationCell->True,
+  CellTags->"Epilog section"],
+
+Cell["This section protects exported symbols and ends the package.", "Text",
+  CellTags->"Epilog section"],
+
+Cell[CellGroupData[{
+
+Cell["Protect exported symbol", "Subsection",
+  InitializationCell->True,
+  CellTags->"Epilog section"],
+
+Cell["Protect[readThousandTurns,parseHeader]", "Input",
+  InitializationCell->True,
+  CellTags->"Epilog section"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["End the package context", "Subsection",
+  InitializationCell->True,
+  CellTags->"Epilog section"],
+
+Cell["EndPackage[ ]", "Input",
+  InitializationCell->True,
+  CellTags->"Epilog section"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Examples, Tests", "Section",
+  CellTags->"Examples section"],
+
+Cell["Need to name the example files properly ... ", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(sampleFile = 
+      ToFileName[{AfsHomeDirectory["\<jowett\>"], "\<public\>", "\<math\>", 
+          "\<Madtomma\>", "\<Mfs\>", "\<Examples\>"}, "\<qkick.tfs\>"]\)], 
+  "Input",
+  CellTags->"Examples section"],
+
+Cell[BoxData[
+    \("P:\\cern.ch\\user\\j\\jowett\\public\\math\\Madtomma\\Mfs\\Examples\\\
+qkick.tfs"\)], "Output"]
+}, Open  ]],
+
+Cell["Choose some directory of your own for the examples", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(SetDirectory["\<C:\\temp\>"]\)], "Input"],
+
+Cell[BoxData[
+    \("C:\\temp"\)], "Output"]
+}, Open  ]],
+
+Cell["First create an mfsdata object from a data file.", "Text"],
+
+Cell[BoxData[
+    \(\(AppendTo[$Path, "\<J:\Madtomma\Examples\>"]; \)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell["readThousandLines", "Subsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(?readThousandTurns\)\)], "Input"],
+
+Cell[BoxData[
+    \("readThousandTurns[file] returns an mfs data object containing all the \
+information in a file."\)], "Print"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(mdmfs = readThousandTurns["\<sample1.dat\>"]; \)\)], "Input"],
+
+Cell[BoxData[
+    \(OpenRead::"noopen" \( : \ \) "Cannot open \!\(\"sample1.dat\"\)."\)], 
+  "Message"],
+
+Cell[BoxData[
+    \(General::"stream" \( : \ \) 
+      "\!\($Failed\) is not a string, InputStream[ ], or OutputStream[ ]."\)],
+   "Message"],
+
+Cell[BoxData[
+    \(StringToStream::"string" \( : \ \) 
+      "String expected at position \!\(1\) in \!\(StringToStream[$Failed]\)."\
+\)], "Message"],
+
+Cell[BoxData[
+    \(General::"stream" \( : \ \) 
+      "\!\($Failed\) is not a string, InputStream[ ], or OutputStream[ ]."\)],
+   "Message"],
+
+Cell[BoxData[
+    \(StringJoin::"string" \( : \ \) 
+      "String expected at position \!\(1\) in \!\($Failed <> \" \" <> \
+Word\)."\)], "Message"],
+
+Cell[BoxData[
+    \(StringJoin::"string" \( : \ \) 
+      "String expected at position \!\(3\) in \!\($Failed <> \" \" <> \
+Word\)."\)], "Message"],
+
+Cell[BoxData[
+    \(General::"stream" \( : \ \) 
+      "\!\($Failed <> \" \" <> Word\) is not a string, InputStream[ ], or \
+OutputStream[ ]."\)], "Message"],
+
+Cell[BoxData[
+    \(General::"stop" \( : \ \) 
+      "Further output of \!\(General :: \"stream\"\) will be suppressed \
+during this calculation."\)], "Message"],
+
+Cell[BoxData[
+    \(StringToStream::"string" \( : \ \) 
+      "String expected at position \!\(1\) in \!\(StringToStream[$Failed]\)."\
+\)], "Message"],
+
+Cell[BoxData[
+    \(Part::"partw" \( : \ \) 
+      "Part \!\(-4\) of \!\(ReadList[\($Failed, \({Word, Number, Word, Word, \
+Number, Word}\), \(WordSeparators \\[Rule] \({\" \"}\)\)\)]\) does not \
+exist."\)], "Message"],
+
+Cell[BoxData[
+    \(StringJoin::"string" \( : \ \) 
+      "String expected at position \!\(1\) in \!\(\\[LeftSkeleton] 1 \
+\\[RightSkeleton]\)."\)], "Message"],
+
+Cell[BoxData[
+    \(General::"stop" \( : \ \) 
+      "Further output of \!\(StringJoin :: \"string\"\) will be suppressed \
+during this calculation."\)], "Message"],
+
+Cell[BoxData[
+    \(Part::"partw" \( : \ \) 
+      "Part \!\(-4\) of \!\(ReadList[\($Failed, \({Word, Number, Word, Word, \
+Number, Word}\), \(WordSeparators \\[Rule] \({\" \"}\)\)\)]\) does not \
+exist."\)], "Message"],
+
+Cell[BoxData[
+    \(Part::"pspec" \( : \ \) 
+      "Part specification \!\({Word, Number, Word, Word, Number, Word}\) is \
+neither an integer nor a list of integers."\)], "Message"],
+
+Cell[BoxData[
+    \(Part::"pspec" \( : \ \) 
+      "Part specification \!\({Word, Number, Word, Word, Number, Word}\) is \
+neither an integer nor a list of integers."\)], "Message"],
+
+Cell[BoxData[
+    \(Syntax::"sntxi" \( : \ \) 
+      "Incomplete expression; more input is needed.\!\(\"\"\)"\)], "Message"],
+
+Cell[BoxData[
+    \(ToExpression::"esntx" \( : \ \) 
+      "Could not parse \!\(\((\\[LeftSkeleton] 1 \\[RightSkeleton])\) \
+\\[LeftDoubleBracket] \(\({Word, Number, Word, Word, Number, Word}\), \
+\(WordSeparators \\[Rule] \({\" \"}\)\), \(-1\)\) \\[RightDoubleBracket]\) as \
+Mathematica input."\)], "Message"],
+
+Cell[BoxData[
+    \(ReplacePart::"argt" \( : \ \) 
+      "\!\(ReplacePart\) called with \!\(5\) arguments; \!\(3\) or \!\(4\) \
+arguments are expected."\)], "Message"],
+
+Cell[BoxData[
+    \(ReplacePart::"psl" \( : \ \) 
+      "Position specification \!\($Failed\\ \(\((\\[LeftSkeleton] 1 \
+\\[RightSkeleton])\) \\[LeftDoubleBracket] \(\({Word, Number, Word, Word, \
+Number, Word}\), \(WordSeparators \\[Rule] \({\" \"}\)\), \(-2\)\) \
+\\[RightDoubleBracket]\)\) in \!\(ReplacePart[\(\\[LeftSkeleton] 1 \
+\\[RightSkeleton]\)]\) is not an integer or a list of integers."\)], "Message"],
+
+Cell[BoxData[
+    \(ReplacePart::"argt" \( : \ \) 
+      "\!\(ReplacePart\) called with \!\(2\) arguments; \!\(3\) or \!\(4\) \
+arguments are expected."\)], "Message"],
+
+Cell[BoxData[
+    \(ReplacePart::"argt" \( : \ \) 
+      "\!\(ReplacePart\) called with \!\(2\) arguments; \!\(3\) or \!\(4\) \
+arguments are expected."\)], "Message"],
+
+Cell[BoxData[
+    \(General::"stop" \( : \ \) 
+      "Further output of \!\(ReplacePart :: \"argt\"\) will be suppressed \
+during this calculation."\)], "Message"],
+
+Cell[BoxData[
+    \(Join::"heads" \( : \ \) 
+      "Heads \!\(ReadList\) and \!\(ReplacePart\) at positions \!\(1\) and \!\
+\(2\) are expected to be the same."\)], "Message"],
+
+Cell[BoxData[
+    \(StringToStream::"string" \( : \ \) 
+      "String expected at position \!\(1\) in \!\(StringToStream[$Failed]\)."\
+\)], "Message"],
+
+Cell[BoxData[
+    \(General::"stop" \( : \ \) 
+      "Further output of \!\(StringToStream :: \"string\"\) will be \
+suppressed during this calculation."\)], "Message"],
+
+Cell[BoxData[
+    \(OpenRead::"noopen" \( : \ \) "Cannot open \!\(\"sample1.dat\"\)."\)], 
+  "Message"],
+
+Cell[BoxData[
+    \(ReadList::"argb" \( : \ \) 
+      "\!\(ReadList\) called with \!\(0\) arguments; between \!\(1\) and \
+\!\(3\) arguments are expected."\)], "Message"],
+
+Cell[BoxData[
+    \(Part::"partw" \( : \ \) 
+      "Part \!\(2\) of \!\(ReadList[\({\(ToUpperCase[\(StringDrop[\(\($Failed \
+<> \" \" <> Word\), \(-1\)\)]\)]\), \(WordSeparators \\[Rule] \" \"\)}\)]\) \
+does not exist."\)], "Message"],
+
+Cell[BoxData[
+    \(General::"stop" \( : \ \) 
+      "Further output of \!\(Part :: \"partw\"\) will be suppressed during \
+this calculation."\)], "Message"],
+
+Cell[BoxData[
+    \(Message::"name" \( : \ \) 
+      "Message name \!\(mfs : Madtomma`Mfs`Mfs`Private`oldname\) is not of \
+the form symbol::name or symbol::name::language."\)], "Message"],
+
+Cell[BoxData[
+    \(Join::"heads" \( : \ \) 
+      "Heads \!\(ReadList\) and \!\(ReplacePart\) at positions \!\(1\) and \!\
+\(2\) are expected to be the same."\)], "Message"],
+
+Cell[BoxData[
+    \(Join::"heads" \( : \ \) 
+      "Heads \!\(ReadList\) and \!\(ReplacePart\) at positions \!\(1\) and \!\
+\(2\) are expected to be the same."\)], "Message"],
+
+Cell[BoxData[
+    \(General::"stop" \( : \ \) 
+      "Further output of \!\(Join :: \"heads\"\) will be suppressed during \
+this calculation."\)], "Message"]
+}, Open  ]],
+
+Cell[TextData[{
+  "Now you can use all the functions operationg on mfsdata objects as the mfs \
+package [",
+  ButtonBox["4",
+    ButtonData:>"Mfs.nb",
+    ButtonStyle->"Hyperlink"],
+  "] is imported."
+}], "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(mfsColumnNames[mdmfs]\)], "Input"],
+
+Cell[BoxData[
+    \({"TURN", "X1", "Y1", "X2", "Y2", "BCT"}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(mfsKeyNames[mdmfs]\)], "Input"],
+
+Cell[BoxData[
+    \({"DATASET", "PU1", "PU2", "BCT PU", "ENERGY", "KICK STRENGTH", "DATE", 
+      "TIME"}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(mfsKeyValue[mdmfs, {"\<PU1\>", "\<PU2\>"}]\)], "Input"],
+
+Cell[BoxData[
+    \({"243", "248"}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(test = mfsAddKey[mdmfs, {"\<COMMENT\>", "\<It works !\>"}]; \)\)], 
+  "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(mfsKeyNames[test]\)], "Input"],
+
+Cell[BoxData[
+    \({"DATASET", "PU1", "PU2", "BCT PU", "ENERGY", "KICK STRENGTH", "DATE", 
+      "TIME", "COMMENT"}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(mfsKeyValue[test, "\<COMMENT\>"]\)], "Input"],
+
+Cell[BoxData[
+    \("It works !"\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(test = mfsDeleteKey[test, "\<COMMENT\>"]; \)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(test == mdmfs\)], "Input"],
+
+Cell[BoxData[
+    \(True\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(turns = mfsColumn[mdmfs, "\<TURN\>"]; \)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Length[turns]\)], "Input"],
+
+Cell[BoxData[
+    \(1023\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(xy = Transpose@mfsColumn[mdmfs, {"\<X1\>", "\<Y1\>"}]; \)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Options[colorListPlot]\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{"{", 
+      RowBox[{
+      \(AspectRatio \[Rule] 1\/GoldenRatio\), ",", \(Axes \[Rule] True\), 
+        ",", \(AxesLabel \[Rule] None\), ",", 
+        \(AxesOrigin \[Rule] Automatic\), ",", 
+        \(AxesStyle \[Rule] Automatic\), ",", 
+        \(Background \[Rule] RGBColor[1, 1, 1]\), ",", 
+        \(ColorOutput \[Rule] Automatic\), ",", 
+        \(DefaultColor \[Rule] Automatic\), ",", \(Epilog \[Rule] {}\), ",", 
+        \(Frame \[Rule] False\), ",", \(FrameLabel \[Rule] None\), ",", 
+        \(FrameStyle \[Rule] Automatic\), ",", 
+        \(FrameTicks \[Rule] Automatic\), ",", \(GridLines \[Rule] None\), 
+        ",", \(ImageSize \[Rule] Automatic\), ",", 
+        \(PlotLabel \[Rule] None\), ",", \(PlotRange \[Rule] Automatic\), 
+        ",", \(PlotRegion \[Rule] Automatic\), ",", 
+        RowBox[{"Prolog", "\[Rule]", 
+          RowBox[{"{", 
+            RowBox[{"PointSize", "[", 
+              StyleBox["0.02`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->1], "]"}], "}"}]}], ",", 
+        \(RotateLabel \[Rule] True\), ",", \(Ticks \[Rule] Automatic\), ",", 
+        \(DefaultFont \[RuleDelayed] $DefaultFont\), ",", 
+        \(DisplayFunction \[RuleDelayed] $DisplayFunction\), ",", 
+        \(FormatType \[RuleDelayed] $FormatType\), ",", 
+        \(TextStyle \[RuleDelayed] $TextStyle\), ",", 
+        \(ColorScale \[Rule] rainbow\), ",", \(PlotJoined \[Rule] False\)}], 
+      "}"}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(colorListPlot[xy, PlotJoined \[Rule] False]\)], "Input"],
+
+Cell[GraphicsData["PostScript", "\<\
+%!
+%%Creator: Mathematica
+%%AspectRatio: .61803 
+MathPictureStart
+/Mabs {
+Mgmatrix idtransform
+Mtmatrix dtransform
+} bind def
+/Mabsadd { Mabs
+3 -1 roll add
+3 1 roll add
+exch } bind def
+%% Graphics
+/Courier findfont 10  scalefont  setfont
+% Background color
+1 1 1 r
+MFill
+% Scaling calculations
+0.342127 0.000233885 0.0508793 0.00124704 [
+[.10824 .03838 -15 -9 ]
+[.10824 .03838 15 0 ]
+[.57601 .03838 -12 -9 ]
+[.57601 .03838 12 0 ]
+[.8099 .03838 -12 -9 ]
+[.8099 .03838 12 0 ]
+[.32963 .17558 -18 -4.5 ]
+[.32963 .17558 0 4.5 ]
+[.32963 .30029 -18 -4.5 ]
+[.32963 .30029 0 4.5 ]
+[.32963 .42499 -18 -4.5 ]
+[.32963 .42499 0 4.5 ]
+[.32963 .5497 -18 -4.5 ]
+[.32963 .5497 0 4.5 ]
+[ 0 0 0 0 ]
+[ 1 .61803 0 0 ]
+] MathScale
+% Start of Graphics
+1 setlinecap
+1 setlinejoin
+newpath
+0 0 0 r
+.25 Mabswid
+.10824 .05088 m
+.10824 .05713 L
+s
+[(-1000)] .10824 .03838 0 1 Mshowa
+.57601 .05088 m
+.57601 .05713 L
+s
+[(1000)] .57601 .03838 0 1 Mshowa
+.8099 .05088 m
+.8099 .05713 L
+s
+[(2000)] .8099 .03838 0 1 Mshowa
+.125 Mabswid
+.15502 .05088 m
+.15502 .05463 L
+s
+.2018 .05088 m
+.2018 .05463 L
+s
+.24857 .05088 m
+.24857 .05463 L
+s
+.29535 .05088 m
+.29535 .05463 L
+s
+.3889 .05088 m
+.3889 .05463 L
+s
+.43568 .05088 m
+.43568 .05463 L
+s
+.48246 .05088 m
+.48246 .05463 L
+s
+.52924 .05088 m
+.52924 .05463 L
+s
+.62279 .05088 m
+.62279 .05463 L
+s
+.66957 .05088 m
+.66957 .05463 L
+s
+.71634 .05088 m
+.71634 .05463 L
+s
+.76312 .05088 m
+.76312 .05463 L
+s
+.06147 .05088 m
+.06147 .05463 L
+s
+.01469 .05088 m
+.01469 .05463 L
+s
+.85668 .05088 m
+.85668 .05463 L
+s
+.90345 .05088 m
+.90345 .05463 L
+s
+.95023 .05088 m
+.95023 .05463 L
+s
+.99701 .05088 m
+.99701 .05463 L
+s
+.25 Mabswid
+0 .05088 m
+1 .05088 L
+s
+.34213 .17558 m
+.34838 .17558 L
+s
+[(100)] .32963 .17558 1 0 Mshowa
+.34213 .30029 m
+.34838 .30029 L
+s
+[(200)] .32963 .30029 1 0 Mshowa
+.34213 .42499 m
+.34838 .42499 L
+s
+[(300)] .32963 .42499 1 0 Mshowa
+.34213 .5497 m
+.34838 .5497 L
+s
+[(400)] .32963 .5497 1 0 Mshowa
+.125 Mabswid
+.34213 .07582 m
+.34588 .07582 L
+s
+.34213 .10076 m
+.34588 .10076 L
+s
+.34213 .1257 m
+.34588 .1257 L
+s
+.34213 .15064 m
+.34588 .15064 L
+s
+.34213 .20052 m
+.34588 .20052 L
+s
+.34213 .22547 m
+.34588 .22547 L
+s
+.34213 .25041 m
+.34588 .25041 L
+s
+.34213 .27535 m
+.34588 .27535 L
+s
+.34213 .32523 m
+.34588 .32523 L
+s
+.34213 .35017 m
+.34588 .35017 L
+s
+.34213 .37511 m
+.34588 .37511 L
+s
+.34213 .40005 m
+.34588 .40005 L
+s
+.34213 .44993 m
+.34588 .44993 L
+s
+.34213 .47487 m
+.34588 .47487 L
+s
+.34213 .49981 m
+.34588 .49981 L
+s
+.34213 .52476 m
+.34588 .52476 L
+s
+.34213 .02594 m
+.34588 .02594 L
+s
+.34213 .001 m
+.34588 .001 L
+s
+.34213 .57464 m
+.34588 .57464 L
+s
+.34213 .59958 m
+.34588 .59958 L
+s
+.25 Mabswid
+.34213 0 m
+.34213 .61803 L
+s
+0 0 m
+1 0 L
+1 .61803 L
+0 .61803 L
+closepath
+clip
+newpath
+1 .005 0 r
+.02 w
+.51567 .24292 Mdot
+1 .009 0 r
+.51567 .24292 Mdot
+1 .014 0 r
+.51567 .24292 Mdot
+1 .019 0 r
+.51567 .24292 Mdot
+1 .023 0 r
+.51567 .24292 Mdot
+1 .028 0 r
+.51567 .24292 Mdot
+1 .033 0 r
+.51567 .24292 Mdot
+1 .038 0 r
+.51567 .24292 Mdot
+1 .042 0 r
+.51567 .24292 Mdot
+1 .047 0 r
+.51567 .24292 Mdot
+1 .052 0 r
+.51567 .24292 Mdot
+1 .056 0 r
+.51567 .24292 Mdot
+1 .061 0 r
+.51567 .24292 Mdot
+1 .066 0 r
+.51567 .24292 Mdot
+1 .07 0 r
+.51567 .24292 Mdot
+1 .075 0 r
+.51567 .24292 Mdot
+1 .08 0 r
+.51567 .24292 Mdot
+1 .084 0 r
+.51567 .24292 Mdot
+1 .089 0 r
+.51567 .24292 Mdot
+1 .094 0 r
+.51567 .24292 Mdot
+1 .117 0 r
+.09281 .10575 Mdot
+1 .164 0 r
+.63495 .11573 Mdot
+1 .197 0 r
+.33137 .10575 Mdot
+1 .253 0 r
+.46468 .38259 Mdot
+1 .263 0 r
+.0914 .37511 Mdot
+1 .277 0 r
+.92731 .51977 Mdot
+1 .286 0 r
+.4993 .37262 Mdot
+1 .296 0 r
+.12649 .09827 Mdot
+1 .328 0 r
+.27991 .51228 Mdot
+1 .338 0 r
+.94462 .38758 Mdot
+1 .343 0 r
+.87632 .11573 Mdot
+1 .352 0 r
+.36318 .09577 Mdot
+1 .361 0 r
+.44878 .50979 Mdot
+1 .375 0 r
+.85948 .24791 Mdot
+1 .38 0 r
+.24623 .50231 Mdot
+1 .385 0 r
+.24623 .50231 Mdot
+1 .389 0 r
+.78978 .2529 Mdot
+1 .399 0 r
+.19478 .09577 Mdot
+1 .404 0 r
+.36458 .36513 Mdot
+1 .413 0 r
+.56713 .37511 Mdot
+1 .427 0 r
+.94462 .38758 Mdot
+1 .436 0 r
+.0914 .37511 Mdot
+1 .441 0 r
+.87632 .11573 Mdot
+1 .446 0 r
+.80616 .12321 Mdot
+1 .455 0 r
+.36458 .36513 Mdot
+1 .465 0 r
+.4137 .23295 Mdot
+1 .479 0 r
+.99607 .52974 Mdot
+1 .488 0 r
+.22846 .10575 Mdot
+1 .497 0 r
+.46515 .10575 Mdot
+1 .507 0 r
+.85761 .52725 Mdot
+1 .54 0 r
+.87632 .11573 Mdot
+1 .554 0 r
+.14379 .23544 Mdot
+1 .563 0 r
+.46468 .38259 Mdot
+1 .587 0 r
+.17794 .22547 Mdot
+1 .596 0 r
+.4296 .10575 Mdot
+1 .605 0 r
+.97923 .39756 Mdot
+1 .629 0 r
+.41463 .50231 Mdot
+1 .638 0 r
+.96099 .25789 Mdot
+1 .652 0 r
+.22846 .10575 Mdot
+1 .662 0 r
+.41463 .50231 Mdot
+1 .685 0 r
+.24577 .24542 Mdot
+1 .694 0 r
+.4296 .10575 Mdot
+1 .704 0 r
+.89316 .25041 Mdot
+1 .727 0 r
+.46468 .38259 Mdot
+1 .737 0 r
+.80756 .39506 Mdot
+1 .741 0 r
+.96099 .25789 Mdot
+1 .76 0 r
+.51661 .51228 Mdot
+1 .765 0 r
+.02404 .0858 Mdot
+1 .774 0 r
+.89316 .25041 Mdot
+1 .779 0 r
+.22986 .37262 Mdot
+1 .784 0 r
+.26261 .37511 Mdot
+1 .788 0 r
+.85948 .24791 Mdot
+1 .793 0 r
+.60127 .10575 Mdot
+1 .802 0 r
+.55075 .24542 Mdot
+1 .807 0 r
+.80756 .39506 Mdot
+1 .812 0 r
+.39686 .36264 Mdot
+1 .816 0 r
+.29675 .10575 Mdot
+1 .826 0 r
+.68734 .24542 Mdot
+1 .83 0 r
+.34681 .50231 Mdot
+1 .835 0 r
+.38095 .23544 Mdot
+1 .84 0 r
+.72009 .24542 Mdot
+1 .845 0 r
+.60127 .10575 Mdot
+1 .849 0 r
+.29675 .10575 Mdot
+1 .854 0 r
+.46468 .38259 Mdot
+1 .859 0 r
+.77341 .38509 Mdot
+1 .863 0 r
+.4993 .37262 Mdot
+1 .868 0 r
+.22846 .10575 Mdot
+1 .873 0 r
+.63495 .11573 Mdot
+1 .877 0 r
+.77341 .38509 Mdot
+1 .882 0 r
+.27991 .51228 Mdot
+1 .887 0 r
+.31406 .24292 Mdot
+1 .891 0 r
+.84311 .11573 Mdot
+1 .896 0 r
+.60127 .10575 Mdot
+1 .901 0 r
+.14379 .23544 Mdot
+1 .906 0 r
+.56713 .37511 Mdot
+1 .91 0 r
+.8941 .51977 Mdot
+1 .915 0 r
+.29675 .10575 Mdot
+1 .924 0 r
+.85948 .24791 Mdot
+1 .929 0 r
+.68594 .51727 Mdot
+1 .934 0 r
+.07503 .24542 Mdot
+1 .938 0 r
+.53298 .10575 Mdot
+1 .943 0 r
+.96099 .25789 Mdot
+1 .948 0 r
+.29675 .10575 Mdot
+1 .952 0 r
+.14379 .23544 Mdot
+1 .957 0 r
+.91094 .39007 Mdot
+1 .962 0 r
+.70371 .3776 Mdot
+1 .976 0 r
+.99607 .52974 Mdot
+1 .981 0 r
+.27991 .51228 Mdot
+1 .985 0 r
+.12649 .09827 Mdot
+1 .99 0 r
+.91 .11573 Mdot
+1 .995 0 r
+.72009 .24542 Mdot
+1 .999 0 r
+.02404 .0858 Mdot
+.996 1 0 r
+.53345 .38259 Mdot
+.991 1 0 r
+.99607 .52974 Mdot
+.987 1 0 r
+.28038 .23544 Mdot
+.977 1 0 r
+.91 .11573 Mdot
+.972 1 0 r
+.70371 .3776 Mdot
+.968 1 0 r
+.04042 .21798 Mdot
+.963 1 0 r
+.55075 .24542 Mdot
+.958 1 0 r
+.96099 .25789 Mdot
+.954 1 0 r
+.28038 .23544 Mdot
+.949 1 0 r
+.17794 .22547 Mdot
+.944 1 0 r
+.91094 .39007 Mdot
+.94 1 0 r
+.66957 .38509 Mdot
+.935 1 0 r
+.05585 .09577 Mdot
+.93 1 0 r
+.56713 .11573 Mdot
+.926 1 0 r
+.92778 .25539 Mdot
+.921 1 0 r
+.27991 .51228 Mdot
+.916 1 0 r
+.21209 .23295 Mdot
+.911 1 0 r
+.89316 .25041 Mdot
+.907 1 0 r
+.61905 .24292 Mdot
+.902 1 0 r
+.10918 .23544 Mdot
+.897 1 0 r
+.5835 .24542 Mdot
+.893 1 0 r
+.87632 .3801 Mdot
+.888 1 0 r
+.28038 .23544 Mdot
+.879 1 0 r
+.84311 .11573 Mdot
+.874 1 0 r
+.60127 .38259 Mdot
+.869 1 0 r
+.17794 .22547 Mdot
+.865 1 0 r
+.5835 .24542 Mdot
+.86 1 0 r
+.78978 .2529 Mdot
+.855 1 0 r
+.29675 .10575 Mdot
+.85 1 0 r
+.33137 .10575 Mdot
+.846 1 0 r
+.78978 .2529 Mdot
+.841 1 0 r
+.56713 .37511 Mdot
+.836 1 0 r
+.22846 .10575 Mdot
+.832 1 0 r
+.5835 .24542 Mdot
+.827 1 0 r
+.73786 .38509 Mdot
+.822 1 0 r
+.34681 .50231 Mdot
+.818 1 0 r
+.38095 .23544 Mdot
+.813 1 0 r
+.72009 .24542 Mdot
+.808 1 0 r
+.55075 .24542 Mdot
+.804 1 0 r
+.31406 .24292 Mdot
+.799 1 0 r
+.56713 .37511 Mdot
+.794 1 0 r
+.66957 .38509 Mdot
+.789 1 0 r
+.39686 .36264 Mdot
+.785 1 0 r
+.4137 .23295 Mdot
+.78 1 0 r
+.65179 .24542 Mdot
+.775 1 0 r
+.53345 .38259 Mdot
+.771 1 0 r
+.38095 .23544 Mdot
+.766 1 0 r
+.51567 .24292 Mdot
+.761 1 0 r
+.61905 .24292 Mdot
+.757 1 0 r
+.48246 .24292 Mdot
+.752 1 0 r
+.43147 .37262 Mdot
+.747 1 0 r
+.56713 .37511 Mdot
+.743 1 0 r
+.5835 .24542 Mdot
+.738 1 0 r
+.44738 .24542 Mdot
+.733 1 0 r
+.46515 .10575 Mdot
+.728 1 0 r
+.5835 .24542 Mdot
+.724 1 0 r
+.56713 .37511 Mdot
+.719 1 0 r
+.43147 .37262 Mdot
+.714 1 0 r
+.46515 .10575 Mdot
+.71 1 0 r
+.61905 .24292 Mdot
+.705 1 0 r
+.51567 .24292 Mdot
+.7 1 0 r
+.36458 .36513 Mdot
+.696 1 0 r
+.55075 .24542 Mdot
+.691 1 0 r
+.65179 .24542 Mdot
+.686 1 0 r
+.4137 .23295 Mdot
+.682 1 0 r
+.38095 .23544 Mdot
+.677 1 0 r
+.68734 .24542 Mdot
+.672 1 0 r
+.58443 .51228 Mdot
+.667 1 0 r
+.28038 .23544 Mdot
+.663 1 0 r
+.53298 .10575 Mdot
+.658 1 0 r
+.75564 .24542 Mdot
+.653 1 0 r
+.38095 .23544 Mdot
+.649 1 0 r
+.31406 .24292 Mdot
+.644 1 0 r
+.73786 .38509 Mdot
+.639 1 0 r
+.61905 .24292 Mdot
+.635 1 0 r
+.21209 .23295 Mdot
+.63 1 0 r
+.51567 .24292 Mdot
+.625 1 0 r
+.8244 .52476 Mdot
+.621 1 0 r
+.36458 .36513 Mdot
+.616 1 0 r
+.24577 .24542 Mdot
+.611 1 0 r
+.78978 .2529 Mdot
+.606 1 0 r
+.63542 .37511 Mdot
+.602 1 0 r
+.16063 .36513 Mdot
+.597 1 0 r
+.53345 .38259 Mdot
+.592 1 0 r
+.87632 .3801 Mdot
+.588 1 0 r
+.31406 .24292 Mdot
+.583 1 0 r
+.22846 .10575 Mdot
+.578 1 0 r
+.84077 .39506 Mdot
+.574 1 0 r
+.65319 .51478 Mdot
+.569 1 0 r
+.10918 .23544 Mdot
+.564 1 0 r
+.55075 .24542 Mdot
+.56 1 0 r
+.89316 .25041 Mdot
+.555 1 0 r
+.29769 .37262 Mdot
+.55 1 0 r
+.21209 .23295 Mdot
+.545 1 0 r
+.85948 .24791 Mdot
+.541 1 0 r
+.65179 .24542 Mdot
+.536 1 0 r
+.09281 .10575 Mdot
+.531 1 0 r
+.55075 .24542 Mdot
+.527 1 0 r
+.91094 .39007 Mdot
+.522 1 0 r
+.27991 .51228 Mdot
+.517 1 0 r
+.21209 .23295 Mdot
+.513 1 0 r
+.85948 .24791 Mdot
+.508 1 0 r
+.63542 .37511 Mdot
+.503 1 0 r
+.10918 .23544 Mdot
+.499 1 0 r
+.56713 .37511 Mdot
+.494 1 0 r
+.87632 .3801 Mdot
+.489 1 0 r
+.29769 .37262 Mdot
+.484 1 0 r
+.24577 .24542 Mdot
+.48 1 0 r
+.84077 .39506 Mdot
+.475 1 0 r
+.61764 .51478 Mdot
+.47 1 0 r
+.14379 .23544 Mdot
+.466 1 0 r
+.5835 .24542 Mdot
+.461 1 0 r
+.8244 .26288 Mdot
+.456 1 0 r
+.31406 .24292 Mdot
+.452 1 0 r
+.28038 .23544 Mdot
+.447 1 0 r
+.79119 .52476 Mdot
+.442 1 0 r
+.60127 .38259 Mdot
+.438 1 0 r
+.21209 .23295 Mdot
+.433 1 0 r
+.55075 .24542 Mdot
+.428 1 0 r
+.77341 .38509 Mdot
+.423 1 0 r
+.38095 .23544 Mdot
+.419 1 0 r
+.34681 .22547 Mdot
+.414 1 0 r
+.70371 .3776 Mdot
+.409 1 0 r
+.5835 .24542 Mdot
+.405 1 0 r
+.31406 .24292 Mdot
+.4 1 0 r
+.51567 .24292 Mdot
+.395 1 0 r
+.66957 .38509 Mdot
+.391 1 0 r
+.44738 .24542 Mdot
+.386 1 0 r
+.38095 .23544 Mdot
+.381 1 0 r
+.5835 .24542 Mdot
+.377 1 0 r
+.60127 .38259 Mdot
+.372 1 0 r
+.43147 .37262 Mdot
+.367 1 0 r
+.46468 .38259 Mdot
+.362 1 0 r
+.5835 .24542 Mdot
+.358 1 0 r
+.55075 .24542 Mdot
+.353 1 0 r
+.43147 .37262 Mdot
+.348 1 0 r
+.48246 .24292 Mdot
+.344 1 0 r
+.60127 .38259 Mdot
+.339 1 0 r
+.53345 .38259 Mdot
+.334 1 0 r
+.38095 .23544 Mdot
+.33 1 0 r
+.51567 .24292 Mdot
+.325 1 0 r
+.63542 .37511 Mdot
+.32 1 0 r
+.46468 .38259 Mdot
+.316 1 0 r
+.38095 .23544 Mdot
+.311 1 0 r
+.61905 .24292 Mdot
+.306 1 0 r
+.60127 .38259 Mdot
+.301 1 0 r
+.3295 .36264 Mdot
+.297 1 0 r
+.46468 .38259 Mdot
+.292 1 0 r
+.72009 .24542 Mdot
+.287 1 0 r
+.46468 .38259 Mdot
+.283 1 0 r
+.31406 .24292 Mdot
+.278 1 0 r
+.65179 .24542 Mdot
+.273 1 0 r
+.66957 .38509 Mdot
+.269 1 0 r
+.29769 .37262 Mdot
+.264 1 0 r
+.44738 .24542 Mdot
+.259 1 0 r
+.78978 .2529 Mdot
+.255 1 0 r
+.46468 .38259 Mdot
+.25 1 0 r
+.24577 .24542 Mdot
+.245 1 0 r
+.68734 .24542 Mdot
+.24 1 0 r
+.70371 .3776 Mdot
+.236 1 0 r
+.24577 .24542 Mdot
+.231 1 0 r
+.4137 .23295 Mdot
+.226 1 0 r
+.8244 .52476 Mdot
+.222 1 0 r
+.46468 .38259 Mdot
+.217 1 0 r
+.24577 .24542 Mdot
+.212 1 0 r
+.70371 .3776 Mdot
+.208 1 0 r
+.70371 .3776 Mdot
+.203 1 0 r
+.22986 .37262 Mdot
+.198 1 0 r
+.44738 .24542 Mdot
+.194 1 0 r
+.84077 .39506 Mdot
+.189 1 0 r
+.43147 .37262 Mdot
+.184 1 0 r
+.24577 .24542 Mdot
+.179 1 0 r
+.70371 .3776 Mdot
+.175 1 0 r
+.68594 .51727 Mdot
+.17 1 0 r
+.24577 .24542 Mdot
+.165 1 0 r
+.48246 .24292 Mdot
+.161 1 0 r
+.80756 .39506 Mdot
+.156 1 0 r
+.4137 .23295 Mdot
+.151 1 0 r
+.26261 .37511 Mdot
+.147 1 0 r
+.72009 .24542 Mdot
+.142 1 0 r
+.63542 .37511 Mdot
+.137 1 0 r
+.24577 .24542 Mdot
+.133 1 0 r
+.4993 .37262 Mdot
+.128 1 0 r
+.77341 .38509 Mdot
+.123 1 0 r
+.39686 .36264 Mdot
+.118 1 0 r
+.31406 .24292 Mdot
+.114 1 0 r
+.70371 .3776 Mdot
+.109 1 0 r
+.60127 .38259 Mdot
+.104 1 0 r
+.29769 .37262 Mdot
+.1 1 0 r
+.53345 .38259 Mdot
+.095 1 0 r
+.72009 .24542 Mdot
+.09 1 0 r
+.39686 .36264 Mdot
+.086 1 0 r
+.38095 .23544 Mdot
+.081 1 0 r
+.66957 .38509 Mdot
+.076 1 0 r
+.56713 .37511 Mdot
+.072 1 0 r
+.34681 .22547 Mdot
+.067 1 0 r
+.55075 .24542 Mdot
+.062 1 0 r
+.65179 .24542 Mdot
+.057 1 0 r
+.4137 .23295 Mdot
+.053 1 0 r
+.43147 .37262 Mdot
+.048 1 0 r
+.63542 .37511 Mdot
+.043 1 0 r
+.53345 .38259 Mdot
+.039 1 0 r
+.4137 .23295 Mdot
+.034 1 0 r
+.55075 .24542 Mdot
+.029 1 0 r
+.60127 .38259 Mdot
+.025 1 0 r
+.44738 .24542 Mdot
+.02 1 0 r
+.48246 .24292 Mdot
+.015 1 0 r
+.5835 .24542 Mdot
+.011 1 0 r
+.51567 .24292 Mdot
+.006 1 0 r
+.46468 .38259 Mdot
+.001 1 0 r
+.53345 .38259 Mdot
+0 1 .004 r
+.53345 .38259 Mdot
+0 1 .008 r
+.48246 .24292 Mdot
+0 1 .013 r
+.4993 .37262 Mdot
+0 1 .018 r
+.51567 .24292 Mdot
+0 1 .022 r
+.53345 .38259 Mdot
+0 1 .027 r
+.4993 .37262 Mdot
+0 1 .032 r
+.48246 .24292 Mdot
+0 1 .036 r
+.51567 .24292 Mdot
+0 1 .041 r
+.55075 .24542 Mdot
+0 1 .046 r
+.4993 .37262 Mdot
+0 1 .05 r
+.46468 .38259 Mdot
+0 1 .055 r
+.55075 .24542 Mdot
+0 1 .06 r
+.55075 .24542 Mdot
+0 1 .065 r
+.44738 .24542 Mdot
+0 1 .069 r
+.4993 .37262 Mdot
+0 1 .074 r
+.60127 .38259 Mdot
+0 1 .079 r
+.48246 .24292 Mdot
+0 1 .083 r
+.4137 .23295 Mdot
+0 1 .088 r
+.5835 .24542 Mdot
+0 1 .093 r
+.56713 .37511 Mdot
+0 1 .097 r
+.38095 .23544 Mdot
+0 1 .102 r
+.4993 .37262 Mdot
+0 1 .107 r
+.65179 .24542 Mdot
+0 1 .111 r
+.44738 .24542 Mdot
+0 1 .116 r
+.38095 .23544 Mdot
+0 1 .121 r
+.63542 .37511 Mdot
+0 1 .126 r
+.5835 .24542 Mdot
+0 1 .13 r
+.34681 .22547 Mdot
+0 1 .135 r
+.51567 .24292 Mdot
+0 1 .14 r
+.68734 .24542 Mdot
+0 1 .144 r
+.4137 .23295 Mdot
+0 1 .149 r
+.38095 .23544 Mdot
+0 1 .154 r
+.68734 .24542 Mdot
+0 1 .158 r
+.5835 .24542 Mdot
+0 1 .163 r
+.31406 .24292 Mdot
+0 1 .168 r
+.53345 .38259 Mdot
+0 1 .172 r
+.72009 .24542 Mdot
+0 1 .177 r
+.38095 .23544 Mdot
+0 1 .182 r
+.34681 .22547 Mdot
+0 1 .187 r
+.72009 .24542 Mdot
+0 1 .191 r
+.56713 .37511 Mdot
+0 1 .196 r
+.26261 .37511 Mdot
+0 1 .201 r
+.55075 .24542 Mdot
+0 1 .205 r
+.72009 .24542 Mdot
+0 1 .21 r
+.38095 .23544 Mdot
+0 1 .215 r
+.34681 .22547 Mdot
+0 1 .219 r
+.72009 .24542 Mdot
+0 1 .224 r
+.56713 .37511 Mdot
+0 1 .229 r
+.26261 .37511 Mdot
+0 1 .233 r
+.5835 .24542 Mdot
+0 1 .238 r
+.72009 .24542 Mdot
+0 1 .243 r
+.36458 .36513 Mdot
+0 1 .248 r
+.38095 .23544 Mdot
+0 1 .252 r
+.72009 .24542 Mdot
+0 1 .257 r
+.55075 .24542 Mdot
+0 1 .262 r
+.28038 .23544 Mdot
+0 1 .266 r
+.5835 .24542 Mdot
+0 1 .271 r
+.70371 .3776 Mdot
+0 1 .276 r
+.36458 .36513 Mdot
+0 1 .28 r
+.38095 .23544 Mdot
+0 1 .285 r
+.70371 .3776 Mdot
+0 1 .29 r
+.53345 .38259 Mdot
+0 1 .294 r
+.31406 .24292 Mdot
+0 1 .299 r
+.5835 .24542 Mdot
+0 1 .304 r
+.66957 .38509 Mdot
+0 1 .309 r
+.38095 .23544 Mdot
+0 1 .313 r
+.4137 .23295 Mdot
+0 1 .318 r
+.66957 .38509 Mdot
+0 1 .323 r
+.53345 .38259 Mdot
+0 1 .327 r
+.34681 .22547 Mdot
+0 1 .332 r
+.55075 .24542 Mdot
+0 1 .337 r
+.63542 .37511 Mdot
+0 1 .341 r
+.4137 .23295 Mdot
+0 1 .346 r
+.44738 .24542 Mdot
+0 1 .351 r
+.61905 .24292 Mdot
+0 1 .355 r
+.53345 .38259 Mdot
+0 1 .36 r
+.4137 .23295 Mdot
+0 1 .365 r
+.53345 .38259 Mdot
+0 1 .37 r
+.5835 .24542 Mdot
+0 1 .374 r
+.48246 .24292 Mdot
+0 1 .379 r
+.44738 .24542 Mdot
+0 1 .384 r
+.55075 .24542 Mdot
+0 1 .388 r
+.53345 .38259 Mdot
+0 1 .393 r
+.46468 .38259 Mdot
+0 1 .398 r
+.4993 .37262 Mdot
+0 1 .402 r
+.55075 .24542 Mdot
+0 1 .407 r
+.51567 .24292 Mdot
+0 1 .412 r
+.48246 .24292 Mdot
+0 1 .416 r
+.4993 .37262 Mdot
+0 1 .421 r
+.55075 .24542 Mdot
+0 1 .426 r
+.53345 .38259 Mdot
+0 1 .43 r
+.44738 .24542 Mdot
+0 1 .435 r
+.51567 .24292 Mdot
+0 1 .44 r
+.56713 .37511 Mdot
+0 1 .445 r
+.48246 .24292 Mdot
+0 1 .449 r
+.44738 .24542 Mdot
+0 1 .454 r
+.5835 .24542 Mdot
+0 1 .459 r
+.56713 .37511 Mdot
+0 1 .463 r
+.4137 .23295 Mdot
+0 1 .468 r
+.4993 .37262 Mdot
+0 1 .473 r
+.63542 .37511 Mdot
+0 1 .477 r
+.48246 .24292 Mdot
+0 1 .482 r
+.4137 .23295 Mdot
+0 1 .487 r
+.5835 .24542 Mdot
+0 1 .491 r
+.60127 .38259 Mdot
+0 1 .496 r
+.38095 .23544 Mdot
+0 1 .501 r
+.48246 .24292 Mdot
+0 1 .506 r
+.65179 .24542 Mdot
+0 1 .51 r
+.46468 .38259 Mdot
+0 1 .515 r
+.38095 .23544 Mdot
+0 1 .52 r
+.61905 .24292 Mdot
+0 1 .524 r
+.60127 .38259 Mdot
+0 1 .529 r
+.36458 .36513 Mdot
+0 1 .534 r
+.48246 .24292 Mdot
+0 1 .538 r
+.66957 .38509 Mdot
+0 1 .543 r
+.44738 .24542 Mdot
+0 1 .548 r
+.38095 .23544 Mdot
+0 1 .552 r
+.63542 .37511 Mdot
+0 1 .557 r
+.5835 .24542 Mdot
+0 1 .562 r
+.34681 .22547 Mdot
+0 1 .567 r
+.51567 .24292 Mdot
+0 1 .571 r
+.66957 .38509 Mdot
+0 1 .576 r
+.4137 .23295 Mdot
+0 1 .581 r
+.39686 .36264 Mdot
+0 1 .585 r
+.65179 .24542 Mdot
+0 1 .59 r
+.56713 .37511 Mdot
+0 1 .595 r
+.34681 .22547 Mdot
+0 1 .599 r
+.55075 .24542 Mdot
+0 1 .604 r
+.65179 .24542 Mdot
+0 1 .609 r
+.39686 .36264 Mdot
+0 1 .613 r
+.4137 .23295 Mdot
+0 1 .618 r
+.65179 .24542 Mdot
+0 1 .623 r
+.53345 .38259 Mdot
+0 1 .628 r
+.38095 .23544 Mdot
+0 1 .632 r
+.56713 .37511 Mdot
+0 1 .637 r
+.63542 .37511 Mdot
+0 1 .642 r
+.39686 .36264 Mdot
+0 1 .646 r
+.44738 .24542 Mdot
+0 1 .651 r
+.63542 .37511 Mdot
+0 1 .656 r
+.4993 .37262 Mdot
+0 1 .66 r
+.38095 .23544 Mdot
+0 1 .665 r
+.5835 .24542 Mdot
+0 1 .67 r
+.60127 .38259 Mdot
+0 1 .674 r
+.39686 .36264 Mdot
+0 1 .679 r
+.48246 .24292 Mdot
+0 1 .684 r
+.63542 .37511 Mdot
+0 1 .689 r
+.46468 .38259 Mdot
+0 1 .693 r
+.4137 .23295 Mdot
+0 1 .698 r
+.5835 .24542 Mdot
+0 1 .703 r
+.56713 .37511 Mdot
+0 1 .707 r
+.4137 .23295 Mdot
+0 1 .712 r
+.4993 .37262 Mdot
+0 1 .717 r
+.60127 .38259 Mdot
+0 1 .721 r
+.46468 .38259 Mdot
+0 1 .726 r
+.44738 .24542 Mdot
+0 1 .731 r
+.5835 .24542 Mdot
+0 1 .735 r
+.53345 .38259 Mdot
+0 1 .74 r
+.44738 .24542 Mdot
+0 1 .745 r
+.53345 .38259 Mdot
+0 1 .75 r
+.56713 .37511 Mdot
+0 1 .754 r
+.48246 .24292 Mdot
+0 1 .759 r
+.48246 .24292 Mdot
+0 1 .764 r
+.55075 .24542 Mdot
+0 1 .768 r
+.53345 .38259 Mdot
+0 1 .773 r
+.48246 .24292 Mdot
+0 1 .778 r
+.51567 .24292 Mdot
+0 1 .782 r
+.53345 .38259 Mdot
+0 1 .787 r
+.4993 .37262 Mdot
+0 1 .792 r
+.4993 .37262 Mdot
+0 1 .796 r
+.51567 .24292 Mdot
+0 1 .801 r
+.51567 .24292 Mdot
+0 1 .806 r
+.51567 .24292 Mdot
+0 1 .811 r
+.4993 .37262 Mdot
+0 1 .815 r
+.4993 .37262 Mdot
+0 1 .82 r
+.53345 .38259 Mdot
+0 1 .825 r
+.51567 .24292 Mdot
+0 1 .829 r
+.48246 .24292 Mdot
+0 1 .834 r
+.53345 .38259 Mdot
+0 1 .839 r
+.56713 .37511 Mdot
+0 1 .843 r
+.48246 .24292 Mdot
+0 1 .848 r
+.48246 .24292 Mdot
+0 1 .853 r
+.5835 .24542 Mdot
+0 1 .857 r
+.53345 .38259 Mdot
+0 1 .862 r
+.43147 .37262 Mdot
+0 1 .867 r
+.53345 .38259 Mdot
+0 1 .872 r
+.5835 .24542 Mdot
+0 1 .876 r
+.44738 .24542 Mdot
+0 1 .881 r
+.46468 .38259 Mdot
+0 1 .886 r
+.60127 .38259 Mdot
+0 1 .89 r
+.53345 .38259 Mdot
+0 1 .895 r
+.4137 .23295 Mdot
+0 1 .9 r
+.55075 .24542 Mdot
+0 1 .904 r
+.61905 .24292 Mdot
+0 1 .909 r
+.4137 .23295 Mdot
+0 1 .914 r
+.44738 .24542 Mdot
+0 1 .918 r
+.63542 .37511 Mdot
+0 1 .923 r
+.53345 .38259 Mdot
+0 1 .928 r
+.38095 .23544 Mdot
+0 1 .933 r
+.56713 .37511 Mdot
+0 1 .937 r
+.63542 .37511 Mdot
+0 1 .942 r
+.39686 .36264 Mdot
+0 1 .947 r
+.44738 .24542 Mdot
+0 1 .951 r
+.65179 .24542 Mdot
+0 1 .956 r
+.4993 .37262 Mdot
+0 1 .961 r
+.38095 .23544 Mdot
+0 1 .965 r
+.5835 .24542 Mdot
+0 1 .97 r
+.61905 .24292 Mdot
+0 1 .975 r
+.38095 .23544 Mdot
+0 1 .979 r
+.44738 .24542 Mdot
+0 1 .984 r
+.65179 .24542 Mdot
+0 1 .989 r
+.4993 .37262 Mdot
+0 1 .994 r
+.38095 .23544 Mdot
+0 1 .998 r
+.60127 .38259 Mdot
+0 .997 1 r
+.60127 .38259 Mdot
+0 .992 1 r
+.38095 .23544 Mdot
+0 .988 1 r
+.48246 .24292 Mdot
+0 .983 1 r
+.65179 .24542 Mdot
+0 .978 1 r
+.48246 .24292 Mdot
+0 .974 1 r
+.38095 .23544 Mdot
+0 .969 1 r
+.60127 .38259 Mdot
+0 .964 1 r
+.60127 .38259 Mdot
+0 .96 1 r
+.39686 .36264 Mdot
+0 .955 1 r
+.48246 .24292 Mdot
+0 .95 1 r
+.61905 .24292 Mdot
+0 .945 1 r
+.48246 .24292 Mdot
+0 .941 1 r
+.4137 .23295 Mdot
+0 .936 1 r
+.5835 .24542 Mdot
+0 .931 1 r
+.56713 .37511 Mdot
+0 .927 1 r
+.4137 .23295 Mdot
+0 .922 1 r
+.4993 .37262 Mdot
+0 .917 1 r
+.60127 .38259 Mdot
+0 .913 1 r
+.48246 .24292 Mdot
+0 .908 1 r
+.44738 .24542 Mdot
+0 .903 1 r
+.56713 .37511 Mdot
+0 .899 1 r
+.53345 .38259 Mdot
+0 .894 1 r
+.46468 .38259 Mdot
+0 .889 1 r
+.51567 .24292 Mdot
+0 .884 1 r
+.56713 .37511 Mdot
+0 .88 1 r
+.48246 .24292 Mdot
+0 .875 1 r
+.48246 .24292 Mdot
+0 .87 1 r
+.53345 .38259 Mdot
+0 .866 1 r
+.53345 .38259 Mdot
+0 .861 1 r
+.48246 .24292 Mdot
+0 .856 1 r
+.51567 .24292 Mdot
+0 .852 1 r
+.51567 .24292 Mdot
+0 .847 1 r
+.51567 .24292 Mdot
+0 .842 1 r
+.51567 .24292 Mdot
+0 .838 1 r
+.51567 .24292 Mdot
+0 .833 1 r
+.51567 .24292 Mdot
+0 .828 1 r
+.51567 .24292 Mdot
+0 .823 1 r
+.4993 .37262 Mdot
+0 .819 1 r
+.4993 .37262 Mdot
+0 .814 1 r
+.53345 .38259 Mdot
+0 .809 1 r
+.51567 .24292 Mdot
+0 .805 1 r
+.48246 .24292 Mdot
+0 .8 1 r
+.51567 .24292 Mdot
+0 .795 1 r
+.55075 .24542 Mdot
+0 .791 1 r
+.48246 .24292 Mdot
+0 .786 1 r
+.48246 .24292 Mdot
+0 .781 1 r
+.55075 .24542 Mdot
+0 .777 1 r
+.53345 .38259 Mdot
+0 .772 1 r
+.46468 .38259 Mdot
+0 .767 1 r
+.51567 .24292 Mdot
+0 .762 1 r
+.56713 .37511 Mdot
+0 .758 1 r
+.48246 .24292 Mdot
+0 .753 1 r
+.48246 .24292 Mdot
+0 .748 1 r
+.5835 .24542 Mdot
+0 .744 1 r
+.53345 .38259 Mdot
+0 .739 1 r
+.44738 .24542 Mdot
+0 .734 1 r
+.55075 .24542 Mdot
+0 .73 1 r
+.5835 .24542 Mdot
+0 .725 1 r
+.44738 .24542 Mdot
+0 .72 1 r
+.48246 .24292 Mdot
+0 .716 1 r
+.5835 .24542 Mdot
+0 .711 1 r
+.4993 .37262 Mdot
+0 .706 1 r
+.44738 .24542 Mdot
+0 .701 1 r
+.55075 .24542 Mdot
+0 .697 1 r
+.56713 .37511 Mdot
+0 .692 1 r
+.44738 .24542 Mdot
+0 .687 1 r
+.48246 .24292 Mdot
+0 .683 1 r
+.60127 .38259 Mdot
+0 .678 1 r
+.48246 .24292 Mdot
+0 .673 1 r
+.44738 .24542 Mdot
+0 .669 1 r
+.5835 .24542 Mdot
+0 .664 1 r
+.56713 .37511 Mdot
+0 .659 1 r
+.44738 .24542 Mdot
+0 .655 1 r
+.4993 .37262 Mdot
+0 .65 1 r
+.60127 .38259 Mdot
+0 .645 1 r
+.48246 .24292 Mdot
+0 .64 1 r
+.44738 .24542 Mdot
+0 .636 1 r
+.5835 .24542 Mdot
+0 .631 1 r
+.55075 .24542 Mdot
+0 .626 1 r
+.4137 .23295 Mdot
+0 .622 1 r
+.51567 .24292 Mdot
+0 .617 1 r
+.60127 .38259 Mdot
+0 .612 1 r
+.46468 .38259 Mdot
+0 .608 1 r
+.44738 .24542 Mdot
+0 .603 1 r
+.60127 .38259 Mdot
+0 .598 1 r
+.53345 .38259 Mdot
+0 .594 1 r
+.4137 .23295 Mdot
+0 .589 1 r
+.53345 .38259 Mdot
+0 .584 1 r
+.5835 .24542 Mdot
+0 .579 1 r
+.46468 .38259 Mdot
+0 .575 1 r
+.48246 .24292 Mdot
+0 .57 1 r
+.60127 .38259 Mdot
+0 .565 1 r
+.51567 .24292 Mdot
+0 .561 1 r
+.44738 .24542 Mdot
+0 .556 1 r
+.55075 .24542 Mdot
+0 .551 1 r
+.5835 .24542 Mdot
+0 .547 1 r
+.46468 .38259 Mdot
+0 .542 1 r
+.48246 .24292 Mdot
+0 .537 1 r
+.5835 .24542 Mdot
+0 .533 1 r
+.51567 .24292 Mdot
+0 .528 1 r
+.44738 .24542 Mdot
+0 .523 1 r
+.53345 .38259 Mdot
+0 .518 1 r
+.56713 .37511 Mdot
+0 .514 1 r
+.48246 .24292 Mdot
+0 .509 1 r
+.4993 .37262 Mdot
+0 .504 1 r
+.56713 .37511 Mdot
+0 .5 1 r
+.4993 .37262 Mdot
+0 .495 1 r
+.48246 .24292 Mdot
+0 .49 1 r
+.53345 .38259 Mdot
+0 .486 1 r
+.53345 .38259 Mdot
+0 .481 1 r
+.48246 .24292 Mdot
+0 .476 1 r
+.4993 .37262 Mdot
+0 .472 1 r
+.53345 .38259 Mdot
+0 .467 1 r
+.51567 .24292 Mdot
+0 .462 1 r
+.4993 .37262 Mdot
+0 .457 1 r
+.51567 .24292 Mdot
+0 .453 1 r
+.51567 .24292 Mdot
+0 .448 1 r
+.51567 .24292 Mdot
+0 .443 1 r
+.51567 .24292 Mdot
+0 .439 1 r
+.4993 .37262 Mdot
+0 .434 1 r
+.53345 .38259 Mdot
+0 .429 1 r
+.53345 .38259 Mdot
+0 .425 1 r
+.4993 .37262 Mdot
+0 .42 1 r
+.4993 .37262 Mdot
+0 .415 1 r
+.53345 .38259 Mdot
+0 .411 1 r
+.4993 .37262 Mdot
+0 .406 1 r
+.48246 .24292 Mdot
+0 .401 1 r
+.53345 .38259 Mdot
+0 .396 1 r
+.53345 .38259 Mdot
+0 .392 1 r
+.46468 .38259 Mdot
+0 .387 1 r
+.4993 .37262 Mdot
+0 .382 1 r
+.56713 .37511 Mdot
+0 .378 1 r
+.4993 .37262 Mdot
+0 .373 1 r
+.46468 .38259 Mdot
+0 .368 1 r
+.56713 .37511 Mdot
+0 .364 1 r
+.56713 .37511 Mdot
+0 .359 1 r
+.44738 .24542 Mdot
+0 .354 1 r
+.4993 .37262 Mdot
+0 .35 1 r
+.60127 .38259 Mdot
+0 .345 1 r
+.4993 .37262 Mdot
+0 .34 1 r
+.44738 .24542 Mdot
+0 .335 1 r
+.56713 .37511 Mdot
+0 .331 1 r
+.56713 .37511 Mdot
+0 .326 1 r
+.44738 .24542 Mdot
+0 .321 1 r
+.4993 .37262 Mdot
+0 .317 1 r
+.60127 .38259 Mdot
+0 .312 1 r
+.48246 .24292 Mdot
+0 .307 1 r
+.44738 .24542 Mdot
+0 .303 1 r
+.5835 .24542 Mdot
+0 .298 1 r
+.56713 .37511 Mdot
+0 .293 1 r
+.43147 .37262 Mdot
+0 .289 1 r
+.51567 .24292 Mdot
+0 .284 1 r
+.60127 .38259 Mdot
+0 .279 1 r
+.46468 .38259 Mdot
+0 .274 1 r
+.44738 .24542 Mdot
+0 .27 1 r
+.60127 .38259 Mdot
+0 .265 1 r
+.53345 .38259 Mdot
+0 .26 1 r
+.43147 .37262 Mdot
+0 .256 1 r
+.53345 .38259 Mdot
+0 .251 1 r
+.60127 .38259 Mdot
+0 .246 1 r
+.46468 .38259 Mdot
+0 .242 1 r
+.46468 .38259 Mdot
+0 .237 1 r
+.60127 .38259 Mdot
+0 .232 1 r
+.53345 .38259 Mdot
+0 .228 1 r
+.44738 .24542 Mdot
+0 .223 1 r
+.53345 .38259 Mdot
+0 .218 1 r
+.56713 .37511 Mdot
+0 .213 1 r
+.46468 .38259 Mdot
+0 .209 1 r
+.48246 .24292 Mdot
+0 .204 1 r
+.56713 .37511 Mdot
+0 .199 1 r
+.4993 .37262 Mdot
+0 .195 1 r
+.46468 .38259 Mdot
+0 .19 1 r
+.55075 .24542 Mdot
+0 .185 1 r
+.55075 .24542 Mdot
+0 .181 1 r
+.46468 .38259 Mdot
+0 .176 1 r
+.4993 .37262 Mdot
+0 .171 1 r
+.56713 .37511 Mdot
+0 .167 1 r
+.4993 .37262 Mdot
+0 .162 1 r
+.48246 .24292 Mdot
+0 .157 1 r
+.55075 .24542 Mdot
+0 .152 1 r
+.53345 .38259 Mdot
+0 .148 1 r
+.46468 .38259 Mdot
+0 .143 1 r
+.51567 .24292 Mdot
+0 .138 1 r
+.53345 .38259 Mdot
+0 .134 1 r
+.4993 .37262 Mdot
+0 .129 1 r
+.4993 .37262 Mdot
+0 .124 1 r
+.53345 .38259 Mdot
+0 .12 1 r
+.4993 .37262 Mdot
+0 .115 1 r
+.48246 .24292 Mdot
+0 .11 1 r
+.53345 .38259 Mdot
+0 .106 1 r
+.53345 .38259 Mdot
+0 .101 1 r
+.4993 .37262 Mdot
+0 .096 1 r
+.4993 .37262 Mdot
+0 .091 1 r
+.53345 .38259 Mdot
+0 .087 1 r
+.4993 .37262 Mdot
+0 .082 1 r
+.4993 .37262 Mdot
+0 .077 1 r
+.53345 .38259 Mdot
+0 .073 1 r
+.4993 .37262 Mdot
+0 .068 1 r
+.4993 .37262 Mdot
+0 .063 1 r
+.53345 .38259 Mdot
+0 .059 1 r
+.4993 .37262 Mdot
+0 .054 1 r
+.4993 .37262 Mdot
+0 .049 1 r
+.53345 .38259 Mdot
+0 .045 1 r
+.4993 .37262 Mdot
+0 .04 1 r
+.48246 .24292 Mdot
+0 .035 1 r
+.51567 .24292 Mdot
+0 .03 1 r
+.53345 .38259 Mdot
+0 .026 1 r
+.48246 .24292 Mdot
+0 .021 1 r
+.4993 .37262 Mdot
+0 .016 1 r
+.53345 .38259 Mdot
+0 .012 1 r
+.4993 .37262 Mdot
+0 .007 1 r
+.48246 .24292 Mdot
+0 .002 1 r
+.53345 .38259 Mdot
+.002 0 1 r
+.53345 .38259 Mdot
+.007 0 1 r
+.46468 .38259 Mdot
+.012 0 1 r
+.4993 .37262 Mdot
+.016 0 1 r
+.55075 .24542 Mdot
+.021 0 1 r
+.48246 .24292 Mdot
+.026 0 1 r
+.48246 .24292 Mdot
+.03 0 1 r
+.55075 .24542 Mdot
+.035 0 1 r
+.53345 .38259 Mdot
+.04 0 1 r
+.46468 .38259 Mdot
+.045 0 1 r
+.53345 .38259 Mdot
+.049 0 1 r
+.56713 .37511 Mdot
+.054 0 1 r
+.46468 .38259 Mdot
+.059 0 1 r
+.48246 .24292 Mdot
+.063 0 1 r
+.56713 .37511 Mdot
+.068 0 1 r
+.4993 .37262 Mdot
+.073 0 1 r
+.44738 .24542 Mdot
+.077 0 1 r
+.53345 .38259 Mdot
+.082 0 1 r
+.56713 .37511 Mdot
+.087 0 1 r
+.46468 .38259 Mdot
+.091 0 1 r
+.48246 .24292 Mdot
+.096 0 1 r
+.56713 .37511 Mdot
+.101 0 1 r
+.4993 .37262 Mdot
+.106 0 1 r
+.44738 .24542 Mdot
+.11 0 1 r
+.55075 .24542 Mdot
+.115 0 1 r
+.55075 .24542 Mdot
+.12 0 1 r
+.44738 .24542 Mdot
+.124 0 1 r
+.48246 .24292 Mdot
+.129 0 1 r
+.56713 .37511 Mdot
+.134 0 1 r
+.4993 .37262 Mdot
+.138 0 1 r
+.44738 .24542 Mdot
+.143 0 1 r
+.55075 .24542 Mdot
+.148 0 1 r
+.53345 .38259 Mdot
+.152 0 1 r
+.44738 .24542 Mdot
+.157 0 1 r
+.4993 .37262 Mdot
+.162 0 1 r
+.56713 .37511 Mdot
+.167 0 1 r
+.48246 .24292 Mdot
+.171 0 1 r
+.46468 .38259 Mdot
+.176 0 1 r
+.55075 .24542 Mdot
+.181 0 1 r
+.53345 .38259 Mdot
+.185 0 1 r
+.46468 .38259 Mdot
+.19 0 1 r
+.4993 .37262 Mdot
+.195 0 1 r
+.55075 .24542 Mdot
+.199 0 1 r
+.48246 .24292 Mdot
+.204 0 1 r
+.48246 .24292 Mdot
+.209 0 1 r
+.53345 .38259 Mdot
+.213 0 1 r
+.51567 .24292 Mdot
+.218 0 1 r
+.48246 .24292 Mdot
+.223 0 1 r
+.51567 .24292 Mdot
+.228 0 1 r
+.53345 .38259 Mdot
+.232 0 1 r
+.48246 .24292 Mdot
+.237 0 1 r
+.4993 .37262 Mdot
+.242 0 1 r
+.53345 .38259 Mdot
+.246 0 1 r
+.4993 .37262 Mdot
+.251 0 1 r
+.4993 .37262 Mdot
+.256 0 1 r
+.51567 .24292 Mdot
+.26 0 1 r
+.51567 .24292 Mdot
+.265 0 1 r
+.4993 .37262 Mdot
+.27 0 1 r
+.4993 .37262 Mdot
+.274 0 1 r
+.4993 .37262 Mdot
+.279 0 1 r
+.4993 .37262 Mdot
+.284 0 1 r
+.51567 .24292 Mdot
+.289 0 1 r
+.51567 .24292 Mdot
+.293 0 1 r
+.48246 .24292 Mdot
+.298 0 1 r
+.51567 .24292 Mdot
+.303 0 1 r
+.51567 .24292 Mdot
+.307 0 1 r
+.4993 .37262 Mdot
+.312 0 1 r
+.4993 .37262 Mdot
+.317 0 1 r
+.53345 .38259 Mdot
+.321 0 1 r
+.4993 .37262 Mdot
+.326 0 1 r
+.48246 .24292 Mdot
+.331 0 1 r
+.53345 .38259 Mdot
+.335 0 1 r
+.53345 .38259 Mdot
+.34 0 1 r
+.48246 .24292 Mdot
+.345 0 1 r
+.4993 .37262 Mdot
+.35 0 1 r
+.53345 .38259 Mdot
+.354 0 1 r
+.4993 .37262 Mdot
+.359 0 1 r
+.48246 .24292 Mdot
+.364 0 1 r
+.53345 .38259 Mdot
+.368 0 1 r
+.53345 .38259 Mdot
+.373 0 1 r
+.48246 .24292 Mdot
+.378 0 1 r
+.51567 .24292 Mdot
+.382 0 1 r
+.55075 .24542 Mdot
+.387 0 1 r
+.48246 .24292 Mdot
+.392 0 1 r
+.48246 .24292 Mdot
+.396 0 1 r
+.55075 .24542 Mdot
+.401 0 1 r
+.51567 .24292 Mdot
+.406 0 1 r
+.46468 .38259 Mdot
+.411 0 1 r
+.51567 .24292 Mdot
+.415 0 1 r
+.55075 .24542 Mdot
+.42 0 1 r
+.48246 .24292 Mdot
+.425 0 1 r
+.48246 .24292 Mdot
+.429 0 1 r
+.55075 .24542 Mdot
+.434 0 1 r
+.51567 .24292 Mdot
+.439 0 1 r
+.46468 .38259 Mdot
+.443 0 1 r
+.53345 .38259 Mdot
+.448 0 1 r
+.55075 .24542 Mdot
+.453 0 1 r
+.46468 .38259 Mdot
+.457 0 1 r
+.4993 .37262 Mdot
+.462 0 1 r
+.55075 .24542 Mdot
+.467 0 1 r
+.4993 .37262 Mdot
+.472 0 1 r
+.48246 .24292 Mdot
+.476 0 1 r
+.53345 .38259 Mdot
+.481 0 1 r
+.53345 .38259 Mdot
+.486 0 1 r
+.46468 .38259 Mdot
+.49 0 1 r
+.4993 .37262 Mdot
+.495 0 1 r
+.55075 .24542 Mdot
+.5 0 1 r
+.4993 .37262 Mdot
+.504 0 1 r
+.48246 .24292 Mdot
+.509 0 1 r
+.53345 .38259 Mdot
+.514 0 1 r
+.53345 .38259 Mdot
+.518 0 1 r
+.48246 .24292 Mdot
+.523 0 1 r
+.51567 .24292 Mdot
+.528 0 1 r
+.55075 .24542 Mdot
+.533 0 1 r
+.48246 .24292 Mdot
+.537 0 1 r
+.48246 .24292 Mdot
+.542 0 1 r
+.53345 .38259 Mdot
+.547 0 1 r
+.51567 .24292 Mdot
+.551 0 1 r
+.48246 .24292 Mdot
+.556 0 1 r
+.51567 .24292 Mdot
+.561 0 1 r
+.53345 .38259 Mdot
+.565 0 1 r
+.48246 .24292 Mdot
+.57 0 1 r
+.4993 .37262 Mdot
+.575 0 1 r
+.53345 .38259 Mdot
+.579 0 1 r
+.51567 .24292 Mdot
+.584 0 1 r
+.48246 .24292 Mdot
+.589 0 1 r
+.51567 .24292 Mdot
+.594 0 1 r
+.53345 .38259 Mdot
+.598 0 1 r
+.4993 .37262 Mdot
+.603 0 1 r
+.4993 .37262 Mdot
+.608 0 1 r
+.53345 .38259 Mdot
+.612 0 1 r
+.4993 .37262 Mdot
+.617 0 1 r
+.4993 .37262 Mdot
+.622 0 1 r
+.51567 .24292 Mdot
+.626 0 1 r
+.51567 .24292 Mdot
+.631 0 1 r
+.4993 .37262 Mdot
+.636 0 1 r
+.51567 .24292 Mdot
+.64 0 1 r
+.51567 .24292 Mdot
+.645 0 1 r
+.4993 .37262 Mdot
+.65 0 1 r
+.4993 .37262 Mdot
+.655 0 1 r
+.51567 .24292 Mdot
+.659 0 1 r
+.4993 .37262 Mdot
+.664 0 1 r
+.51567 .24292 Mdot
+.669 0 1 r
+.51567 .24292 Mdot
+.673 0 1 r
+.4993 .37262 Mdot
+.678 0 1 r
+.51567 .24292 Mdot
+.683 0 1 r
+.51567 .24292 Mdot
+.687 0 1 r
+.4993 .37262 Mdot
+.692 0 1 r
+.4993 .37262 Mdot
+.697 0 1 r
+.53345 .38259 Mdot
+.701 0 1 r
+.4993 .37262 Mdot
+.706 0 1 r
+.4993 .37262 Mdot
+.711 0 1 r
+.51567 .24292 Mdot
+.716 0 1 r
+.53345 .38259 Mdot
+.72 0 1 r
+.4993 .37262 Mdot
+.725 0 1 r
+.4993 .37262 Mdot
+.73 0 1 r
+.53345 .38259 Mdot
+.734 0 1 r
+.4993 .37262 Mdot
+.739 0 1 r
+.48246 .24292 Mdot
+.744 0 1 r
+.53345 .38259 Mdot
+.748 0 1 r
+.53345 .38259 Mdot
+.753 0 1 r
+.48246 .24292 Mdot
+.758 0 1 r
+.4993 .37262 Mdot
+.762 0 1 r
+.53345 .38259 Mdot
+.767 0 1 r
+.4993 .37262 Mdot
+.772 0 1 r
+.48246 .24292 Mdot
+.777 0 1 r
+.53345 .38259 Mdot
+.781 0 1 r
+.53345 .38259 Mdot
+.786 0 1 r
+.48246 .24292 Mdot
+.791 0 1 r
+.4993 .37262 Mdot
+.795 0 1 r
+.55075 .24542 Mdot
+.8 0 1 r
+.4993 .37262 Mdot
+% End of Graphics
+MathPictureEnd
+\
+\>"], "Graphics",
+  ImageSize->{288, 177.938},
+  ImageMargins->{{35, 0}, {0, 0}},
+  ImageRegion->{{0, 1}, {0, 1}},
+  ImageCache->GraphicsData["Bitmap", "\<\
+CF5dJ6E]HGAYHf4PAg9QL6QYHg<PAVmbKF5d0`40004P0000/A000`40O003h00O5Woo00<007ooOol0
+0goo00<007ooOol00Woo00D007ooOomoo`0000Aoo`05001oogooOol00004Ool00`00Oomoo`0/Ool2
+000dOol00`00Oomoo`03Ool00`00Oomoo`02Ool01@00Oomoogoo000017oo00D007ooOomoo`0000Ao
+o`03001oogoo021oo`03001oogoo00Ioo`03001oogoo009oo`05001oogooOol00004Ool01@00Oomo
+ogoo000017oo00<007ooOol09Goo000FOol00`00Oomoo`03Ool00`00Oomoo`02Ool01@00Oomoogoo
+000017oo00D007ooOomoo`0000Aoo`03001oogoo02aoo`03001oogoo03=oo`03001oogoo00=oo`03
+001oogoo009oo`05001oogooOol00004Ool01@00Oomoogoo000017oo00<007ooOol08Goo00<007oo
+Ool01Goo00<007ooOol00Woo00D007ooOomoo`0000Aoo`05001oogooOol00004Ool00`00Oomoo`0U
+Ool001Ioo`03001oogoo00=oo`03001oogoo009oo`05001oogooOol00004Ool01@00Oomoogoo0000
+17oo00<007ooOol0;7oo00<007ooOol0<goo00<007ooOol00goo00<007ooOol00Woo00D007ooOomo
+o`0000Aoo`05001oogooOol00004Ool00`00Oomoo`0ROol00`00Oomoo`04Ool00`00Oomoo`02Ool0
+1@00Oomoogoo000017oo00D007ooOomoo`0000Aoo`03001oogoo02Eoo`002Woo1P001Woo00<007oo
+Ool00goo00<007ooOol00Woo00D007ooOomoo`0000Aoo`05001oogooOol00004Ool00`00Oomoo`0/
+Ool00`00Oomoo`0cOol00`00Oomoo`03Ool00`00Oomoo`02Ool01@00Oomoogoo000017oo00D007oo
+Oomoo`0000Aoo`03001oogoo02=oo`03001oogoo00=oo`03001oogoo009oo`05001oogooOol00004
+Ool01@00Oomoogoo000017oo00<007ooOol09Goo000FOol00`00Oomoo`03Ool00`00Oomoo`02Ool0
+1@00Oomoogoo000017oo00D007ooOomoo`0000Aoo`03001oogoo02aoo`03001oogoo03=oo`03001o
+ogoo00=oo`03001oogoo009oo`05001oogooOol00004Ool01@00Oomoogoo000017oo00<007ooOol0
+97oo00<007ooOol00Woo00<007ooOol00Woo00D007ooOomoo`0000Aoo`05001oogooOol00004Ool0
+0`00Oomoo`0UOol001Ioo`03001oogoo00=oo`03001oogoo009oo`05001oogooOol00004Ool01@00
+Oomoogoo000017oo00<007ooOol0;7oo00<007ooOol0<goo00<007ooOol00goo00<007ooOol00Woo
+00D007ooOomoo`0000Aoo`05001oogooOol00004Ool00`00Oomoo`0UOol01@00Oomoogoo000017oo
+00D007ooOomoo`0000Aoo`05001oogooOol00004Ool00`00Oomoo`0UOol001Ioo`03001oogoo00=o
+o`03001oogoo009oo`05001oogooOol00004Ool01@00Oomoogoo000017oo00<007ooOol0;7oo00<0
+07ooOol0<goo00<007ooOol00goo00<007ooOol00Woo00D007ooOomoo`0000Aoo`05001oogooOol0
+0004Ool00`00Oomoo`0UOol01@00Oomoogoo000017oo00D007ooOomoo`0000Aoo`05001oogooOol0
+0004Ool00`00Oomoo`0UOol001Aoo`<000Eoo`03001oogoo009oo`05001oogooOol00004Ool01@00
+Oomoogoo000017oo00<007ooOol0;7oo0P00<Woo0`001Goo00<007ooOol00Woo00D007ooOomoo`00
+00Aoo`05001oogooOol00004Ool00`00Oomoo`0POol00`00Oomoo`02Ool01@00Oomoogoo000017oo
+00D007ooOomoo`0000Aoo`05001oogooOol00004Ool00`00Oomoo`0UOol001Ioo`03001oogoo00Ao
+o`@000Eoo`@000Eoo`@002moo`03001oogoo03=oo`03001oogoo00Aoo`@000Eoo`@000Eoo`@002Ao
+o`@000Eoo`@000Eoo`@000Eoo`@002Qoo`00HWoo00<007ooOol0^goo001ROol00`00Oomoo`2kOol0
+069oo`03001oogoo0;]oo`00HWoo00<007ooOol0^goo001ROol00`00Oomoo`2kOol00?l00200005o
+o`0017oo00<007ooOol02Woo00<007ooOol02goo00<007ooOol02Woo00<007ooOol02goo00<007oo
+Ool02Woo00<007ooOol02Woo00<007ooOol02goo00<007ooOol02Woo00<007ooOol02goo00<007oo
+Ool02Woo00<007ooOol02Woo00<007ooOol02goo00<007ooOol02Woo00<007ooOol02goo00<007oo
+Ool02Woo00<007ooOol02Woo00<007ooOol02goo00<007ooOol02Woo00<007ooOol02goo00<007oo
+Ool02Woo00<007ooOol02Woo0@000Goo0Goo000OOol00`00Oomoo`10Ool00`00Oomoo`10Ool00`00
+Oomoo`10Ool00`00Oomoo`0eOol0069oo`03001oogoo0;]oo`00HWoo00<007ooOol0^goo001ROol0
+0`00Oomoo`2kOol0069oo`03001oogoo0;]oo`00HWoo0P00_7oo001ROol00`00Oomoo`2kOol000Ao
+o`Aoh5Yoo`03001oogoo0;]oo`0017oo17oPFWoo00<007ooOol0^goo0004Ool4On1JOol00`00Oomo
+o`2kOol000Eoo`9oh0Moo`9oh003In1oh7oo029oo`AmP2Uoo`04001oogooOol2OH000gc0OH1oo`2e
+Ool000ioo`04In1oh7oPOn0@Ool4On0?Ool4OH0YOol01@00OomoogooO<000gf0]Woo000>Ool2On00
+0fOPOn1oo`0?Ool4On0?Ool4OH0YOol20002Ool2OH000gc0OH1oo`2eOol000moo`9oh0Moo`04Cn0c
+h3?PCn06Ool4On0@Ool2OH07Ool4Cn0@Ool016OPOn1Wh6OP1Goo00Aoh6OPIn1Wh09oo`03001oogoo
+009oo`9mP11oo`=nH003Ob1oogoo00Aoo`9Wh09?h0moo`9?h003In1?h7oo00moo`9o8003On1o87oo
+075oo`0067oo00@ch4oPCn1?h0Moo`9oh1Yoo`A?h11oo`=Wh003On1oogoo00=oo`9Wh005On1Wh7oo
+Ool0000FOol2Ob02OV06Ool2Cn02In0?Ool016OPCn1?h4oP47oo00Aoh7lPOb1oh79oo`0067oo0ToP
+00<ch4oPOol08Woo0doP00<ch7ooOol03Woo00AWh7oPIn1Wh0Eoo`04On1Wh6OPIn02Ool00`00Oomo
+o`0DOol2OV02Ob06Ool3In000doPOomoo`0=Ool014oPIn1Wh4oP47oo00Ao87oPOn1o879oo`006Goo
+0ToP9Goo0ToP4Woo0VOP1goo00=Wh7oPOol00Woo00<007ooOol05Goo00=o87iPOol01goo00=?h6OP
+Ool047oo0ToP1goo00AWh7oPOn1Wh0Moo`9o80Ioo`=o8003On1oogoo03Ioo`=Wh003On1oogoo00=o
+o`04OH1nH7iPOV06Ool4On0JOol0069oo`03001oogoo03]oo`04On1Wh6OPOn0?Ool017lPOn1o87lP
+>7oo00AWh7oPIn1Wh0Eoo`9nH003OH1nH7oo00Eoo`Aoh1Yoo`00HWoo00<007ooOol0>goo00AWh7oP
+On1oh0moo`9o809oh2eoo`9mP003OV1mP7oo00Ioo`9Wh09oh0Eoo`04OH1nH7iPOV06Ool2On000fOP
+On1oo`0IOol0069oo`03001oogoo03aoo`03On1Wh7oo011oo`03On1o87oo02eoo`AmP0Qoo`03On1W
+h7oo00Ioo`03OV1mP7oo00Moo`9oh1]oo`00HWoo0P00P7oo0Wf000=nH7f0Ool0=goo001ROol00`00
+Oomoo`20Ool2OH0iOol0069oo`03001oogoo0;]oo`00HWoo00<007ooOol0^goo001ROol00`00Oomo
+o`2kOol0069oo`03001oogoo0;]oo`00HWoo00<007ooOol0^goo001ROol2002lOol0069oo`03001o
+ogoo0;]oo`00HWoo00<007ooOol0^goo0016Ool50004Ool40005Ool40006Ool00`00Oomoo`2kOol0
+04Qoo`03001oogoo00=oo`03001oogoo009oo`05001oogooOol00004Ool00`00Oomoo`03Ool00`00
+Oomoo`2kOol004Qoo`03001oogoo00=oo`03001oogoo009oo`05001oogooOol00004Ool00`00Oomo
+o`03Ool00`00Oomoo`2kOol004Qoo`03001oogoo00=oo`03001oogoo009oo`05001oogooOol00004
+Ool00`00Oomoo`03Ool00`00Oomoo`2kOol004Qoo`03001oogoo00=oo`03001oogoo009oo`05001o
+ogooOol00004Ool00`00Oomoo`03Ool3002kOol004Qoo`03001oogoo00=oo`03001oogoo009oo`05
+001oogooOol00004Ool00`00Oomoo`03Ool00`00Oomoo`2kOol004Qoo`03001oogoo00=oo`03001o
+ogoo009oo`05001oogooOol00004Ool00`00Oomoo`03Ool00`00Oomoo`2kOol004Qoo`03001oogoo
+00=oo`03001oogoo009oo`05001oogooOol00004Ool00`00Oomoo`03Ool00`00Oomoo`2kOol004Io
+o`<000Eoo`03001oogoo009oo`05001oogooOol00004Ool00`00Oomoo`03Ool00`00Oomoo`2kOol0
+04Qoo`03001oogoo00Aoo`@000Eoo`@000Ioo`03001oogoo0;]oo`00HWoo00<007ooOol0^goo001R
+Ool2002lOol0069oo`03001oogoo0;]oo`00HWoo00<007ooOol0^goo001ROol00`00Oomoo`2kOol0
+00Uoo`Aoh5Eoo`03001oogoo0;]oo`002Goo0goP00=Wh7ooOol0Dgoo00<007ooOol0^goo0009Ool0
+17oPIn1oh7oP8goo00Aoh6OPIn1oh2eoo`040o<3k0?c0o>kOol000Yoo`9oh2Aoo`9Wh003On1Wh7oo
+02aoo`@3lk]oo`00<7oo00Aoh6OPIn1Wh2eoo`@3lk]oo`007Goo0ToP0S?P1Woo0S?P0ToP1Woo0WoP
+1goo00A?h3?P<n0ch11oo`040n`3iP?V0nH@Ool20o<7Ool010?o0cl3o`?o1Goo109oZ7oo000MOol2
+<n02Cn06Ool2Cn02<n0?Ool4<n0@Ool010?V0n`3k0?V47oo00<007ooOol01Woo0`?o00<3?gooOol0
+0goo109oZ7oo000MOol2Cn02<n06Ool3<n000doPOomoo`0=Ool014oP<n0ch3?P47oo00@3k0?V0nH3
+iPEoo`83iP83k0Moo`03001oogoo00Ioo`@3o`Eoo`@2Oa1oo`AT7`Eoo`9T7`9<7aYoo`040ol3?`?o
+0om]Ool001=oo`9oh09o80Moo`03<n1?h7oo00Moo`03Cn0ch7oo011oo`03<n1?h7oo00Ioo`046n03
+h0?P6n07Ool00`?V0naoo`05Ool20n`20nH7Ool00`00Oomoo`07Ool20ol7Ool20Wl7Ool0100O61lH
+7aPO1Woo16@O1Goo0T`O0V@O1Woo16@O1Woo0P3O0P6O1Woo0`?o00<3?gooOol00goo10?o1Woo00@3
+h0?V0nH3iPIoo`040n`3iP?V0nH6Ool2Cn000fOPCn1oo`15Ool001=oo`04On1o87oPOn0]Ool010?P
+6n0Kh1_P3goo0P?V0P?/1goo00<007ooOol06Goo0QPO00<07aPOOol01Goo16@O1Goo0V@O0T`O1Woo
+16@O1Woo0P6O0P3O1Woo00@3o`<o0ol3o`Eoo`@3o`Ioo`83iP030n03iWoo00Eoo`83iP030n`3iWoo
+00Eoo`04In1?h4oPCn0JOol013?PCn1?h3?P:7oo000COol3On000glPOomoo`0[Ool26n000`?P6n1o
+o`0?Ool00`?/0nIoo`07Ool2000JOol0100O61lH7aPO1goo00=T7d`OOol01Woo00=<7f@OOol01Woo
+16@O1Woo0P3O0P6O1goo0P?o1Woo0P?o00<3?`?oOol01Goo00@3h0?V0nH3iPIoo`040n`3iP?V0nH6
+Ool014oPIn1Wh4oP1Woo00@ch1_P6n0Kh11oo`9?h003<n1?h7oo00Aoo`04Cn0ch4oPCn0OOol001Ao
+o`03Ob1oh7oo02ioo`8Kh1]oo`03001oogoo01Yoo`0361l07goo01Yoo`9T7`Qoo`030Il0ggoo011o
+o`83o`Qoo`030nH3h7oo00Moo`030nH3k7oo00Moo`9?h0Moo`8Kh003<n0Kh7oo00moo`04<n1?h4oP
+<n05Ool3Cn000c?POomoo`04Ool017oPIn1oh7oP5Goo001ROol00`00Oomoo`1kOol013?P6n0Kh1_P
+4Goo0S?P1Woo14oP1Woo0WoP0VOP1Woo17oP2goo001ROol00`00Oomoo`1lOol00a_P<n1oo`06Ool0
+14oP<n0ch3?P47oo0ToP1goo00Aoh6OPOn1oh0Ioo`=oh003In1oogoo00Uoo`00HWoo00<007ooOol0
+QGoo00@ch4oPCn0ch1Yoo`9oh0Moo`04On1Wh7oPOn0;Ool0069oo`03001oogoo08Eoo`04Cn0ch3?P
+<n0TOol2On0<Ool0069oo`03001oogoo08Ioo`03<n1?h7oo039oo`00HWoo0P00_7oo001ROol00`00
+Oomoo`2kOol0069oo`03001oogoo0;]oo`00HWoo00<007ooOol0^goo0015Ool60004Ool40005Ool4
+0006Ool00`00Oomoo`2kOol004Eoo`03001oogoo00Ioo`03001oogoo009oo`05001oogooOol00004
+Ool00`00Oomoo`03Ool00`00Oomoo`2kOol004Ioo`03001oogoo00Eoo`03001oogoo009oo`05001o
+ogooOol00004Ool00`00Oomoo`03Ool00`00Oomoo`2kOol004Moo`03001oogoo00Aoo`03001oogoo
+009oo`05001oogooOol00004Ool00`00Oomoo`03Ool00`00Oomoo`2kOol004Qoo`03001oogoo00=o
+o`03001oogoo009oo`05001oogooOol00004Ool00`00Oomoo`03Ool3002kOol004Uoo`03001oogoo
+009oo`03001oogoo009oo`05001oogooOol00004Ool00`00Oomoo`03Ool00`00Oomoo`2kOol004Yo
+o`05001oogooOol00004Ool01@00Oomoogoo000017oo00<007ooOol00goo00<007ooOol0^goo001:
+Ool01@00Oomoogoo000017oo00D007ooOomoo`0000Aoo`03001oogoo00=oo`03001oogoo0;]oo`00
+AGoo00<007ooOol00Woo00D007ooOomoo`0000Aoo`05001oogooOol00004Ool00`00Oomoo`03Ool0
+0`00Oomoo`2kOol004Ioo`@000Eoo`@000Eoo`@000Ioo`03001oogoo0;]oo`00HWoo00<007ooOol0
+^goo001ROol2002lOol0069oo`03001oogoo0;]oo`00HWoo00<007ooOol0^goo001ROol00`00Oomo
+o`2kOol0069oo`03001oogoo0;]oo`00HWoo00<007ooOol0^goo001ROol00`00Oomoo`2kOol0069o
+o`800;aoo`00HWoo00<007ooOol0^goo001ROol00`00Oomoo`2kOol002aoo`A?h2aoo`04<n0Kh1_P
+<n02Ool01@00Oomoogoo0n`00`?c1Goo0`?o00<3?gooOol0Zgoo000/Ool4Cn0/Ool011_P<n0ch1_P
+0Woo00@007ooOomoo`83l`030n`3lgoo00Aoo`040ol3?`?o0on]Ool002aoo`A?h2aoo`04<n0Kh1_P
+<n02Ool01@00Oomoogoo0n`00P?c00<3k7ooOol00goo10?o[Goo000HOol2OH000giPOH1oo`0@Ool2
+Cn0@Ool46n06Ool010?V0n`3iP?V1Woo0P?P0Q_P1Woo0S?P0goo00<007ooOol00Woo00<3l`?/Ool0
+1Woo00<3?`?oOol01Woo00@0g`6O0=l0g`moo`AT7a1oo`0401lH7aPO61l?Ool010?o0oT3o`?oJGoo
+000HOol4OH0SOol46n06Ool40nH6Ool26n020n0;Ool2000EOol20=l20Il?Ool4I1l@Ool261l00`0O
+61moo`0>Ool30ol00`?iOomoo`0>Ool20n`20nIEOol001Qoo`9mP003OV1mP7oo029oo`@Kh0Ioo`04
+0nH3k0?V0nH6Ool20n026n0;Ool00`00Oomoo`0DOol0103O0Il0g`3O1Woo0S0O0T`O1Goo16@O1Woo
+16@O1Woo00@07aPO61lH7`Ioo`040Il0g`3O0=l5Ool010?o0oT3o`?o47oo0P?V0P?/;Goo00@ch4oP
+Cn0ch2Aoo`006Goo0Wf09Goo0Q_P27oo0P?V27oo00<Kh0?POol02goo00<007ooOol05Goo0P3O1goo
+00@`7d`O<1l`7`Ioo`9T7`Moo`AT7`Moo`8H7`Moo`80g`030Il0ggoo00Eoo`030ol3nGoo00Ioo`@3
+l`Ioo`040nH3k0?V0nH6Ool3Cn000fOPOomoo`04Ool26n020n0IOol014oP<n0ch3?P97oo001ROol0
+0`00Oomoo`0NOol2<1l2C1l?Ool2I1l00d`OI1moo`0?Ool40=l?Ool30o<00`?/Oomoo`05Ool00`?V
+0naoo`06Ool014oPIn1?h4oP1Woo00@Kh0?P6n0Kh1Uoo`04<n1?h4oP<n0@Ool4OH0@Ool0069oo`03
+001oogoo01moo`03C1l`7goo011oo`9T7a9oo`80ga1oo`040o<3k0?c0o<@Ool3Cn000fOPOomoo`04
+Ool36n000`?POomoo`0HOol2<n07Ool013?PCn1?h4oP1Woo17f047oo001ROol00`00Oomoo`1IOol2
+0o<BOol00fOPCn1oo`07Ool00`?P6n1oo`06Ool36n000`?POomoo`03Ool46n0@Ool014oP<n0ch4oP
+1Woo0Wf000=nH7f0Ool03goo001ROol00`00Oomoo`20Ool46n05Ool46n0@Ool013?PCn1?h3?P1goo
+0Wf01goo0WiP00=o87iPOol01Goo001ROol20021Ool36n000`?POomoo`03Ool46n0AOol00doP<n1o
+o`0@Ool4OV06Ool0069oo`03001oogoo085oo`030n0Kh7oo00Ioo`8Kh2Eoo`AnH0Ioo`00HWoo00<0
+07ooOol0/Woo0WiP1goo0016Ool40005Ool40005Ool40006Ool00`00Oomoo`2kOol004Eoo`03001o
+ogoo009oo`05001oogooOol00004Ool01@00Oomoogoo000017oo00<007ooOol00goo00<007ooOol0
+^goo001:Ool01@00Oomoogoo000017oo00D007ooOomoo`0000Aoo`03001oogoo00=oo`03001oogoo
+0;]oo`00BWoo00D007ooOomoo`0000Aoo`05001oogooOol00004Ool00`00Oomoo`03Ool00`00Oomo
+o`2kOol004Yoo`05001oogooOol00004Ool01@00Oomoogoo000017oo00<007ooOol00goo0`00^goo
+0017Ool30004Ool00`00Oomoo`02Ool01@00Oomoogoo000017oo00<007ooOol00goo00<007ooOol0
+^goo001:Ool01@00Oomoogoo000017oo00D007ooOomoo`0000Aoo`03001oogoo00=oo`03001oogoo
+0;]oo`00BWoo00D007ooOomoo`0000Aoo`05001oogooOol00004Ool00`00Oomoo`03Ool00`00Oomo
+o`2kOol004Eoo`03001oogoo009oo`05001oogooOol00004Ool01@00Oomoogoo000017oo00<007oo
+Ool00goo00<007ooOol0^goo0016Ool40005Ool40005Ool40006Ool00`00Oomoo`2kOol0069oo`03
+001oogoo0;]oo`00HWoo0P00_7oo001ROol00`00Oomoo`2kOol0069oo`03001oogoo0;]oo`00HWoo
+00<007ooOol0^goo001ROol00`00Oomoo`2kOol0069oo`03001oogoo0;]oo`00HWoo00<007ooOol0
+^goo001ROol00`00Oomoo`2kOol0069oo`800;aoo`00HWoo00<007ooOol0^goo001ROol00`00Oomo
+o`2kOol0069oo`03001oogoo0;]oo`00HWoo00<007ooOol0^goo001ROol00`00Oomoo`2kOol0069o
+o`03001oogoo0;]oo`00A7oo0Wf000=l`7f0Ool067oo16OP3goo00Ao87iPOV1o8:Qoo`00A7oo17f0
+6Goo16OP3goo0WiP00=o87iPOol0Ygoo0014Ool4OH0IOol3In000goPOomoo`0=Ool017lPOV1nH7iP
+1Woo17f0WWoo0015Ool2OH07Ool2Cn000c?PCn1oo`0?Ool2In0AOol00giPOb1oo`06Ool2OH000gc0
+OH1oo`0>Ool3Ob000giPOomoo`0>Ool2In02Cn05Ool014oP<n0ch4oP1goo0doP00<ch7ooOol0HGoo
+001>Ool013?PCn1?h4oP47oo00<007ooOol06Goo00Al`7f0OH1mP0moo`04Ob1nH7lPOb0@Ool2Cn02
+In05Ool013?PCn1?h3?P1goo00A?h3?PCn1?h0Eoo`040n0Kh1_P6n1JOol004ioo`04Cn0ch3?PCn0@
+Ool00`00Oomoo`0JOol00gf0O<1oo`0?Ool3Ob000giPOomoo`0>Ool014oPIn1?h4oP1Goo00A?h3?P
+<n0ch0Moo`A?h0Eoo`@Kh3Qoo`04On1o87lPOn05Ool3O<000gf0Oomoo`0COol004moo`9?h15oo`03
+001oogoo02eoo`9o819oo`9?h0Moo`03<n1?h7oo00Qoo`9?h0Ioo`@Kh1Yoo`04Cn0ch3?P<n06Ool2
+6n000c?P6n1oo`0?Ool017lPOn1oh7lP1Goo00Al`7f0O<1l`1Eoo`00HWoo0P00Ggoo00<Kh0?POol0
+6Woo0S?P00=?h3?POol01Goo11_P1Goo0Wf00WiP1goo00Aoh7lPOb1oh0Eoo`9l`09mP1Eoo`00HWoo
+00<007ooOol0Ngoo13?P1Woo11_P1Goo0giP00=mP7ooOol01Woo0WoP1goo00=mP7c0Ool047oo17oP
+0Goo001ROol00`00Oomoo`1lOol00c?PCn1oo`07Ool26n06Ool2OH02OV0TOol4On01Ool004Qoo`<0
+00Aoo`@000Eoo`@000Ioo`03001oogoo08moo`03OV1mP7oo02Aoo`Aoh05oo`00BGoo00<007ooOol0
+0Woo00<007ooOol00Woo00D007ooOomoo`0000Aoo`03001oogoo00=oo`03001oogoo0;Moo`9oh09o
+o`00BGoo00<007ooOol00Woo00<007ooOol00Woo00D007ooOomoo`0000Aoo`03001oogoo00=oo`03
+001oogoo0;]oo`00AGoo1P000goo00<007ooOol00Woo00D007ooOomoo`0000Aoo`03001oogoo00=o
+o`03001oogoo0;]oo`00AGoo00D007ooOomoo`0000Aoo`03001oogoo009oo`05001oogooOol00004
+Ool00`00Oomoo`03Ool3002kOol004Ioo`04001oogoo0004Ool00`00Oomoo`02Ool01@00Oomoogoo
+000017oo00<007ooOol00goo00<007ooOol0^goo0017Ool00`00Ool00004Ool00`00Oomoo`02Ool0
+1@00Oomoogoo000017oo00<007ooOol00goo00<007ooOol0^goo0017Ool00`00Ool00004Ool00`00
+Oomoo`02Ool01@00Oomoogoo000017oo00<007ooOol00goo00<007ooOol0^goo0018Ool20004Ool0
+0`00Oomoo`02Ool01@00Oomoogoo000017oo00<007ooOol00goo00<007ooOol0^goo0019Ool00`00
+Oomoo`03Ool40005Ool40006Ool00`00Oomoo`2kOol0069oo`03001oogoo0;]oo`00HWoo0P00_7oo
+001ROol00`00Oomoo`2kOol0069oo`03001oogoo0;]oo`00HWoo00<007ooOol0^goo001ROol00`00
+Oomoo`2kOol0069oo`03001oogoo0;]oo`00HWoo00<007ooOol0^goo001ROol2002lOol0069oo`03
+001oogoo0;]oo`00HWoo00<007ooOol0^goo001ROol00`00Oomoo`2kOol0069oo`03001oogoo0;]o
+o`00HWoo00<007ooOol0^goo0000\
+\>"],
+  ImageRangeCache->{{{0, 287}, {176.938, 0}} -> {-1468.1, -40.8025, 14.9345, 
+  2.801}}],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["generalized tfsRead", "Subsection"],
+
+Cell[BoxData[
+    \(file1 = "\<qkick.tfs\>"; \nfile2 = "\<eig.tfs\>"; \n
+    file3 = "\<OPTICSdp0000.tfs\>"; \)], "Input"],
+
+Cell[BoxData[
+    \(\(file4 = "\<Q_FFT_Tfs21Aug97_04%3A31.53\>"; \)\)], "Input"],
+
+Cell[BoxData[
+    \(\(file5 = "\<XY_Tfs17Aug97_15%3A10.44\>"; \)\)], "Input"],
+
+Cell[BoxData[
+    \(\(file6 = "\<Q_TNH_Tfs17Aug97_17%3A32.08\>"; \)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(xyTfs = tfsRead[file5, Verbose -> True]; \)\)], "Input"],
+
+Cell[BoxData[
+    \({Number, Number, Number}\)], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[
+      \("Header block:\n"\[InvisibleSpace]{}
+          \[InvisibleSpace]"\nColumns labels:  "\[InvisibleSpace]{"COLUMN", 
+          "HORIZONTAL", "VERTICAL"}
+          \[InvisibleSpace]"\nColumn formats:  "\[InvisibleSpace]{Number, 
+          Number, Number}\),
+      SequenceForm[ 
+      "Header block:\n", {}, "\nColumns labels:  ", {"COLUMN", "HORIZONTAL", 
+        "VERTICAL"}, "\nColumn formats:  ", {Number, Number, Number}],
+      Editable->False]], "Print"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(mfsKeyNames[t]\)], "Input"],
+
+Cell[BoxData[
+    \({"ORIGIN", "MODE", "NUMBER_OF_BINS", "HOR_BUNCH_EXCITED", 
+      "HOR_BUNCH_OBSERVED", "VER_BUNCH_EXCITED", "VER_BUNCH_OBSERVED", 
+      "TIME", "TFSFILENAME", "DATE"}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(mfsKeyValue[t, {"\<TFSFILENAME\>", "\<DATE\>"}]\)], "Input"],
+
+Cell[BoxData[
+    \({"Q_FFT_Tfs21Aug97_04%3A31.53", "21/8/97"}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(mfsColumnNames[t]\)], "Input"],
+
+Cell[BoxData[
+    \({"COLUMN", "HOR_TUNE", "VER_TUNE", "HOR_AMPLITUDE", "VER_AMPLITUDE"}
+      \)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Short[Last[t], 20]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"{", 
+        RowBox[{\({1, 0.`, 0.`, 0.`, 0.`}\), ",", 
+          RowBox[{"{", 
+            RowBox[{"2", ",", 
+              StyleBox["0.001`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->2], ",", 
+              StyleBox["0.001`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->2], ",", 
+              StyleBox["0.000371999999999999975`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->3], ",", 
+              StyleBox["0.00533000000000000007`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4]}], "}"}], ",", 
+          RowBox[{"{", 
+            RowBox[{"3", ",", 
+              StyleBox["0.002`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->2], ",", 
+              StyleBox["0.002`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->2], ",", 
+              StyleBox["0.00430300000000000082`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4], ",", 
+              StyleBox["0.00459299999999999997`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4]}], "}"}], ",", 
+          RowBox[{"{", 
+            RowBox[{"4", ",", 
+              StyleBox["0.0029`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->2], ",", 
+              StyleBox["0.0029`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->2], ",", 
+              StyleBox["0.0021549999999999998`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4], ",", 
+              StyleBox["0.00352700000000000013`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4]}], "}"}], ",", 
+          RowBox[{"{", 
+            RowBox[{"5", ",", 
+              StyleBox["0.00390000000000000035`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->2], ",", 
+              StyleBox["0.00390000000000000035`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->2], ",", 
+              StyleBox["0.0048700000000000001`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4], ",", 
+              StyleBox["0.00449900000000000055`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4]}], "}"}], ",", 
+          RowBox[{"{", 
+            RowBox[{"6", ",", 
+              StyleBox["0.00490000000000000035`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->2], ",", 
+              StyleBox["0.00490000000000000035`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->2], ",", 
+              StyleBox["0.00395699999999999931`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4], ",", 
+              StyleBox["0.00654599999999999848`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4]}], "}"}], ",", 
+          \(\[LeftSkeleton]501\[RightSkeleton]\), ",", 
+          RowBox[{"{", 
+            RowBox[{"508", ",", 
+              StyleBox["0.496100000000000029`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4], ",", 
+              StyleBox["0.496100000000000029`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4], ",", 
+              StyleBox["0.00119100000000000004`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4], ",", 
+              StyleBox["0.00286600000000000001`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4]}], "}"}], ",", 
+          RowBox[{"{", 
+            RowBox[{"509", ",", 
+              StyleBox["0.497100000000000008`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4], ",", 
+              StyleBox["0.497100000000000008`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4], ",", 
+              StyleBox["0.00120400000000000018`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4], ",", 
+              StyleBox["0.00130500000000000015`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4]}], "}"}], ",", 
+          RowBox[{"{", 
+            RowBox[{"510", ",", 
+              StyleBox["0.498000000000000042`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4], ",", 
+              StyleBox["0.498000000000000042`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4], ",", 
+              StyleBox["0.000540999999999999925`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->3], ",", 
+              StyleBox["0.0012669999999999999`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4]}], "}"}], ",", 
+          RowBox[{"{", 
+            RowBox[{"511", ",", 
+              StyleBox["0.499000000000000021`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4], ",", 
+              StyleBox["0.499000000000000021`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4], ",", 
+              StyleBox["0.0000879999999999999893`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->2], ",", 
+              StyleBox["0.000766999999999999904`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->3]}], "}"}], ",", 
+          RowBox[{"{", 
+            RowBox[{"512", ",", 
+              StyleBox["0.5`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4], ",", 
+              StyleBox["0.5`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4], ",", 
+              StyleBox["0.000320000000000000017`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->3], ",", 
+              StyleBox["0.00118400000000000016`",
+                StyleBoxAutoDelete->True,
+                PrintPrecision->4]}], "}"}]}], "}"}],
+      (Short[ #, 20]&)]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(qfft = tfsRead[file4, Verbose -> False]; \)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(mfsKeyNames[qfft]\)], "Input"],
+
+Cell[BoxData[
+    \({"ORIGIN", "MODE", "NUMBER_OF_BINS", "HOR_BUNCH_EXCITED", 
+      "HOR_BUNCH_OBSERVED", "VER_BUNCH_EXCITED", "VER_BUNCH_OBSERVED", 
+      "TIME", "TFSFILENAME", "DATE"}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(mfsColumnNames[qfft]\)], "Input"],
+
+Cell[BoxData[
+    \({"COLUMN", "HOR_TUNE", "VER_TUNE", "HOR_AMPLITUDE", "VER_AMPLITUDE"}
+      \)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Last@Last[qfft]\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{"{", 
+      RowBox[{"512", ",", 
+        StyleBox["0.5`",
+          StyleBoxAutoDelete->True,
+          PrintPrecision->4], ",", 
+        StyleBox["0.5`",
+          StyleBoxAutoDelete->True,
+          PrintPrecision->4], ",", 
+        StyleBox["0.000320000000000000017`",
+          StyleBoxAutoDelete->True,
+          PrintPrecision->3], ",", 
+        StyleBox["0.00118400000000000016`",
+          StyleBoxAutoDelete->True,
+          PrintPrecision->4]}], "}"}]], "Output"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Bibliography", "Section"],
+
+Cell[TextData[{
+  StyleBox["[1] Stephen Wolfram, ", "SR"],
+  StyleBox["The Mathematica Book", "SO",
+    FontSlant->"Italic"],
+  StyleBox[
+  ", 3rd ed., Wolfram Media/Cambridge University Press, 1996.", "SR"]
+}], "Text",
+  CellTags->"Wolfram book"],
+
+Cell[TextData[{
+  "[2]  Roman Maeder, ",
+  StyleBox["Programming in Mathematica",
+    FontSlant->"Italic"],
+  ", 3rd ed. Addison-Wesley, 1996 and"
+}], "Text",
+  CellTags->"Meader book"],
+
+Cell[TextData[ButtonBox["\thttp://www.wolfram.com/~maeder/ProgInMath/",
+  ButtonData:>{
+    URL[ "http://www.wolfram.com/~maeder/ProgInMath/"], None},
+  ButtonStyle->"Hyperlink"]], "Program"],
+
+Cell["\<\
+[3] Hans Grote, F. Christoph Iselin, The MAD Program, User's \
+Reference Manual, CERN/SL/90-13 (AP), and \
+\>", "Text",
+  CellTags->"MAD manual"],
+
+Cell[TextData[ButtonBox["\thttp://wwwslap.cern.ch/~fci/mad/mad.html",
+  ButtonData:>{
+    URL[ "http://wwwslap.cern.ch/~fci/mad/mad.html"], None},
+  ButtonStyle->"Hyperlink"]], "Program"],
+
+Cell["\<\
+[4] J.M. Jowett, Basic MAD Tables in Mathematica, CERN SL Note \
+97-55   (1997) and\
+\>", "Text",
+  CellTags->"Mfs.nb"],
+
+Cell[TextData[ButtonBox[
+"\thttp://wwwslap.cern.ch/~jowett/Madtomma/Mfs/Mfs.html",
+  ButtonData:>{
+    URL[ "http://wwwslap.cern.ch/~jowett/Madtomma/Mfs/Mfs.html"], None},
+  ButtonStyle->"Hyperlink"]], "Program"],
+
+Cell["\<\
+[5] K. Goral and J.M. Jowett, Time Evolution and Colour, CERN SL \
+Note 97-56  (1997) and\
+\>", "Text",
+  CellTags->"ColorListPlot.nb"],
+
+Cell[TextData[ButtonBox[
+"\thttp://wwwslap.cern.ch/~jowett/Madtomma/Mfs/ColorListPlot.html",
+  ButtonData:>{
+    URL[ "http://wwwslap.cern.ch/~jowett/Madtomma/Mfs/ColorListPlot.html"], 
+    None},
+  ButtonStyle->"Hyperlink"]], "Program"]
+}, Open  ]]
+}, Open  ]]
+},
+FrontEndVersion->"4.0 for Microsoft Windows",
+ScreenRectangle->{{0, 1024}, {0, 695}},
+AutoGeneratedPackage->Automatic,
+CellGrouping->Automatic,
+WindowSize->{666, 668},
+WindowMargins->{{153, Automatic}, {Automatic, 0}},
+PrivateNotebookOptions->{"ColorPalette"->{RGBColor, 128}},
+ShowCellLabel->True,
+RenderingOptions->{"ObjectDithering"->True,
+"RasterDithering"->False},
+StyleDefinitions -> Notebook[{
+  
+  Cell[CellGroupData[{
+  Cell["Style Definitions", "Subtitle"],
+  
+  Cell["\<\
+Modify the definitions below to change the default appearance of \
+all cells in a given style.
+Make modifications to any definition using commands in the Format menu.\
+\>", 
+    "Text"],
+  
+  Cell[CellGroupData[{
+  
+  Cell["Style Environment Names", "Section"],
+  
+  Cell[StyleData[All, "Working"],
+    PageWidth->WindowWidth,
+    CellBracketOptions->{"Color"->RGBColor[0.4, 0, 0.239994]},
+    ScriptMinSize->9,
+    Background->None],
+  
+  Cell[StyleData[All, "Presentation"],
+    PageWidth->PaperWidth,
+    CellBracketOptions->{"Color"->RGBColor[0, 0, 1]},
+    ScriptMinSize->9],
+  
+  Cell[StyleData[All, "Printout"],
+    PageWidth->PaperWidth,
+    ShowCellLabel->False,
+    ImageSize->{200, 200},
+    PrivateFontOptions->{"FontType"->"Outline"}]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell["Notebook Options", "Section"],
+  
+  Cell["\<\
+The options defined for the style below will be used at the \
+Notebook level.\
+\>", "Text"],
+  
+  Cell[StyleData["Notebook"],
+    PageHeaders->{{Cell[ 
+            TextData[ {
+              CounterBox[ "Page"]}], "PageNumber"], None, Cell[ 
+            TextData[ {
+              ValueBox[ "FileName"]}], "Header"]}, {Cell[ 
+            TextData[ {
+              ValueBox[ "FileName"]}], "Header"], None, Cell[ 
+            TextData[ {
+              CounterBox[ "Page"]}], "PageNumber"]}},
+    CellFrameLabelMargins->6,
+    StyleMenuListing->None]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell["Styles for Headings", "Section"],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Title"],
+    CellFrame->{{0, 0}, {0, 0.25}},
+    CellMargins->{{18, 10}, {0, 20}},
+    CellGroupingRules->{"TitleGrouping", 0},
+    PageBreakBelow->False,
+    CellFrameMargins->6,
+    CellFrameColor->GrayLevel[0],
+    LineSpacing->{0.95, 0},
+    CounterAssignments->{{"Section", 0}, {"Equation", 0}, {"Figure", 0}},
+    FontFamily->"Helvetica",
+    FontSize->36,
+    FontWeight->"Bold",
+    FontColor->RGBColor[0.4, 0, 0.239994]],
+  
+  Cell[StyleData["Title", "Presentation"],
+    CellMargins->{{20, 10}, {2, 20}},
+    CellFrameMargins->5,
+    FontColor->RGBColor[0, 0, 1]],
+  
+  Cell[StyleData["Title", "Printout"],
+    CellMargins->{{18, 30}, {0, 0}},
+    CellFrameMargins->4,
+    FontSize->24]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Subtitle"],
+    CellMargins->{{20, 30}, {2, 10}},
+    CellGroupingRules->{"TitleGrouping", 10},
+    PageBreakBelow->False,
+    CellFrameMargins->{{0, 4}, {8, 4}},
+    LineSpacing->{1, 0},
+    CounterAssignments->{{"Section", 0}, {"Equation", 0}, {"Figure", 0}},
+    FontFamily->"Helvetica",
+    FontSize->24],
+  
+  Cell[StyleData["Subtitle", "Presentation"],
+    CellMargins->{{20, 10}, {2, 10}}],
+  
+  Cell[StyleData["Subtitle", "Printout"],
+    CellMargins->{{18, 30}, {0, 10}},
+    FontSize->18]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Section 1"],
+    CellFrame->{{0, 0}, {0, 3}},
+    CellMargins->{{18, 10}, {10, 30}},
+    CellGroupingRules->{"SectionGrouping", 40},
+    PageBreakBelow->False,
+    CellFrameMargins->{{0, 4}, {8, 4}},
+    CellFrameColor->RGBColor[0.4, 0, 0.239994],
+    CounterIncrements->"Section",
+    CounterAssignments->{{"Subsection", 0}, {"Subsubsection", 0}},
+    FontFamily->"Helvetica",
+    FontSize->18,
+    FontWeight->"Bold"],
+  
+  Cell[StyleData["Section 1", "Presentation"],
+    CellMargins->{{20, 10}, {6, 30}},
+    CellFrameMargins->5],
+  
+  Cell[StyleData["Section 1", "Printout"],
+    CellMargins->{{18, 30}, {4, 30}},
+    CellFrameMargins->4,
+    FontSize->14]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Section"],
+    CellFrame->False,
+    CellMargins->{{18, 10}, {10, 30}},
+    CellGroupingRules->{"SectionGrouping", 40},
+    PageBreakBelow->False,
+    CellFrameMargins->4,
+    CellFrameLabels->{{Cell[ 
+            TextData[ {
+              CounterBox[ "Section"]}]], None}, {None, None}},
+    CounterIncrements->"Section",
+    CounterAssignments->{{"Subsection", 0}, {"Subsubsection", 0}},
+    FontFamily->"Helvetica",
+    FontSize->18,
+    FontWeight->"Bold"],
+  
+  Cell[StyleData["Section", "Presentation"],
+    CellMargins->{{20, 10}, {0, 30}}],
+  
+  Cell[StyleData["Section", "Printout"],
+    CellMargins->{{18, 30}, {0, 30}},
+    CellFrameMargins->5,
+    FontSize->14]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Subsection"],
+    CellDingbat->None,
+    CellMargins->{{38, 30}, {2, 20}},
+    CellGroupingRules->{"SectionGrouping", 50},
+    PageBreakBelow->False,
+    CellFrameLabels->{{Cell[ 
+            TextData[ {
+              CounterBox[ "Section"], ".", 
+              CounterBox[ "Subsection"]}]], None}, {None, None}},
+    CounterIncrements->"Subsection",
+    CounterAssignments->{{"Subsubsection", 0}},
+    FontFamily->"Times",
+    FontSize->14,
+    FontWeight->"Bold"],
+  
+  Cell[StyleData["Subsection", "Presentation"],
+    CellMargins->{{35, 30}, {0, 20}}],
+  
+  Cell[StyleData["Subsection", "Printout"],
+    CellMargins->{{18, 30}, {0, 10}},
+    FontSize->12]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Subsubsection"],
+    CellDingbat->None,
+    CellMargins->{{55, 30}, {4, 10}},
+    CellGroupingRules->{"SectionGrouping", 60},
+    PageBreakBelow->False,
+    CellFrameLabels->{{Cell[ 
+            TextData[ {
+              CounterBox[ "Section"], ".", 
+              CounterBox[ "Subsection"], ".", 
+              CounterBox[ "Subsubsection"]}]], None}, {None, None}},
+    CounterIncrements->"Subsubsection",
+    FontFamily->"Times",
+    FontSize->12,
+    FontWeight->"Bold"],
+  
+  Cell[StyleData["Subsubsection", "Presentation"],
+    CellMargins->{{31, 30}, {0, 12}}],
+  
+  Cell[StyleData["Subsubsection", "Printout"],
+    CellMargins->{{18, 30}, {0, 12}},
+    FontSize->10]
+  }, Open  ]]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell["Styles for Body Text", "Section"],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Text"],
+    CellMargins->{{55, 10}, {6, 6}},
+    TextJustification->1,
+    LineSpacing->{1, 2},
+    FontFamily->"Times"],
+  
+  Cell[StyleData["Text", "Presentation"],
+    CellMargins->{{20, 10}, {6, 6}},
+    TextAlignment->Left,
+    TextJustification->0,
+    LineSpacing->{1.3, 0},
+    FontSize->14],
+  
+  Cell[StyleData["Text", "Printout"],
+    CellMargins->{{18, 4}, {4, 4}},
+    LineSpacing->{1, 3},
+    FontSize->10]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Commentary"],
+    CellMargins->{{55, 10}, {2, 6}},
+    TextJustification->1,
+    LineSpacing->{1, 2},
+    FontFamily->"Helvetica",
+    FontSize->10,
+    FontColor->RGBColor[0, 0, 0.4]],
+  
+  Cell[StyleData["Commentary", "Presentation"],
+    CellMargins->{{60, 30}, {2, 6}},
+    TextJustification->1,
+    LineSpacing->{1.3, 0},
+    FontSize->12],
+  
+  Cell[StyleData["Commentary", "Printout"],
+    CellMargins->{{18, 30}, {3, 0}},
+    LineSpacing->{1, 3},
+    FontFamily->"Times",
+    FontSize->10]
+  }, Open  ]]
+  }, Closed]],
+  
+  Cell[CellGroupData[{
+  
+  Cell["Styles for Input/Output", "Section"],
+  
+  Cell["\<\
+The cells in this section define styles used for input and output \
+to the kernel.  Be careful when modifying, renaming, or removing these \
+styles, because the front end associates special meanings with these style \
+names.\
+\>", "Text"],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Input"],
+    CellFrame->{{1, 1}, {0, 1}},
+    CellMargins->{{55, 10}, {0, 0}},
+    Evaluatable->True,
+    CellGroupingRules->"InputGrouping",
+    CellHorizontalScrolling->True,
+    PageBreakWithin->False,
+    GroupPageBreakWithin->False,
+    CellLabelPositioning->Automatic,
+    CellLabelMargins->{{23, Inherited}, {Inherited, Inherited}},
+    DefaultFormatType->DefaultInputFormatType,
+    FormatType->InputForm,
+    ShowStringCharacters->True,
+    NumberMarks->True,
+    FontSize->12,
+    FontWeight->"Bold",
+    Background->None],
+  
+  Cell[StyleData["Input", "Presentation"],
+    CellMargins->{{60, 10}, {0, 10}},
+    Background->None],
+  
+  Cell[StyleData["Input", "Printout"],
+    CellMargins->{{55, 10}, {0, 10}},
+    FontSize->10,
+    Background->None]
+  }, Open  ]],
+  
+  Cell[StyleData["InlineInput"],
+    Evaluatable->True,
+    CellGroupingRules->"InputGrouping",
+    CellHorizontalScrolling->True,
+    PageBreakWithin->False,
+    GroupPageBreakWithin->False,
+    DefaultFormatType->DefaultInputFormatType,
+    AutoItalicWords->{},
+    FormatType->InputForm,
+    ShowStringCharacters->True,
+    NumberMarks->True,
+    CounterIncrements->"Input",
+    FontWeight->"Bold"],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Output"],
+    CellFrame->{{1, 1}, {1, 0}},
+    CellMargins->{{55, 10}, {15, 0}},
+    CellEditDuplicate->True,
+    CellGroupingRules->"OutputGrouping",
+    CellHorizontalScrolling->True,
+    PageBreakWithin->False,
+    GroupPageBreakWithin->False,
+    GeneratedCell->True,
+    CellAutoOverwrite->True,
+    CellLabelMargins->{{23, Inherited}, {Inherited, Inherited}},
+    DefaultFormatType->DefaultOutputFormatType,
+    FormatType->InputForm,
+    FontSize->12,
+    Background->None],
+  
+  Cell[StyleData["Output", "Presentation"],
+    CellMargins->{{60, Inherited}, {10, 0}},
+    Background->None],
+  
+  Cell[StyleData["Output", "Printout"],
+    CellMargins->{{55, Inherited}, {10, 0}},
+    FontSize->10,
+    Background->None]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["InputOnly"],
+    CellFrame->1,
+    CellMargins->{{55, 10}, {15, 0}},
+    Evaluatable->True,
+    CellGroupingRules->"InputGrouping",
+    CellHorizontalScrolling->True,
+    PageBreakWithin->False,
+    GroupPageBreakWithin->False,
+    CellLabelPositioning->Automatic,
+    CellLabelMargins->{{23, Inherited}, {Inherited, Inherited}},
+    DefaultFormatType->DefaultInputFormatType,
+    FormatType->InputForm,
+    ShowStringCharacters->True,
+    NumberMarks->True,
+    FontSize->12,
+    FontWeight->"Bold",
+    Background->GrayLevel[0.966674]],
+  
+  Cell[StyleData["InputOnly", "Presentation"],
+    CellMargins->{{60, Inherited}, {10, 10}}],
+  
+  Cell[StyleData["InputOnly", "Printout"],
+    CellMargins->{{55, Inherited}, {10, 10}},
+    FontSize->10]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Message"],
+    CellFrame->{{1, 1}, {0, 0}},
+    CellDingbat->"\[LongDash]",
+    CellMargins->{{55, 10}, {0, 0}},
+    CellGroupingRules->"OutputGrouping",
+    PageBreakWithin->False,
+    GroupPageBreakWithin->False,
+    GeneratedCell->True,
+    CellAutoOverwrite->True,
+    ShowCellLabel->False,
+    CellLabelMargins->{{23, Inherited}, {Inherited, Inherited}},
+    DefaultFormatType->DefaultOutputFormatType,
+    FormatType->InputForm,
+    StyleMenuListing->None,
+    FontFamily->"Helvetica",
+    FontSize->10,
+    FontSlant->"Oblique",
+    FontColor->GrayLevel[0],
+    Background->GrayLevel[1]],
+  
+  Cell[StyleData["Message", "Presentation"],
+    CellMargins->{{60, Inherited}, {Inherited, Inherited}},
+    LineSpacing->{1, 0}],
+  
+  Cell[StyleData["Message", "Printout"],
+    CellMargins->{{55, Inherited}, {0, 0}},
+    FontSize->8]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Print"],
+    CellFrame->True,
+    CellMargins->{{55, 26}, {1, 6}},
+    CellGroupingRules->"OutputGrouping",
+    CellHorizontalScrolling->True,
+    PageBreakWithin->False,
+    GroupPageBreakWithin->False,
+    GeneratedCell->True,
+    CellAutoOverwrite->True,
+    ShowCellLabel->False,
+    CellLabelMargins->{{23, Inherited}, {Inherited, Inherited}},
+    DefaultFormatType->DefaultOutputFormatType,
+    TextAlignment->Left,
+    FormatType->InputForm,
+    StyleMenuListing->None,
+    FontSize->9,
+    Background->GrayLevel[0.849989]],
+  
+  Cell[StyleData["Print", "Presentation"],
+    CellFrame->True,
+    CellMargins->{{60, Inherited}, {10, 2}},
+    Background->GrayLevel[0.849989]],
+  
+  Cell[StyleData["Print", "Printout"],
+    CellFrame->True,
+    CellMargins->{{54, Inherited}, {2, 6}},
+    FontSize->10,
+    Background->GrayLevel[0.849989]]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Graphics"],
+    CellFrame->{{1, 1}, {0, 0}},
+    CellMargins->{{55, 10}, {0, 0}},
+    CellGroupingRules->"GraphicsGrouping",
+    CellHorizontalScrolling->True,
+    PageBreakWithin->False,
+    GeneratedCell->True,
+    CellAutoOverwrite->True,
+    ShowCellLabel->False,
+    DefaultFormatType->DefaultOutputFormatType,
+    FormatType->InputForm,
+    ImageSize->{288, 288},
+    ImageMargins->{{35, Inherited}, {Inherited, 0}},
+    StyleMenuListing->None,
+    Background->GrayLevel[1]],
+  
+  Cell[StyleData["Graphics", "Presentation"],
+    CellMargins->{{60, Inherited}, {0, 0}},
+    ImageMargins->{{10, 10}, {10, 10}}],
+  
+  Cell[StyleData["Graphics", "Printout"],
+    CellMargins->{{55, Inherited}, {0, 0}},
+    ImageSize->{288, 288}]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["CellLabel"],
+    StyleMenuListing->None,
+    FontFamily->"Helvetica",
+    FontSize->10,
+    FontSlant->"Oblique",
+    FontColor->RGBColor[0, 0, 1]],
+  
+  Cell[StyleData["CellLabel", "Presentation"],
+    CellMargins->{{18, Inherited}, {Inherited, Inherited}}],
+  
+  Cell[StyleData["CellLabel", "Printout"],
+    CellMargins->{{0, Inherited}, {Inherited, Inherited}},
+    FontSize->8]
+  }, Open  ]]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell["Unique Styles", "Section"],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Author"],
+    CellMargins->{{20, 30}, {45, 5}},
+    CellGroupingRules->{"TitleGrouping", 20},
+    PageBreakBelow->False,
+    CellFrameMargins->{{0, 4}, {8, 4}},
+    LineSpacing->{1, 0},
+    CounterAssignments->{{"Section", 0}, {"Equation", 0}, {"Figure", 0}},
+    FontFamily->"Helvetica",
+    FontSize->16,
+    FontSlant->"Italic"],
+  
+  Cell[StyleData["Author", "Presentation"],
+    CellMargins->{{20, 30}, {45, 10}},
+    FontSize->18],
+  
+  Cell[StyleData["Author", "Printout"],
+    CellMargins->{{18, 30}, {45, 5}},
+    FontSize->16]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Abstract"],
+    CellFrame->False,
+    CellMargins->{{18, 140}, {4, 30}},
+    LineSpacing->{0.9, 0},
+    FontFamily->"Times",
+    FontSize->12],
+  
+  Cell[StyleData["Abstract", "Presentation"],
+    CellFrame->True,
+    CellMargins->{{20, 10}, {Inherited, 30}}],
+  
+  Cell[StyleData["Abstract", "Printout"],
+    LineSpacing->{1, 2},
+    FontSize->10]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Caption"],
+    CellMargins->{{55, 10}, {5, 3}},
+    FontFamily->"Helvetica",
+    FontSize->9],
+  
+  Cell[StyleData["Caption", "Presentation"],
+    CellMargins->{{60, 65}, {6, 4}},
+    FontSize->10],
+  
+  Cell[StyleData["Caption", "Printout"],
+    CellMargins->{{55, 55}, {5, 4}},
+    LineSpacing->{1, 2},
+    FontSize->8]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Reference"],
+    CellMargins->{{24, 40}, {6, 6}},
+    TextJustification->1,
+    LineSpacing->{1, 0},
+    FontFamily->"Times"],
+  
+  Cell[StyleData["Reference", "Presentation"],
+    CellMargins->{{20, 40}, {Inherited, 6}},
+    TextJustification->0,
+    LineSpacing->{1, 4},
+    FontSize->12],
+  
+  Cell[StyleData["Reference", "Printout"],
+    CellMargins->{{18, 4}, {4, 4}},
+    FontSize->9]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["PictureGroup"],
+    CellFrame->{{1, 1}, {0, 0}},
+    CellMargins->{{55, Inherited}, {0, 0}},
+    CellGroupingRules->"GraphicsGrouping",
+    CellHorizontalScrolling->True,
+    PageBreakWithin->False,
+    ShowCellLabel->False,
+    ImageMargins->{{35, Inherited}, {Inherited, 0}},
+    StyleMenuListing->None,
+    Background->None],
+  
+  Cell[StyleData["PictureGroup", "Presentation"],
+    CellMargins->{{60, Inherited}, {0, 0}},
+    ImageMargins->{{10, 10}, {10, 10}},
+    Background->None],
+  
+  Cell[StyleData["PictureGroup", "Printout"],
+    CellMargins->{{55, Inherited}, {0, 0}},
+    ImageSize->{288, 288},
+    Background->None]
+  }, Open  ]]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell["Formulas and Programming", "Section"],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["DisplayFormula"],
+    CellMargins->{{55, Inherited}, {Inherited, Inherited}},
+    CellHorizontalScrolling->True,
+    ScriptLevel->0,
+    SingleLetterItalics->True,
+    StyleMenuListing->None,
+    UnderoverscriptBoxOptions->{LimitsPositioning->True}],
+  
+  Cell[StyleData["DisplayFormula", "Presentation"],
+    CellMargins->{{60, 10}, {Inherited, 6}},
+    LineSpacing->{1, 5}],
+  
+  Cell[StyleData["DisplayFormula", "Printout"],
+    CellMargins->{{18, 4}, {4, 4}}]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["ChemicalFormula"],
+    CellMargins->{{55, 10}, {Inherited, 0}},
+    CellHorizontalScrolling->True,
+    TextJustification->1,
+    AutoSpacing->False,
+    ScriptLevel->1,
+    ScriptBaselineShifts->{0.6, Automatic},
+    SingleLetterItalics->False,
+    ZeroWidthTimes->True],
+  
+  Cell[StyleData["ChemicalFormula", "Presentation"],
+    CellMargins->{{60, 10}, {Inherited, 6}}],
+  
+  Cell[StyleData["ChemicalFormula", "Printout"],
+    CellMargins->{{18, 4}, {4, 4}},
+    LineSpacing->{1, 3},
+    FontSize->10]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Program"],
+    CellMargins->{{55, 10}, {Inherited, 0}},
+    CellHorizontalScrolling->True,
+    FontFamily->"Courier"],
+  
+  Cell[StyleData["Program", "Presentation"],
+    CellMargins->{{60, 10}, {Inherited, 6}}],
+  
+  Cell[StyleData["Program", "Printout"],
+    CellMargins->{{18, 4}, {4, 4}},
+    LineSpacing->{1, 3},
+    FontSize->9.5]
+  }, Open  ]]
+  }, Closed]],
+  
+  Cell[CellGroupData[{
+  
+  Cell["Styles for Automatic Numbering", "Section"],
+  
+  Cell["\<\
+The following styles are useful for numbered equations, figures, \
+etc.  They automatically give the cell a FrameLabel containing a reference to \
+a particular counter, and also increment that counter.\
+\>", "Text"],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["NumberedEquation"],
+    CellMargins->{{55, 85}, {Inherited, Inherited}},
+    CellFrameLabels->{{None, Cell[ 
+            TextData[ {"(", 
+              CounterBox[ "NumberedEquation"], ")"}]]}, {None, None}},
+    DefaultFormatType->DefaultInputFormatType,
+    CounterIncrements->"NumberedEquation",
+    FormatTypeAutoConvert->False,
+    FontFamily->"Times"],
+  
+  Cell[StyleData["NumberedEquation", "Presentation"],
+    CellMargins->{{60, 10}, {Inherited, 6}},
+    LineSpacing->{1, 0}],
+  
+  Cell[StyleData["NumberedEquation", "Printout"],
+    CellMargins->{{18, 4}, {4, 4}},
+    FontSize->8]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["NumberedFigure"],
+    CellMargins->{{55, 95}, {Inherited, Inherited}},
+    CellFrameLabels->{{None, None}, {Cell[ 
+            TextData[ {"Figure ", 
+              CounterBox[ "NumberedFigure"]}], FontWeight -> "Bold"], None}},
+    CounterIncrements->"NumberedFigure",
+    FormatTypeAutoConvert->False,
+    FontFamily->"Times"],
+  
+  Cell[StyleData["NumberedFigure", "Presentation"],
+    CellMargins->{{60, 80}, {Inherited, 6}},
+    LineSpacing->{1, 0}],
+  
+  Cell[StyleData["NumberedFigure", "Printout"],
+    CellMargins->{{18, 80}, {4, 4}},
+    FontSize->8]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["NumberedTable"],
+    CellMargins->{{55, 95}, {Inherited, Inherited}},
+    CellFrameLabels->{{None, None}, {Cell[ 
+            TextData[ {"Table ", 
+              CounterBox[ "NumberedTable"]}], FontWeight -> "Bold"], None}},
+    TextAlignment->Center,
+    CounterIncrements->"NumberedTable",
+    FormatTypeAutoConvert->False,
+    FontFamily->"Times"],
+  
+  Cell[StyleData["NumberedTable", "Presentation"],
+    CellMargins->{{60, 80}, {Inherited, 6}},
+    LineSpacing->{1, 0}],
+  
+  Cell[StyleData["NumberedTable", "Printout"],
+    CellMargins->{{18, 80}, {4, 4}},
+    FontSize->8]
+  }, Open  ]]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell["Styles for Headers and Footers", "Section"],
+  
+  Cell[StyleData["Header"],
+    StyleMenuListing->None,
+    FontFamily->"Helvetica",
+    FontSize->9],
+  
+  Cell[StyleData["PageNumber"],
+    StyleMenuListing->None,
+    FontFamily->"Helvetica",
+    FontSize->9,
+    FontWeight->"Bold"],
+  
+  Cell[StyleData["Footer"],
+    TextAlignment->Center,
+    StyleMenuListing->None,
+    FontFamily->"Helvetica",
+    FontSize->9]
+  }, Closed]]
+  }, Open  ]]
+  }]
+]
+
+
+(***********************************************************************
+Cached data follows.  If you edit this Notebook file directly, not using
+Mathematica, you must remove the line containing CacheID at the top of 
+the file.  The cache data will then be recreated when you save this file 
+from within Mathematica.
+***********************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{
+  "Reference section"->{
+    Cell[4477, 149, 61, 1, 63, "Section",
+      CellTags->"Reference section"]},
+  "Setup section"->{
+    Cell[8843, 314, 53, 1, 37, "Section",
+      CellTags->"Setup section"],
+    Cell[9457, 330, 75, 1, 41, "Subsection",
+      CellTags->"Setup section"],
+    Cell[9994, 346, 354, 9, 63, "Text",
+      CellTags->"Setup section"],
+    Cell[10420, 361, 839, 22, 81, "Text",
+      CellTags->"Setup section"]},
+  "Interface section"->{
+    Cell[11730, 407, 89, 2, 37, "Section",
+      InitializationCell->True,
+      CellTags->"Interface section"],
+    Cell[11822, 411, 158, 5, 29, "Text",
+      InitializationCell->True,
+      CellTags->"Interface section"],
+    Cell[12005, 420, 135, 2, 41, "Subsection",
+      InitializationCell->True,
+      CellTags->"Interface section"],
+    Cell[12143, 424, 216, 8, 27, "Input",
+      InitializationCell->True,
+      CellTags->"Interface section"],
+    Cell[12396, 437, 157, 5, 41, "Subsection",
+      InitializationCell->True,
+      CellTags->"Interface section"],
+    Cell[12556, 444, 212, 5, 45, "Input",
+      InitializationCell->True,
+      CellTags->"Interface section"],
+    Cell[12771, 451, 255, 6, 63, "Input",
+      InitializationCell->True,
+      CellTags->"Interface section"],
+    Cell[13041, 460, 122, 2, 41, "Subsection",
+      InitializationCell->True,
+      CellTags->"Interface section"]},
+  "Implementation section"->{
+    Cell[13200, 467, 99, 2, 37, "Section",
+      InitializationCell->True,
+      CellTags->"Implementation section"],
+    Cell[13302, 471, 169, 4, 70, "Text",
+      CellTags->"Implementation section"],
+    Cell[13496, 479, 135, 2, 70, "Subsection",
+      InitializationCell->True,
+      CellTags->"Implementation section"],
+    Cell[13634, 483, 103, 2, 70, "Input",
+      InitializationCell->True,
+      CellTags->"Implementation section"],
+    Cell[13774, 490, 163, 5, 70, "Subsection",
+      InitializationCell->True,
+      CellTags->"Implementation section"],
+    Cell[14076, 504, 161, 5, 70, "Subsection",
+      InitializationCell->True,
+      CellTags->"Implementation section"],
+    Cell[14873, 532, 124, 2, 70, "Subsection",
+      InitializationCell->True,
+      CellTags->"Implementation section"],
+    Cell[16658, 574, 110, 2, 70, "Subsubsection",
+      InitializationCell->True,
+      CellTags->"Implementation section"],
+    Cell[21726, 698, 124, 2, 70, "Subsection",
+      InitializationCell->True,
+      CellTags->"Implementation section"],
+    Cell[21966, 708, 111, 2, 70, "Subsection",
+      InitializationCell->True,
+      CellTags->"Implementation section"],
+    Cell[22080, 712, 89, 2, 70, "Input",
+      InitializationCell->True,
+      CellTags->"Implementation section"]},
+  "Epilog section"->{
+    Cell[22218, 720, 83, 2, 37, "Section",
+      InitializationCell->True,
+      CellTags->"Epilog section"],
+    Cell[22304, 724, 106, 1, 70, "Text",
+      CellTags->"Epilog section"],
+    Cell[22435, 729, 103, 2, 70, "Subsection",
+      InitializationCell->True,
+      CellTags->"Epilog section"],
+    Cell[22541, 733, 113, 2, 70, "Input",
+      InitializationCell->True,
+      CellTags->"Epilog section"],
+    Cell[22691, 740, 103, 2, 70, "Subsection",
+      InitializationCell->True,
+      CellTags->"Epilog section"],
+    Cell[22797, 744, 88, 2, 70, "Input",
+      InitializationCell->True,
+      CellTags->"Epilog section"]},
+  "Examples section"->{
+    Cell[22934, 752, 66, 1, 37, "Section",
+      CellTags->"Examples section"],
+    Cell[23088, 759, 229, 5, 67, "Input",
+      CellTags->"Examples section"]},
+  "Wolfram book"->{
+    Cell[86979, 3611, 247, 7, 70, "Text",
+      CellTags->"Wolfram book"]},
+  "Meader book"->{
+    Cell[87229, 3620, 185, 6, 70, "Text",
+      CellTags->"Meader book"]},
+  "MAD manual"->{
+    Cell[87611, 3633, 155, 4, 70, "Text",
+      CellTags->"MAD manual"]},
+  "Mfs.nb"->{
+    Cell[87959, 3644, 129, 4, 70, "Text",
+      CellTags->"Mfs.nb"]},
+  "ColorListPlot.nb"->{
+    Cell[88306, 3656, 145, 4, 70, "Text",
+      CellTags->"ColorListPlot.nb"]}
+  }
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{
+  {"Reference section", 109660, 4432},
+  {"Setup section", 109762, 4435},
+  {"Interface section", 110093, 4444},
+  {"Implementation section", 111035, 4469},
+  {"Epilog section", 112350, 4502},
+  {"Examples section", 113006, 4520},
+  {"Wolfram book", 113186, 4525},
+  {"Meader book", 113281, 4528},
+  {"MAD manual", 113374, 4531},
+  {"Mfs.nb", 113462, 4534},
+  {"ColorListPlot.nb", 113556, 4537}
+  }
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1717, 49, 65, 1, 29, "Text"],
+Cell[1785, 52, 16, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[1826, 56, 31, 0, 67, "Title"],
+Cell[1860, 58, 189, 6, 88, "Author"],
+
+Cell[CellGroupData[{
+Cell[2074, 68, 31, 0, 63, "Section"],
+Cell[2108, 70, 323, 13, 29, "Text"],
+Cell[2434, 85, 562, 16, 64, "Text"],
+Cell[2999, 103, 624, 16, 80, "Text"],
+Cell[3626, 121, 357, 8, 63, "Text"],
+Cell[3986, 131, 58, 0, 29, "Text"],
+Cell[4047, 133, 185, 3, 21, "Program"],
+Cell[4235, 138, 205, 6, 46, "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4477, 149, 61, 1, 63, "Section",
+  CellTags->"Reference section"],
+
+Cell[CellGroupData[{
+Cell[4563, 154, 30, 0, 31, "Subsubsection"],
+Cell[4596, 156, 73, 1, 29, "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4706, 162, 31, 0, 31, "Subsubsection"],
+Cell[4740, 164, 31, 0, 29, "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4808, 169, 32, 0, 31, "Subsubsection"],
+Cell[4843, 171, 16, 0, 29, "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4896, 176, 34, 0, 31, "Subsubsection"],
+Cell[4933, 178, 1765, 27, 70, "Text"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[6735, 210, 41, 0, 25, "Subsubsection"],
+Cell[6779, 212, 19, 0, 29, "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[6835, 217, 101, 4, 31, "Subsubsection"],
+Cell[6939, 223, 19, 0, 29, "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[6995, 228, 32, 0, 31, "Subsubsection"],
+Cell[7030, 230, 162, 4, 46, "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7229, 239, 33, 0, 31, "Subsubsection"],
+Cell[7265, 241, 37, 0, 29, "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7339, 246, 31, 0, 31, "Subsubsection"],
+Cell[7373, 248, 188, 7, 29, "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7598, 260, 33, 0, 31, "Subsubsection"],
+Cell[7634, 262, 107, 1, 29, "Text"],
+Cell[7744, 265, 326, 7, 64, "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[8107, 277, 35, 0, 31, "Subsubsection"],
+Cell[8145, 279, 100, 1, 29, "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[8282, 285, 35, 0, 31, "Subsubsection"],
+Cell[8320, 287, 108, 1, 29, "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[8465, 293, 37, 0, 31, "Subsubsection"],
+Cell[8505, 295, 289, 13, 30, "Text"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[8843, 314, 53, 1, 37, "Section",
+  CellTags->"Setup section"],
+Cell[8899, 317, 533, 9, 81, "Text"],
+
+Cell[CellGroupData[{
+Cell[9457, 330, 75, 1, 41, "Subsection",
+  CellTags->"Setup section"],
+Cell[9535, 333, 237, 5, 46, "Text"],
+Cell[9775, 340, 216, 4, 21, "Program"],
+Cell[9994, 346, 354, 9, 63, "Text",
+  CellTags->"Setup section"],
+
+Cell[CellGroupData[{
+Cell[10373, 359, 44, 0, 31, "Subsubsection"],
+Cell[10420, 361, 839, 22, 81, "Text",
+  CellTags->"Setup section"],
+Cell[11262, 385, 77, 0, 27, "Input"],
+Cell[11342, 387, 99, 3, 29, "Text"],
+Cell[11444, 392, 167, 6, 29, "Text"],
+Cell[11614, 400, 55, 0, 27, "Input"]
+}, Open  ]]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[11730, 407, 89, 2, 37, "Section",
+  InitializationCell->True,
+  CellTags->"Interface section"],
+Cell[11822, 411, 158, 5, 29, "Text",
+  InitializationCell->True,
+  CellTags->"Interface section"],
+
+Cell[CellGroupData[{
+Cell[12005, 420, 135, 2, 41, "Subsection",
+  InitializationCell->True,
+  CellTags->"Interface section"],
+Cell[12143, 424, 216, 8, 27, "Input",
+  InitializationCell->True,
+  CellTags->"Interface section"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[12396, 437, 157, 5, 41, "Subsection",
+  InitializationCell->True,
+  CellTags->"Interface section"],
+Cell[12556, 444, 212, 5, 45, "Input",
+  InitializationCell->True,
+  CellTags->"Interface section"],
+Cell[12771, 451, 255, 6, 63, "Input",
+  InitializationCell->True,
+  CellTags->"Interface section"]
+}, Open  ]],
+Cell[13041, 460, 122, 2, 41, "Subsection",
+  InitializationCell->True,
+  CellTags->"Interface section"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[13200, 467, 99, 2, 37, "Section",
+  InitializationCell->True,
+  CellTags->"Implementation section"],
+Cell[13302, 471, 169, 4, 70, "Text",
+  CellTags->"Implementation section"],
+
+Cell[CellGroupData[{
+Cell[13496, 479, 135, 2, 70, "Subsection",
+  InitializationCell->True,
+  CellTags->"Implementation section"],
+Cell[13634, 483, 103, 2, 70, "Input",
+  InitializationCell->True,
+  CellTags->"Implementation section"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[13774, 490, 163, 5, 70, "Subsection",
+  InitializationCell->True,
+  CellTags->"Implementation section"],
+Cell[13940, 497, 99, 2, 70, "Input",
+  InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[14076, 504, 161, 5, 70, "Subsection",
+  InitializationCell->True,
+  CellTags->"Implementation section"],
+
+Cell[CellGroupData[{
+Cell[14262, 513, 45, 0, 70, "Subsubsection"],
+Cell[14310, 515, 514, 11, 70, "Input",
+  InitializationCell->True]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[14873, 532, 124, 2, 70, "Subsection",
+  InitializationCell->True,
+  CellTags->"Implementation section"],
+
+Cell[CellGroupData[{
+Cell[15022, 538, 39, 0, 70, "Subsubsection"],
+Cell[15064, 540, 1557, 29, 70, "Input",
+  InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[16658, 574, 110, 2, 70, "Subsubsection",
+  InitializationCell->True,
+  CellTags->"Implementation section"],
+Cell[16771, 578, 947, 19, 70, "Input",
+  InitializationCell->True]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[17767, 603, 311, 11, 70, "Subsection"],
+Cell[18081, 616, 1139, 24, 70, "Input",
+  InitializationCell->True],
+Cell[19223, 642, 904, 19, 70, "Input",
+  InitializationCell->True],
+Cell[20130, 663, 1559, 30, 70, "Input",
+  InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[21726, 698, 124, 2, 70, "Subsection",
+  InitializationCell->True,
+  CellTags->"Implementation section"],
+Cell[21853, 702, 76, 1, 70, "Input",
+  InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[21966, 708, 111, 2, 70, "Subsection",
+  InitializationCell->True,
+  CellTags->"Implementation section"],
+Cell[22080, 712, 89, 2, 70, "Input",
+  InitializationCell->True,
+  CellTags->"Implementation section"]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[22218, 720, 83, 2, 37, "Section",
+  InitializationCell->True,
+  CellTags->"Epilog section"],
+Cell[22304, 724, 106, 1, 70, "Text",
+  CellTags->"Epilog section"],
+
+Cell[CellGroupData[{
+Cell[22435, 729, 103, 2, 70, "Subsection",
+  InitializationCell->True,
+  CellTags->"Epilog section"],
+Cell[22541, 733, 113, 2, 70, "Input",
+  InitializationCell->True,
+  CellTags->"Epilog section"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[22691, 740, 103, 2, 70, "Subsection",
+  InitializationCell->True,
+  CellTags->"Epilog section"],
+Cell[22797, 744, 88, 2, 70, "Input",
+  InitializationCell->True,
+  CellTags->"Epilog section"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[22934, 752, 66, 1, 37, "Section",
+  CellTags->"Examples section"],
+Cell[23003, 755, 60, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[23088, 759, 229, 5, 67, "Input",
+  CellTags->"Examples section"],
+Cell[23320, 766, 116, 2, 41, "Output"]
+}, Open  ]],
+Cell[23451, 771, 66, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[23542, 775, 61, 1, 27, "Input"],
+Cell[23606, 778, 44, 1, 41, "Output"]
+}, Open  ]],
+Cell[23665, 782, 64, 0, 29, "Text"],
+Cell[23732, 784, 82, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[23839, 789, 39, 0, 41, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[23903, 793, 55, 1, 27, "Input"],
+Cell[23961, 796, 129, 2, 37, "Print"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[24127, 803, 83, 1, 27, "Input"],
+Cell[24213, 806, 103, 2, 14, "Message"],
+Cell[24319, 810, 141, 3, 14, "Message"],
+Cell[24463, 815, 150, 3, 14, "Message"],
+Cell[24616, 820, 141, 3, 14, "Message"],
+Cell[24760, 825, 147, 3, 14, "Message"],
+Cell[24910, 830, 147, 3, 14, "Message"],
+Cell[25060, 835, 157, 3, 14, "Message"],
+Cell[25220, 840, 161, 3, 14, "Message"],
+Cell[25384, 845, 150, 3, 14, "Message"],
+Cell[25537, 850, 219, 4, 29, "Message"],
+Cell[25759, 856, 159, 3, 14, "Message"],
+Cell[25921, 861, 164, 3, 14, "Message"],
+Cell[26088, 866, 219, 4, 29, "Message"],
+Cell[26310, 872, 181, 3, 29, "Message"],
+Cell[26494, 877, 181, 3, 29, "Message"],
+Cell[26678, 882, 124, 2, 14, "Message"],
+Cell[26805, 886, 311, 5, 29, "Message"],
+Cell[27119, 893, 167, 3, 14, "Message"],
+Cell[27289, 898, 413, 6, 44, "Message"],
+Cell[27705, 906, 167, 3, 14, "Message"],
+Cell[27875, 911, 167, 3, 14, "Message"],
+Cell[28045, 916, 163, 3, 14, "Message"],
+Cell[28211, 921, 174, 3, 14, "Message"],
+Cell[28388, 926, 150, 3, 14, "Message"],
+Cell[28541, 931, 168, 3, 14, "Message"],
+Cell[28712, 936, 103, 2, 14, "Message"],
+Cell[28818, 940, 170, 3, 14, "Message"],
+Cell[28991, 945, 234, 4, 29, "Message"],
+Cell[29228, 951, 157, 3, 14, "Message"],
+Cell[29388, 956, 188, 3, 29, "Message"],
+Cell[29579, 961, 174, 3, 14, "Message"],
+Cell[29756, 966, 174, 3, 14, "Message"],
+Cell[29933, 971, 157, 3, 14, "Message"]
+}, Open  ]],
+Cell[30105, 977, 212, 7, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[30342, 988, 54, 1, 27, "Input"],
+Cell[30399, 991, 73, 1, 41, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[30509, 997, 51, 1, 27, "Input"],
+Cell[30563, 1000, 119, 2, 41, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[30719, 1007, 75, 1, 27, "Input"],
+Cell[30797, 1010, 48, 1, 41, "Output"]
+}, Open  ]],
+Cell[30860, 1014, 100, 2, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[30985, 1020, 50, 1, 27, "Input"],
+Cell[31038, 1023, 130, 2, 41, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[31205, 1030, 65, 1, 27, "Input"],
+Cell[31273, 1033, 46, 1, 41, "Output"]
+}, Open  ]],
+Cell[31334, 1037, 79, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[31438, 1042, 46, 1, 27, "Input"],
+Cell[31487, 1045, 38, 1, 41, "Output"]
+}, Open  ]],
+Cell[31540, 1049, 75, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[31640, 1054, 46, 1, 27, "Input"],
+Cell[31689, 1057, 38, 1, 41, "Output"]
+}, Open  ]],
+Cell[31742, 1061, 92, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[31859, 1066, 55, 1, 27, "Input"],
+Cell[31917, 1069, 1474, 28, 212, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[33428, 1102, 76, 1, 27, "Input"],
+Cell[33507, 1105, 44130, 2224, 178, 30096, 2046, "GraphicsData", \
+"PostScript", "Graphics"],
+Cell[77640, 3331, 130, 3, 70, "Output"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[77819, 3340, 41, 0, 25, "Subsection"],
+Cell[77863, 3342, 122, 2, 67, "Input"],
+Cell[77988, 3346, 80, 1, 27, "Input"],
+Cell[78071, 3349, 77, 1, 27, "Input"],
+Cell[78151, 3352, 80, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[78256, 3357, 78, 1, 27, "Input"],
+Cell[78337, 3360, 57, 1, 37, "Print"],
+Cell[78397, 3363, 502, 10, 82, "Print"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[78936, 3378, 47, 1, 27, "Input"],
+Cell[78986, 3381, 201, 3, 60, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[79224, 3389, 80, 1, 27, "Input"],
+Cell[79307, 3392, 76, 1, 41, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[79420, 3398, 50, 1, 27, "Input"],
+Cell[79473, 3401, 109, 2, 41, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[79619, 3408, 51, 1, 27, "Input"],
+Cell[79673, 3411, 6050, 145, 174, "Output"]
+}, Open  ]],
+Cell[85738, 3559, 78, 1, 70, "Input"],
+
+Cell[CellGroupData[{
+Cell[85841, 3564, 50, 1, 70, "Input"],
+Cell[85894, 3567, 201, 3, 70, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[86132, 3575, 53, 1, 70, "Input"],
+Cell[86188, 3578, 109, 2, 70, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[86334, 3585, 48, 1, 70, "Input"],
+Cell[86385, 3588, 499, 14, 70, "Output"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[86945, 3609, 31, 0, 70, "Section"],
+Cell[86979, 3611, 247, 7, 70, "Text",
+  CellTags->"Wolfram book"],
+Cell[87229, 3620, 185, 6, 70, "Text",
+  CellTags->"Meader book"],
+Cell[87417, 3628, 191, 3, 70, "Program"],
+Cell[87611, 3633, 155, 4, 70, "Text",
+  CellTags->"MAD manual"],
+Cell[87769, 3639, 187, 3, 70, "Program"],
+Cell[87959, 3644, 129, 4, 70, "Text",
+  CellTags->"Mfs.nb"],
+Cell[88091, 3650, 212, 4, 70, "Program"],
+Cell[88306, 3656, 145, 4, 70, "Text",
+  CellTags->"ColorListPlot.nb"],
+Cell[88454, 3662, 237, 5, 70, "Program"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+
+
+
+(***********************************************************************
+End of Mathematica Notebook file.
+***********************************************************************)
+

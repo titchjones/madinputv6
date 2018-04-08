@@ -1,0 +1,3400 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[    112768,       3390]
+NotebookOptionsPosition[     76091,       2515]
+NotebookOutlinePosition[    101795,       3073]
+CellTagsIndexPosition[    101752,       3070]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Checks on an LHC optics", "Title"],
+
+Cell["John Jowett", "Subtitle"],
+
+Cell[CellGroupData[{
+
+Cell["Introduction", "Section"],
+
+Cell["\<\
+This document takes an LHC optics and goes through a sequence of standard \
+checks and validations.  Its content is not meant to be definitive. Its \
+purpose is to provides a framework in which more checks and calculations can \
+be added as required;  suggestions are welcome.\
+\>", "Text"],
+
+Cell[TextData[{
+ "This is a direct printing from a ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " notebook that can be found at "
+}], "Text"],
+
+Cell["\<\
+/afs/cern.ch/user/j/jowett/math/Madtomma/LHCapplications/OpticsCheckOut.nb\
+\>", "Program"],
+
+Cell["\<\
+and was documented as Beam Physics Note 2 on 27 October 1998.   The best way \
+to learn how this notebook works is to open it and evaluate it, trying to \
+change and add some things.  Of course, it can be used as a canned recipe for \
+doing a certain set of calculations.  \
+\>", "Text"],
+
+Cell[TextData[{
+ "Standard features of ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " are taken for granted.  However in reading this document, you need to \
+know, as a minimum, that a bold-face expression on an input line, is usually \
+followed by the results of its evaluation, as in"
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{"Date", "[", "]"}]], "Input",
+ InitializationCell->True],
+
+Cell["\<\
+Diaplay of the result is suppressed by ending the expression with a \
+semi-colon.  The evaluation may include the production of some graphics.   \
+\>", "Text"],
+
+Cell["\<\
+There is a second, much smaller, \"InputOnly\" version of the file that can \
+be used to start from nothing.\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell["Reference", "Subsection"],
+
+Cell[CellGroupData[{
+
+Cell["Change history", "Subsubsection"],
+
+Cell["\<\
+27/10/1998: A version of this notebook with some extra text released as Beam \
+Physics Note 3.\
+\>", "Commentary"],
+
+Cell["\<\
+11/11/1998 Improved the definition of getOptics to make it more flexible for \
+future applications.  Several other notebooks can start up by using the \
+auto-generated package from this notebook.  Changes are backward compatible. \
+The runMAD function was also made more robust in the meantime.  In particular \
+it can be run harmlessly on Windows where MAD does not exist.\
+\>", "Commentary"],
+
+Cell["11/11/1998 Added section on occurrences of elements.", "Commentary"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Copyright", "Subsubsection"],
+
+Cell[TextData[{
+ "\[Copyright] Copyright ",
+ StyleBox["CERN.1998",
+  FontSlant->"Italic"],
+ "\n\nThe copyright and all other rights relating to this computer software, \
+in whatever form, including but not\nlimited to the source code, the object \
+code and user documentation, are vested in CERN. \n\nCERN, on a royalty-free \
+and non-exclusive basis, hereby grants permission to use, copy, change, \
+modify,\ntranslate, display, distribute and make available this computer \
+software, subject to the following conditions:\n\n(1) this computer software \
+is provided on an as-is basis and CERN provides no express or implied\n\
+warranties of any kind, including but not limited to those of \
+merchantability, fitness for a particular purpose\nand non-infringement of \
+the proprietary rights, such as copyrights, patents and trade secrets, of \
+third\nparties. CERN accepts no liability whatsoever for or in connection \
+with the use of this computer software; \n\n(2) all copies made of this \
+computer software or of parts thereof shall include this copyright statement \
+in\nfull; \n\n(3) however, if this computer software or parts thereof are \
+made available in any other form than their\noriginal form, or are included \
+in any other computer software, the following short acknowledgement only\n\
+must be mentioned in the copyright statement and in the user documentation \
+(or, in the absence thereof, in\nany other appropriate place) concerning the \
+computer software thus made available or created: \n\n\"This product includes \
+computer software created and made available by CERN. This acknowledgement\n\
+shall be mentioned in full in any product which includes the CERN computer \
+software included herein or\nparts thereof.\" "
+}], "Text"]
+}, Closed]]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Setup ", "Section"],
+
+Cell[CellGroupData[{
+
+Cell["Starting the kernel", "Subsection"],
+
+Cell[TextData[{
+ "In order to run MAD within functions, this notebook can be ",
+ ButtonBox["set up to run a remote kernel on a Unix machine",
+  BaseStyle->"Hyperlink",
+  ButtonData:>{
+    URL["http://wwwslap.cern.ch/~jowett/ComputingNotes/\
+MathematicaUnixKernelFromWindows.html"], None}],
+ " (although of course it can always use a local kernel from a Front End on \
+Unix)."
+}], "Text"],
+
+Cell[BoxData["$Version"], "Input"],
+
+Cell[BoxData["$MachineName"], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Packages needed ", "Subsection",
+ InitializationCell->True],
+
+Cell[TextData[{
+ "We need to load some ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " packages for interacting with MAD."
+}], "Text"],
+
+Cell["\<\
+A package for working with the table output from MAD (fully documented in \
+CERN SL Note 97-55  (AP)).\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<Madtomma`Mfs`Mfs`\>\"", "]"}]], "InputOnly",
+ InitializationCell->True],
+
+Cell["\<\
+A package for generating input for MAD (not yet documented publicly but \
+available online)\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<Madtomma`MadLanguage`MADinput`\>\"", 
+  "]"}]], "InputOnly",
+ InitializationCell->True],
+
+Cell[TextData[{
+ "Although the following package is still under development, it contains some \
+useful functions for dealing with ",
+ StyleBox["mfs", "Input"],
+ " objects that represent optics."
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<Madtomma`Mfs`OpticsUtilities`\>\"", 
+  "]"}]], "InputOnly",
+ InitializationCell->True],
+
+Cell["Other general purpose packages", "Text",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<Graphics`Graphics`\>\"", "]"}]], "InputOnly",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<Graphics`MultipleListPlot`\>\"", 
+  "]"}]], "InputOnly",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<Statistics`DescriptiveStatistics`\>\"", 
+  "]"}]], "InputOnly",
+ InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Functions for this application", "Subsection"],
+
+Cell[TextData[{
+ "A command to run MAD.  If MAD is not available, ",
+ StyleBox["Null", "Input"],
+ " is returned and it tells you what to do."
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"runMAD", "[", "madfile_String", "]"}], ":=", "\n", "\t", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"cmdline", "=", 
+      RowBox[{"\"\<mad -new < \>\"", " ", "<>", "madfile"}]}], "}"}], ",", 
+    "\n", "\t\t", 
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{"$OperatingSystem", "==", "\"\<Unix\>\""}], ",", "\n", "\t\t", 
+      RowBox[{"ReadList", "[", 
+       RowBox[{
+        RowBox[{"\"\<!\>\"", "<>", "cmdline"}], ",", "String"}], "]"}], ",", 
+      "\n", "\t\t", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"Print", "[", 
+         RowBox[{
+         "\"\<MAD is not available on this operating system. You need to run \
+the command:\\n\>\"", ",", "cmdline", " ", ",", 
+          "\"\<\\non a system where it is available.\>\""}], "]"}], ";", "\n",
+         "\t\t", 
+        RowBox[{"Print", "[", 
+         RowBox[{
+          RowBox[{"File", "/.", 
+           RowBox[{"FileInformation", "[", "madfile", "]"}]}], "/.", 
+          RowBox[{"File", "\[Rule]", 
+           RowBox[{
+           "\"\<File \>\"", "<>", "madfile", "<>", 
+            "\"\< not found ?\>\""}]}]}], "]"}], ";", "\n", "\t\t\t\t", 
+        "Null"}], "\n", "\t\t", ")"}]}], "\n", "\t", "]"}]}], 
+   "]"}]}]], "InputOnly",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"runMAD", "::", "usage"}], "=", 
+   "\"\<runMAD[madfile] runs MAD, taking input from madfile, returning the \
+console output as a list of strings.  If MAD is not available, a message is \
+printed and Null is returned.\>\""}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[TextData[{
+ "A function to return an ",
+ StyleBox["mfs", "Input"],
+ " object based on a a stream of  ",
+ StyleBox["MadInput", "Input"],
+ " objects setting up a machine.  This function backs up existing output \
+files in a TRASH subdirectory of the current directory.    The argument ",
+ StyleBox["madinput", "Input"],
+ " is a ",
+ StyleBox["MadInput ", "Input"],
+ "object defining the optics; ",
+ StyleBox["cols", "Input"],
+ " is a list of column names for MAD's OPTICS command.  The optional final \
+argument ",
+ StyleBox["selectspec ", "Input"],
+ " is a selection specification for the OPTICS command that defaults to \
+selecting everything."
+}], "Text"],
+
+Cell[TextData[{
+ "Since Beam Physics Note 3 was distributed (November 1998), this function \
+has been extended so that ",
+ StyleBox["selectspec", "Input"],
+ " can be a list (this allows multiple selections, e.g., of quadrupoles and \
+IPs).  Giving an empty list will not generated any selection. This may be \
+useful if you want to specify the selection in ",
+ StyleBox["madinput", "Input"],
+ " instead.  Any selection made there will remain in force anyway unless ",
+ StyleBox["\"CLEAR\"", "Input"],
+ " is the first element of ",
+ StyleBox["selectspec", "Input"],
+ ". In addition the final optional argument ",
+ StyleBox["fstub", "Input"],
+ " can be used to control the names given to the files created behind the \
+scenes."
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"getOptics", "[", 
+   RowBox[{"madinput_", ",", "cols_List", ",", 
+    RowBox[{"selectspec", ":", 
+     RowBox[{"{", 
+      RowBox[{"_String", "..."}], "}"}]}], ",", 
+    RowBox[{"fstub_String:", "\"\<getOptics\>\""}]}], "]"}], ":=", "\n", "\t", 
+  RowBox[{"Module", "[", "\n", "\t\t", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"madfile", "=", 
+       RowBox[{"fstub", "<>", "\"\<.mad\>\""}]}], ",", "\n", "\t\t\t", 
+      RowBox[{"tfsfile", "=", 
+       RowBox[{"fstub", "<>", "\"\<.tfs\>\""}]}], ",", "\n", "\t\t\t", 
+      RowBox[{"printfile", "=", 
+       RowBox[{"fstub", "<>", "\"\<.mou\>\""}]}], ",", "MadRC"}], "\n", 
+     "\t\t", "}"}], ",", "\n", "\t\t", 
+    RowBox[{
+     RowBox[{"bumpFile", "/@", 
+      RowBox[{"{", 
+       RowBox[{"madfile", ",", "tfsfile"}], "}"}]}], ";", "\n", "\t\t", 
+     RowBox[{"makeMADfile", "[", 
+      RowBox[{"madfile", ",", "\n", "\t\t\t", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+         "\"\<assign,print=\\\"\>\"", "<>", "printfile", "<>", 
+          "\"\<\\\"\>\""}], ",", "\n", "\t\t\t\t", 
+         RowBox[{
+         "\"\<assign,echo=\\\"\>\"", "<>", "printfile", "<>", 
+          "\"\<\\\"\>\""}], ",", "\n", "\t\t\t\t", "madinput", ",", "\n", 
+         "\t\t\t\t", "\"\<OPTION,DOUBLE\>\"", ",", "\n", "\t\t\t\t", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"\"\<select,optics,\>\"", "<>", "#"}], " ", "&"}], ")"}], 
+          "/@", " ", "selectspec"}], ",", "\n", "\t\t\t\t", 
+         RowBox[{"MADoptics", "[", 
+          RowBox[{"tfsfile", ",", 
+           RowBox[{"columns", "->", "cols"}]}], "]"}]}], "\n", "\t\t\t", 
+        "}"}]}], "]"}], ";", "\n", "\t\t\t", 
+     RowBox[{"Print", "[", 
+      RowBox[{"TableForm", "[", 
+       RowBox[{"MadRC", "=", 
+        RowBox[{"runMAD", "[", "madfile", "]"}]}], "]"}], "]"}], ";", "\n", 
+     "\t\t", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"MadRC", "=!=", "Null"}], ",", 
+       RowBox[{"tfsRead", "[", "tfsfile", "]"}], ",", "Null"}], "]"}]}]}], 
+   "\n", "\t", "]"}]}]], "InputOnly",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"getOptics", "[", 
+   RowBox[{"madinput_", ",", "cols_List", ",", 
+    RowBox[{"selectspec_String:", "\"\<FULL\>\""}], ",", 
+    RowBox[{"fstub_String:", "\"\<getOptics\>\""}]}], "]"}], ":=", 
+  RowBox[{"getOptics", "[", 
+   RowBox[{"madinput", ",", "cols", ",", 
+    RowBox[{"{", "selectspec", "}"}], ",", "fstub"}], "]"}]}]], "InputOnly",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"getOptics", "::", "usage"}], "=", 
+   "\"\<getOptics[madinput,cols,selectspec,fstub] returns an mfs object \
+obtained by running MAD's OPTICS command on the machine generated by the \
+MadInput obect madinput.\\nThe argument cols specifies the columns of \
+interest, e.g., {\\\"NAME\\\",\\\"BETX\\\"}.\\nThe optional argument \
+selectspec (default \\\"FULL\\\") is a string or list of strings defining the \
+elements to be selected, e.g., \
+{\\\"RANGE=IP2/IP3,CLASS=QUADRUPOLE\\\",\\\"CLASS=SEXTUPOLE\\\"}.\\nThe \
+optional argument fstub is a string controlling the naming of files created \
+for and by MAD.\>\""}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell["\<\
+A function to remove all the drift spaces from an optics, knowing the way MAD \
+invents names for them.\
+\>", "Text",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"removeDrifts", "[", "seq_mfs", "]"}], ":=", 
+   RowBox[{"mfsSelect", "[", 
+    RowBox[{"seq", ",", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"Not", "[", 
+        RowBox[{"StringMatchQ", "[", 
+         RowBox[{
+          RowBox[{"mfsColumnValue", "[", 
+           RowBox[{"seq", ",", "#", ",", "\"\<NAME\>\""}], "]"}], ",", 
+          "\"\<[*]\>\""}], "]"}], "]"}], ")"}], "&"}]}], "]"}]}], 
+  ";"}]], "InputOnly",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"removeDrifts", "::", "usage"}], "=", 
+   "\"\<removeDrifts[opt] removes all MAD-generated drift spaces from the \
+optics opt, given as an mfs object.\>\""}], ";"}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Specification of the optics", "Section",
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell["Some technical remarks and hints", "Subsection"],
+
+Cell[TextData[{
+ "Presently, the standard practice for generating LHC optics is to use a \
+sample job file provided by John Miles and found in the optics database.   To \
+avoid making many modified private copies of these files, we can very often \
+use them as the basis of a ",
+ StyleBox["Madinput", "Input"],
+ " object that can be passed as the first argument to the ",
+ StyleBox["getOptics", "Input"],
+ " command defined above.  The remainder of this section is an example of a \
+sequence of transformations of a typical sample job into a variable ",
+ StyleBox["opticsSpec", "Input"],
+ " for a typical LHC application.  To make it as easy as possible to \
+understand, each step is spelled out in detail.   It can be made much shorter \
+once you are familiar with the technique."
+}], "Text"],
+
+Cell["\<\
+If you are reading this passively and are not interested in these rather \
+technical details, you may want to skip straight to the next section.\
+\>", "Text"],
+
+Cell["\<\
+Since this sequence of transformations can vary somewhat between optics of \
+interest, I have found it practical to save a copy of this section in a \
+separate notebook file in the directory where I keep work relating to a given \
+optics version.  That avoids duplicating the whole of this notebook. and I \
+can either replace the rest of this section with the appropriate copy.  \
+\>", "Text"],
+
+Cell[TextData[{
+ "Alternatively, if all the input cells in these optics specification \
+notebooks are given the ",
+ StyleBox["InitializationCell", "Input"],
+ " property and the notebook itself has the option setting ",
+ StyleBox["AutoGeneratedPackage->Automatic", "Input"],
+ ", then its definition can be read in with a simple ",
+ StyleBox["Get[<notebookname>.m]", "Input"],
+ " command."
+}], "Text"],
+
+Cell[TextData[{
+ "However any other means of constructing the optics will also work.  All \
+that matters is that we come out of this section with a valid value for the \
+variable ",
+ StyleBox["opticsSpec. ", "Input"],
+ "E.g. to simply reload an existing pool file you need only set ",
+ StyleBox["opticsSpec=MADpoolLoad[<poolfilename>]", "Input"],
+ "."
+}], "Text"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["User's working area and the sample job", "Subsection"],
+
+Cell[TextData[{
+ "Select a directory where we can create working files.  Use delayed \
+assignment (",
+ StyleBox[":=", "Input"],
+ " rather than ",
+ StyleBox["=", "Input"],
+ ") to make this independent of operating system."
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{"workDir", ":=", 
+  RowBox[{"ToFileName", "[", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"AfsHomeDirectory", "[", "]"}], ",", "\"\<public\>\"", ",", 
+     "\"\<lhc99\>\"", ",", "\"\<V6.0\>\""}], "}"}], "]"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"SetDirectory", "[", "workDir", "]"}]], "Input"],
+
+Cell["Select a sample job file and check its location, size, etc.", "Text"],
+
+Cell[BoxData[
+ RowBox[{"sampleJobFile", ":=", 
+  RowBox[{"ToFileName", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "$AfsRoot", ",", "\"\<cern.ch\>\"", ",", "\"\<eng\>\"", ",", 
+      "\"\<lhc\>\"", ",", "\"\<optics\>\"", ",", "\"\<V6.0\>\"", ",", 
+      "\"\<madjobs\>\""}], "}"}], ",", "\"\<linear1.job\>\""}], 
+   "]"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"FileInformation", "[", "sampleJobFile", "]"}]], "Input"],
+
+Cell["\<\
+Get the lines of the file into a variable and list them here so we can look \
+at them\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(", 
+   RowBox[{"sampleJob", "=", 
+    RowBox[{"ReadList", "[", 
+     RowBox[{"sampleJobFile", ",", "String"}], "]"}]}], ")"}], "//", 
+  "TableForm"}]], "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Modifications to the sample job ", "Subsection"],
+
+Cell[TextData[{
+ "This is the slightly messy part. We want to modify the sample job into \
+something a bit different, possibly changing some options.  We proceed step \
+by step for clarity and in order to maximise flexibility, making a sequence \
+of changes to ",
+ StyleBox["opticsSpec", "Input"],
+ " (they have to be done in order of course).   This is a bit like editing a \
+copy of the file.  To avoid making this too long, we don't show the output of \
+each step.   You can make it appear by removing the semi-colons at the end of \
+each expression.  Or skip ahead and evaluate the command in the next \
+subsection."
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"opticsSpec", "=", "sampleJob"}], ";"}]], "Input"],
+
+Cell["\<\
+To simplify things, start by removing lines containing only blanks or that \
+are just decorative comments.   These are lines whose characters all belong \
+to a certain small set.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"opticsSpec", "=", 
+   RowBox[{"Select", "[", 
+    RowBox[{"opticsSpec", ",", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"Complement", "[", 
+         RowBox[{
+          RowBox[{"Characters", "[", "#", "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"\"\< \>\"", ",", "\"\<!\>\"", ",", "\"\<-\>\""}], "}"}]}],
+          "]"}], "=!=", 
+        RowBox[{"{", "}"}]}], ")"}], "&"}]}], "]"}]}], ";"}]], "Input"],
+
+Cell["\<\
+Anything beyond column 80 will be ignored by MAD, so we shall truncate such \
+lines now to avoid problems later.  But first list any lines that will be \
+affected\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Select", "[", 
+   RowBox[{"opticsSpec", ",", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"StringLength", "[", "#", "]"}], ">", "79"}], ")"}], "&"}]}], 
+   "]"}], " ", "//", "TableForm"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"opticsSpec", "=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"StringTake", "[", 
+     RowBox[{"#", ",", 
+      RowBox[{"{", 
+       RowBox[{"1", ",", 
+        RowBox[{"Min", "[", 
+         RowBox[{
+          RowBox[{"StringLength", "[", "#", "]"}], ",", "79"}], "]"}]}], 
+       "}"}]}], "]"}], "&"}], " ", "/@", " ", "opticsSpec"}]}]], "Input"],
+
+Cell["\<\
+Remove the STOP command because we want to follow it with other things.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"opticsSpec", "=", 
+   RowBox[{"Drop", "[", 
+    RowBox[{"opticsSpec", ",", 
+     RowBox[{"-", "1"}]}], "]"}]}], ";"}]], "Input"],
+
+Cell["Check for any lines setting output streams from MAD", "Text"],
+
+Cell[BoxData[
+ RowBox[{"Select", "[", 
+  RowBox[{"opticsSpec", ",", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"StringMatchQ", "[", 
+      RowBox[{
+       RowBox[{"ToUpperCase", "[", "#", "]"}], ",", "\"\<*ASSIGN*\>\""}], 
+      "]"}], ")"}], "&"}]}], "]"}]], "Input"],
+
+Cell["and (if that is indeed all we see here) remove them", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"opticsSpec", "=", 
+   RowBox[{"Select", "[", 
+    RowBox[{"opticsSpec", ",", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"!", 
+        RowBox[{"StringMatchQ", "[", 
+         RowBox[{
+          RowBox[{"ToUpperCase", "[", "#", "]"}], ",", "\"\<*ASSIGN*\>\""}], 
+         "]"}]}], ")"}], "&"}]}], "]"}]}], ";"}]], "Input"],
+
+Cell["Remove extraneous blanks to facilitate later operations", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"opticsSpec", "=", 
+   RowBox[{"FixedPoint", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"StringReplace", "[", 
+       RowBox[{"#", ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"\"\< :\>\"", "\[Rule]", "\"\<:\>\""}], ",", 
+          RowBox[{"\"\<= \>\"", "\[Rule]", "\"\<=\>\""}], ",", 
+          RowBox[{"\"\<  \>\"", "\[Rule]", "\"\< \>\""}]}], "}"}]}], "]"}], 
+      "&"}], ",", "opticsSpec"}], "]"}]}], ";"}]], "Input"],
+
+Cell["\<\
+Define a predicate function that will identify the lines switching on the \
+main optics database options\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"switchLineQ", "[", "madline_String", "]"}], ":=", 
+  RowBox[{"StringMatchQ", "[", 
+   RowBox[{
+    RowBox[{"ToUpperCase", "[", "madline", "]"}], ",", "\"\<*ON_*:=*\>\""}], 
+   "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell["\<\
+Pick out lines using this predicate.  These give the set of parameters that \
+we might want to change.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(", 
+   RowBox[{"switches", "=", 
+    RowBox[{"Select", "[", 
+     RowBox[{"opticsSpec", ",", "switchLineQ"}], "]"}]}], ")"}], "//", 
+  "TableForm"}]], "Input"],
+
+Cell["and remove them from ", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"opticsSpec", "=", 
+   RowBox[{"Select", "[", 
+    RowBox[{"opticsSpec", ",", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"Not", "[", 
+        RowBox[{"switchLineQ", "[", "#", "]"}], "]"}], ")"}], "&"}]}], 
+    "]"}]}], ";"}]], "Input"],
+
+Cell["\<\
+Rebuild the specification, putting all the switches first.  Follow them with \
+their replacement (lines which will override them) and then the other lines.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"opticsSpec", "=", 
+   RowBox[{"{", 
+    RowBox[{"switches", ",", "\n", "\t\t", 
+     RowBox[{"{", "\"\<ON_RING:=0\>\"", "\n", "\t\t", "}"}], ",", "\n", 
+     "\t\t", "opticsSpec"}], "}"}]}], ";"}]], "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Verify the modified MAD input", "Subsection",
+ PageBreakAbove->True],
+
+Cell["\<\
+Show what we have now (the flattening removes some of the nested structure of \
+the new MAD job)/\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"TableForm", "[", 
+  RowBox[{"Flatten", "[", "opticsSpec", "]"}], "]"}]], "Input"]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Evaluate the optics", "Section"],
+
+Cell["Compute the optics, removing all the drifts.  ", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"optics", "[", "LHC", "]"}], "=", 
+   RowBox[{"removeDrifts", "[", 
+    RowBox[{"getOptics", "[", 
+     RowBox[{"opticsSpec", ",", 
+      RowBox[{"{", 
+       RowBox[{
+       "\"\<NAME\>\"", ",", "\"\<S\>\"", ",", "\"\<L\>\"", ",", "\"\<K1L\>\"",
+         ",", "\"\<BETX\>\"", ",", "\"\<MUX\>\"", ",", "\"\<BETY\>\"", ",", 
+        "\"\<MUY\>\"", ",", "\"\<DX\>\"", ",", "\"\<DY\>\""}], "}"}]}], "]"}],
+     "]"}]}], ";"}]], "Input"],
+
+Cell["Or, if we are sure the correct MAD run has already been done", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"optics", "[", "LHC", "]"}], "=", 
+   RowBox[{"removeDrifts", "[", 
+    RowBox[{"tfsRead", "[", "\"\<getOptics.tfs\>\"", "]"}], "]"}]}], 
+  ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"Directory", "[", "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"FileNames", "[", "\"\<*.tfs\>\"", "]"}]], "Input"],
+
+Cell["\<\
+List the descriptor names in this optics and print some of the values to show \
+which optics we are dealing with\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"mfsKeyNames", "[", 
+  RowBox[{"optics", "[", "LHC", "]"}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"mfsKeyValue", "[", 
+  RowBox[{
+   RowBox[{"optics", "[", "LHC", "]"}], ",", "\"\<COMMENT\>\""}], 
+  "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"circumference", "[", "opt_", "]"}], ":=", 
+  RowBox[{"mfsKeyValue", "[", 
+   RowBox[{
+    RowBox[{"optics", "[", "LHC", "]"}], ",", "\"\<CIRCUM\>\""}], 
+   "]"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"circumference", "[", "LHC", "]"}]], "Input"],
+
+Cell["\<\
+This optics object contains all elements in the LHC.   How much memory does \
+it occupy?\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"ByteCount", "[", 
+  RowBox[{"optics", "[", "LHC", "]"}], "]"}]], "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Check for any thick elements", "Section"],
+
+Cell["\<\
+This was supposed to be a thin-lens machine.  To check, we can extract just \
+those elements with non-zero length\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"thickElements", "[", "LHC", "]"}], "=", 
+   RowBox[{"mfsSelect", "[", 
+    RowBox[{
+     RowBox[{"optics", "[", "LHC", "]"}], ",", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"mfsColumnValue", "[", 
+         RowBox[{
+          RowBox[{"optics", "[", "LHC", "]"}], ",", "#", ",", "\"\<L\>\""}], 
+         "]"}], ">", "0"}], ")"}], "&"}]}], "]"}]}], ";"}]], "Input"],
+
+Cell["\<\
+Display a table of the names and lengths of all the thick elements\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Transpose", "[", 
+   RowBox[{"mfsColumn", "[", 
+    RowBox[{
+     RowBox[{"thickElements", "[", "LHC", "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"\"\<NAME\>\"", ",", "\"\<L\>\""}], "}"}]}], "]"}], "]"}], "//",
+   "Length"}]], "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Occurrences of elements", "Section"],
+
+Cell["\<\
+Many things are simpler if every element in the machine has a unique name.  \
+Let us see if this is the case.  Start by creating a list of all the names \
+that occur.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"elementNames", "[", "LHC", "]"}], "=", 
+   RowBox[{"mfsColumn", "[", 
+    RowBox[{
+     RowBox[{"optics", "[", "LHC", "]"}], ",", "\"\<NAME\>\""}], "]"}]}], 
+  ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"uniqueElementNames", "[", "LHC", "]"}], "=", 
+   RowBox[{"Union", "[", 
+    RowBox[{"elementNames", "[", "LHC", "]"}], "]"}]}], ";"}]], "Input"],
+
+Cell["\<\
+How many are there?  And how many elements are there altogether?\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"Length", "[", 
+    RowBox[{"uniqueElementNames", "[", "LHC", "]"}], "]"}], ",", 
+   RowBox[{"Length", "[", 
+    RowBox[{"elementNames", "[", "LHC", "]"}], "]"}]}], "}"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"?", "Count"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"First", "[", 
+  RowBox[{"elementNames", "[", "LHC", "]"}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"Count", "[", 
+  RowBox[{
+   RowBox[{"elementNames", "[", "LHC", "]"}], ",", 
+   RowBox[{"First", "[", 
+    RowBox[{"elementNames", "[", "LHC", "]"}], "]"}]}], "]"}]], "Input"],
+
+Cell["\<\
+Create a list of the unique names together with their frequencies of \
+occurrence.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"nameFrequencies", "[", "LHC", "]"}], "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"#", ",", 
+       RowBox[{"Count", "[", 
+        RowBox[{
+         RowBox[{"elementNames", "[", "LHC", "]"}], ",", "#"}], "]"}]}], 
+      "}"}], "&"}], " ", "/@", " ", 
+    RowBox[{"uniqueElementNames", "[", "LHC", "]"}]}]}], ";"}]], "Input"],
+
+Cell["\<\
+Tabulate those that occur more than once, with their frequencies of \
+occurrence.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Select", "[", 
+   RowBox[{
+    RowBox[{"nameFrequencies", "[", "LHC", "]"}], ",", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"Last", "[", "#", "]"}], ">", "1"}], ")"}], "&"}]}], "]"}], "//",
+   "TableForm"}]], "Input"],
+
+Cell[TextData[{
+ "Overload the definition of ",
+ StyleBox["optics", "Input"],
+ " to restrict to a given element name"
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"optics", "[", 
+   RowBox[{"LHC", ",", "element_String"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"optics", "[", 
+    RowBox[{"LHC", ",", "element"}], "]"}], "=", 
+   RowBox[{"mfsMember", "[", 
+    RowBox[{
+     RowBox[{"optics", "[", "LHC", "]"}], ",", "\"\<NAME\>\"", ",", 
+     RowBox[{"{", "element", "}"}]}], "]"}]}]}]], "Input"],
+
+Cell["\<\
+Print a table of the optical functions at all the occurrences of a given \
+element\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"TableForm", "[", 
+    RowBox[{
+     RowBox[{"Transpose", "[", 
+      RowBox[{"mfsColumn", "[", 
+       RowBox[{
+        RowBox[{"optics", "[", 
+         RowBox[{"LHC", ",", "\"\<SFB.67\>\""}], "]"}], ",", "#"}], "]"}], 
+      "]"}], ",", "\n", "\t", 
+     RowBox[{"TableHeadings", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", "}"}], ",", 
+        RowBox[{"opticsNotation", "[", "#", "]"}]}], "}"}]}], ",", "\n", "\t", 
+     RowBox[{"TableSpacing", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "1"}], "}"}]}]}], "]"}], "&"}], " ", "@", " ", 
+  RowBox[{"{", 
+   RowBox[{
+   "\"\<NAME\>\"", ",", "\"\<S\>\"", ",", "\"\<BETX\>\"", ",", "\"\<MUX\>\"", 
+    ",", "\"\<BETY\>\"", ",", "\"\<MUY\>\""}], "}"}]}]], "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Beta-beating", "Section"],
+
+Cell[TextData[{
+ "A straighforward plot of the ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["\[Beta]", "x"], TraditionalForm]]],
+ " function over the whole ring.  Notice how the function ",
+ StyleBox["opticsNotation", "Input"],
+ " transforms MAD's ASCII names for optical functions (e.g. \"BETX\") into \
+conventional notations like ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["\[Beta]", "x"], TraditionalForm]]],
+ "."
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{"ListPlot", "[", 
+  RowBox[{
+   RowBox[{"Transpose", "[", 
+    RowBox[{"mfsColumn", "[", 
+     RowBox[{
+      RowBox[{"optics", "[", "LHC", "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"\"\<S\>\"", ",", "\"\<BETX\>\""}], "}"}]}], "]"}], "]"}], ",", 
+   RowBox[{"PlotJoined", "\[Rule]", "True"}], ",", 
+   RowBox[{"PlotRange", "\[Rule]", "All"}], ",", 
+   RowBox[{"AxesLabel", "\[Rule]", 
+    RowBox[{"opticsNotation", "[", 
+     RowBox[{"{", 
+      RowBox[{"\"\<S\>\"", ",", "\"\<BETX\>\""}], "}"}], "]"}]}]}], 
+  "]"}]], "Input"],
+
+Cell[TextData[{
+ "Perhaps it's better to transform that into a plot of ",
+ Cell[BoxData[
+  FormBox[
+   SqrtBox["\[Beta]"], TraditionalForm]]],
+ " with an appropriate pure function"
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{"ListPlot", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+       ",", 
+       SqrtBox[
+        RowBox[{
+        "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]]}], "}"}],
+      "&"}], " ", "/@", 
+    RowBox[{"Transpose", "[", 
+     RowBox[{"mfsColumn", "[", 
+      RowBox[{
+       RowBox[{"optics", "[", "LHC", "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<S\>\"", ",", "\"\<BETX\>\""}], "}"}]}], "]"}], "]"}]}], 
+   ",", 
+   RowBox[{"PlotJoined", "\[Rule]", "True"}], ",", 
+   RowBox[{"PlotRange", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "30"}], "}"}]}], ",", 
+   RowBox[{"AxesLabel", "\[Rule]", 
+    RowBox[{"opticsNotation", "[", 
+     RowBox[{"{", 
+      RowBox[{"\"\<S\>\"", ",", 
+       SqrtBox["\"\<BETX\>\""]}], "}"}], "]"}]}]}], "]"}]], "Input"],
+
+Cell[TextData[{
+ "Using ",
+ StyleBox["mfsRange", "Input"],
+ ", we can limit the plot to a piece of the ring"
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{"ListPlot", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+       ",", 
+       SqrtBox[
+        RowBox[{
+        "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]]}], "}"}],
+      "&"}], " ", "/@", 
+    RowBox[{"Transpose", "[", 
+     RowBox[{"mfsColumn", "[", "\n", "\t\t\t\t", 
+      RowBox[{
+       RowBox[{"mfsRange", "[", 
+        RowBox[{
+         RowBox[{"optics", "[", "LHC", "]"}], ",", "\"\<S\>\"", ",", 
+         RowBox[{"{", 
+          RowBox[{"0", ",", "800"}], "}"}]}], "]"}], ",", "\n", "\t\t\t\t", 
+       RowBox[{"{", 
+        RowBox[{"\"\<S\>\"", ",", "\"\<BETX\>\""}], "}"}]}], "]"}], "]"}]}], 
+   ",", 
+   RowBox[{"PlotJoined", "\[Rule]", "True"}], ",", 
+   RowBox[{"PlotRange", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "30"}], "}"}]}], ",", 
+   RowBox[{"AxesLabel", "\[Rule]", 
+    RowBox[{"opticsNotation", "[", 
+     RowBox[{"{", 
+      RowBox[{"\"\<S\>\"", ",", 
+       SqrtBox["\"\<BETX\>\""]}], "}"}], "]"}]}]}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"ListPlot", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+       ",", 
+       SqrtBox[
+        RowBox[{
+        "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]]}], "}"}],
+      "&"}], " ", "/@", 
+    RowBox[{"Transpose", "[", 
+     RowBox[{"mfsColumn", "[", 
+      RowBox[{
+       RowBox[{"optics", "[", "LHC", "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<S\>\"", ",", "\"\<BETY\>\""}], "}"}]}], "]"}], "]"}]}], 
+   ",", 
+   RowBox[{"PlotJoined", "\[Rule]", "True"}], ",", 
+   RowBox[{"PlotRange", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "30"}], "}"}]}], ",", 
+   RowBox[{"AxesLabel", "\[Rule]", 
+    RowBox[{"opticsNotation", "[", 
+     RowBox[{"{", 
+      RowBox[{"\"\<S\>\"", ",", 
+       SqrtBox["\"\<BETY\>\""]}], "}"}], "]"}]}]}], "]"}]], "Input"],
+
+Cell["\<\
+We want to pick out just the quadrupoles in the arcs to analyse the \
+beta-beating.  Here is a predicate that can be applied to a quadrupole name \
+to see if it is a focussing arc quad.  It relies on the naming and numbering \
+conventions in the LHC.  Basically, it checks that the first two characters \
+of the name are \"QF\" and that the next two are an integer \[GreaterEqual] \
+13. \
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"arcQFQ", "[", "qname_String", "]"}], ":=", "\n", "\t", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"StringLength", "[", "qname", "]"}], "\[GreaterEqual]", "4"}], 
+    ",", "\n", "\t\t", 
+    RowBox[{"With", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"qfd", "=", 
+         RowBox[{"StringTake", "[", 
+          RowBox[{"qname", ",", "2"}], "]"}]}], ",", "\n", "\t\t\t\t", 
+        RowBox[{"qn", "=", 
+         RowBox[{"StringTake", "[", 
+          RowBox[{"qname", ",", 
+           RowBox[{"{", 
+            RowBox[{"3", ",", "4"}], "}"}]}], "]"}]}]}], "}"}], ",", "\n", 
+      "\t\t\t", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"qfd", "==", "\"\<QF\>\""}], " ", ")"}], " ", "&&", " ", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"DigitQ", "[", "qn", "]"}], ",", 
+         RowBox[{
+          RowBox[{"ToExpression", "[", "qn", "]"}], "\[GreaterEqual]", "13"}],
+          ",", "False"}], "]"}]}]}], "\n", "\t\t", "]"}], ",", "\n", "\t\t", 
+    "False"}], "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell["Test it on some typical values", "Text"],
+
+Cell[BoxData[
+ RowBox[{"arcQFQ", "/@", " ", 
+  RowBox[{"{", 
+   RowBox[{
+   "\"\<aQF14\>\"", ",", "\"\<QF13\>\"", ",", "\"\<QF11\>\"", ",", 
+    "\"\<QFab\>\"", ",", "\"\<QF21.L2\>\"", ",", "\"\<QF1.L3\>\"", ",", 
+    "\"\<QD1\>\"", ",", "\"\<QS11\>\"", ",", "\"\<QD12\>\"", ",", 
+    "\"\<QD22.L4\>\""}], "}"}]}]], "Input"],
+
+Cell["A similar predicate for the QDs", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"arcQDQ", "[", "qname_String", "]"}], ":=", "\n", "\t", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"StringLength", "[", "qname", "]"}], "\[GreaterEqual]", "4"}], 
+    ",", "\n", "\t\t", 
+    RowBox[{"With", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"qfd", "=", 
+         RowBox[{"StringTake", "[", 
+          RowBox[{"qname", ",", "2"}], "]"}]}], ",", "\n", "\t\t\t\t", 
+        RowBox[{"qn", "=", 
+         RowBox[{"StringTake", "[", 
+          RowBox[{"qname", ",", 
+           RowBox[{"{", 
+            RowBox[{"3", ",", "4"}], "}"}]}], "]"}]}]}], "}"}], ",", "\n", 
+      "\t\t\t", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"qfd", "==", "\"\<QD\>\""}], " ", ")"}], " ", "&&", " ", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"DigitQ", "[", "qn", "]"}], ",", 
+         RowBox[{
+          RowBox[{"ToExpression", "[", "qn", "]"}], "\[GreaterEqual]", "13"}],
+          ",", "False"}], "]"}]}]}], "\n", "\t\t", "]"}], ",", "\n", "\t\t", 
+    "False"}], "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"arcQDQ", "/@", " ", 
+  RowBox[{"{", 
+   RowBox[{
+   "\"\<QF12\>\"", ",", "\"\<QF11\>\"", ",", "\"\<QFab\>\"", ",", 
+    "\"\<QF21.L2\>\"", ",", "\"\<QD1\>\"", ",", "\"\<QS11\>\"", ",", 
+    "\"\<QD12\>\"", ",", "\"\<QD22.L4\>\""}], "}"}]}]], "Input"],
+
+Cell["\<\
+The optics at the arc QFs and QDs are obtained by selecting elements \
+satisfying these predicates\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"optics", "[", 
+    RowBox[{"LHC", ",", "\"\<QF\>\""}], "]"}], "=", 
+   RowBox[{"mfsSelect", "[", 
+    RowBox[{
+     RowBox[{"optics", "[", "LHC", "]"}], ",", 
+     RowBox[{
+      RowBox[{"arcQFQ", "[", 
+       RowBox[{"mfsColumnValue", "[", 
+        RowBox[{
+         RowBox[{"optics", "[", "LHC", "]"}], ",", "#", ",", "\"\<NAME\>\""}],
+         "]"}], "]"}], "&"}]}], "]"}]}], ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"optics", "[", 
+    RowBox[{"LHC", ",", "\"\<QD\>\""}], "]"}], "=", 
+   RowBox[{"mfsSelect", "[", 
+    RowBox[{
+     RowBox[{"optics", "[", "LHC", "]"}], ",", 
+     RowBox[{
+      RowBox[{"arcQDQ", "[", 
+       RowBox[{"mfsColumnValue", "[", 
+        RowBox[{
+         RowBox[{"optics", "[", "LHC", "]"}], ",", "#", ",", "\"\<NAME\>\""}],
+         "]"}], "]"}], "&"}]}], "]"}]}], ";"}]], "Input"],
+
+Cell[TextData[{
+ "Plot the ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["\[Beta]", "x"], TraditionalForm]]],
+ " at the QFs"
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{"ListPlot", "[", 
+  RowBox[{
+   RowBox[{"Transpose", "[", 
+    RowBox[{"mfsColumn", "[", " ", 
+     RowBox[{
+      RowBox[{"optics", "[", 
+       RowBox[{"LHC", ",", "\"\<QF\>\""}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"\"\<S\>\"", ",", "\"\<BETX\>\""}], "}"}]}], "]"}], "]"}], ",", 
+   RowBox[{"AxesLabel", "\[Rule]", 
+    RowBox[{"opticsNotation", "[", 
+     RowBox[{"{", 
+      RowBox[{"\"\<S\>\"", ",", "\"\<BETX\>\""}], "}"}], "]"}]}]}], 
+  "]"}]], "Input"],
+
+Cell["\<\
+We want \[Beta]-beating plots for the four cases of interest\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"betaBeatCases", "=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"\"\<QF\>\"", ",", "\"\<BETX\>\""}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"\"\<QF\>\"", ",", "\"\<BETY\>\""}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"\"\<QD\>\"", ",", "\"\<BETX\>\""}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"\"\<QD\>\"", ",", "\"\<BETY\>\""}], "}"}]}], "}"}]}]], "Input",
+ InitializationCell->True],
+
+Cell["\<\
+With some standard methods, it is easy to build up from the above plot and \
+arrange the results\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"Show", "[", 
+  RowBox[{"GraphicsArray", "[", 
+   RowBox[{"Partition", "[", "\n", "\t\t\t", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"ListPlot", "[", 
+        RowBox[{
+         RowBox[{"Transpose", "[", 
+          RowBox[{"mfsColumn", "[", " ", 
+           RowBox[{
+            RowBox[{"optics", "[", 
+             RowBox[{"LHC", ",", 
+              RowBox[{
+              "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
+             "]"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"\"\<S\>\"", ",", 
+              RowBox[{
+              "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+             "}"}]}], "]"}], "]"}], ",", "\n", "\t\t\t\t", 
+         RowBox[{"AxesLabel", "\[Rule]", 
+          RowBox[{"opticsNotation", "[", "#", "]"}]}], ",", 
+         RowBox[{"DisplayFunction", "\[Rule]", "Identity"}]}], "]"}], "&"}], 
+      " ", "/@", " ", "betaBeatCases"}], ",", "\n", "\t\t\t", "2"}], "]"}], 
+   "]"}], "]"}]], "Input"],
+
+Cell[TextData[{
+ "Get the minimum value of ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["\[Beta]", "x"], TraditionalForm]]],
+ " at a QF"
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{"Min", "[", 
+  RowBox[{"mfsColumn", "[", 
+   RowBox[{
+    RowBox[{"optics", "[", 
+     RowBox[{"LHC", ",", "\"\<QF\>\""}], "]"}], ",", "\"\<BETX\>\""}], "]"}], 
+  "]"}]], "Input"],
+
+Cell["\<\
+Build up expressions for naximum, minimum and statistics of the four \
+\[Beta]-beating cases\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"betaBeatCasesMax", "=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"Max", "[", 
+     RowBox[{"mfsColumn", "[", 
+      RowBox[{
+       RowBox[{"optics", "[", 
+        RowBox[{"LHC", ",", 
+         RowBox[{
+         "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], "]"}],
+        ",", 
+       RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+      "]"}], "]"}], "&"}], " ", "/@", " ", "betaBeatCases"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"betaBeatCasesMin", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Min", "[", 
+      RowBox[{"mfsColumn", "[", 
+       RowBox[{
+        RowBox[{"optics", "[", 
+         RowBox[{"LHC", ",", 
+          RowBox[{
+          "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
+         "]"}], ",", 
+        RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}],
+        "]"}], "]"}], "&"}], " ", "/@", " ", "betaBeatCases"}]}], 
+  ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"betaBeatCasesMean", "=", 
+   RowBox[{"Mean", " ", "/@", " ", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"mfsColumn", "[", 
+        RowBox[{
+         RowBox[{"optics", "[", 
+          RowBox[{"LHC", ",", 
+           RowBox[{
+           "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
+          "]"}], ",", 
+         RowBox[{
+         "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], "]"}],
+        "&"}], " ", "/@", " ", "betaBeatCases"}], ")"}]}]}], ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"betaBeatCasesSD", "=", 
+   RowBox[{"StandardDeviation", " ", "/@", " ", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"mfsColumn", "[", 
+        RowBox[{
+         RowBox[{"optics", "[", 
+          RowBox[{"LHC", ",", 
+           RowBox[{
+           "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
+          "]"}], ",", 
+         RowBox[{
+         "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], "]"}],
+        "&"}], " ", "/@", " ", "betaBeatCases"}], ")"}]}]}], ";"}]], "Input"],
+
+Cell["\<\
+Combining these quantities, we can produce a summary table for \[Beta]-beating\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"TableForm", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"opticsNotation", "[", "betaBeatCases", "]"}], ",", 
+     "betaBeatCasesMin", ",", "betaBeatCasesMax", ",", "betaBeatCasesMean", 
+     ",", "betaBeatCasesSD"}], "}"}], ",", 
+   RowBox[{"TableHeadings", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\< \>\"", ",", "\"\<Min\>\"", ",", "\"\<Max\>\"", ",", 
+       "\"\<Mean\>\"", ",", "\"\<\[Sigma]\>\""}], "}"}], "}"}]}]}], 
+  "]"}]], "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Spacing of the arc quadrupoles", "Section"],
+
+Cell[CellGroupData[{
+
+Cell["The QFs", "Subsection"],
+
+Cell["\<\
+Since we have all the elements, we can check that they are properly spaced.  \
+As an example, let's take the arc QF quadrupoles again.  Their names and \
+positions are\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"QFnames", "=", 
+   RowBox[{"mfsColumn", "[", 
+    RowBox[{
+     RowBox[{"optics", "[", 
+      RowBox[{"LHC", ",", "\"\<QF\>\""}], "]"}], ",", "\"\<NAME\>\""}], 
+    "]"}]}], ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"QFs", "=", 
+   RowBox[{"mfsColumn", "[", 
+    RowBox[{
+     RowBox[{"optics", "[", 
+      RowBox[{"LHC", ",", "\"\<QF\>\""}], "]"}], ",", "\"\<S\>\""}], "]"}]}], 
+  ";"}]], "Input"],
+
+Cell["The distances between each quadrupole and the next are", "Text"],
+
+Cell[BoxData[
+ RowBox[{"QFds", "=", 
+  RowBox[{
+   RowBox[{"RotateLeft", "[", "QFs", "]"}], "-", "QFs"}]}]], "Input"],
+
+Cell["\<\
+We can safely assume that anything greater than 1 km is between arcs. List \
+those quadrupoles where the spacing to the next one appears anomalous\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"Select", "[", 
+  RowBox[{
+   RowBox[{"Transpose", "[", 
+    RowBox[{"{", 
+     RowBox[{"QFnames", ",", "QFs", ",", 
+      RowBox[{"QFds", "-", "106.9"}]}], "}"}], "]"}], ",", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"Abs", "[", 
+         RowBox[{"Last", "[", "#", "]"}], "]"}], ">", 
+        SuperscriptBox["10", 
+         RowBox[{"-", "4"}]]}], ")"}], "&&", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"Abs", "[", 
+         RowBox[{"Last", "[", "#", "]"}], "]"}], "<", 
+        SuperscriptBox["10", "3"]}], ")"}]}], ")"}], " ", "&"}]}], 
+  "]"}]], "Input"],
+
+Cell["\<\
+The next sub-section treats the QDs (printing may be suppressed).\
+\>", "Text"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["The QDs", "Subsection"],
+
+Cell["\<\
+Check that the QD quadrupoles are properly spaced.   Their names and \
+positions are\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"QDnames", "=", 
+   RowBox[{"mfsColumn", "[", 
+    RowBox[{
+     RowBox[{"optics", "[", 
+      RowBox[{"LHC", ",", "\"\<QD\>\""}], "]"}], ",", "\"\<NAME\>\""}], 
+    "]"}]}], ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"QDs", "=", 
+   RowBox[{"mfsColumn", "[", 
+    RowBox[{
+     RowBox[{"optics", "[", 
+      RowBox[{"LHC", ",", "\"\<QD\>\""}], "]"}], ",", "\"\<S\>\""}], "]"}]}], 
+  ";"}]], "Input"],
+
+Cell["The distances between each quadrupole and the next are", "Text"],
+
+Cell[BoxData[
+ RowBox[{"QDds", "=", 
+  RowBox[{
+   RowBox[{"RotateLeft", "[", "QDs", "]"}], "-", "QDs"}]}]], "Input"],
+
+Cell["\<\
+There will be some small differences because of rounding but   Use Chop to \
+remove effects of rounding error\
+\>", "Text"],
+
+Cell["\<\
+We can safely assume that anything greater than 1 km is between arcs. List \
+those quadrupoles where the spacing to the next QD appears anomalous\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"Select", "[", 
+  RowBox[{
+   RowBox[{"Transpose", "[", 
+    RowBox[{"{", 
+     RowBox[{"QDnames", ",", "QDs", ",", 
+      RowBox[{"QDds", "-", "106.9"}]}], "}"}], "]"}], ",", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"Abs", "[", 
+         RowBox[{"Last", "[", "#", "]"}], "]"}], ">", 
+        SuperscriptBox["10", 
+         RowBox[{"-", "4"}]]}], ")"}], "&&", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"Abs", "[", 
+         RowBox[{"Last", "[", "#", "]"}], "]"}], "<", 
+        SuperscriptBox["10", "3"]}], ")"}]}], ")"}], " ", "&"}]}], 
+  "]"}]], "Input"]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Quadrupole strengths", "Section"],
+
+Cell["\<\
+This could replace the \"tesla\" job file very easily.  What would be a good \
+way to get the maximum strengths for various quadrupoles?\
+\>", "Text"],
+
+Cell["\<\
+Select all the quadrupoles (elements with non-zero integrated quadrupole \
+strength)\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"optics", "[", 
+    RowBox[{"LHC", ",", "Quadrupoles"}], "]"}], "=", 
+   RowBox[{"mfsSelect", "[", 
+    RowBox[{
+     RowBox[{"optics", "[", "LHC", "]"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"mfsColumnValue", "[", 
+        RowBox[{
+         RowBox[{"optics", "[", "LHC", "]"}], ",", "#", ",", "\"\<K1L\>\""}], 
+        "]"}], ">", "0"}], "&"}]}], "]"}]}], ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"ListPlot", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"#1", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+        ",", 
+        FractionBox[
+         RowBox[{"#1", "\[LeftDoubleBracket]", "4", "\[RightDoubleBracket]"}], 
+         RowBox[{
+         "#1", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}]]}], 
+       "}"}], "&"}], ")"}], "/@", 
+    RowBox[{"Transpose", "[", 
+     RowBox[{"mfsColumn", "[", 
+      RowBox[{
+       RowBox[{"optics", "[", 
+        RowBox[{"LHC", ",", "Quadrupoles"}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{
+        "\"\<NAME\>\"", ",", "\"\<S\>\"", ",", "\"\<L\>\"", ",", 
+         "\"\<K1L\>\""}], "}"}]}], "]"}], "]"}]}], ",", 
+   RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"ListPlot", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"#1", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+        ",", 
+        RowBox[{
+        "#1", "\[LeftDoubleBracket]", "4", "\[RightDoubleBracket]"}]}], "}"}],
+       "&"}], ")"}], "/@", 
+    RowBox[{"Transpose", "[", 
+     RowBox[{"mfsColumn", "[", 
+      RowBox[{
+       RowBox[{"optics", "[", 
+        RowBox[{"LHC", ",", "Quadrupoles"}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{
+        "\"\<NAME\>\"", ",", "\"\<S\>\"", ",", "\"\<L\>\"", ",", 
+         "\"\<K1L\>\""}], "}"}]}], "]"}], "]"}]}], ",", 
+   RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Dispersion functions", "Section"],
+
+Cell[BoxData[
+ RowBox[{"ListPlot", "[", 
+  RowBox[{
+   RowBox[{"Transpose", "[", 
+    RowBox[{"mfsColumn", "[", 
+     RowBox[{
+      RowBox[{"optics", "[", "LHC", "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"\"\<S\>\"", ",", "\"\<DX\>\""}], "}"}]}], "]"}], "]"}], ",", 
+   RowBox[{"PlotJoined", "\[Rule]", "True"}], ",", 
+   RowBox[{"AxesLabel", "\[Rule]", 
+    RowBox[{"opticsNotation", "[", 
+     RowBox[{"{", 
+      RowBox[{"\"\<S\>\"", ",", "\"\<DX\>\""}], "}"}], "]"}]}]}], 
+  "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"ListPlot", "[", 
+  RowBox[{
+   RowBox[{"Transpose", "[", 
+    RowBox[{"mfsColumn", "[", 
+     RowBox[{
+      RowBox[{"optics", "[", "LHC", "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"\"\<S\>\"", ",", "\"\<DY\>\""}], "}"}]}], "]"}], "]"}], ",", 
+   RowBox[{"AxesLabel", "\[Rule]", 
+    RowBox[{"opticsNotation", "[", 
+     RowBox[{"{", 
+      RowBox[{"\"\<S\>\"", ",", "\"\<DY\>\""}], "}"}], "]"}]}], ",", 
+   RowBox[{"PlotJoined", "\[Rule]", "True"}]}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"ListPlot", "[", 
+  RowBox[{
+   RowBox[{"Transpose", "[", 
+    RowBox[{"mfsColumn", "[", " ", 
+     RowBox[{
+      RowBox[{"optics", "[", 
+       RowBox[{"LHC", ",", "\"\<QF\>\""}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"\"\<S\>\"", ",", "\"\<DX\>\""}], "}"}]}], "]"}], "]"}], ",", 
+   RowBox[{"AxesLabel", "\[Rule]", 
+    RowBox[{"opticsNotation", "[", 
+     RowBox[{"{", 
+      RowBox[{"\"\<S\>\"", ",", "\"\<DX\>\""}], "}"}], "]"}]}]}], 
+  "]"}]], "Input"],
+
+Cell[TextData[{
+ "Get the means of ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["D", "x"], TraditionalForm]]],
+ " in the QF and QD strings"
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{"DxQFMean", "=", 
+  RowBox[{"Mean", " ", "[", 
+   RowBox[{"mfsColumn", "[", 
+    RowBox[{
+     RowBox[{"optics", "[", 
+      RowBox[{"LHC", ",", "\"\<QF\>\""}], "]"}], ",", "\"\<DX\>\""}], "]"}], 
+   "]"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"DxQDMean", "=", 
+  RowBox[{"Mean", " ", "[", 
+   RowBox[{"mfsColumn", "[", 
+    RowBox[{
+     RowBox[{"optics", "[", 
+      RowBox[{"LHC", ",", "\"\<QD\>\""}], "]"}], ",", "\"\<DX\>\""}], "]"}], 
+   "]"}]}]], "Input"],
+
+Cell["\<\
+Extract the optics at any \"arc quadrupoles\" that have anomalous values of \
+the dispersion.  \
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"mfsSelect", "[", " ", 
+  RowBox[{
+   RowBox[{"optics", "[", 
+    RowBox[{"LHC", ",", "\"\<QF\>\""}], "]"}], ",", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"Abs", "[", 
+       RowBox[{
+        FractionBox[
+         RowBox[{"mfsColumnValue", "[", " ", 
+          RowBox[{
+           RowBox[{"optics", "[", 
+            RowBox[{"LHC", ",", "\"\<QF\>\""}], "]"}], ",", "#", ",", 
+           "\"\<DX\>\""}], "]"}], "DxQFMean"], "-", "1"}], "]"}], ">", 
+      "0.02"}], ")"}], "&"}]}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"mfsSelect", "[", " ", 
+  RowBox[{
+   RowBox[{"optics", "[", 
+    RowBox[{"LHC", ",", "\"\<QD\>\""}], "]"}], ",", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"Abs", "[", 
+       RowBox[{
+        FractionBox[
+         RowBox[{"mfsColumnValue", "[", " ", 
+          RowBox[{
+           RowBox[{"optics", "[", 
+            RowBox[{"LHC", ",", "\"\<QD\>\""}], "]"}], ",", "#", ",", 
+           "\"\<DX\>\""}], "]"}], "DxQDMean"], "-", "1"}], "]"}], ">", 
+      "0.02"}], ")"}], "&"}]}], "]"}]], "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "Finding the largest ",
+ Cell[BoxData[
+  FormBox[
+   SqrtBox["\[Beta]"], TraditionalForm]]],
+ "-functions"
+}], "Section"],
+
+Cell[BoxData[
+ RowBox[{"betaxMax", "=", 
+  RowBox[{"Max", "[", 
+   RowBox[{"mfsColumn", "[", 
+    RowBox[{
+     RowBox[{"optics", "[", "LHC", "]"}], ",", "\"\<BETX\>\""}], "]"}], 
+   "]"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"betayMax", "=", 
+  RowBox[{"Max", "[", 
+   RowBox[{"mfsColumn", "[", 
+    RowBox[{
+     RowBox[{"optics", "[", "LHC", "]"}], ",", "\"\<BETY\>\""}], "]"}], 
+   "]"}]}]], "Input"],
+
+Cell[TextData[{
+ "The names of the elements that have large values of ",
+ Cell[BoxData[
+  FormBox[
+   SqrtBox[
+    SubscriptBox["\[Beta]", "x"]], TraditionalForm]]]
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{"xsensitive", "=", 
+  RowBox[{"mfsColumn", "[", 
+   RowBox[{
+    RowBox[{"mfsSelect", "[", 
+     RowBox[{
+      RowBox[{"optics", "[", "LHC", "]"}], ",", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         SqrtBox[
+          RowBox[{"mfsColumnValue", "[", 
+           RowBox[{
+            RowBox[{"optics", "[", "LHC", "]"}], ",", "#", ",", 
+            "\"\<BETX\>\""}], "]"}]], ">", 
+         RowBox[{"0.6", " ", 
+          SqrtBox["betaxMax"]}]}], ")"}], "&"}]}], " ", "]"}], ",", 
+    "\"\<NAME\>\""}], "]"}]}]], "Input"],
+
+Cell["Actually we could have used the simpler function", "Text"],
+
+Cell[BoxData[
+ RowBox[{"mfsColumn", "[", 
+  RowBox[{
+   RowBox[{"mfsRange", "[", 
+    RowBox[{
+     RowBox[{"optics", "[", "LHC", "]"}], ",", "\"\<BETX\>\"", ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        SuperscriptBox["0.6", "2"], " ", "betaxMax"}], ",", "\[Infinity]"}], 
+      "}"}]}], "]"}], ",", "\"\<NAME\>\""}], "]"}]], "Input"],
+
+Cell[TextData[{
+ "The names of the elements that have large values of ",
+ Cell[BoxData[
+  FormBox[
+   SqrtBox[
+    SubscriptBox["\[Beta]", "y"]], TraditionalForm]]]
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{"ysensitive", "=", 
+  RowBox[{"mfsColumn", "[", 
+   RowBox[{
+    RowBox[{"mfsSelect", "[", 
+     RowBox[{
+      RowBox[{"optics", "[", "LHC", "]"}], ",", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         SqrtBox[
+          RowBox[{"mfsColumnValue", "[", 
+           RowBox[{
+            RowBox[{"optics", "[", "LHC", "]"}], ",", "#", ",", 
+            "\"\<BETY\>\""}], "]"}]], ">", 
+         RowBox[{"0.6", " ", 
+          SqrtBox["betayMax"]}]}], ")"}], "&"}]}], " ", "]"}], ",", 
+    "\"\<NAME\>\""}], "]"}]}]], "Input"],
+
+Cell["\<\
+The intersection of these two sets gives the elements that are sensitive in \
+both planes\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"xsensitive", " ", "\[Intersection]", " ", "ysensitive"}]], "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Phase advances", "Section"],
+
+Cell["\<\
+Here we can extract phase advances at positions of interest,  show \
+differences between points in the ring.  Etc.  \
+\>", "Text"],
+
+Cell[TextData[{
+ "The frequency distribution of QF quadrupoles in ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["\[Mu]", "x"], TraditionalForm]]],
+ " is "
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{"BinCounts", "[", "  ", 
+  RowBox[{
+   RowBox[{"Mod", "[", 
+    RowBox[{
+     RowBox[{"mfsColumn", "[", 
+      RowBox[{
+       RowBox[{"optics", "[", 
+        RowBox[{"LHC", ",", "\"\<QF\>\""}], "]"}], ",", "\"\<MUX\>\""}], 
+      "]"}], ",", "1"}], "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "1", ",", 
+     FractionBox["1", "25"]}], "}"}]}], "]"}]], "Input"],
+
+Cell["and it is easy to make a histogram", "Text"],
+
+Cell[BoxData[
+ RowBox[{"BarChart", "[", "%", "]"}]], "Input"],
+
+Cell["\<\
+We can copy the approach used to display all the \[Beta]-beating cases, \
+adding a few extras.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"phaseCases", "=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"StringReplace", "[", 
+     RowBox[{"#", ",", 
+      RowBox[{"{", 
+       RowBox[{"\"\<BET\>\"", "\[Rule]", "\"\<MU\>\""}], "}"}]}], "]"}], 
+    "&"}], " ", "/@", " ", "betaBeatCases"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"Show", "[", 
+  RowBox[{"GraphicsArray", "[", 
+   RowBox[{"Partition", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"BarChart", "[", 
+        RowBox[{
+         RowBox[{"BinCounts", "[", "  ", 
+          RowBox[{
+           RowBox[{"Mod", "[", 
+            RowBox[{
+             RowBox[{"mfsColumn", "[", 
+              RowBox[{
+               RowBox[{"optics", "[", 
+                RowBox[{"LHC", ",", 
+                 RowBox[{
+                 "#", "\[LeftDoubleBracket]", "1", 
+                  "\[RightDoubleBracket]"}]}], "]"}], ",", 
+               RowBox[{
+               "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+              "]"}], ",", "1"}], "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"0", ",", "1", ",", 
+             FractionBox["1", "20"]}], "}"}]}], "]"}], ",", 
+         RowBox[{"AxesLabel", "\[Rule]", 
+          RowBox[{"opticsNotation", "[", "#", "]"}]}], ",", 
+         RowBox[{"DisplayFunction", "\[Rule]", "Identity"}]}], "]"}], "&"}], 
+      " ", "/@", " ", "phaseCases"}], ",", "\n", "\t\t\t", "2"}], "]"}], 
+   "]"}], "]"}]], "Input"],
+
+Cell[TextData[{
+ "Another approach is to make a polar plot to show the distribution of QF \
+quadrupoles over horizontal betatron phase.   The radius is ",
+ Cell[BoxData[
+  FormBox[
+   SqrtBox[
+    SubscriptBox["\[Beta]", "x"]], TraditionalForm]]],
+ "."
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{"PolarListPlot", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"Sqrt", "[", 
+       RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+       "]"}], ",", 
+      RowBox[{"2", "\[Pi]", 
+       RowBox[{
+       "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}]}], "}"}],
+     " ", "&"}], "/@", " ", 
+   RowBox[{"Transpose", "[", 
+    RowBox[{"mfsColumn", "[", 
+     RowBox[{
+      RowBox[{"optics", "[", 
+       RowBox[{"LHC", ",", "\"\<QF\>\""}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"\"\<BETX\>\"", ",", "\"\<MUX\>\""}], "}"}]}], "]"}], "]"}]}], 
+  "]"}]], "Input"],
+
+Cell[TextData[{
+ "Make the plot for the first octant only using ",
+ StyleBox["mfsRange", "Input"],
+ " to take only those quadrupoles with ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"0", "<", "s", "<", 
+    FractionBox["C", "8"]}], TraditionalForm]]],
+ ".  Add options to colour the points."
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{"PolarListPlot", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"Sqrt", "[", 
+        RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+        "]"}], ",", 
+       RowBox[{"2", "\[Pi]", 
+        RowBox[{
+        "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}]}], 
+      "}"}], " ", "&"}], "/@", " ", 
+    RowBox[{"Transpose", "[", 
+     RowBox[{"mfsColumn", "[", 
+      RowBox[{
+       RowBox[{"mfsRange", "[", 
+        RowBox[{
+         RowBox[{"optics", "[", 
+          RowBox[{"LHC", ",", "\"\<QF\>\""}], "]"}], ",", "\"\<S\>\"", ",", 
+         RowBox[{"{", 
+          RowBox[{"0", ",", 
+           FractionBox[
+            RowBox[{"circumference", "[", "LHC", "]"}], "8"]}], "}"}]}], 
+        "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<BETX\>\"", ",", "\"\<MUX\>\""}], "}"}]}], "]"}], "]"}]}],
+    ",", 
+   RowBox[{"PlotStyle", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"PointSize", "[", "0.02", "]"}], ",", 
+      RowBox[{"Hue", "[", "0", "]"}]}], "}"}]}]}], "]"}]], "Input"],
+
+Cell[TextData[{
+ "Generalise that to superpose the different octants in different colours \
+(octant 1 is red, octant 8 is dark blue).  Since all the quadrupoles have the \
+same ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["\[Beta]", "x"], TraditionalForm]]],
+ " values, multiply by the square root of the octant number to separate them \
+radially"
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{"Show", "[", 
+  RowBox[{
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"PolarListPlot", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            SqrtBox[
+             RowBox[{"k", " ", 
+              RowBox[{
+              "#1", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}]],
+             ",", 
+            RowBox[{"2", " ", "\[Pi]", " ", 
+             RowBox[{
+             "#1", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}]}],
+            "}"}], "&"}], ")"}], "/@", 
+        RowBox[{"Transpose", "[", 
+         RowBox[{"mfsColumn", "[", 
+          RowBox[{
+           RowBox[{"mfsRange", "[", 
+            RowBox[{
+             RowBox[{"optics", "[", 
+              RowBox[{"LHC", ",", "\"\<QF\>\""}], "]"}], ",", "\"\<S\>\"", 
+             ",", 
+             RowBox[{
+              FractionBox["1", "8"], " ", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"k", "-", "1"}], ",", "k"}], "}"}], " ", 
+              RowBox[{"circumference", "[", "LHC", "]"}]}]}], "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"\"\<BETX\>\"", ",", "\"\<MUX\>\""}], "}"}]}], "]"}], 
+         "]"}]}], ",", 
+       RowBox[{"PlotStyle", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"PointSize", "[", "0.02", "]"}], ",", 
+          RowBox[{"Hue", "[", 
+           RowBox[{
+            FractionBox["1", "8"], " ", "0.7", " ", 
+            RowBox[{"(", 
+             RowBox[{"k", "-", "1"}], ")"}]}], "]"}]}], "}"}]}], ",", 
+       RowBox[{"DisplayFunction", "\[Rule]", "Identity"}]}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"k", ",", "1", ",", "8"}], "}"}]}], "]"}], ",", 
+   RowBox[{"DisplayFunction", "\[Rule]", "$DisplayFunction"}]}], 
+  "]"}]], "Input"],
+
+Cell[TextData[{
+ "Copying this with small modifications, it is easy to show the distribution \
+in some resonance phase, e.g., ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Mu]", "x"], "-", 
+    RowBox[{
+     SubscriptBox["\[Mu]", "y"], " ", "or", "  ", "2", 
+     SubscriptBox["\[Mu]", "x"]}], "-", 
+    SubscriptBox["\[Mu]", "y"]}], TraditionalForm]]],
+ ".  We make the overall factor ",
+ Cell[BoxData[
+  FormBox[
+   SqrtBox[
+    RowBox[{
+     SubscriptBox["\[Beta]", "x"], 
+     SubscriptBox["\[Beta]", "y"]}]], TraditionalForm]]],
+ " or ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Beta]", "x"], 
+    SqrtBox[
+     SubscriptBox["\[Beta]", "y"]]}], TraditionalForm]]],
+ " accordingly."
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{"Show", "[", 
+  RowBox[{
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"PolarListPlot", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            SqrtBox[
+             RowBox[{"k", " ", 
+              RowBox[{
+              "#1", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+              " ", 
+              RowBox[{
+              "#1", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}]],
+             ",", 
+            RowBox[{"2", " ", "\[Pi]", " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{
+               "#1", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}], 
+               "-", 
+               RowBox[{
+               "#1", "\[LeftDoubleBracket]", "4", "\[RightDoubleBracket]"}]}],
+               ")"}]}]}], "}"}], "&"}], ")"}], "/@", 
+        RowBox[{"Transpose", "[", 
+         RowBox[{"mfsColumn", "[", 
+          RowBox[{
+           RowBox[{"mfsRange", "[", 
+            RowBox[{
+             RowBox[{"optics", "[", 
+              RowBox[{"LHC", ",", "\"\<QF\>\""}], "]"}], ",", "\"\<S\>\"", 
+             ",", 
+             RowBox[{
+              FractionBox["1", "8"], " ", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"k", "-", "1"}], ",", "k"}], "}"}], " ", 
+              RowBox[{"circumference", "[", "LHC", "]"}]}]}], "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+            "\"\<BETX\>\"", ",", "\"\<BETY\>\"", ",", "\"\<MUX\>\"", ",", 
+             "\"\<MUY\>\""}], "}"}]}], "]"}], "]"}]}], ",", 
+       RowBox[{"PlotStyle", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"PointSize", "[", "0.02", "]"}], ",", 
+          RowBox[{"Hue", "[", 
+           RowBox[{
+            FractionBox["1", "8"], " ", "0.7", " ", 
+            RowBox[{"(", 
+             RowBox[{"k", "-", "1"}], ")"}]}], "]"}]}], "}"}]}], ",", 
+       RowBox[{"DisplayFunction", "\[Rule]", "Identity"}]}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"k", ",", "1", ",", "8"}], "}"}]}], "]"}], ",", 
+   RowBox[{"DisplayFunction", "\[Rule]", "$DisplayFunction"}]}], 
+  "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"Show", "[", 
+  RowBox[{
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"PolarListPlot", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            SqrtBox[
+             RowBox[{"k", " ", 
+              SuperscriptBox[
+               RowBox[{
+               "#1", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+               "2"], " ", 
+              RowBox[{
+              "#1", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}]],
+             ",", 
+            RowBox[{"2", " ", "\[Pi]", " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"2", " ", 
+                RowBox[{
+                "#1", "\[LeftDoubleBracket]", "3", 
+                 "\[RightDoubleBracket]"}]}], "-", 
+               RowBox[{
+               "#1", "\[LeftDoubleBracket]", "4", "\[RightDoubleBracket]"}]}],
+               ")"}]}]}], "}"}], "&"}], ")"}], "/@", 
+        RowBox[{"Transpose", "[", 
+         RowBox[{"mfsColumn", "[", 
+          RowBox[{
+           RowBox[{"mfsRange", "[", 
+            RowBox[{
+             RowBox[{"optics", "[", 
+              RowBox[{"LHC", ",", "\"\<QF\>\""}], "]"}], ",", "\"\<S\>\"", 
+             ",", 
+             RowBox[{
+              FractionBox["1", "8"], " ", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"k", "-", "1"}], ",", "k"}], "}"}], " ", 
+              RowBox[{"circumference", "[", "LHC", "]"}]}]}], "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+            "\"\<BETX\>\"", ",", "\"\<BETY\>\"", ",", "\"\<MUX\>\"", ",", 
+             "\"\<MUY\>\""}], "}"}]}], "]"}], "]"}]}], ",", 
+       RowBox[{"PlotStyle", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"PointSize", "[", "0.02", "]"}], ",", 
+          RowBox[{"Hue", "[", 
+           RowBox[{
+            FractionBox["1", "8"], " ", "0.7", " ", 
+            RowBox[{"(", 
+             RowBox[{"k", "-", "1"}], ")"}]}], "]"}]}], "}"}]}], ",", 
+       RowBox[{"DisplayFunction", "\[Rule]", "Identity"}]}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"k", ",", "1", ",", "8"}], "}"}]}], "]"}], ",", 
+   RowBox[{"DisplayFunction", "\[Rule]", "$DisplayFunction"}]}], 
+  "]"}]], "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Beam size and apertures", "Section"],
+
+Cell["\<\
+Specify the emittances and fractional energy spread.  Units are metres for \
+emittances.\
+\>", "Text"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   SubscriptBox["\[Epsilon]", "x"], "=", 
+   RowBox[{"3.75", " ", 
+    SuperscriptBox["10", 
+     RowBox[{"-", "6"}]]}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   SubscriptBox["\[Epsilon]", "y"], "=", 
+   SubscriptBox["\[Epsilon]", "x"]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   SubscriptBox["\[Sigma]", "\[Epsilon]"], "=", 
+   RowBox[{"4.5", " ", 
+    SuperscriptBox["10", 
+     RowBox[{"-", "4"}]]}]}], ";"}]}], "Input"],
+
+Cell["Introduce some definitions to shorten the expressions", "Text"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   SubscriptBox["\[Beta]", "x"], "=", 
+   RowBox[{"mfsColumn", "[", 
+    RowBox[{
+     RowBox[{"optics", "[", "LHC", "]"}], ",", "\"\<BETX\>\""}], "]"}]}], ";", 
+  RowBox[{
+   SubscriptBox["\[Beta]", "y"], "=", 
+   RowBox[{"mfsColumn", "[", 
+    RowBox[{
+     RowBox[{"optics", "[", "LHC", "]"}], ",", "\"\<BETY\>\""}], "]"}]}], ";", 
+  RowBox[{
+   SubscriptBox["D", "x"], "=", 
+   RowBox[{"mfsColumn", "[", 
+    RowBox[{
+     RowBox[{"optics", "[", "LHC", "]"}], ",", "\"\<DX\>\""}], "]"}]}], ";", 
+  RowBox[{
+   SubscriptBox["D", "y"], "=", 
+   RowBox[{"mfsColumn", "[", 
+    RowBox[{
+     RowBox[{"optics", "[", "LHC", "]"}], ",", "\"\<DY\>\""}], "]"}]}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{"sLHC", "=", 
+   RowBox[{"mfsColumn", "[", 
+    RowBox[{
+     RowBox[{"optics", "[", "LHC", "]"}], ",", "\"\<S\>\""}], "]"}]}], 
+  ";"}]}], "Input"],
+
+Cell[BoxData[
+ RowBox[{"ListPlot", "[", 
+  RowBox[{
+   RowBox[{"Transpose", "[", 
+    RowBox[{"{", 
+     RowBox[{"sLHC", ",", 
+      SqrtBox[
+       RowBox[{
+        RowBox[{
+         SubscriptBox["\[Beta]", 
+          RowBox[{"x", " "}]], " ", 
+         SubscriptBox["\[Epsilon]", "x"]}], "+", 
+        SuperscriptBox[
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["D", "x"], " ", 
+           SubscriptBox["\[Sigma]", "\[Epsilon]"]}], ")"}], "2"]}]]}], "}"}], 
+    "]"}], ",", 
+   RowBox[{"AxesLabel", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<s\>\"", ",", "\"\<\!\(\*SubscriptBox[\(\[Sigma]\), \(x\)]\)\>\""}], 
+     "}"}]}]}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"sigxMax", "=", 
+  RowBox[{"Max", "[", 
+   SqrtBox[
+    RowBox[{
+     RowBox[{
+      SubscriptBox["\[Beta]", 
+       RowBox[{"x", " "}]], " ", 
+      SubscriptBox["\[Epsilon]", "x"]}], "+", 
+     SuperscriptBox[
+      RowBox[{"(", 
+       RowBox[{
+        SubscriptBox["D", "x"], " ", 
+        SubscriptBox["\[Sigma]", "\[Epsilon]"]}], ")"}], "2"]}]], 
+   "]"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"ListPlot", "[", 
+  RowBox[{
+   RowBox[{"Transpose", "[", 
+    RowBox[{"{", 
+     RowBox[{"sLHC", ",", 
+      SqrtBox[
+       RowBox[{
+        RowBox[{
+         SubscriptBox["\[Beta]", 
+          RowBox[{"y", " "}]], " ", 
+         SubscriptBox["\[Epsilon]", "y"]}], "+", 
+        SuperscriptBox[
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["D", "y"], " ", 
+           SubscriptBox["\[Sigma]", "\[Epsilon]"]}], ")"}], "2"]}]]}], "}"}], 
+    "]"}], ",", 
+   RowBox[{"AxesLabel", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<s\>\"", ",", "\"\<\!\(\*SubscriptBox[\(\[Sigma]\), \(y\)]\)\>\""}], 
+     "}"}]}]}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"sigyMax", "=", 
+  RowBox[{"Max", "[", 
+   SqrtBox[
+    RowBox[{
+     RowBox[{
+      SubscriptBox["\[Beta]", 
+       RowBox[{"y", " "}]], " ", 
+      SubscriptBox["\[Epsilon]", "y"]}], "+", 
+     SuperscriptBox[
+      RowBox[{"(", 
+       RowBox[{
+        SubscriptBox["D", "y"], " ", 
+        SubscriptBox["\[Sigma]", "\[Epsilon]"]}], ")"}], "2"]}]], 
+   "]"}]}]], "Input"],
+
+Cell[TextData[{
+ "In the absence of physical aperture information, find those elements where \
+the beam size exceeds 90% of its maximum.  This reminds me why ",
+ StyleBox["mfsSelect", "Input"],
+ " and ",
+ StyleBox["mfsColumnValue", "Input"],
+ " are designed like that."
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"xApertureLimits", "=", 
+   RowBox[{"mfsSelect", "[", 
+    RowBox[{
+     RowBox[{"optics", "[", "LHC", "]"}], ",", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"\[Sqrt]", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"mfsColumnValue", "[", 
+             RowBox[{
+              RowBox[{"optics", "[", "LHC", "]"}], ",", "#", ",", 
+              "\"\<BETX\>\""}], "]"}], " ", 
+            SubscriptBox["\[Epsilon]", "x"]}], "+", 
+           SuperscriptBox[
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"mfsColumnValue", "[", 
+               RowBox[{
+                RowBox[{"optics", "[", "LHC", "]"}], ",", "#", ",", 
+                "\"\<DX\>\""}], "]"}], " ", 
+              SubscriptBox["\[Sigma]", "\[Epsilon]"]}], ")"}], "2"]}], 
+          ")"}]}], ">", 
+        RowBox[{"0.9", " ", "sigxMax"}]}], ")"}], "&"}]}], "]"}]}], 
+  ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"mfsColumn", "[", 
+  RowBox[{"xApertureLimits", ",", "\"\<NAME\>\""}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"yApertureLimits", "=", 
+   RowBox[{"mfsSelect", "[", 
+    RowBox[{
+     RowBox[{"optics", "[", "LHC", "]"}], ",", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"\[Sqrt]", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"mfsColumnValue", "[", 
+             RowBox[{
+              RowBox[{"optics", "[", "LHC", "]"}], ",", "#", ",", 
+              "\"\<BETY\>\""}], "]"}], " ", 
+            SubscriptBox["\[Epsilon]", "y"]}], "+", 
+           SuperscriptBox[
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"mfsColumnValue", "[", 
+               RowBox[{
+                RowBox[{"optics", "[", "LHC", "]"}], ",", "#", ",", 
+                "\"\<DY\>\""}], "]"}], " ", 
+              SubscriptBox["\[Sigma]", "\[Epsilon]"]}], ")"}], "2"]}], 
+          ")"}]}], ">", 
+        RowBox[{"0.8", "sigyMax"}]}], ")"}], "&"}]}], "]"}]}], ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"mfsColumn", "[", 
+  RowBox[{"yApertureLimits", ",", "\"\<NAME\>\""}], "]"}]], "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["File Housekeeping", "Section"],
+
+Cell[TextData[{
+ "The hidden workings of the ",
+ StyleBox["getOptics", "Input"],
+ " function created some files that we can get rid of when we like."
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{"unwanted", "=", 
+  RowBox[{
+   RowBox[{"FileNames", "[", 
+    RowBox[{"\"\<*\>\"", ",", "\"\<TRASH\>\""}], "]"}], "\[Union]", 
+   RowBox[{"FileNames", "[", 
+    RowBox[{"{", 
+     RowBox[{"\"\<*junk\>\"", ",", "\"\<*temp*\>\""}], "}"}], 
+    "]"}]}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"DeleteFile", "[", "unwanted", "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"FileNames", "[", "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"FileNames", "[", "\"\<getOptics*\>\"", "]"}]], "Input"]
+}, Closed]]
+}, Open  ]]
+},
+AutoGeneratedPackage->Automatic,
+ScreenStyleEnvironment->"Working",
+WindowToolbars->{"RulerBar", "EditBar"},
+Evaluator->"FEConnect",
+WindowSize->{696, 732},
+WindowMargins->{{87, Automatic}, {Automatic, 55}},
+PrintingCopies->1,
+PrintingPageRange->{Automatic, Automatic},
+PrintingOptions->{"Magnification"->1,
+"PaperOrientation"->"Portrait",
+"PaperSize"->{597.563, 842.375}},
+PrivateFontOptions->{"FontType"->"Outline"},
+FrontEndVersion->"8.0 for Microsoft Windows (32-bit) (February 23, 2011)",
+StyleDefinitions->Notebook[{
+   Cell[
+    CellGroupData[{
+      Cell["Style Definitions", "Subtitle"], 
+      Cell[
+      "Modify the definitions below to change the default appearance of all \
+cells in a given style.\nMake modifications to any definition using commands \
+in the Format menu.", "Text"], 
+      Cell[
+       CellGroupData[{
+         Cell["Style Environment Names", "Section"], 
+         Cell[
+          StyleData[All, "Working"], PageWidth -> WindowWidth, 
+          CellBracketOptions -> {"Color" -> RGBColor[0.4, 0, 0.239994]}, 
+          ScriptMinSize -> 9, Background -> None], 
+         Cell[
+          StyleData[All, "Presentation"], PageWidth -> PaperWidth, 
+          CellBracketOptions -> {"Color" -> RGBColor[0, 0, 1]}, ScriptMinSize -> 
+          9], 
+         Cell[
+          StyleData[All, "Printout"], PageWidth -> PaperWidth, ShowCellLabel -> 
+          False, ImageSize -> {200, 200}, 
+          PrivateFontOptions -> {"FontType" -> "Outline"}]}, Open]], 
+      Cell[
+       CellGroupData[{
+         Cell["Notebook Options", "Section"], 
+         Cell[
+         "The options defined for the style below will be used at the \
+Notebook level.", "Text"], 
+         Cell[
+          StyleData["Notebook"], PageHeaders -> {{
+             Cell[
+              TextData[{
+                CounterBox["Page"]}], "PageNumber"], None, 
+             Cell[
+              TextData[{
+                ValueBox["FileName"]}], "Header"]}, {
+             Cell[
+              TextData[{
+                ValueBox["FileName"]}], "Header"], None, 
+             Cell[
+              TextData[{
+                CounterBox["Page"]}], "PageNumber"]}}, CellFrameLabelMargins -> 
+          6, StyleMenuListing -> None]}, Open]], 
+      Cell[
+       CellGroupData[{
+         Cell["Styles for Headings", "Section"], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Title"], CellFrame -> {{0, 0}, {0, 0.25}}, 
+             CellMargins -> {{18, 10}, {0, 20}}, 
+             CellGroupingRules -> {"TitleGrouping", 0}, PageBreakBelow -> 
+             False, CellFrameMargins -> 6, CellFrameColor -> GrayLevel[0], 
+             LineSpacing -> {0.95, 0}, 
+             CounterAssignments -> {{"Section", 0}, {"Equation", 0}, {
+               "Figure", 0}}, FontFamily -> "Helvetica", FontSize -> 36, 
+             FontWeight -> "Bold", FontColor -> RGBColor[0.4, 0, 0.239994]], 
+            Cell[
+             StyleData["Title", "Presentation"], 
+             CellMargins -> {{20, 10}, {2, 20}}, CellFrameMargins -> 5, 
+             FontColor -> RGBColor[0, 0, 1]], 
+            Cell[
+             StyleData["Title", "Printout"], 
+             CellMargins -> {{18, 30}, {0, 0}}, CellFrameMargins -> 4, 
+             FontSize -> 24]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Subtitle"], CellMargins -> {{20, 30}, {2, 10}}, 
+             CellGroupingRules -> {"TitleGrouping", 10}, PageBreakBelow -> 
+             False, CellFrameMargins -> {{0, 4}, {8, 4}}, 
+             LineSpacing -> {1, 0}, 
+             CounterAssignments -> {{"Section", 0}, {"Equation", 0}, {
+               "Figure", 0}}, FontFamily -> "Helvetica", FontSize -> 24], 
+            Cell[
+             StyleData["Subtitle", "Presentation"], 
+             CellMargins -> {{20, 10}, {2, 10}}], 
+            Cell[
+             StyleData["Subtitle", "Printout"], 
+             CellMargins -> {{18, 30}, {0, 10}}, FontSize -> 18]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Section 1"], CellFrame -> {{0, 0}, {0, 3}}, 
+             CellMargins -> {{18, 10}, {10, 30}}, 
+             CellGroupingRules -> {"SectionGrouping", 40}, PageBreakBelow -> 
+             False, CellFrameMargins -> {{0, 4}, {8, 4}}, CellFrameColor -> 
+             RGBColor[0.4, 0, 0.239994], CounterIncrements -> "Section", 
+             CounterAssignments -> {{"Subsection", 0}, {"Subsubsection", 0}}, 
+             FontFamily -> "Helvetica", FontSize -> 18, FontWeight -> "Bold"], 
+            Cell[
+             StyleData["Section 1", "Presentation"], 
+             CellMargins -> {{20, 10}, {6, 30}}, CellFrameMargins -> 5], 
+            Cell[
+             StyleData["Section 1", "Printout"], 
+             CellMargins -> {{18, 30}, {4, 30}}, CellFrameMargins -> 4, 
+             FontSize -> 14]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Section"], CellFrame -> False, 
+             CellMargins -> {{18, 10}, {10, 30}}, 
+             CellGroupingRules -> {"SectionGrouping", 40}, PageBreakBelow -> 
+             False, CellFrameMargins -> 4, CellFrameLabels -> {{
+                Cell[
+                 TextData[{
+                   CounterBox["Section"]}]], None}, {None, None}}, 
+             CounterIncrements -> "Section", 
+             CounterAssignments -> {{"Subsection", 0}, {"Subsubsection", 0}}, 
+             FontFamily -> "Helvetica", FontSize -> 18, FontWeight -> "Bold"], 
+            Cell[
+             StyleData["Section", "Presentation"], 
+             CellMargins -> {{20, 10}, {0, 30}}], 
+            Cell[
+             StyleData["Section", "Printout"], 
+             CellMargins -> {{18, 30}, {0, 30}}, CellFrameMargins -> 5, 
+             FontSize -> 14]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Subsection"], CellDingbat -> None, 
+             CellMargins -> {{38, 30}, {2, 20}}, 
+             CellGroupingRules -> {"SectionGrouping", 50}, PageBreakBelow -> 
+             False, CellFrameLabels -> {{
+                Cell[
+                 TextData[{
+                   CounterBox["Section"], ".", 
+                   CounterBox["Subsection"]}]], None}, {None, None}}, 
+             CounterIncrements -> "Subsection", 
+             CounterAssignments -> {{"Subsubsection", 0}}, FontFamily -> 
+             "Times", FontSize -> 14, FontWeight -> "Bold"], 
+            Cell[
+             StyleData["Subsection", "Presentation"], 
+             CellMargins -> {{35, 30}, {0, 20}}], 
+            Cell[
+             StyleData["Subsection", "Printout"], 
+             CellMargins -> {{18, 30}, {0, 10}}, FontSize -> 12]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Subsubsection"], CellDingbat -> None, 
+             CellMargins -> {{55, 30}, {4, 10}}, 
+             CellGroupingRules -> {"SectionGrouping", 60}, PageBreakBelow -> 
+             False, CellFrameLabels -> {{
+                Cell[
+                 TextData[{
+                   CounterBox["Section"], ".", 
+                   CounterBox["Subsection"], ".", 
+                   CounterBox["Subsubsection"]}]], None}, {None, None}}, 
+             CounterIncrements -> "Subsubsection", FontFamily -> "Times", 
+             FontSize -> 12, FontWeight -> "Bold"], 
+            Cell[
+             StyleData["Subsubsection", "Presentation"], 
+             CellMargins -> {{31, 30}, {0, 12}}], 
+            Cell[
+             StyleData["Subsubsection", "Printout"], 
+             CellMargins -> {{18, 30}, {0, 12}}, FontSize -> 10]}, Open]]}, 
+        Closed]], 
+      Cell[
+       CellGroupData[{
+         Cell["Styles for Body Text", "Section"], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Text"], CellMargins -> {{55, 10}, {6, 6}}, 
+             TextJustification -> 1, LineSpacing -> {1, 2}, FontFamily -> 
+             "Times"], 
+            Cell[
+             StyleData["Text", "Presentation"], 
+             CellMargins -> {{20, 10}, {6, 6}}, TextAlignment -> Left, 
+             TextJustification -> 0, LineSpacing -> {1.3, 0}, FontSize -> 14], 
+            Cell[
+             StyleData["Text", "Printout"], CellMargins -> {{18, 4}, {4, 4}}, 
+             LineSpacing -> {1, 3}, FontSize -> 10]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Commentary"], CellMargins -> {{55, 10}, {2, 6}}, 
+             TextJustification -> 1, LineSpacing -> {1, 2}, FontFamily -> 
+             "Helvetica", FontSize -> 10, FontColor -> RGBColor[0, 0, 0.4]], 
+            Cell[
+             StyleData["Commentary", "Presentation"], 
+             CellMargins -> {{60, 30}, {2, 6}}, TextJustification -> 1, 
+             LineSpacing -> {1.3, 0}, FontSize -> 12], 
+            Cell[
+             StyleData["Commentary", "Printout"], 
+             CellMargins -> {{18, 30}, {3, 0}}, LineSpacing -> {1, 3}, 
+             FontFamily -> "Times", FontSize -> 10]}, Open]]}, Closed]], 
+      Cell[
+       CellGroupData[{
+         Cell["Styles for Input/Output", "Section"], 
+         Cell[
+         "The cells in this section define styles used for input and output \
+to the kernel.  Be careful when modifying, renaming, or removing these \
+styles, because the front end associates special meanings with these style \
+names.", "Text"], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Input"], CellFrame -> {{1, 1}, {0, 1}}, 
+             CellMargins -> {{55, 10}, {0, 0}}, Evaluatable -> True, 
+             CellGroupingRules -> "InputGrouping", CellHorizontalScrolling -> 
+             True, PageBreakWithin -> False, GroupPageBreakWithin -> False, 
+             CellLabelPositioning -> Automatic, 
+             CellLabelMargins -> {{23, Inherited}, {Inherited, Inherited}}, 
+             DefaultFormatType -> DefaultInputFormatType, FormatType -> 
+             InputForm, ShowStringCharacters -> True, NumberMarks -> True, 
+             FontSize -> 12, FontWeight -> "Bold", Background -> None], 
+            Cell[
+             StyleData["Input", "Presentation"], 
+             CellMargins -> {{60, 10}, {0, 10}}, Background -> None], 
+            Cell[
+             StyleData["Input", "Printout"], 
+             CellMargins -> {{55, 10}, {0, 10}}, FontSize -> 10, Background -> 
+             None]}, Open]], 
+         Cell[
+          StyleData["InlineInput"], Evaluatable -> True, CellGroupingRules -> 
+          "InputGrouping", CellHorizontalScrolling -> True, PageBreakWithin -> 
+          False, GroupPageBreakWithin -> False, DefaultFormatType -> 
+          DefaultInputFormatType, AutoItalicWords -> {}, FormatType -> 
+          InputForm, ShowStringCharacters -> True, NumberMarks -> True, 
+          CounterIncrements -> "Input", FontWeight -> "Bold"], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Output"], CellFrame -> {{1, 1}, {1, 0}}, 
+             CellMargins -> {{55, 10}, {15, 0}}, CellEditDuplicate -> True, 
+             CellGroupingRules -> "OutputGrouping", CellHorizontalScrolling -> 
+             True, PageBreakWithin -> False, GroupPageBreakWithin -> False, 
+             GeneratedCell -> True, CellAutoOverwrite -> True, 
+             CellLabelMargins -> {{23, Inherited}, {Inherited, Inherited}}, 
+             DefaultFormatType -> DefaultOutputFormatType, FormatType -> 
+             InputForm, FontSize -> 12, Background -> None], 
+            Cell[
+             StyleData["Output", "Presentation"], 
+             CellMargins -> {{60, Inherited}, {10, 0}}, Background -> None], 
+            Cell[
+             StyleData["Output", "Printout"], 
+             CellMargins -> {{55, Inherited}, {10, 0}}, FontSize -> 10, 
+             Background -> None]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["InputOnly"], CellFrame -> 1, 
+             CellMargins -> {{55, 10}, {15, 0}}, Evaluatable -> True, 
+             CellGroupingRules -> "InputGrouping", CellHorizontalScrolling -> 
+             True, PageBreakWithin -> False, GroupPageBreakWithin -> False, 
+             CellLabelPositioning -> Automatic, 
+             CellLabelMargins -> {{23, Inherited}, {Inherited, Inherited}}, 
+             DefaultFormatType -> DefaultInputFormatType, FormatType -> 
+             InputForm, ShowStringCharacters -> True, NumberMarks -> True, 
+             FontSize -> 12, FontWeight -> "Bold", Background -> 
+             GrayLevel[0.966674]], 
+            Cell[
+             StyleData["InputOnly", "Presentation"], 
+             CellMargins -> {{60, Inherited}, {10, 10}}], 
+            Cell[
+             StyleData["InputOnly", "Printout"], 
+             CellMargins -> {{55, Inherited}, {10, 10}}, FontSize -> 10]}, 
+           Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Message"], CellFrame -> {{1, 1}, {0, 0}}, CellDingbat -> 
+             "\[LongDash]", CellMargins -> {{55, 10}, {0, 0}}, 
+             CellGroupingRules -> "OutputGrouping", PageBreakWithin -> False, 
+             GroupPageBreakWithin -> False, GeneratedCell -> True, 
+             CellAutoOverwrite -> True, ShowCellLabel -> False, 
+             CellLabelMargins -> {{23, Inherited}, {Inherited, Inherited}}, 
+             DefaultFormatType -> DefaultOutputFormatType, FormatType -> 
+             InputForm, StyleMenuListing -> None, FontFamily -> "Helvetica", 
+             FontSize -> 10, FontSlant -> "Oblique", FontColor -> 
+             GrayLevel[0], Background -> GrayLevel[1]], 
+            Cell[
+             StyleData["Message", "Presentation"], 
+             CellMargins -> {{60, Inherited}, {Inherited, Inherited}}, 
+             LineSpacing -> {1, 0}], 
+            Cell[
+             StyleData["Message", "Printout"], 
+             CellMargins -> {{55, Inherited}, {0, 0}}, FontSize -> 8]}, 
+           Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Print"], CellFrame -> True, 
+             CellMargins -> {{55, 26}, {1, 6}}, CellGroupingRules -> 
+             "OutputGrouping", CellHorizontalScrolling -> True, 
+             PageBreakWithin -> False, GroupPageBreakWithin -> False, 
+             GeneratedCell -> True, CellAutoOverwrite -> True, ShowCellLabel -> 
+             False, CellLabelMargins -> {{23, Inherited}, {
+               Inherited, Inherited}}, DefaultFormatType -> 
+             DefaultOutputFormatType, TextAlignment -> Left, FormatType -> 
+             InputForm, StyleMenuListing -> None, FontSize -> 9, Background -> 
+             GrayLevel[0.849989]], 
+            Cell[
+             StyleData["Print", "Presentation"], CellFrame -> True, 
+             CellMargins -> {{60, Inherited}, {10, 2}}, Background -> 
+             GrayLevel[0.849989]], 
+            Cell[
+             StyleData["Print", "Printout"], CellFrame -> True, 
+             CellMargins -> {{54, Inherited}, {2, 6}}, FontSize -> 10, 
+             Background -> GrayLevel[0.849989]]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Graphics"], CellFrame -> {{1, 1}, {0, 0}}, 
+             CellMargins -> {{55, 10}, {0, 0}}, CellGroupingRules -> 
+             "GraphicsGrouping", CellHorizontalScrolling -> True, 
+             PageBreakWithin -> False, GeneratedCell -> True, 
+             CellAutoOverwrite -> True, ShowCellLabel -> False, 
+             DefaultFormatType -> DefaultOutputFormatType, FormatType -> 
+             InputForm, ImageSize -> {288, 288}, 
+             ImageMargins -> {{35, Inherited}, {Inherited, 0}}, 
+             StyleMenuListing -> None, Background -> GrayLevel[1]], 
+            Cell[
+             StyleData["Graphics", "Presentation"], 
+             CellMargins -> {{60, Inherited}, {0, 0}}, 
+             ImageMargins -> {{10, 10}, {10, 10}}], 
+            Cell[
+             StyleData["Graphics", "Printout"], 
+             CellMargins -> {{55, Inherited}, {0, 0}}, 
+             ImageSize -> {288, 288}]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["CellLabel"], StyleMenuListing -> None, FontFamily -> 
+             "Helvetica", FontSize -> 10, FontSlant -> "Oblique", FontColor -> 
+             RGBColor[0, 0, 1]], 
+            Cell[
+             StyleData["CellLabel", "Presentation"], 
+             CellMargins -> {{18, Inherited}, {Inherited, Inherited}}], 
+            Cell[
+             StyleData["CellLabel", "Printout"], 
+             CellMargins -> {{0, Inherited}, {Inherited, Inherited}}, 
+             FontSize -> 8]}, Open]]}, Open]], 
+      Cell[
+       CellGroupData[{
+         Cell["Unique Styles", "Section"], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Author"], CellMargins -> {{20, 30}, {45, 5}}, 
+             CellGroupingRules -> {"TitleGrouping", 20}, PageBreakBelow -> 
+             False, CellFrameMargins -> {{0, 4}, {8, 4}}, 
+             LineSpacing -> {1, 0}, 
+             CounterAssignments -> {{"Section", 0}, {"Equation", 0}, {
+               "Figure", 0}}, FontFamily -> "Helvetica", FontSize -> 16, 
+             FontSlant -> "Italic"], 
+            Cell[
+             StyleData["Author", "Presentation"], 
+             CellMargins -> {{20, 30}, {45, 10}}, FontSize -> 18], 
+            Cell[
+             StyleData["Author", "Printout"], 
+             CellMargins -> {{18, 30}, {45, 5}}, FontSize -> 16]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Abstract"], CellFrame -> False, 
+             CellMargins -> {{18, 140}, {4, 30}}, LineSpacing -> {0.9, 0}, 
+             FontFamily -> "Times", FontSize -> 12], 
+            Cell[
+             StyleData["Abstract", "Presentation"], CellFrame -> True, 
+             CellMargins -> {{20, 10}, {Inherited, 30}}], 
+            Cell[
+             StyleData["Abstract", "Printout"], LineSpacing -> {1, 2}, 
+             FontSize -> 10]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Caption"], CellMargins -> {{55, 10}, {5, 3}}, 
+             FontFamily -> "Helvetica", FontSize -> 9], 
+            Cell[
+             StyleData["Caption", "Presentation"], 
+             CellMargins -> {{60, 65}, {6, 4}}, FontSize -> 10], 
+            Cell[
+             StyleData["Caption", "Printout"], 
+             CellMargins -> {{55, 55}, {5, 4}}, LineSpacing -> {1, 2}, 
+             FontSize -> 8]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Reference"], CellMargins -> {{24, 40}, {6, 6}}, 
+             TextJustification -> 1, LineSpacing -> {1, 0}, FontFamily -> 
+             "Times"], 
+            Cell[
+             StyleData["Reference", "Presentation"], 
+             CellMargins -> {{20, 40}, {Inherited, 6}}, TextJustification -> 
+             0, LineSpacing -> {1, 4}, FontSize -> 12], 
+            Cell[
+             StyleData["Reference", "Printout"], 
+             CellMargins -> {{18, 4}, {4, 4}}, FontSize -> 9]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["PictureGroup"], CellFrame -> {{1, 1}, {0, 0}}, 
+             CellMargins -> {{55, Inherited}, {0, 0}}, CellGroupingRules -> 
+             "GraphicsGrouping", CellHorizontalScrolling -> True, 
+             PageBreakWithin -> False, ShowCellLabel -> False, 
+             ImageMargins -> {{35, Inherited}, {Inherited, 0}}, 
+             StyleMenuListing -> None, Background -> None], 
+            Cell[
+             StyleData["PictureGroup", "Presentation"], 
+             CellMargins -> {{60, Inherited}, {0, 0}}, 
+             ImageMargins -> {{10, 10}, {10, 10}}, Background -> None], 
+            Cell[
+             StyleData["PictureGroup", "Printout"], 
+             CellMargins -> {{55, Inherited}, {0, 0}}, 
+             ImageSize -> {288, 288}, Background -> None]}, Open]]}, Open]], 
+      Cell[
+       CellGroupData[{
+         Cell["Formulas and Programming", "Section"], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["DisplayFormula"], 
+             CellMargins -> {{55, Inherited}, {Inherited, Inherited}}, 
+             CellHorizontalScrolling -> True, ScriptLevel -> 0, 
+             SingleLetterItalics -> True, StyleMenuListing -> None, 
+             UnderoverscriptBoxOptions -> {LimitsPositioning -> True}], 
+            Cell[
+             StyleData["DisplayFormula", "Presentation"], 
+             CellMargins -> {{60, 10}, {Inherited, 6}}, 
+             LineSpacing -> {1, 5}], 
+            Cell[
+             StyleData["DisplayFormula", "Printout"], 
+             CellMargins -> {{18, 4}, {4, 4}}]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["ChemicalFormula"], 
+             CellMargins -> {{55, 10}, {Inherited, 0}}, 
+             CellHorizontalScrolling -> True, TextJustification -> 1, 
+             AutoSpacing -> False, ScriptBaselineShifts -> {0.6, Automatic}, 
+             ScriptLevel -> 1, SingleLetterItalics -> False, ZeroWidthTimes -> 
+             True], 
+            Cell[
+             StyleData["ChemicalFormula", "Presentation"], 
+             CellMargins -> {{60, 10}, {Inherited, 6}}], 
+            Cell[
+             StyleData["ChemicalFormula", "Printout"], 
+             CellMargins -> {{18, 4}, {4, 4}}, LineSpacing -> {1, 3}, 
+             FontSize -> 10]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Program"], CellMargins -> {{55, 10}, {Inherited, 0}}, 
+             CellHorizontalScrolling -> True, FontFamily -> "Courier"], 
+            Cell[
+             StyleData["Program", "Presentation"], 
+             CellMargins -> {{60, 10}, {Inherited, 6}}], 
+            Cell[
+             StyleData["Program", "Printout"], 
+             CellMargins -> {{18, 4}, {4, 4}}, LineSpacing -> {1, 3}, 
+             FontSize -> 9.5]}, Open]]}, Closed]], 
+      Cell[
+       CellGroupData[{
+         Cell["Styles for Automatic Numbering", "Section"], 
+         Cell[
+         "The following styles are useful for numbered equations, figures, \
+etc.  They automatically give the cell a FrameLabel containing a reference to \
+a particular counter, and also increment that counter.", "Text"], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["NumberedEquation"], 
+             CellMargins -> {{55, 85}, {Inherited, Inherited}}, 
+             CellFrameLabels -> {{None, 
+                Cell[
+                 TextData[{"(", 
+                   CounterBox["NumberedEquation"], ")"}]]}, {None, None}}, 
+             DefaultFormatType -> DefaultInputFormatType, CounterIncrements -> 
+             "NumberedEquation", FormatTypeAutoConvert -> False, FontFamily -> 
+             "Times"], 
+            Cell[
+             StyleData["NumberedEquation", "Presentation"], 
+             CellMargins -> {{60, 10}, {Inherited, 6}}, 
+             LineSpacing -> {1, 0}], 
+            Cell[
+             StyleData["NumberedEquation", "Printout"], 
+             CellMargins -> {{18, 4}, {4, 4}}, FontSize -> 8]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["NumberedFigure"], 
+             CellMargins -> {{55, 95}, {Inherited, Inherited}}, 
+             CellFrameLabels -> {{None, None}, {
+                Cell[
+                 TextData[{"Figure ", 
+                   CounterBox["NumberedFigure"]}], FontWeight -> "Bold"], 
+                None}}, CounterIncrements -> "NumberedFigure", 
+             FormatTypeAutoConvert -> False, FontFamily -> "Times"], 
+            Cell[
+             StyleData["NumberedFigure", "Presentation"], 
+             CellMargins -> {{60, 80}, {Inherited, 6}}, 
+             LineSpacing -> {1, 0}], 
+            Cell[
+             StyleData["NumberedFigure", "Printout"], 
+             CellMargins -> {{18, 80}, {4, 4}}, FontSize -> 8]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["NumberedTable"], 
+             CellMargins -> {{55, 95}, {Inherited, Inherited}}, 
+             CellFrameLabels -> {{None, None}, {
+                Cell[
+                 TextData[{"Table ", 
+                   CounterBox["NumberedTable"]}], FontWeight -> "Bold"], 
+                None}}, TextAlignment -> Center, CounterIncrements -> 
+             "NumberedTable", FormatTypeAutoConvert -> False, FontFamily -> 
+             "Times"], 
+            Cell[
+             StyleData["NumberedTable", "Presentation"], 
+             CellMargins -> {{60, 80}, {Inherited, 6}}, 
+             LineSpacing -> {1, 0}], 
+            Cell[
+             StyleData["NumberedTable", "Printout"], 
+             CellMargins -> {{18, 80}, {4, 4}}, FontSize -> 8]}, Open]]}, 
+        Open]], 
+      Cell[
+       CellGroupData[{
+         Cell["Styles for Headers and Footers", "Section"], 
+         Cell[
+          StyleData["Header"], StyleMenuListing -> None, FontFamily -> 
+          "Helvetica", FontSize -> 9], 
+         Cell[
+          StyleData["PageNumber"], StyleMenuListing -> None, FontFamily -> 
+          "Helvetica", FontSize -> 9, FontWeight -> "Bold"], 
+         Cell[
+          StyleData["Footer"], TextAlignment -> Center, StyleMenuListing -> 
+          None, FontFamily -> "Helvetica", FontSize -> 9]}, Closed]]}, 
+     Open]]}, Visible -> False, FrontEndVersion -> 
+  "8.0 for Microsoft Windows (32-bit) (February 23, 2011)", StyleDefinitions -> 
+  "Default.nb"]
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 40, 0, 67, "Title"],
+Cell[622, 24, 31, 0, 38, "Subtitle"],
+Cell[CellGroupData[{
+Cell[678, 28, 31, 0, 61, "Section"],
+Cell[712, 30, 300, 5, 70, "Text"],
+Cell[1015, 37, 149, 5, 70, "Text"],
+Cell[1167, 44, 101, 2, 70, "Program"],
+Cell[1271, 48, 297, 5, 70, "Text"],
+Cell[1571, 55, 306, 7, 70, "Text"],
+Cell[1880, 64, 79, 2, 70, "Input",
+ InitializationCell->True],
+Cell[1962, 68, 169, 3, 70, "Text"],
+Cell[2134, 73, 132, 3, 70, "Text"],
+Cell[CellGroupData[{
+Cell[2291, 80, 31, 0, 70, "Subsection"],
+Cell[CellGroupData[{
+Cell[2347, 84, 39, 0, 70, "Subsubsection"],
+Cell[2389, 86, 124, 3, 70, "Commentary"],
+Cell[2516, 91, 403, 6, 70, "Commentary"],
+Cell[2922, 99, 74, 0, 70, "Commentary"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[3033, 104, 34, 0, 70, "Subsubsection"],
+Cell[3070, 106, 1754, 26, 70, "Text"]
+}, Closed]]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[4885, 139, 25, 0, 35, "Section"],
+Cell[CellGroupData[{
+Cell[4935, 143, 41, 0, 70, "Subsection"],
+Cell[4979, 145, 387, 9, 70, "Text"],
+Cell[5369, 156, 34, 0, 70, "Input"],
+Cell[5406, 158, 38, 0, 70, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5481, 163, 65, 1, 70, "Subsection",
+ InitializationCell->True],
+Cell[5549, 166, 141, 5, 70, "Text"],
+Cell[5693, 173, 126, 3, 70, "Text"],
+Cell[5822, 178, 113, 2, 70, "InputOnly",
+ InitializationCell->True],
+Cell[5938, 182, 115, 3, 70, "Text"],
+Cell[6056, 187, 129, 3, 70, "InputOnly",
+ InitializationCell->True],
+Cell[6188, 192, 206, 5, 70, "Text"],
+Cell[6397, 199, 128, 3, 70, "InputOnly",
+ InitializationCell->True],
+Cell[6528, 204, 73, 1, 70, "Text",
+ InitializationCell->True],
+Cell[6604, 207, 114, 2, 70, "InputOnly",
+ InitializationCell->True],
+Cell[6721, 211, 125, 3, 70, "InputOnly",
+ InitializationCell->True],
+Cell[6849, 216, 132, 3, 70, "InputOnly",
+ InitializationCell->True]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[7018, 224, 52, 0, 70, "Subsection"],
+Cell[7073, 226, 153, 4, 70, "Text"],
+Cell[7229, 232, 1297, 34, 70, "InputOnly",
+ InitializationCell->True],
+Cell[8529, 268, 315, 7, 70, "Input",
+ InitializationCell->True],
+Cell[8847, 277, 660, 17, 70, "Text"],
+Cell[9510, 296, 737, 16, 70, "Text"],
+Cell[10250, 314, 2136, 53, 70, "InputOnly",
+ InitializationCell->True],
+Cell[12389, 369, 401, 9, 70, "InputOnly",
+ InitializationCell->True],
+Cell[12793, 380, 706, 13, 70, "Input",
+ InitializationCell->True],
+Cell[13502, 395, 154, 4, 70, "Text",
+ InitializationCell->True],
+Cell[13659, 401, 495, 15, 70, "InputOnly",
+ InitializationCell->True],
+Cell[14157, 418, 248, 6, 70, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[14454, 430, 73, 1, 35, "Section",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[14552, 435, 54, 0, 70, "Subsection"],
+Cell[14609, 437, 793, 14, 70, "Text"],
+Cell[15405, 453, 168, 3, 70, "Text"],
+Cell[15576, 458, 404, 6, 70, "Text"],
+Cell[15983, 466, 399, 9, 70, "Text"],
+Cell[16385, 477, 363, 8, 70, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[16785, 490, 60, 0, 70, "Subsection"],
+Cell[16848, 492, 233, 7, 70, "Text"],
+Cell[17084, 501, 245, 6, 70, "Input"],
+Cell[17332, 509, 71, 1, 70, "Input"],
+Cell[17406, 512, 75, 0, 70, "Text"],
+Cell[17484, 514, 345, 9, 70, "Input"],
+Cell[17832, 525, 80, 1, 70, "Input"],
+Cell[17915, 528, 109, 3, 70, "Text"],
+Cell[18027, 533, 196, 6, 70, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[18260, 544, 54, 0, 70, "Subsection"],
+Cell[18317, 546, 632, 11, 70, "Text"],
+Cell[18952, 559, 84, 2, 70, "Input"],
+Cell[19039, 563, 202, 4, 70, "Text"],
+Cell[19244, 569, 471, 14, 70, "Input"],
+Cell[19718, 585, 186, 4, 70, "Text"],
+Cell[19907, 591, 251, 8, 70, "Input"],
+Cell[20161, 601, 362, 11, 70, "Input"],
+Cell[20526, 614, 95, 2, 70, "Text"],
+Cell[20624, 618, 163, 5, 70, "Input"],
+Cell[20790, 625, 67, 0, 70, "Text"],
+Cell[20860, 627, 269, 8, 70, "Input"],
+Cell[21132, 637, 67, 0, 70, "Text"],
+Cell[21202, 639, 361, 11, 70, "Input"],
+Cell[21566, 652, 71, 0, 70, "Text"],
+Cell[21640, 654, 479, 13, 70, "Input"],
+Cell[22122, 669, 128, 3, 70, "Text"],
+Cell[22253, 674, 256, 7, 70, "Input",
+ InitializationCell->True],
+Cell[22512, 683, 126, 3, 70, "Text"],
+Cell[22641, 688, 195, 6, 70, "Input"],
+Cell[22839, 696, 37, 0, 70, "Text"],
+Cell[22879, 698, 276, 9, 70, "Input"],
+Cell[23158, 709, 179, 3, 70, "Text"],
+Cell[23340, 714, 242, 6, 70, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[23619, 725, 74, 1, 70, "Subsection",
+ PageBreakAbove->True],
+Cell[23696, 728, 121, 3, 70, "Text"],
+Cell[23820, 733, 105, 2, 70, "Input"]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[23974, 741, 38, 0, 35, "Section"],
+Cell[24015, 743, 62, 0, 70, "Text"],
+Cell[24080, 745, 479, 12, 70, "Input"],
+Cell[24562, 759, 76, 0, 70, "Text"],
+Cell[24641, 761, 202, 6, 70, "Input"],
+Cell[24846, 769, 57, 1, 70, "Input"],
+Cell[24906, 772, 74, 1, 70, "Input"],
+Cell[24983, 775, 136, 3, 70, "Text"],
+Cell[25122, 780, 99, 2, 70, "Input"],
+Cell[25224, 784, 140, 4, 70, "Input"],
+Cell[25367, 790, 209, 6, 70, "Input"],
+Cell[25579, 798, 68, 1, 70, "Input"],
+Cell[25650, 801, 112, 3, 70, "Text"],
+Cell[25765, 806, 97, 2, 70, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[25899, 813, 47, 0, 35, "Section"],
+Cell[25949, 815, 137, 3, 70, "Text"],
+Cell[26089, 820, 434, 13, 70, "Input"],
+Cell[26526, 835, 90, 2, 70, "Text"],
+Cell[26619, 839, 273, 8, 70, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[26929, 852, 42, 0, 35, "Section"],
+Cell[26974, 854, 190, 4, 70, "Text"],
+Cell[27167, 860, 223, 7, 70, "Input"],
+Cell[27393, 869, 191, 5, 70, "Input"],
+Cell[27587, 876, 88, 2, 70, "Text"],
+Cell[27678, 880, 232, 6, 70, "Input"],
+Cell[27913, 888, 48, 1, 70, "Input"],
+Cell[27964, 891, 99, 2, 70, "Input"],
+Cell[28066, 895, 199, 5, 70, "Input"],
+Cell[28268, 902, 106, 3, 70, "Text"],
+Cell[28377, 907, 390, 12, 70, "Input"],
+Cell[28770, 921, 105, 3, 70, "Text"],
+Cell[28878, 926, 273, 9, 70, "Input"],
+Cell[29154, 937, 129, 4, 70, "Text"],
+Cell[29286, 943, 365, 10, 70, "Input"],
+Cell[29654, 955, 106, 3, 70, "Text"],
+Cell[29763, 960, 796, 22, 70, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[30596, 987, 31, 0, 35, "Section"],
+Cell[30630, 989, 431, 13, 70, "Text"],
+Cell[31064, 1004, 556, 15, 70, "Input"],
+Cell[31623, 1021, 192, 6, 70, "Text"],
+Cell[31818, 1029, 918, 28, 70, "Input"],
+Cell[32739, 1059, 120, 4, 70, "Text"],
+Cell[32862, 1065, 1106, 32, 70, "Input"],
+Cell[33971, 1099, 918, 28, 70, "Input"],
+Cell[34892, 1129, 411, 7, 70, "Text"],
+Cell[35306, 1138, 1109, 31, 70, "Input",
+ InitializationCell->True],
+Cell[36418, 1171, 46, 0, 70, "Text"],
+Cell[36467, 1173, 324, 7, 70, "Input"],
+Cell[36794, 1182, 47, 0, 70, "Text"],
+Cell[36844, 1184, 1109, 31, 70, "Input",
+ InitializationCell->True],
+Cell[37956, 1217, 274, 6, 70, "Input"],
+Cell[38233, 1225, 122, 3, 70, "Text"],
+Cell[38358, 1230, 442, 13, 70, "Input"],
+Cell[38803, 1245, 442, 13, 70, "Input"],
+Cell[39248, 1260, 135, 6, 70, "Text"],
+Cell[39386, 1268, 496, 14, 70, "Input"],
+Cell[39885, 1284, 84, 2, 70, "Text"],
+Cell[39972, 1288, 439, 12, 70, "Input",
+ InitializationCell->True],
+Cell[40414, 1302, 120, 3, 70, "Text"],
+Cell[40537, 1307, 1014, 26, 70, "Input"],
+Cell[41554, 1335, 148, 6, 70, "Text"],
+Cell[41705, 1343, 202, 6, 70, "Input"],
+Cell[41910, 1351, 116, 3, 70, "Text"],
+Cell[42029, 1356, 467, 13, 70, "Input"],
+Cell[42499, 1371, 501, 15, 70, "Input"],
+Cell[43003, 1388, 551, 16, 70, "Input"],
+Cell[43557, 1406, 562, 16, 70, "Input"],
+Cell[44122, 1424, 102, 2, 70, "Text"],
+Cell[44227, 1428, 514, 14, 70, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[44778, 1447, 49, 0, 35, "Section"],
+Cell[CellGroupData[{
+Cell[44852, 1451, 29, 0, 70, "Subsection"],
+Cell[44884, 1453, 191, 4, 70, "Text"],
+Cell[45078, 1459, 225, 7, 70, "Input"],
+Cell[45306, 1468, 216, 7, 70, "Input"],
+Cell[45525, 1477, 70, 0, 70, "Text"],
+Cell[45598, 1479, 117, 3, 70, "Input"],
+Cell[45718, 1484, 170, 3, 70, "Text"],
+Cell[45891, 1489, 646, 21, 70, "Input"],
+Cell[46540, 1512, 89, 2, 70, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[46666, 1519, 29, 0, 70, "Subsection"],
+Cell[46698, 1521, 108, 3, 70, "Text"],
+Cell[46809, 1526, 225, 7, 70, "Input"],
+Cell[47037, 1535, 216, 7, 70, "Input"],
+Cell[47256, 1544, 70, 0, 70, "Text"],
+Cell[47329, 1546, 117, 3, 70, "Input"],
+Cell[47449, 1551, 133, 3, 70, "Text"],
+Cell[47585, 1556, 169, 3, 70, "Text"],
+Cell[47757, 1561, 646, 21, 70, "Input"]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[48452, 1588, 39, 0, 35, "Section"],
+Cell[48494, 1590, 160, 3, 41, "Text"],
+Cell[48657, 1595, 108, 3, 25, "Text"],
+Cell[48768, 1600, 432, 13, 40, "Input"],
+Cell[49203, 1615, 844, 24, 83, "Input"],
+Cell[50050, 1641, 739, 22, 57, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[50826, 1668, 39, 0, 61, "Section"],
+Cell[50868, 1670, 502, 14, 70, "Input"],
+Cell[51373, 1686, 499, 13, 70, "Input"],
+Cell[51875, 1701, 492, 14, 70, "Input"],
+Cell[52370, 1717, 151, 6, 70, "Text"],
+Cell[52524, 1725, 241, 7, 70, "Input"],
+Cell[52768, 1734, 241, 7, 70, "Input"],
+Cell[53012, 1743, 119, 3, 70, "Text"],
+Cell[53134, 1748, 537, 16, 70, "Input"],
+Cell[53674, 1766, 537, 16, 70, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[54248, 1787, 138, 6, 70, "Section"],
+Cell[54389, 1795, 201, 6, 70, "Input"],
+Cell[54593, 1803, 201, 6, 70, "Input"],
+Cell[54797, 1811, 176, 6, 70, "Text"],
+Cell[54976, 1819, 559, 17, 70, "Input"],
+Cell[55538, 1838, 64, 0, 70, "Text"],
+Cell[55605, 1840, 353, 10, 70, "Input"],
+Cell[55961, 1852, 176, 6, 70, "Text"],
+Cell[56140, 1860, 559, 17, 70, "Input"],
+Cell[56702, 1879, 113, 3, 70, "Text"],
+Cell[56818, 1884, 91, 1, 70, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[56946, 1890, 33, 0, 70, "Section"],
+Cell[56982, 1892, 140, 3, 70, "Text"],
+Cell[57125, 1897, 165, 6, 70, "Text"],
+Cell[57293, 1905, 392, 12, 70, "Input"],
+Cell[57688, 1919, 50, 0, 70, "Text"],
+Cell[57741, 1921, 61, 1, 70, "Input"],
+Cell[57805, 1924, 118, 3, 70, "Text"],
+Cell[57926, 1929, 276, 8, 70, "Input"],
+Cell[58205, 1939, 1140, 30, 70, "Input"],
+Cell[59348, 1971, 264, 8, 70, "Text"],
+Cell[59615, 1981, 657, 20, 70, "Input"],
+Cell[60275, 2003, 299, 9, 70, "Text"],
+Cell[60577, 2014, 1109, 33, 70, "Input"],
+Cell[61689, 2049, 359, 9, 70, "Text"],
+Cell[62051, 2060, 1838, 51, 70, "Input"],
+Cell[63892, 2113, 730, 26, 70, "Text"],
+Cell[64625, 2141, 2205, 60, 70, "Input"],
+Cell[66833, 2203, 2284, 62, 70, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[69154, 2270, 42, 0, 70, "Section"],
+Cell[69199, 2272, 112, 3, 70, "Text"],
+Cell[69314, 2277, 455, 16, 70, "Input"],
+Cell[69772, 2295, 69, 0, 70, "Text"],
+Cell[69844, 2297, 880, 28, 70, "Input"],
+Cell[70727, 2327, 678, 22, 70, "Input"],
+Cell[71408, 2351, 397, 14, 70, "Input"],
+Cell[71808, 2367, 678, 22, 70, "Input"],
+Cell[72489, 2391, 397, 14, 70, "Input"],
+Cell[72889, 2407, 281, 7, 70, "Text"],
+Cell[73173, 2416, 964, 28, 70, "Input"],
+Cell[74140, 2446, 110, 2, 70, "Input"],
+Cell[74253, 2450, 956, 27, 70, "Input"],
+Cell[75212, 2479, 110, 2, 70, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[75359, 2486, 36, 0, 70, "Section"],
+Cell[75398, 2488, 161, 4, 70, "Text"],
+Cell[75562, 2494, 286, 8, 70, "Input"],
+Cell[75851, 2504, 70, 1, 70, "Input"],
+Cell[75924, 2507, 57, 1, 70, "Input"],
+Cell[75984, 2510, 79, 1, 70, "Input"]
+}, Closed]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+

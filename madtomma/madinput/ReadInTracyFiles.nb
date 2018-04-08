@@ -1,0 +1,861 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.1'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     31894,        718]*)
+(*NotebookOutlinePosition[     32592,        742]*)
+(*  CellTagsIndexPosition[     32548,        738]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Begin", "Section"],
+
+Cell[BoxData[
+    \(\(BeginPackage["\<ReadInTracyFiles`\>", {"\<Madtomma`MADInput`MADInput`\
+\>"}];\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(quadRead::usage = "\<\>";\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(sbendRead::usage = "\<\>";\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(sextRead::usage = "\<\>";\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(monitorRead::usage = "\<\>";\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(kickerRead::usage = "\<\>";\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(driftRead::usage = "\<\>";\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(lineRead::usage = "\<\>";\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(multipoleRead::usage = "\<\>";\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(ReadInTracyFile::usage = "\<ReadInTracyFile[\"filename\"] reads in a \
+TRACY file and (re)assigns the element and line definitions\>";\)\)], "Input",\
+
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(ReadInElegantFile::usage = "\<ReadInElegantFile[\"filename\"] reads \
+in an Elegant file and (re)assigns the element and line definitions\>";\)\)], \
+"Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(Begin["\<`Private`\>"];\)\)], "Input",
+  InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Functions", "Section"],
+
+Cell[BoxData[
+    \(\(ElementList = {};\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(idRead2[
+        type_] := \(Join[
+            Take[readfile, 
+              If[StringMatchQ[
+                  readfile\[LeftDoubleBracket]#\[RightDoubleBracket], \
+"\<*&*\>"], {#, Module[{a = #}, 
+                    While[StringMatchQ[
+                        readfile\[LeftDoubleBracket]
+                          a\[RightDoubleBracket], "\<*&*\>"], \(a++\)]; 
+                    a]}, {#}]]] &\) /@ \((Flatten[
+            Position[
+              readfile, _?\((StringMatchQ[ToString[#], type, 
+                        IgnoreCase \[Rule] True] && \((Not[
+                          StringMatchQ[
+                            StringTake[ToString[#], 
+                              1], "\<!\>"]])\) &)\), {1}]])\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(idRead[type_, nottype_: "\<\>"] := 
+      Select[readfile, 
+        StringMatchQ[StringReplace[#, "\< \>" \[Rule] "\<\>"], type, 
+              IgnoreCase \[Rule] True] && 
+            Not[StringMatchQ[
+                StringReplace[#, "\< \>" \[Rule] "\<\>"], {"\<*LINE*\>", \
+"\<*PLOT*\>", "\<*TWISS*\>", nottype}, 
+                IgnoreCase \[Rule] True]] &]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(getLines[] := 
+      Select[readfile, 
+        StringMatchQ[#, "\<*:*LINE*\>", IgnoreCase \[Rule] True] && 
+            Not[StringMatchQ[#, {"\<*PLINE*\>", "\<*PLOT*\>", "\<*TWISS*\>"}, 
+                IgnoreCase \[Rule] True]] &]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(replacerules = 
+        Flatten@{"\<&\>" \[Rule] "\<\>", \[IndentingNewLine]"\<&\>" \[Rule] "\
+\<\>", \[IndentingNewLine]"\<,\>" \[Rule] "\<},{\>", \
+\[IndentingNewLine]"\<:\>" \[Rule] "\<:=Partition[\>", \
+\[IndentingNewLine]"\<(\>" \[Rule] "\<Flatten[{{\>", \
+\[IndentingNewLine]"\<)\>" \[Rule] "\<}}],7]\>", \
+\[IndentingNewLine]"\<LINE=\>" \[Rule] "\<\>", \[IndentingNewLine]"\<-\>" \
+\[Rule] "\<Reverse@\>", \[IndentingNewLine]\(\(("\<*\>" <> 
+                      ToString[#] \[Rule] "\<Table[#,{\>" <> 
+                      ToString[#] <> "\<}]&@\>")\) &\) /@ 
+              Range[20], \[IndentingNewLine]\(\((ToString[#] <> "\<*\>" \
+\[Rule] "\<Table[#,{\>" <> ToString[#] <> "\<}]&@\>")\) &\) /@ 
+              Range[20], \[IndentingNewLine]"\<_\>" \[Rule] "\<\>"};\)\)], \
+"Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Sequence[\(\(("\<*\>" <> ToString[#] \[Rule] "\<Table[#,{\>" <> 
+                ToString[#] <> "\<}]&@\>")\) &\) /@ Range[12]]\)], "Input"],
+
+Cell[BoxData[
+    \({"*1" \[Rule] "Table[#,{1}]&@", "*2" \[Rule] "Table[#,{2}]&@", 
+      "*3" \[Rule] "Table[#,{3}]&@", "*4" \[Rule] "Table[#,{4}]&@", 
+      "*5" \[Rule] "Table[#,{5}]&@", "*6" \[Rule] "Table[#,{6}]&@", 
+      "*7" \[Rule] "Table[#,{7}]&@", "*8" \[Rule] "Table[#,{8}]&@", 
+      "*9" \[Rule] "Table[#,{9}]&@", "*10" \[Rule] "Table[#,{10}]&@", 
+      "*11" \[Rule] "Table[#,{11}]&@", 
+      "*12" \[Rule] "Table[#,{12}]&@"}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(replacerules2 = {"\<:\>" \[Rule] "\<,\>", "\<&\>" \[Rule] "\<\>", \
+"\<TYPE=\>" \[Rule] "\<TYPE=ToString@Unevaluated@\>", "\<_\>" \[Rule] "\<\>", \
+"\< \>" \[Rule] "\<\>", "\<[L]\>" \[Rule] "\<\[LeftDoubleBracket]1,3\
+\[RightDoubleBracket]\>", "\<[APER]\>" \[Rule] "\<Extra\[LeftDoubleBracket]3\
+\[RightDoubleBracket]\>", "\<TILT\>" \[Rule] "\<TILT=TILT\>"};\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(replacerules3 = {"\< \>" \[Rule] "\<\>", "\<[L]\>" \[Rule] "\<\
+\[LeftDoubleBracket]1,3\[RightDoubleBracket]\>", "\<[APER]\>" \[Rule] \
+"\<Extra\[LeftDoubleBracket]3\[RightDoubleBracket]\>", "\<CONSTANT\>" \[Rule] \
+"\<\>", "\<CLIGHT\>" \[Rule] "\<299792458\>", "\<TWOPI\>" \[Rule] \
+"\<2\[Pi]\>", "\<PI\>" \[Rule] "\<\[Pi]\>"};\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(lineRead[list_] := 
+      Block[{}, \[IndentingNewLine]Clear[
+          Evaluate[
+            StringReplace[
+              StringTake[
+                ToString[
+                  list], {1, \((StringPosition[ToString[list], "\<:\>"] - 
+                        1)\)\[LeftDoubleBracket]1, 
+                    1\[RightDoubleBracket]}], {"\< \>" \[Rule] "\<\>"}]]]; \
+\[IndentingNewLine]ToExpression[
+          Evaluate[StringReplace[ToString[list], replacerules]]]]\)], "Input",\
+
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(clearFunc[list2_] := 
+      Block[{a}, 
+        Clear[Evaluate[
+            a = StringReplace[
+                StringTake[
+                  list2, {1, \((StringPosition[list2, "\<:\>"] - 
+                          1)\)\[LeftDoubleBracket]1, 
+                      1\[RightDoubleBracket]}], replacerules2]]]; 
+        Clear[Evaluate[a <> "\<Extra\>"]];]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(quadRead[list2_, elementname___ : "\<\>"] := 
+      Block[{Global`NAME, Global`K = 0, Global`TYPE = "\<\>", Global`L = 0, 
+          list, name := Global`NAME, Global`APER, 
+          Global`TILT = 0}, \[IndentingNewLine]If[elementname == "\<\>", 
+          clearFunc[list2], 
+          clearFunc[elementname]]; \[IndentingNewLine]list = 
+          ReplaceExponent[
+            ToString[
+              list2]]; \[IndentingNewLine]ToExpression["\<{{NAME=\>" <> \ 
+            StringReplace[list, 
+              replacerules2] <> "\<}}\>"]; \[IndentingNewLine]AppendTo[
+          ElementList, {ToString[Global`NAME], 
+            list2}]; \[IndentingNewLine]quad[Evaluate[Global`NAME], Global`L, 
+          Global`K, Global`TYPE, Global`XAp \[Rule] Global`APER, 
+          Global`YAp \[Rule] Global`APER, 
+          Global`Tilt \[Rule] 
+            Evaluate[
+              If[\(! NumberQ[Global`TILT]\), "\<TILT\>", 
+                Global`TILT]]]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(sextRead[list2_, elementname___ : "\<\>"] := 
+      Block[{Global`NAME, Global`K, Global`TYPE = "\<\>", Global`L = 0, 
+          list}, \[IndentingNewLine]If[elementname == "\<\>", 
+          clearFunc[list2], 
+          clearFunc[elementname]]; \[IndentingNewLine]list = 
+          ReplaceExponent[
+            ToString[
+              list2]]; \[IndentingNewLine]ToExpression["\<{{NAME=\>" <> \ 
+            StringReplace[list, 
+              replacerules2] <> "\<}}\>"]; \[IndentingNewLine]AppendTo[
+          ElementList, {ToString[Global`NAME], 
+            list2}]; \[IndentingNewLine]sext[Evaluate[Global`NAME], Global`L, 
+          Global`K*2, Global`TYPE, Global`XAp \[Rule] Global`APER, 
+          Global`YAp \[Rule] Global`APER, 
+          Global`Tilt \[Rule] 
+            Evaluate[
+              If[\(! NumberQ[Global`TILT]\), "\<TILT\>", 
+                Global`TILT]]]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(octRead[list2_, elementname___ : "\<\>"] := 
+      Block[{Global`NAME, Global`K3, Global`TYPE = "\<\>", Global`L, list, 
+          Global`APER, Global`TILT = 0}, \[IndentingNewLine]If[
+          elementname == "\<\>", clearFunc[list2], 
+          clearFunc[elementname]]; \[IndentingNewLine]list = 
+          ReplaceExponent[
+            ToString[
+              list2]]; \[IndentingNewLine]ToExpression["\<{{NAME=\>" <> \ 
+            StringReplace[list, 
+              replacerules2] <> "\<}}\>"]; \[IndentingNewLine]AppendTo[
+          ElementList, {ToString[Global`NAME], 
+            list2}]; \[IndentingNewLine]oct[Evaluate[Global`NAME], Global`L, 
+          Global`K3, Global`TYPE, Global`XAp \[Rule] Global`APER, 
+          Global`YAp \[Rule] Global`APER, 
+          Global`Tilt \[Rule] 
+            Evaluate[
+              If[\(! NumberQ[Global`TILT]\), "\<TILT\>", 
+                Global`TILT]]]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(sbendRead[list2_, elementname___ : "\<\>"] := 
+      Block[{Global`NAME = "\<B\>", Global`K1 = 0, Global`TYPE = "\<\>", 
+          Global`L = 0, Global`T1 = 0, Global`T2 = 0, Global`K2 = 0, 
+          Global`H1 = 0, Global`HGAP = 0, Global`FINT = 0, Global`K3 = 0, 
+          Global`FINTX = 0, Global`T = 0, list, name := Global`NAME, 
+          Global`APER = 0, Global`TILT = 0}, \[IndentingNewLine]If[
+          elementname == "\<\>", clearFunc[list2], 
+          clearFunc[elementname]]; \[IndentingNewLine]list = 
+          ReplaceExponent[
+            ToString[list2]]; \[IndentingNewLine]ToExpression["\<{{NAME=\>" <> 
+            StringReplace[list, 
+              replacerules2] <> "\<}}\>"]; \[IndentingNewLine]AppendTo[
+          ElementList, {ToString[Global`NAME], 
+            list2}]; \[IndentingNewLine]{t1, t2, tilt, k2, h1, hgap, fint, 
+            k3, fintx} = {Global`T1, Global`T2, Global`TILT, Global`K2, 
+            Global`H1, Global`HGAP, Global`FINT, Global`K3, 
+            Global`FINTX}; \[IndentingNewLine]Clear[Global`T1, Global`T2, 
+          Global`TILT, Global`K2, Global`H1, Global`HGAP, Global`FINT, 
+          Global`K3, Global`FINTX]; \[IndentingNewLine]sbend[
+          Evaluate[Global`NAME], Global`L, Global`K1, Global`T*Degree, 
+          Global`TYPE, Global`E1 \[Rule] t1*Degree, 
+          Global`E2 \[Rule] t2*Degree, Global`Tilt \[Rule] tilt, 
+          Global`K2 \[Rule] k2, Global`H1 \[Rule] h1, 
+          Global`HGap \[Rule] hgap, Global`FInt \[Rule] fint, 
+          Global`K3 \[Rule] k3, Global`FIntX \[Rule] fintx, 
+          Global`XAp \[Rule] Global`APER, Global`YAp \[Rule] Global`APER, 
+          Global`Tilt \[Rule] 
+            Evaluate[
+              If[\(! NumberQ[Global`TILT]\), "\<TILT\>", 
+                Global`TILT]]];\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(driftRead[list2_, elementname___ : "\<\>"] := 
+      Block[{Global`NAME, Global`TYPE = "\<\>", Global`L, list, Global`APER, 
+          Global`TILT = 0}, \[IndentingNewLine]If[elementname == "\<\>", 
+          clearFunc[list2], 
+          clearFunc[elementname]]; \[IndentingNewLine]list = 
+          ReplaceExponent[ToString[list2]]; \[IndentingNewLine]Print[
+          list]; \[IndentingNewLine]ToExpression["\<{{NAME=\>" <> 
+            StringReplace[list, 
+              replacerules2] <> "\<}}\>"]; \[IndentingNewLine]AppendTo[
+          ElementList, {ToString[Global`NAME], 
+            list2}]; \[IndentingNewLine]drift[Evaluate[Global`NAME], 
+          Global`L, Global`TYPE, Global`XAp \[Rule] Global`APER, 
+          Global`YAp \[Rule] Global`APER]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(kickRead[list2_, elementname___ : "\<\>"] := 
+      Block[{Global`NAME, TYPE = "\<\"\"\>", Global`L, Global`VKICK = 0, 
+          Global`HKICK = 0, list, Global`TILT = 0}, \[IndentingNewLine]If[
+          elementname == "\<\>", clearFunc[list2], 
+          clearFunc[elementname]]; \[IndentingNewLine]list = 
+          ReplaceExponent[
+            ToString[list2]]; \[IndentingNewLine]ToExpression["\<{{NAME=\>" <> 
+            StringReplace[list, 
+              replacerules2] <> "\<}}\>"]; \[IndentingNewLine]AppendTo[
+          ElementList, {ToString[Global`NAME], 
+            list2}]; \[IndentingNewLine]kick[Evaluate[Global`NAME], Global`L, 
+          Global`VKICK, Global`HKICK, Global`TYPE, 
+          Global`XAp \[Rule] Global`APER, Global`YAp \[Rule] Global`APER, 
+          Global`Tilt \[Rule] Global`TILT]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(bpmRead[list2_, elementname___ : "\<\>"] := 
+      Block[{Global`NAME, Global`TYPE = "\<\>", Global`L = 0, list, 
+          Global`APER, Global`TILT = 0}, \[IndentingNewLine]If[
+          elementname == "\<\>", clearFunc[list2], 
+          clearFunc[elementname]]; \[IndentingNewLine]list = 
+          ReplaceExponent[
+            ToString[list2]]; \[IndentingNewLine]ToExpression["\<{{NAME=\>" <> 
+            StringReplace[list, 
+              replacerules2] <> "\<}}\>"]; \[IndentingNewLine]AppendTo[
+          ElementList, {ToString[Global`NAME], 
+            list2}]; \[IndentingNewLine]bpm[Evaluate[Global`NAME], Global`L, 
+          Global`TYPE, Global`XAp \[Rule] Global`APER, 
+          Global`YAp \[Rule] Global`APER, 
+          Global`Tilt \[Rule] 
+            Evaluate[
+              If[Global`TILT \[Equal] Global`TILT, "\<TILT\>", 
+                Global`TILT]]]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(rcollRead[list2_, elementname___ : "\<\>"] := 
+      Block[{Global`NAME, Global`XSIZE = 0, Global`YSIZE = 0, 
+          Global`TYPE = "\<\>", Global`L = 0, list, 
+          Global`TILT = 0}, \[IndentingNewLine]If[elementname == "\<\>", 
+          clearFunc[list2], 
+          clearFunc[elementname]]; \[IndentingNewLine]list = 
+          ReplaceExponent[
+            ToString[list2]]; \[IndentingNewLine]ToExpression["\<{{NAME=\>" <> 
+            StringReplace[list, 
+              replacerules2] <> "\<}}\>"]; \[IndentingNewLine]AppendTo[
+          ElementList, {ToString[Global`NAME], 
+            list2}]; \[IndentingNewLine]rcoll[Evaluate[Global`NAME], 
+          Global`L, Global`XSIZE, Global`YSIZE, Global`TYPE, 
+          Global`XAp \[Rule] Global`APER, 
+          Global`YAp \[Rule] Global`APER]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(ecollRead[list2_, elementname___ : "\<\>"] := 
+      Block[{Global`NAME, Global`XSIZE = 0, Global`YSIZE = 0, 
+          Global`TYPE = "\<\>", Global`L = 0, list, Global`APER, 
+          Global`TILT = 0}, \[IndentingNewLine]If[elementname == "\<\>", 
+          clearFunc[list2], 
+          clearFunc[elementname]]; \[IndentingNewLine]list = 
+          ReplaceExponent[
+            ToString[list2]]; \[IndentingNewLine]ToExpression["\<{{NAME=\>" <> 
+            StringReplace[list, 
+              replacerules2] <> "\<}}\>"]; \[IndentingNewLine]AppendTo[
+          ElementList, {ToString[Global`NAME], 
+            list2}]; \[IndentingNewLine]ecoll[Evaluate[Global`NAME], 
+          Global`L, Global`XSIZE, Global`YSIZE, Global`TYPE, 
+          Global`XAp \[Rule] Global`APER, 
+          Global`YAp \[Rule] Global`APER]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(markerRead[list2_, elementname___ : "\<\>"] := 
+      Block[{Global`NAME, Global`TYPE = "\<\>", Global`L = 0, list, 
+          Global`APER, Global`TILT = 0}, \[IndentingNewLine]If[
+          elementname == "\<\>", clearFunc[list2], 
+          clearFunc[elementname]]; \[IndentingNewLine]list = 
+          ReplaceExponent[
+            ToString[list2]]; \[IndentingNewLine]ToExpression["\<{{NAME=\>" <> 
+            StringReplace[list, 
+              replacerules2] <> "\<}}\>"]; \[IndentingNewLine]AppendTo[
+          ElementList, {ToString[Global`NAME], 
+            list2}]; \[IndentingNewLine]marker[Evaluate[Global`NAME], 
+          Global`TYPE, Global`XAp \[Rule] Global`APER, 
+          Global`YAp \[Rule] Global`APER]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(wireRead[list2_, elementname___ : "\<\>"] := 
+      Block[{Global`NAME, Global`TYPE = "\<\>", Global`L = 0, list, 
+          Global`APER, Global`TILT = 0}, \[IndentingNewLine]If[
+          elementname == "\<\>", clearFunc[list2], 
+          clearFunc[elementname]]; \[IndentingNewLine]list = 
+          ReplaceExponent[
+            ToString[list2]]; \[IndentingNewLine]ToExpression["\<{{NAME=\>" <> 
+            StringReplace[list, 
+              replacerules2] <> "\<}}\>"]; \[IndentingNewLine]AppendTo[
+          ElementList, {ToString[Global`NAME], 
+            list2}]; \[IndentingNewLine]wire[Evaluate[Global`NAME], Global`L, 
+          Global`TYPE, Global`XAp \[Rule] Global`APER, 
+          Global`YAp \[Rule] Global`APER]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(monitorRead[list2_, elementname___ : "\<\>"] := 
+      Block[{Global`NAME, Global`TYPE = "\<\>", Global`L = 0, list, 
+          Global`APER, Global`TILT = 0}, \[IndentingNewLine]If[
+          elementname == "\<\>", clearFunc[list2], 
+          clearFunc[elementname]]; \[IndentingNewLine]list = 
+          ReplaceExponent[
+            ToString[list2]]; \[IndentingNewLine]ToExpression["\<{{NAME=\>" <> 
+            StringReplace[list, 
+              replacerules2] <> "\<}}\>"]; \[IndentingNewLine]AppendTo[
+          ElementList, {ToString[Global`NAME], 
+            list2}]; \[IndentingNewLine]monitor[Evaluate[Global`NAME], 
+          Global`L, Global`TYPE, Global`XAp \[Rule] Global`APER, 
+          Global`YAp \[Rule] Global`APER]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(instrumentRead[list2_, elementname___ : "\<\>"] := 
+      Block[{Global`NAME, Global`TYPE = "\<\>", Global`L = 0, list, 
+          Global`APER, Global`TILT = 0}, \[IndentingNewLine]If[
+          elementname == "\<\>", clearFunc[list2], 
+          clearFunc[elementname]]; \[IndentingNewLine]list = 
+          ReplaceExponent[
+            ToString[list2]]; \[IndentingNewLine]ToExpression["\<{{NAME=\>" <> 
+            StringReplace[list, 
+              replacerules2] <> "\<}}\>"]; \[IndentingNewLine]AppendTo[
+          ElementList, {ToString[Global`NAME], 
+            list2}]; \[IndentingNewLine]instrument[Evaluate[Global`NAME], 
+          Global`L, Global`TYPE, Global`XAp \[Rule] Global`APER, 
+          Global`YAp \[Rule] Global`APER]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(rfcRead[list2_, elementname___ : "\<\>"] := 
+      Block[{Global`NAME, Global`TYPE = "\<\>", Global`L = 0, list, 
+          Global`VOLTAGE, Global`LAG = 0, Global`HARMON = 0, 
+          Global`FREQUENCY}, \[IndentingNewLine]If[elementname == "\<\>", 
+          clearFunc[list2], 
+          clearFunc[elementname]]; \[IndentingNewLine]list = 
+          ReplaceExponent[
+            ToString[list2]]; \[IndentingNewLine]ToExpression["\<{{NAME=\>" <> 
+            StringReplace[list, 
+              replacerules2] <> "\<}}\>"]; \[IndentingNewLine]AppendTo[
+          ElementList, {ToString[Global`NAME], 
+            list2}]; \[IndentingNewLine]rfc[Evaluate[Global`NAME], Global`L, 
+          Global`TYPE, Global`MADVolt \[Rule] Global`VOLTAGE, 
+          Global`Lag \[Rule] Global`LAG, Global`Harmon \[Rule] Global`HARMON, 
+          Global`MADFreq \[Rule] Global`FREQUENCY]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(constRead[list2_] := 
+      Block[{list}, \[IndentingNewLine]clearFunc[
+          list2]; \[IndentingNewLine]list = 
+          ReplaceExponent[ToString[list2]]; \[IndentingNewLine]ToExpression[
+          StringReplace[list, replacerules3]];\[IndentingNewLine]]\)], "Input",\
+
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Flatten[\({Symbol@\((Evaluate["\<Global`K\>" <> 
+                      ToString[#] <> "\<L\>"])\) \[Rule] 
+              Symbol@\((Evaluate["\<k\>" <> 
+                      ToString[#] <> "\<l\>"])\), \((Symbol@
+                  Evaluate["\<Global`T\>" <> ToString[#]])\) \[Rule] 
+              Symbol@\((Evaluate["\<t\>" <> ToString[#]])\)} &\) /@ 
+        Range[0, 9]]\)], "Input"],
+
+Cell[BoxData[
+    \({K0L \[Rule] k0l, T0 \[Rule] t0, K1L \[Rule] k1l, T1 \[Rule] t1, 
+      K2L \[Rule] k2l, T2 \[Rule] t2, K3L \[Rule] k3l, T3 \[Rule] t3, 
+      K4L \[Rule] k4l, T4 \[Rule] t4, K5L \[Rule] k5l, T5 \[Rule] t5, 
+      K6L \[Rule] k6l, T6 \[Rule] t6, K7L \[Rule] k7l, T7 \[Rule] t7, 
+      K8L \[Rule] k8l, T8 \[Rule] t8, K9L \[Rule] k9l, 
+      T9 \[Rule] t9}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(multipoleRead[list2_, elementname___ : "\<\>"] := 
+      Block[{Global`NAME, Global`TYPE = "\<\>", Global`L, list, 
+          Global`LRAD = 0. , Global`K0L = 0. , Global`K1L = 0. , 
+          Global`K2L = 0. , Global`K3L = 0. , Global`K4L = 0. , 
+          Global`K5L = 0. , Global`K6L = 0. , Global`K7L = 0. , 
+          Global`K8L = 0. , Global`K9L = 0. , Global`T0 = 0. , 
+          Global`T1 = 0. , Global`T2 = 0. , Global`T3 = 0. , Global`T4 = 0. , 
+          Global`T5 = 0. , Global`T6 = 0. , Global`T7 = 0. , Global`T8 = 0. , 
+          Global`T9 = 0. , name}, \[IndentingNewLine]If[
+          elementname == "\<\>", clearFunc[list2], 
+          clearFunc[elementname]]; \[IndentingNewLine]list = 
+          ReplaceExponent[
+            ToString[list2]]; \[IndentingNewLine]ToExpression["\<{{NAME=\>" <> 
+            StringReplace[list, 
+              replacerules2] <> "\<}}\>"]; \[IndentingNewLine]AppendTo[
+          ElementList, {ToString[Global`NAME], 
+            list2}]; \[IndentingNewLine]{lrad, k0l, t0, k1l, t1, k2l, t2, 
+            k3l, t3, k4l, t4, k5l, t5, k6l, t6, k7l, t7, k8l, t8, k9l, 
+            t9} = {Global`LRAD, Global`K0L, Global`T0, Global`K1L, Global`T1, 
+            Global`K2L, Global`T2, Global`K3L, Global`T3, Global`K4L, 
+            Global`T4, Global`K5L, Global`T5, Global`K6L, Global`T6, 
+            Global`K7L, Global`T7, Global`K8L, Global`T8, Global`K9L, 
+            Global`T9}; \[IndentingNewLine]multipole[Evaluate[Global`NAME], 
+          Global`TYPE, Global`K0L \[Rule] k0l, Global`T0 \[Rule] t0, 
+          Global`K1L \[Rule] k1l, Global`T1 \[Rule] t1, 
+          Global`K2L \[Rule] k2l, Global`T2 \[Rule] t2, 
+          Global`K3L \[Rule] k3l, Global`T3 \[Rule] t3, 
+          Global`K4L \[Rule] k4l, Global`T4 \[Rule] t4, 
+          Global`K5L \[Rule] k5l, Global`T5 \[Rule] t5, 
+          Global`K6L \[Rule] k6l, Global`T6 \[Rule] t6, 
+          Global`K7L \[Rule] k7l, Global`T7 \[Rule] t7, 
+          Global`K8L \[Rule] k8l, Global`T8 \[Rule] t8, 
+          Global`K9L \[Rule] k9l, 
+          T9 \[Rule] t9];\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(ReplaceExponent[string_] := 
+      Block[{list = string, before, 
+          after}, \[IndentingNewLine]\((\(\((If[\((\((DigitQ[
+                            before = 
+                              StringTake[
+                                list, {# - 
+                                    1}]])\) || \((before === "\<=\>")\) || \
+\((before === "\<-\>")\) || \((before === "\<+\>")\))\) && \((\((DigitQ[
+                            after = 
+                              StringTake[
+                                list, {# + 
+                                    1}]])\) || \((after === "\<+\>")\) || \
+\((after === "\<-\>")\))\), \[IndentingNewLine]list = 
+                    StringReplacePart[list, "\<*10^\>", {#, #}]])\) &\) /@ 
+            Reverse[Select[
+                Flatten[{\(StringPosition[list, "\<D\>"]\)\[LeftDoubleBracket]
+                      All, 1\[RightDoubleBracket], \(StringPosition[
+                        list, "\<E\>"]\)\[LeftDoubleBracket]All, 
+                      1\[RightDoubleBracket]}], \((# > \(StringPosition[
+                            list, "\<:\>"]\)\[LeftDoubleBracket]1, 
+                          1\[RightDoubleBracket])\) && \((# < 
+                        StringLength[
+                          list])\) &]])\); \[IndentingNewLine]Return[
+          StringReplace[list, "\<_\>" \[Rule] "\<\>"]]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(subelementRead[list2_, element_] := 
+      Block[{list}, \[IndentingNewLine]Switch[\((Symbol@
+                Evaluate[
+                  element\[LeftDoubleBracket]1\[RightDoubleBracket]])\)\
+\[LeftDoubleBracket]1, 
+            2\[RightDoubleBracket], \[IndentingNewLine]"\<Quadrupole\>", 
+          quadRead[
+            element\[LeftDoubleBracket]2\[RightDoubleBracket] <> "\<, \
+NAME=\>" <> list2, list2], \[IndentingNewLine]"\<SectorBend\>", 
+          sbendRead[
+            element\[LeftDoubleBracket]2\[RightDoubleBracket] <> "\<, \
+NAME=\>" <> list2, list2], \[IndentingNewLine]"\<Sextupole\>", 
+          sextRead[
+            element\[LeftDoubleBracket]2\[RightDoubleBracket] <> "\<, \
+NAME=\>" <> list2, list2], \[IndentingNewLine]"\<Octupole\>", 
+          octRead[element\[LeftDoubleBracket]2\[RightDoubleBracket] <> "\<, \
+NAME=\>" <> list2, list2], \[IndentingNewLine]"\<Drift\>", 
+          driftRead[
+            element\[LeftDoubleBracket]2\[RightDoubleBracket] <> "\<, \
+NAME=\>" <> list2, list2], \[IndentingNewLine]"\<BPM\>", 
+          bpmRead[element\[LeftDoubleBracket]2\[RightDoubleBracket] <> "\<, \
+NAME=\>" <> list2, list2], \[IndentingNewLine]"\<Kicker\>", 
+          kickerRead[
+            element\[LeftDoubleBracket]2\[RightDoubleBracket] <> "\<, \
+NAME=\>" <> list2, list2], \[IndentingNewLine]"\<Multipole\>", 
+          multipoleRead[
+            element\[LeftDoubleBracket]2\[RightDoubleBracket] <> "\<, \
+NAME=\>" <> list2, list2], \[IndentingNewLine]"\<Marker\>", 
+          markerRead[
+            element\[LeftDoubleBracket]2\[RightDoubleBracket] <> "\<, \
+NAME=\>" <> list2, list2], \[IndentingNewLine]"\<RCOLL\>", 
+          rcollRead[
+            element\[LeftDoubleBracket]2\[RightDoubleBracket] <> "\<, \
+NAME=\>" <> list2, list2], \[IndentingNewLine]"\<ECOLL\>", 
+          ecollRead[
+            element\[LeftDoubleBracket]2\[RightDoubleBracket] <> "\<, \
+NAME=\>" <> list2, list2], \[IndentingNewLine]"\<Wire\>", 
+          wireRead[
+            element\[LeftDoubleBracket]2\[RightDoubleBracket] <> "\<, \
+NAME=\>" <> list2, list2], \[IndentingNewLine]"\<Instrument\>", 
+          instrumentRead[
+            element\[LeftDoubleBracket]2\[RightDoubleBracket] <> "\<, \
+NAME=\>" <> list2, list2], \[IndentingNewLine]"\<Monitor\>", 
+          monitorRead[
+            element\[LeftDoubleBracket]2\[RightDoubleBracket] <> "\<, \
+NAME=\>" <> list2, list2]]]\)], "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(typesListTracy = {{"\<*:QUA*\>", quadRead}, {"\<*:BEND*\>", 
+          sbendRead}, {"\<*:SEX*\>", sextRead}, {"\<*:OCT*\>", 
+          octRead}, {"\<*:DRI*\>", driftRead}, {"\<*:BPM*\>", 
+          NullRead}, {"\<*:KIC*\>", kickRead}, {"\<*:MPO*\>", 
+          multipoleRead}, {"\<*:MAR*\>", markerRead}, {"\<*:RCO*\>", 
+          rcollRead}, {"\<*:ECO*\>", ecollRead}, {"\<*:WIR*\>", 
+          wireRead}, {"\<*:WS*\>", wireRead}, {"\<*:INS*\>", 
+          instrumentRead}, {"\<*:MON*\>", monitorRead}, {"\<*:*CAV*\>", 
+          rfcRead}, {"\<*:=*\>", constRead}, {"\<*:CONST*\>", 
+          constRead}}\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \({{"*:QUA*", quadRead}, {"*:SBEN*", sbendRead}, {"*:SEX*", 
+        sextRead}, {"*:OCT*", octRead}, {"*:DRI*", driftRead}, {"*:BPM*", 
+        NullRead}, {"*:KIC*", kickRead}, {"*:MPO*", 
+        multipoleRead}, {"*:MAR*", markerRead}, {"*:RCO*", 
+        rcollRead}, {"*:ECO*", ecollRead}, {"*:WIR*", wireRead}, {"*:WS*", 
+        wireRead}, {"*:INS*", instrumentRead}, {"*:MON*", 
+        monitorRead}, {"*:=*", constRead}, {"*:CONST*", 
+        constRead}}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(interpretTracyFile[file_] := 
+      Block[{a}, \[IndentingNewLine]readfile = 
+          Map[If[StringMatchQ[a = ToUpperCase[StringJoin[#]], "\<*!*\>"], 
+                StringTake[
+                  a, {1, \(StringPosition[a, "\<!\>"]\)\[LeftDoubleBracket]1, 
+                        1\[RightDoubleBracket] - 1}], a] &, 
+            Split[Select[
+                ReadList[file, Record, 
+                  RecordSeparators \[Rule] {"\<;\>", "\<\n\>"}], 
+                Not[StringMatchQ[#, "\<!*\>"]] &], 
+              StringMatchQ[#2, "\<*&*\>"] &]]; \[IndentingNewLine]\(Block[{in \
+= #}, Print[
+                in]; \(\((\(in\[LeftDoubleBracket]2\[RightDoubleBracket]\)[#])\
+\) &\) /@ idRead[in\[LeftDoubleBracket]1\[RightDoubleBracket]]] &\) /@ 
+          typesListTracy; \[IndentingNewLine]\(lineRead[#] &\) /@ 
+          getLines[];]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(ReadInTracyFile[files_List] := 
+      Block[{a, tilt}, \[IndentingNewLine]tilt = Global`TILT; 
+        Clear[Global`TILT]; \[IndentingNewLine]ElementList = {}; \
+\[IndentingNewLine]\(interpretTracyFile[#] &\) /@ 
+          files; \[IndentingNewLine]\(Block[{in = #}, \(subelementRead[#, 
+                    in] &\) /@ 
+                idRead["\<*:\>" <> 
+                    in\[LeftDoubleBracket]1\[RightDoubleBracket] <> "\<*\>"]] \
+&\) /@ ElementList; \[IndentingNewLine]Global`TILT = 
+          tilt;\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(ReadInTracyFile[file_String] := 
+      Block[{a, tilt}, \[IndentingNewLine]tilt = Global`TILT; 
+        Clear[Global`TILT]; \[IndentingNewLine]ElementList = {}; \
+\[IndentingNewLine]interpretTracyFile[
+          file]; \[IndentingNewLine]\(Block[{in = #}, \(subelementRead[#, 
+                    in] &\) /@ 
+                idRead["\<*:\>" <> 
+                    in\[LeftDoubleBracket]1\[RightDoubleBracket] <> "\<*\>"]] \
+&\) /@ ElementList; \[IndentingNewLine]Global`TILT = 
+          tilt;\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["End", "Section"],
+
+Cell[BoxData[
+    \(\(End[];\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(EndPackage[];\)\)], "Input",
+  InitializationCell->True]
+}, Open  ]]
+},
+FrontEndVersion->"5.1 for Microsoft Windows",
+ScreenRectangle->{{3, 1280}, {0, 950}},
+AutoGeneratedPackage->Automatic,
+WindowSize->{1123, 923},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+ShowSelection->True
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[1776, 53, 24, 0, 73, "Section"],
+Cell[1803, 55, 142, 3, 30, "Input",
+  InitializationCell->True],
+Cell[1948, 60, 62, 1, 30, "Input"],
+Cell[2013, 63, 63, 1, 30, "Input"],
+Cell[2079, 66, 62, 1, 30, "Input"],
+Cell[2144, 69, 65, 1, 30, "Input"],
+Cell[2212, 72, 64, 1, 30, "Input"],
+Cell[2279, 75, 63, 1, 30, "Input"],
+Cell[2345, 78, 62, 1, 30, "Input"],
+Cell[2410, 81, 67, 1, 30, "Input"],
+Cell[2480, 84, 201, 4, 30, "Input",
+  InitializationCell->True],
+Cell[2684, 90, 208, 4, 30, "Input",
+  InitializationCell->True],
+Cell[2895, 96, 88, 2, 30, "Input",
+  InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3020, 103, 28, 0, 73, "Section"],
+Cell[3051, 105, 82, 2, 30, "Input",
+  InitializationCell->True],
+Cell[3136, 109, 775, 17, 90, "Input",
+  InitializationCell->True],
+Cell[3914, 128, 423, 9, 90, "Input",
+  InitializationCell->True],
+Cell[4340, 139, 292, 6, 50, "Input",
+  InitializationCell->True],
+Cell[4635, 147, 843, 15, 230, "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+Cell[5503, 166, 160, 2, 30, "Input"],
+Cell[5666, 170, 454, 7, 48, "Output"]
+}, Open  ]],
+Cell[6135, 180, 423, 6, 50, "Input",
+  InitializationCell->True],
+Cell[6561, 188, 393, 6, 30, "Input",
+  InitializationCell->True],
+Cell[6957, 196, 526, 13, 70, "Input",
+  InitializationCell->True],
+Cell[7486, 211, 414, 10, 50, "Input",
+  InitializationCell->True],
+Cell[7903, 223, 1007, 20, 170, "Input",
+  InitializationCell->True],
+Cell[8913, 245, 943, 19, 150, "Input",
+  InitializationCell->True],
+Cell[9859, 266, 967, 19, 150, "Input",
+  InitializationCell->True],
+Cell[10829, 287, 1865, 31, 290, "Input",
+  InitializationCell->True],
+Cell[12697, 320, 819, 14, 150, "Input",
+  InitializationCell->True],
+Cell[13519, 336, 879, 15, 150, "Input",
+  InitializationCell->True],
+Cell[14401, 353, 938, 18, 150, "Input",
+  InitializationCell->True],
+Cell[15342, 373, 866, 16, 130, "Input",
+  InitializationCell->True],
+Cell[16211, 391, 879, 16, 150, "Input",
+  InitializationCell->True],
+Cell[17093, 409, 785, 14, 130, "Input",
+  InitializationCell->True],
+Cell[17881, 425, 791, 14, 130, "Input",
+  InitializationCell->True],
+Cell[18675, 441, 797, 14, 130, "Input",
+  InitializationCell->True],
+Cell[19475, 457, 803, 14, 130, "Input",
+  InitializationCell->True],
+Cell[20281, 473, 934, 16, 170, "Input",
+  InitializationCell->True],
+Cell[21218, 491, 323, 7, 110, "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+Cell[21566, 502, 405, 7, 70, "Input"],
+Cell[21974, 511, 389, 6, 48, "Output"]
+}, Open  ]],
+Cell[22378, 520, 2147, 35, 310, "Input",
+  InitializationCell->True],
+Cell[24528, 557, 1402, 25, 150, "Input",
+  InitializationCell->True],
+Cell[25933, 584, 2463, 47, 330, "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+Cell[28421, 635, 666, 11, 90, "Input",
+  InitializationCell->True],
+Cell[29090, 648, 492, 8, 67, "Output"]
+}, Open  ]],
+Cell[29597, 659, 900, 17, 110, "Input",
+  InitializationCell->True],
+Cell[30500, 678, 586, 11, 150, "Input",
+  InitializationCell->True],
+Cell[31089, 691, 575, 11, 150, "Input",
+  InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[31701, 707, 22, 0, 73, "Section"],
+Cell[31726, 709, 71, 2, 30, "Input",
+  InitializationCell->True],
+Cell[31800, 713, 78, 2, 30, "Input",
+  InitializationCell->True]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

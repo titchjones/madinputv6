@@ -1,0 +1,2266 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.2'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     81381,       1905]*)
+(*NotebookOutlinePosition[     82080,       1929]*)
+(*  CellTagsIndexPosition[     82036,       1925]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell[BoxData[
+    \(\(BeginPackage["\<EPOptimise`\>", \
+{"\<Statistics`NormalDistribution`\>"}];\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(NDSGA::usage = "\<EPOptimise[Objective Function, No Of Chromosomes, \
+Iterations, Prob. of Crossover, Prob. of Mutation, Genes per Chrom., Start of \
+range, End of range, Options (see EPOptimise[Options])]\nEPOptimise is a \
+MAXIMISING Function!\>";\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(EPOptimise::usage = "\<EPOptimise[Objective Function, No Of \
+Chromosomes, Iterations, Prob. of Crossover, Prob. of Mutation, Genes per \
+Chrom., Start of range, End of range, Options (see EPOptimise[Options])]\n\
+EPOptimise is a MAXIMISING Function!\>";\)\)], "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(EPOptimise::Options = "\<EPOptimise supports 3 possible options: \
+SelectionMethod, BreedingPool, ReinsertionMethod;\nSee EPOptimise[<Option \
+Name>];\>"\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \("EPOptimise supports 3 possible options: SelectionMethod, BreedingPool, \
+ReinsertionMethod;\nSee EPOptimise[<Option Name>];"\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(EPOptimise::SelectionMethod = "\<SelectionMethod specifies one of 4 \
+methods for selecting the possible breeding population.\nThe options are:\n\
+Roulette\nUniversal\nTruncation\nTournament\>"\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \("SelectionMethod specifies one of 4 methods for selecting the possible \
+breeding population.\nThe options are:\nRoulette\nUniversal\nTruncation\n\
+Tournament"\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(EPOptimise::Roulette = "\<In the Roulette SelectionMethod The \
+individuals are mapped to contiguous segments of a line, such that each \
+individual's segment is equal in size to its fitness. A random number is \
+generated and the individual whose segment spans the random number is \
+selected. This is repeated to select the breeding population required.\>"\)], \
+"Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \("In the Roulette SelectionMethod The individuals are mapped to \
+contiguous segments of a line, such that each individual's segment is equal \
+in size to its fitness. A random number is generated and the individual whose \
+segment spans the random number is selected. This is repeated to select the \
+breeding population required."\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(EPOptimise::Universal = "\<In the Universal SelectionMethod the \
+individuals are mapped to contiguous segments of a line, such that each \
+individual's segment is equal in size to its fitness exactly as in Roulette \
+selection. Here equally spaced pointers are placed over the line as many as \
+there are individuals to be selected, and the breeding population thus \
+chosen.\>"\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \("In the Universal SelectionMethod the individuals are mapped to \
+contiguous segments of a line, such that each individual's segment is equal \
+in size to its fitness exactly as in Roulette selection. Here equally spaced \
+pointers are placed over the line as many as there are individuals to be \
+selected, and the breeding population thus chosen."\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(EPOptimise::Truncation = "\<In Truncation selection individuals are \
+sorted according to their fitness. Only the best individuals are selected for \
+parents. The parameter for truncation selection is the TruncationThreshold. \
+TruncationThreshold indicates the proportion of the population to be selected \
+as parents and takes values ranging from 50%-10%. Individuals below the \
+truncation threshold do not produce offspring.\>"\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \("In Truncation selection individuals are sorted according to their \
+fitness. Only the best individuals are selected for parents. The parameter \
+for truncation selection is the TruncationThreshold. TruncationThreshold \
+indicates the proportion of the population to be selected as parents and \
+takes values ranging from 50%-10%. Individuals below the truncation threshold \
+do not produce offspring."\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(EPOptimise::TruncationThreshold = "\<TruncationThreshold indicates the \
+proportion of the population to be selected as parents in the Truncation \
+SelectionMethod, and takes values ranging from 50%-10%.\>"\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \("TruncationThreshold indicates the proportion of the population to be \
+selected as parents in the Truncation SelectionMethod, and takes values \
+ranging from 50%-10%."\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(EPOptimise::Tournament = "\<In Tournament selection a number \
+TournamentNumber of individuals is chosen randomly from the population and \
+the best individual from this group is selected as a parent. This process is \
+repeated as often as individuals must be chosen.\>"\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \("In Tournament selection a number TournamentNumber of individuals is \
+chosen randomly from the population and the best individual from this group \
+is selected as a parent. This process is repeated as often as individuals \
+must be chosen."\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(EPOptimise::TournamentNumber\)\(=\)\("\<TournamentNumber is the \
+number of individuals to be tested in each tournament round in the Tournament \
+SelectionMethod.\>"\)\(\ \)\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \("TournamentNumber is the number of individuals to be tested in each \
+tournament round in the Tournament SelectionMethod."\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(EPOptimise::BreedingPool = "\<The BreedingPool is the size of the \
+breeding population at each iteration. This is the total possible breeding \
+population, and not all individuals chosen will breed. See \
+EPOptimise[Breeding].\>"\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \("The BreedingPool is the size of the breeding population at each \
+iteration. This is the total possible breeding population, and not all \
+individuals chosen will breed. See EPOptimise[Breeding]."\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(EPOptimise::Breeding = "\<When breeding individuals, the breeding \
+population is chosen using the SelectionMethod variable and the BreedingPool \
+size. The chance of these individuals then breeding is determined randomly \
+using the Crossover Probability. The breeding is then performed using one of \
+the CrossoverMethod's (Not yet implemented), and reinsertion of the resulting \
+offspring is performed according to the ReinsertionMethod.\>"\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \("When breeding individuals, the breeding population is chosen using the \
+SelectionMethod variable and the BreedingPool size. The chance of these \
+individuals then breeding is determined randomly using the Crossover \
+Probability. The breeding is then performed using one of the \
+CrossoverMethod's (Not yet implemented), and reinsertion of the resulting \
+offspring is performed according to the ReinsertionMethod."\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(EPOptimise::ReinsertionMethod = "\<ReinsertionMethod specifies the \
+algorithm for reinserting the offspring back into the main population. It is \
+dependant on the choice of BreedingPool relative to the population size. The \
+methods are:\nBreedingPool = Population Size  \[Rule]  Pure\nBreedingPool < \
+Population Size  \[Rule]  Elitist or Uniform\nBreedingPool > Population Size  \
+\[Rule]  Fitness\>"\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \("ReinsertionMethod specifies the algorithm for reinserting the \
+offspring back into the main population. It is dependant on the choice of \
+BreedingPool relative to the population size. The methods are:\nBreedingPool \
+= Population Size  \[Rule]  Pure\nBreedingPool < Population Size  \[Rule]  \
+Elitist or Uniform\nBreedingPool > Population Size  \[Rule]  Fitness"\)], \
+"Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(EPOptimise::Pure = "\<In Pure reinsertion the parents are completely \
+replaced with their offspring. Because not all parents reproduce (see \
+EPOptimise[Breeding]), some offspring are clones of their parents.\>"\)], \
+"Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \("In Pure reinsertion the parents are completely replaced with their \
+offspring. Because not all parents reproduce (see EPOptimise[Breeding]), some \
+offspring are clones of their parents."\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(EPOptimise::Elitist = "\<In Elitist reinsertion the worst parents are \
+replaced by the offspring. Elitist reinsertion requires BreedingPool to be \
+less than the population Size.\>"\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \("In Elitist reinsertion the worst parents are replaced by the \
+offspring. Elitist reinsertion requires BreedingPool to be less than the \
+population Size."\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(EPOptimise::Uniform = "\<In Uniform reinsertion the offspring randomly \
+replace some of the parents. This is analogous to Pure reinsertion when \
+BreedingPool < Population Size.\>"\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \("In Uniform reinsertion the offspring randomly replace some of the \
+parents. This is analogous to Pure reinsertion when BreedingPool < Population \
+Size."\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(EPOptimise::Fitness = "\<In Fitness reinsertion the fittest offspring \
+replace all of the parents. This requires BreedingPool > Population Size. The \
+Fitness ReinsertionMethod has a penalty in terms of computational efficiency \
+as the fitness of all offspring must be evaluated in addition to that \
+required in evaluating the chosen SelectionMethod.\>"\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \("In Fitness reinsertion the fittest offspring replace all of the \
+parents. This requires BreedingPool > Population Size. The Fitness \
+ReinsertionMethod has a penalty in terms of computational efficiency as the \
+fitness of all offspring must be evaluated in addition to that required in \
+evaluating the chosen SelectionMethod."\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(GetIterationNumber::usage = "\<Returns Latest Iteration Number from \
+EPOptimise.\>"\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \("Returns Latest Iteration Number from EPOptimise."\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Begin["\<`Private`\>"]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \("EPOptimise`Private`"\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(Clear[EPOptimise]\)], "Input"],
+
+Cell[BoxData[
+    \(EPOptimise[] := \(?EPOptimise\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(EPOptimise[help_] := 
+      Print[ToExpression[
+          Evaluate["\<EPOptimise::\>" <> ToString[help]]]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(PartitionAt[list_, lengths_] := 
+      Block[{}, \[IndentingNewLine]totallengths = 
+          Transpose[{Drop[FoldList[Plus, 1, lengths], \(-1\)], 
+              Rest[FoldList[Plus, 0, lengths]]}]; \[IndentingNewLine]If[
+          Fold[Plus, 0, lengths] =!= Length[list], 
+          AppendTo[totallengths, 
+            Length[list] - 
+              Fold[Plus, 0, 
+                lengths]]]; \[IndentingNewLine]\(list\[LeftDoubleBracket]
+              Range[Sequence @@ #]\[RightDoubleBracket] &\) /@ 
+          totallengths\[IndentingNewLine]]\)], "Input"],
+
+Cell[BoxData[
+    \(RandomUnion[no_] := 
+      Block[{randlist = Range[no], rand, 
+          randno}, \[IndentingNewLine]Table[\((rand = 
+              Random[Integer, {1, Length[randlist]}]; 
+            randno = randlist\[LeftDoubleBracket]rand\[RightDoubleBracket]; 
+            randlist = Drop[randlist, {rand}]; 
+            randno)\), {no}]\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(RandomUnion[no_, subno_] := 
+      Block[{randlist = Range[no], rand, 
+          randno}, \[IndentingNewLine]Table[\((rand = 
+              Random[Integer, {1, Length[randlist]}]; 
+            randno = randlist\[LeftDoubleBracket]rand\[RightDoubleBracket]; 
+            randlist = Drop[randlist, {rand}]; 
+            randno)\), {subno}]\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell["Create Chromosomes", "Subsubsection"],
+
+Cell[BoxData[
+    \(Clear[CreateChrom]\)], "Input"],
+
+Cell[BoxData[
+    \(CreateChrom[number_, numbers_Integer, start_List, end_List] := 
+      Table[\(Random[
+              Real, {start\[LeftDoubleBracket]#\[RightDoubleBracket], 
+                end\[LeftDoubleBracket]#\[RightDoubleBracket]}] &\) /@ 
+          Range[numbers], {number}]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(CreateChrom[number_, numbers_Integer, start_Real | start_Integer, 
+        end_List] := 
+      Table[\(Random[
+              Real, {start, 
+                end\[LeftDoubleBracket]#\[RightDoubleBracket]}] &\) /@ 
+          Range[numbers], {number}]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(CreateChrom[number_, numbers_Integer, start_List, 
+        end_Real | end_Integer] := 
+      Table[\(Random[
+              Real, {start\[LeftDoubleBracket]#\[RightDoubleBracket], 
+                end}] &\) /@ Range[numbers], {number}]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(CreateChrom[number_, numbers_Integer, start_Real | start_Integer, 
+        end_Real | end_Integer] := 
+      Table[\(Random[Real, {start, end}] &\) /@ 
+          Range[numbers], {number}]\)], "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Fitness & Cumulative probabliltiies", "Subsubsection"],
+
+Cell[BoxData[
+    \(FitnessAll[list_, m_] := \((\(SaveFit[m, #] &\) /@ list)\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(CumulativeProbabilities[list_List, m_List] := 
+      Block[{a}, \[IndentingNewLine]a = 
+          DominationRank[list, m]\^2; \[IndentingNewLine]Rest[
+          FoldList[Plus, 0, a/Total[a]]]\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(Clear[Fitness]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(ValueQ[\(Fitness[x]\)[1]]\)], "Input"],
+
+Cell[BoxData[
+    \(True\)], "Output"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Domination", "Subsubsection"],
+
+Cell[BoxData[
+    \(Dominates[p_, q_, m_] := 
+      Block[{}, \[IndentingNewLine]pans = \(SaveFit[#, p] &\) /@ 
+            m; \[IndentingNewLine]qans = \(SaveFit[#, q] &\) /@ 
+            m; \[IndentingNewLine]And @@ {And @@ \((\(#\[LeftDoubleBracket]1\
+\[RightDoubleBracket] > #\[LeftDoubleBracket]2\[RightDoubleBracket] &\) /@ 
+                  Transpose[{pans, 
+                      qans}])\), \[IndentingNewLine]And @@ \((\(#\
+\[LeftDoubleBracket]1\[RightDoubleBracket] \[GreaterEqual] #\
+\[LeftDoubleBracket]2\[RightDoubleBracket] &\) /@ 
+                  Transpose[{pans, qans}])\)}\[IndentingNewLine]]\)], "Input",\
+
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(FastNonDominatedSort[P_List, m_List] := 
+      Module[{i = 1, F, S, 
+          n}, \[IndentingNewLine]F[1] = {}; \(\((S[#] = {})\) &\) /@ 
+          P; \[IndentingNewLine]\(Block[{p = #, q}, \[IndentingNewLine]n[p] = 
+                0; \[IndentingNewLine]\(Block[{q = #}, \[IndentingNewLine]If[
+                      Dominates[p, q, m], S[q] = Append[S[q], q], 
+                      If[Dominates[q, p, m], n[p] = n[p] + 1]]] &\) /@ 
+                P; \[IndentingNewLine]If[n[p] === 0, 
+                F[1] = Append[F[1], p]]\[IndentingNewLine]] &\) /@ 
+          P; \[IndentingNewLine]While[
+          Length[F[i]] > 
+            0, \[IndentingNewLine]H = {}; \[IndentingNewLine]\(Block[{np = 0, 
+                  q}, \[IndentingNewLine]q = 
+                  S[#]; \[IndentingNewLine]\(\((n[#] = 
+                        n[#] - 1; \[IndentingNewLine]If[n[#] === 0, 
+                        H = Append[H, #]])\) &\) /@ 
+                  q;\[IndentingNewLine]] &\) /@ F[i]; \[IndentingNewLine]i = 
+            i + 1; \[IndentingNewLine]F[i] = 
+            H;\[IndentingNewLine]]; \[IndentingNewLine]\(F[#] &\) /@ 
+          Range[i - 1]\[IndentingNewLine]]\)], "Input"],
+
+Cell[BoxData[
+    \(ObjectiveSort[I_, mfunc_] := 
+      Module[{ans}, \[IndentingNewLine]ans = \(SaveFit[mfunc, #] &\) /@ 
+            I; \[IndentingNewLine]I\[LeftDoubleBracket]
+          Ordering[ans]\[RightDoubleBracket]\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(Clear[CrowdingDistanceAssignment]\)], "Input"],
+
+Cell[BoxData[
+    \(CrowdingDistanceAssignment[P_List, m_List] := 
+      Module[{l = Length[P], I = P, 
+          Idistance = 
+            Table[0, {Length[
+                  P]}]}, \[IndentingNewLine]\(Block[{mfunc = #}, \
+\[IndentingNewLine]I = 
+                ObjectiveSort[I, mfunc]; \[IndentingNewLine]Idistance = 
+                ReplacePart[
+                  Idistance, \[Infinity], {{1}, {\(-1\)}}]; \
+\[IndentingNewLine]Table[\(Idistance = 
+                    ReplacePart[Idistance, 
+                      Idistance\[LeftDoubleBracket]
+                          i\[RightDoubleBracket] + \((SaveFit[mfunc, 
+                              I\[LeftDoubleBracket]i + 
+                                  1\[RightDoubleBracket]] - 
+                            SaveFit[mfunc, 
+                              I\[LeftDoubleBracket]i - 
+                                  1\[RightDoubleBracket]])\), 
+                      i];\)\[IndentingNewLine], {i, 2, l - 1}]] &\) /@ 
+          m; \[IndentingNewLine]Idistance\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(PartialOrder[i_List, j_List] := 
+      Module[{irank, jrankidistance, 
+          jdistance}, \[IndentingNewLine]{{irank, jrank}, {idistance, 
+              jdistance}} = 
+          Transpose[{i, j}]; \[IndentingNewLine]irank < 
+            jrank || \((irank === jrank && 
+              idistance > jdistance)\)\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(DominationRank[P_List, m_List] := 
+      Module[{P2}, \[IndentingNewLine]P2 = 
+          Outer[Dominates[#1, #2, m] &, P, P, 
+            1]; \[IndentingNewLine]\(Count[#, True] + 1 &\) /@ 
+          P2\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(DominationRank[Range[10], {# &}]\)], "Input"],
+
+Cell[BoxData[
+    \({1, 2, 3, 4, 5, 6, 7, 8, 9, 10}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(FitnessValue2 = 
+        Compile[{{xin, _Real, 1}}, 
+          x = xin\[LeftDoubleBracket]1\[RightDoubleBracket]; 
+          y = xin\[LeftDoubleBracket]2\[RightDoubleBracket]; \((1.2`\ \
+\[ExponentialE]\^\(\(-\(1\/5\)\)\ \((\(-6.58`\) + x)\)\^2 - 0.390625`\ \
+\((\(-6.58`\) + y)\)\^2\) + \[ExponentialE]\^\(\(-1.3071895424836601`\)\ \
+\((\(-3.256`\) + x)\)\^2 - 0.8333333333333334`\ \((\(-3.256`\) + y)\)\^2\) + 
+              0.75`\ \[ExponentialE]\^\(\(-1.3071895424836601`\)\ \((\(-6.58`\
+\) + x)\)\^2 - 0.390625`\ \((\(-3.256`\) + y)\)\^2\))\)];\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(funcs = {Max[#\^2] &, FitnessValue2};\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(StartingPoints = 
+        Table[{Random[Real, {\(-10\), 10}], 
+            Random[Real, {\(-10\), 10}]}, {10}];\)\)], "Input"],
+
+Cell["StartingPoints=Table[Random[Real,{-10,10}],{10}];", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Dominates[StartingPoints\[LeftDoubleBracket]7\[RightDoubleBracket], 
+      StartingPoints\[LeftDoubleBracket]1\[RightDoubleBracket], 
+      funcs]\)], "Input"],
+
+Cell[BoxData[
+    \(False\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(DominationRank[StartingPoints, funcs]\)], "Input"],
+
+Cell[BoxData[
+    \({10, 2, 1, 5, 1, 6, 1, 1, 1, 1}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Rest[
+        FoldList[Plus, 
+          0, {4, 1, 9, 6, 5, 2, 1, 1, 1, 1}/
+            Total[{4, 1, 9, 6, 5, 2, 1, 1, 1, 1}]]] // 
+      ListPlot[##, PlotJoined \[Rule] True] &\)], "Input"],
+
+Cell[GraphicsData["PostScript", "\<\
+%!
+%%Creator: Mathematica
+%%AspectRatio: .61803 
+MathPictureStart
+/Mabs {
+Mgmatrix idtransform
+Mtmatrix dtransform
+} bind def
+/Mabsadd { Mabs
+3 -1 roll add
+3 1 roll add
+exch } bind def
+%% Graphics
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+/Courier findfont 10  scalefont  setfont
+% Scaling calculations
+-0.0820106 0.10582 -0.0724855 0.675804 [
+[.34127 .59082 -3 -9 ]
+[.34127 .59082 3 0 ]
+[.55291 .59082 -3 -9 ]
+[.55291 .59082 3 0 ]
+[.76455 .59082 -3 -9 ]
+[.76455 .59082 3 0 ]
+[.97619 .59082 -6 -9 ]
+[.97619 .59082 6 0 ]
+[.11713 .06268 -18 -4.5 ]
+[.11713 .06268 0 4.5 ]
+[.11713 .19784 -18 -4.5 ]
+[.11713 .19784 0 4.5 ]
+[.11713 .333 -18 -4.5 ]
+[.11713 .333 0 4.5 ]
+[.11713 .46816 -18 -4.5 ]
+[.11713 .46816 0 4.5 ]
+[ 0 0 0 0 ]
+[ 1 .61803 0 0 ]
+] MathScale
+% Start of Graphics
+1 setlinecap
+1 setlinejoin
+newpath
+0 g
+.25 Mabswid
+[ ] 0 setdash
+.34127 .60332 m
+.34127 .60957 L
+s
+[(4)] .34127 .59082 0 1 Mshowa
+.55291 .60332 m
+.55291 .60957 L
+s
+[(6)] .55291 .59082 0 1 Mshowa
+.76455 .60332 m
+.76455 .60957 L
+s
+[(8)] .76455 .59082 0 1 Mshowa
+.97619 .60332 m
+.97619 .60957 L
+s
+[(10)] .97619 .59082 0 1 Mshowa
+.125 Mabswid
+.18254 .60332 m
+.18254 .60707 L
+s
+.23545 .60332 m
+.23545 .60707 L
+s
+.28836 .60332 m
+.28836 .60707 L
+s
+.39418 .60332 m
+.39418 .60707 L
+s
+.44709 .60332 m
+.44709 .60707 L
+s
+.5 .60332 m
+.5 .60707 L
+s
+.60582 .60332 m
+.60582 .60707 L
+s
+.65873 .60332 m
+.65873 .60707 L
+s
+.71164 .60332 m
+.71164 .60707 L
+s
+.81746 .60332 m
+.81746 .60707 L
+s
+.87037 .60332 m
+.87037 .60707 L
+s
+.92328 .60332 m
+.92328 .60707 L
+s
+.07672 .60332 m
+.07672 .60707 L
+s
+.02381 .60332 m
+.02381 .60707 L
+s
+.25 Mabswid
+0 .60332 m
+1 .60332 L
+s
+.12963 .06268 m
+.13588 .06268 L
+s
+[(0.2)] .11713 .06268 1 0 Mshowa
+.12963 .19784 m
+.13588 .19784 L
+s
+[(0.4)] .11713 .19784 1 0 Mshowa
+.12963 .333 m
+.13588 .333 L
+s
+[(0.6)] .11713 .333 1 0 Mshowa
+.12963 .46816 m
+.13588 .46816 L
+s
+[(0.8)] .11713 .46816 1 0 Mshowa
+.125 Mabswid
+.12963 .09647 m
+.13338 .09647 L
+s
+.12963 .13026 m
+.13338 .13026 L
+s
+.12963 .16405 m
+.13338 .16405 L
+s
+.12963 .23163 m
+.13338 .23163 L
+s
+.12963 .26542 m
+.13338 .26542 L
+s
+.12963 .29921 m
+.13338 .29921 L
+s
+.12963 .36679 m
+.13338 .36679 L
+s
+.12963 .40058 m
+.13338 .40058 L
+s
+.12963 .43437 m
+.13338 .43437 L
+s
+.12963 .50195 m
+.13338 .50195 L
+s
+.12963 .53574 m
+.13338 .53574 L
+s
+.12963 .56953 m
+.13338 .56953 L
+s
+.12963 .02889 m
+.13338 .02889 L
+s
+.25 Mabswid
+.12963 0 m
+.12963 .61803 L
+s
+0 0 m
+1 0 L
+1 .61803 L
+0 .61803 L
+closepath
+clip
+newpath
+.5 Mabswid
+.02381 .01472 m
+.12963 .03652 L
+.23545 .23272 L
+.34127 .36352 L
+.44709 .47252 L
+.55291 .51612 L
+.65873 .53792 L
+.76455 .55972 L
+.87037 .58152 L
+.97619 .60332 L
+s
+% End of Graphics
+MathPictureEnd
+\
+\>"], "Graphics",
+  ImageSize->{288, 177.938},
+  ImageMargins->{{43, 0}, {0, 0}},
+  ImageRegion->{{0, 1}, {0, 1}},
+  ImageCache->GraphicsData["Bitmap", "\<\
+CF5dJ6E]HGAYHf4PAg9QL6QYHg<PAVmbKF5d0`40004P0000/B000`400?l00000o`00003o9@3oool0
+0`000000oooo0?ooo`3h0?ooo`009@3oool00`000000oooo0?ooo`3h0?ooo`009@3oool00`000000
+oooo0?ooo`3h0?ooo`009@3oool00`000000oooo0?ooo`3h0?ooo`001`3oool3000001/0oooo00<0
+00000?ooo`3oool0n03oool000X0oooo1@00000F0?ooo`030000003oool0oooo0?P0oooo000?0?oo
+o`D000004@3oool00`000000oooo0?ooo`3h0?ooo`00503oool5000000`0oooo00<000000?ooo`3o
+ool0n03oool001T0oooo1@0000070?ooo`800000n@3oool001h0oooo1@0000020?ooo`030000003o
+ool0oooo0?P0oooo000S0?ooo`<00000nP3oool002D0oooo0P00003i0?ooo`009@3oool200000?T0
+oooo000U0?ooo`030000003oool000000?P0oooo000U0?ooo`030000003oool000000?P0oooo000U
+0?ooo`040000003oool0oooo00000?L0oooo000A0?ooo`800000103oool2000000<0oooo10000005
+0?ooo`040000003oool0oooo00000?L0oooo000@0?ooo`040000003oool0oooo000000P0oooo00<0
+00000?ooo`3oool01P3oool01@000000oooo0?ooo`3oool000000?H0oooo000@0?ooo`040000003o
+ool0oooo000000T0oooo00<000000?ooo`3oool01@3oool3000000030?ooo`000000oooo0?D0oooo
+000@0?ooo`040000003oool0oooo000000X0oooo00<000000?ooo`3oool0103oool00`000000oooo
+0?ooo`020?ooo`030000003oool0oooo0?<0oooo000@0?ooo`040000003oool0oooo000000P0oooo
+00@000000?ooo`3oool000001@3oool00`000000oooo0?ooo`020?ooo`030000003oool0oooo0?<0
+oooo000A0?ooo`8000002P3oool2000000H0oooo00<000000?ooo`3oool00`3oool00`000000oooo
+0?ooo`3b0?ooo`009@3oool00`000000oooo0?ooo`030?ooo`030000003oool0oooo0?80oooo000U
+0?ooo`030000003oool0oooo00@0oooo00<000000?ooo`3oool0l@3oool002D0oooo00<000000?oo
+o`3oool0103oool00`000000oooo0?ooo`3a0?ooo`009@3oool00`000000oooo0?ooo`050?ooo`03
+0000003oool0oooo0?00oooo000U0?ooo`030000003oool0oooo00H0oooo00<000000?ooo`3oool0
+k`3oool002D0oooo0P0000070?ooo`030000003oool0oooo0>l0oooo000U0?ooo`030000003oool0
+oooo00L0oooo00<000000?ooo`3oool0kP3oool002D0oooo00<000000?ooo`3oool01`3oool00`00
+0000oooo0?ooo`3^0?ooo`009@3oool00`000000oooo0?ooo`080?ooo`030000003oool0oooo0>d0
+oooo000U0?ooo`030000003oool0oooo00P0oooo00<000000?ooo`3oool0k@3oool002D0oooo00<0
+00000?ooo`3oool02@3oool00`000000oooo0?ooo`3/0?ooo`009@3oool00`000000oooo0?ooo`09
+0?ooo`030000003oool0oooo0>`0oooo000U0?ooo`030000003oool0oooo00X0oooo00<000000?oo
+o`3oool0j`3oool002D0oooo00<000000?ooo`3oool02P3oool00`000000oooo0?ooo`3[0?ooo`00
+9@3oool00`000000oooo0?ooo`0;0?ooo`030000003oool0oooo0>X0oooo000U0?ooo`800000303o
+ool00`000000oooo0?ooo`3Z0?ooo`009@3oool00`000000oooo0?ooo`0<0?ooo`030000003oool0
+oooo0>T0oooo000U0?ooo`030000003oool0oooo00d0oooo00<000000?ooo`3oool0j03oool002D0
+oooo00<000000?ooo`3oool03@3oool00`000000oooo0?ooo`3X0?ooo`009@3oool00`000000oooo
+0?ooo`0>0?ooo`030000003oool0oooo0>L0oooo000U0?ooo`030000003oool0oooo00h0oooo00<0
+00000?ooo`3oool0i`3oool002D0oooo00<000000?ooo`3oool03`3oool00`000000oooo0?ooo`3V
+0?ooo`009@3oool00`000000oooo0?ooo`0?0?ooo`030000003oool0oooo0>H0oooo000U0?ooo`03
+0000003oool0oooo0100oooo00<000000?ooo`3oool0i@3oool002D0oooo00<000000?ooo`3oool0
+403oool00`000000oooo0?ooo`3U0?ooo`009@3oool200000180oooo00<000000?ooo`3oool0i03o
+ool002D0oooo00<000000?ooo`3oool04@3oool00`000000oooo0?ooo`3T0?ooo`009@3oool00`00
+0000oooo0?ooo`0B0?ooo`030000003oool0oooo0><0oooo000U0?ooo`030000003oool0oooo0180
+oooo00<000000?ooo`3oool0h`3oool002D0oooo00<000000?ooo`3oool04`3oool00`000000oooo
+0?ooo`3R0?ooo`009@3oool00`000000oooo0?ooo`0C0?ooo`030000003oool0oooo0>80oooo000U
+0?ooo`030000003oool0oooo01@0oooo00<000000?ooo`3oool0h@3oool00140oooo0P0000040?oo
+o`8000001@3oool3000000@0oooo00<000000?ooo`3oool05@3oool00`000000oooo0?ooo`3P0?oo
+o`00403oool010000000oooo0?ooo`00000;0?ooo`030000003oool0oooo00<0oooo00<000000?oo
+o`3oool05@3oool00`000000oooo0?ooo`3P0?ooo`00403oool010000000oooo0?ooo`0000080?oo
+o`D00000103oool3000001H0oooo00<000000?ooo`3oool0g`3oool00100oooo00@000000?ooo`3o
+ool00000203oool010000000oooo0?ooo`0000050?ooo`030000003oool0oooo01H0oooo00<00000
+0?ooo`3oool0g`3oool00100oooo00@000000?ooo`3oool000002@3oool00`000000oooo00000005
+0?ooo`030000003oool0oooo01L0oooo00<000000?ooo`3oool0gP3oool00140oooo0P00000;0?oo
+o`8000001@3oool00`000000oooo0?ooo`0G0?ooo`030000003oool0oooo0=h0oooo000U0?ooo`03
+0000003oool0oooo01P0oooo00<000000?ooo`3oool0g@3oool002D0oooo00<000000?ooo`3oool0
+603oool00`000000oooo0?ooo`3M0?ooo`009@3oool00`000000oooo0?ooo`0I0?ooo`030000003o
+ool0oooo0=`0oooo000U0?ooo`030000003oool0oooo01T0oooo00<000000?ooo`3oool0g03oool0
+02D0oooo00<000000?ooo`3oool06P3oool00`000000oooo0?ooo`3K0?ooo`009@3oool00`000000
+oooo0?ooo`0J0?ooo`030000003oool0oooo0=/0oooo000U0?ooo`800000703oool00`000000oooo
+0?ooo`3J0?ooo`009@3oool00`000000oooo0?ooo`0L0?ooo`030000003oool0oooo0=T0oooo000U
+0?ooo`030000003oool0oooo01d0oooo00<000000?ooo`3oool0f03oool002D0oooo00<000000?oo
+o`3oool07@3oool00`000000oooo0?ooo`3H0?ooo`009@3oool00`000000oooo0?ooo`0N0?ooo`03
+0000003oool0oooo0=L0oooo000U0?ooo`030000003oool0oooo01l0oooo00<000000?ooo`3oool0
+eP3oool002D0oooo00<000000?ooo`3oool0803oool00`000000oooo0?ooo`3E0?ooo`009@3oool0
+0`000000oooo0?ooo`0Q0?ooo`030000003oool0oooo0=@0oooo000U0?ooo`030000003oool0oooo
+0280oooo00<000000?ooo`3oool0d`3oool002D0oooo00<000000?ooo`3oool08P3oool00`000000
+oooo0?ooo`3C0?ooo`009@3oool2000002@0oooo00<000000?ooo`3oool0dP3oool002D0oooo00<0
+00000?ooo`3oool0903oool00`000000oooo0?ooo`3A0?ooo`009@3oool00`000000oooo0?ooo`0U
+0?ooo`030000003oool0oooo0=00oooo000U0?ooo`030000003oool0oooo02H0oooo00<000000?oo
+o`3oool0c`3oool002D0oooo00<000000?ooo`3oool09P3oool00`000000oooo0?ooo`3?0?ooo`00
+9@3oool00`000000oooo0?ooo`0W0?ooo`030000003oool0oooo0<h0oooo000U0?ooo`030000003o
+ool0oooo02P0oooo00<000000?ooo`3oool0c@3oool002D0oooo00<000000?ooo`3oool0:@3oool0
+0`000000oooo0?ooo`3<0?ooo`009@3oool00`000000oooo0?ooo`0Z0?ooo`030000003oool0oooo
+0</0oooo000U0?ooo`800000:`3oool00`000000oooo0?ooo`3;0?ooo`009@3oool00`000000oooo
+0?ooo`0[0?ooo`030000003oool0oooo0<X0oooo000U0?ooo`030000003oool0oooo02`0oooo00<0
+00000?ooo`3oool0b@3oool002D0oooo00<000000?ooo`3oool0;@3oool00`000000oooo0?ooo`38
+0?ooo`009@3oool00`000000oooo0?ooo`0^0?ooo`030000003oool0oooo0<L0oooo000U0?ooo`03
+0000003oool0oooo02l0oooo00<000000?ooo`3oool0aP3oool002D0oooo00<000000?ooo`3oool0
+;`3oool00`000000oooo0?ooo`360?ooo`009@3oool00`000000oooo0?ooo`0`0?ooo`030000003o
+ool0oooo0<D0oooo000A0?ooo`800000103oool2000000<0oooo0`0000060?ooo`030000003oool0
+oooo0340oooo00<000000?ooo`3oool0a03oool00100oooo00@000000?ooo`3oool00000203oool0
+10000000oooo0?ooo`0000050?ooo`030000003oool0oooo0380oooo00<000000?ooo`3oool0``3o
+ool00100oooo00@000000?ooo`3oool00000203oool010000000oooo0?ooo`0000050?ooo`<00000
+<`3oool00`000000oooo0?ooo`320?ooo`00403oool010000000oooo0?ooo`0000080?ooo`<00000
+1P3oool00`000000oooo0?ooo`0c0?ooo`030000003oool0oooo0<80oooo000@0?ooo`040000003o
+ool0oooo000000T0oooo00<000000?ooo`3oool01@3oool00`000000oooo0?ooo`0d0?ooo`030000
+003oool0oooo0<40oooo000A0?ooo`8000002P3oool3000000D0oooo00<000000?ooo`3oool0=@3o
+ool00`000000oooo0?ooo`300?ooo`009@3oool00`000000oooo0?ooo`0f0?ooo`030000003oool0
+oooo0;l0oooo000U0?ooo`030000003oool0oooo03L0oooo00<000000?ooo`3oool0_P3oool002D0
+oooo00<000000?ooo`3oool0>03oool00`000000oooo0?ooo`2m0?ooo`009@3oool00`000000oooo
+0?ooo`0h0?ooo`030000003oool0oooo0;d0oooo000U0?ooo`030000003oool0oooo03T0oooo00<0
+00000?ooo`3oool0_03oool002D0oooo00<000000?ooo`3oool0>P3oool00`000000oooo0?ooo`2k
+0?ooo`009@3oool2000003`0oooo00<000000?ooo`3oool0^P3oool002D0oooo00<000000?ooo`3o
+ool0?03oool00`000000oooo0?ooo`2i0?ooo`009@3oool00`000000oooo0?ooo`0m0?ooo`030000
+003oool0oooo0;P0oooo000U0?ooo`030000003oool0oooo03h0oooo00<000000?ooo`3oool0]`3o
+ool002D0oooo00<000000?ooo`3oool0?`3oool00`000000oooo0?ooo`2f0?ooo`009@3oool00`00
+0000oooo0?ooo`100?ooo`030000003oool0oooo0;D0oooo000U0?ooo`030000003oool0oooo0440
+oooo00<000000?ooo`3oool0]03oool002D0oooo00<000000?ooo`3oool0@P3oool00`000000oooo
+0?ooo`2c0?ooo`009@3oool00`000000oooo0?ooo`130?ooo`030000003oool0oooo0;80oooo000U
+0?ooo`800000A@3oool00`000000oooo0?ooo`2a0?ooo`009@3oool00`000000oooo0?ooo`150?oo
+o`030000003oool0oooo0;00oooo000U0?ooo`030000003oool0oooo04H0oooo00<000000?ooo`3o
+ool0[`3oool002D0oooo00<000000?ooo`3oool0A`3oool00`000000oooo0?ooo`2^0?ooo`009@3o
+ool00`000000oooo0?ooo`180?ooo`030000003oool0oooo0:d0oooo000U0?ooo`030000003oool0
+oooo04T0oooo00<000000?ooo`3oool0[03oool002D0oooo00<000000?ooo`3oool0B@3oool00`00
+0000oooo0?ooo`2/0?ooo`009@3oool00`000000oooo0?ooo`1:0?ooo`030000003oool0oooo0:/0
+oooo000U0?ooo`030000003oool0oooo04/0oooo00<000000?ooo`3oool0ZP3oool002D0oooo00<0
+00000?ooo`3oool0C03oool00`000000oooo0?ooo`2Y0?ooo`009@3oool2000004h0oooo00<00000
+0?ooo`3oool0Z03oool002D0oooo00<000000?ooo`3oool0CP3oool00`000000oooo0?ooo`2W0?oo
+o`009@3oool00`000000oooo0?ooo`1?0?ooo`030000003oool0oooo0:H0oooo000U0?ooo`030000
+003oool0oooo0500oooo00<000000?ooo`3oool0Y@3oool002D0oooo00<000000?ooo`3oool0D@3o
+ool00`000000oooo0?ooo`2T0?ooo`009@3oool00`000000oooo0?ooo`1B0?ooo`030000003oool0
+oooo0:<0oooo000U0?ooo`030000003oool0oooo05<0oooo00<000000?ooo`3oool0XP3oool002D0
+oooo00<000000?ooo`3oool0E03oool00`000000oooo0?ooo`2Q0?ooo`004@3oool2000000@0oooo
+0P0000040?ooo`8000001P3oool00`000000oooo0?ooo`1E0?ooo`030000003oool0oooo0:00oooo
+000@0?ooo`040000003oool0oooo000000P0oooo00@000000?ooo`3oool000001@3oool00`000000
+oooo0?ooo`1F0?ooo`030000003oool0oooo09l0oooo000@0?ooo`040000003oool0oooo000000P0
+oooo00@000000?ooo`3oool000001@3oool3000005L0oooo00<000000?ooo`3oool0WP3oool00100
+oooo00@000000?ooo`3oool000002@3oool2000000H0oooo00<000000?ooo`3oool0F03oool20000
+09h0oooo000@0?ooo`040000003oool0oooo000000P0oooo00@000000?ooo`3oool000001@3oool0
+0`000000oooo0?ooo`1J0?ooo`800000W03oool00140oooo0P00000:0?ooo`8000001P3oool00`00
+0000oooo0?ooo`1L0?ooo`<00000V@3oool002D0oooo00<000000?ooo`3oool0G`3oool2000009L0
+oooo000U0?ooo`030000003oool0oooo0640oooo0`00002D0?ooo`009@3oool00`000000oooo0?oo
+o`1T0?ooo`800000TP3oool002D0oooo00<000000?ooo`3oool0IP3oool3000008l0oooo000U0?oo
+o`030000003oool0oooo06T0oooo0P00002=0?ooo`009@3oool2000006`0oooo0`00002:0?ooo`00
+9@3oool00`000000oooo0?ooo`1^0?ooo`800000R03oool002D0oooo00<000000?ooo`3oool0L03o
+ool3000008D0oooo000U0?ooo`030000003oool0oooo07<0oooo0P0000230?ooo`009@3oool00`00
+0000oooo0?ooo`1e0?ooo`@00000O`3oool002D0oooo00<000000?ooo`3oool0N@3oool4000007/0
+oooo000U0?ooo`030000003oool0oooo07d0oooo1000001g0?ooo`009@3oool00`000000oooo0?oo
+o`210?ooo`@00000L`3oool002D0oooo00<000000?ooo`3oool0Q@3oool5000006h0oooo000U0?oo
+o`030000003oool0oooo08X0oooo1000001Z0?ooo`009@3oool2000008l0oooo1000001V0?ooo`00
+9@3oool00`000000oooo0?ooo`2B0?ooo`D00000H@3oool002D0oooo00<000000?ooo`3oool0U`3o
+ool5000005`0oooo000U0?ooo`030000003oool0oooo09`0oooo1@00001G0?ooo`009@3oool00`00
+0000oooo0?ooo`2Q0?ooo`H00000D@3oool002D0oooo00<000000?ooo`3oool0Y`3oool5000004`0
+oooo000U0?ooo`030000003oool0oooo0:`0oooo1@0000170?ooo`009@3oool00`000000oooo0?oo
+o`2a0?ooo`D00000@P3oool002D0oooo00<000000?ooo`3oool0>P3oool3000003L0oooo0`00000k
+0?ooo`8000000P3oool5000002l0oooo1@0000020?ooo`8000001@3oool002D0oooo00<000000?oo
+o`3oool0>`3oool00`000000oooo0?ooo`0f0?ooo`040000003oool0oooo000003T0oooo00@00000
+0?ooo`3oool000001P3oool5000002`0oooo00D000000?ooo`3oool0oooo000000020?ooo`030000
+003oool0oooo0080oooo000U0?ooo`800000>@3oool5000003L0oooo00@000000?ooo`3oool00000
+>@3oool010000000oooo0?ooo`00000;0?ooo`D000009`3oool01@000000oooo0?ooo`3oool00000
+0080oooo00<000000?ooo`3oool00P3oool002D0oooo00<000000?ooo`3oool0>03oool010000000
+oooo0?ooo`00000h0?ooo`<00000>`3oool200000140oooo1@00000R0?ooo`050000003oool0oooo
+0?ooo`0000000P3oool00`000000oooo0?ooo`020?ooo`009@3oool00`000000oooo0?ooo`0i0?oo
+o`030000003oool0000003T0oooo00<000000?ooo`3oool0>@3oool010000000oooo0?ooo`00000E
+0?ooo`D000007@3oool01@000000oooo0?ooo`3oool000000080oooo00<000000?ooo`3oool00P3o
+ool002D0oooo00<000000?ooo`3oool0>P3oool2000003T0oooo0`00000j0?ooo`8000006`3oool5
+000001L0oooo0P0000040?ooo`8000001@3oool002D0oooo00<000000?ooo`3oool0e03oool50000
+01l0oooo000U0?ooo`030000003oool0oooo0=T0oooo1@00000J0?ooo`009@3oool00`000000oooo
+0?ooo`3N0?ooo`D000005@3oool002D0oooo00<000000?ooo`3oool0h`3oool500000100oooo000U
+0?ooo`030000003oool0oooo0>P0oooo1@00000;0?ooo`00o`00000P00000040oooo00070?ooo`03
+0000003oool0oooo00`0oooo00<000000?ooo`3oool0303oool00`000000oooo0?ooo`0<0?ooo`03
+0000003oool0oooo00`0oooo00<000000?ooo`3oool0303oool00`000000oooo0?ooo`0=0?ooo`03
+0000003oool0oooo00`0oooo00<000000?ooo`3oool0303oool00`000000oooo0?ooo`0<0?ooo`03
+0000003oool0oooo00`0oooo00<000000?ooo`3oool0303oool00`000000oooo0?ooo`0<0?ooo`03
+0000003oool0oooo00d0oooo00<000000?ooo`3oool0303oool00`000000oooo0?ooo`0<0?ooo`03
+0000003oool0oooo00`0oooo00<000000?ooo`3oool0303oool00`000000oooo0?ooo`0<0?ooo`03
+0000003oool0oooo00H0oooo000U0?ooo`030000003oool0oooo03X0oooo00<000000?ooo`3oool0
+>@3oool00`000000oooo0?ooo`0j0?ooo`030000003oool0oooo03T0oooo00<000000?ooo`3oool0
+1P3oool002D0oooo00<000000?ooo`3oool0n03oool002D0oooo00<000000?ooo`3oool0n03oool0
+0001\
+\>"],
+  ImageRangeCache->{{{0, 287}, {176.938, 0}} -> {0.763281, 0.107254, \
+0.0330085, 0.0051686}}],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(CumulativeProbabilities[list_List, m_List] := 
+      Block[{a}, \[IndentingNewLine]a = 
+          DominationRank[list, m]\^2; \[IndentingNewLine]Rest[
+          FoldList[Plus, 0, a/Total[a]]]\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(CumulativeProbabilities[StartingPoints, funcs] // N\)], "Input"],
+
+Cell[BoxData[
+    \({0.5847953216374269`, 0.6081871345029239`, 0.6140350877192983`, 
+      0.7602339181286549`, 0.7660818713450293`, 0.9766081871345029`, 
+      0.9824561403508771`, 0.9883040935672515`, 0.9941520467836257`, 
+      1.`}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(DominationSorting[P_, distances_, m_] := 
+      Module[{ranks}, \[IndentingNewLine]ranks = 
+          DominationRank[P, m]; \[IndentingNewLine]P\[LeftDoubleBracket]
+          Ordering[Transpose[{distances, ranks}], All, 
+            PartialOrder[#1, #2] \
+&]\[RightDoubleBracket]\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(randomnumbers[number_] := \((SeedRandom[]; 
+        Table[Random[Real, {0, 1}], {number}])\)\)], "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Selection", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(selectionmethods = {Global`Roulette, Global`Tournament}\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \({Global`Roulette, Global`Universal, Global`Truncation, 
+      Global`Tournament}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(SelectionRoulette[list_, probab_, number_, opts___] := 
+      Block[{a, 
+          random = 
+            randomnumbers[
+              number]}, \[IndentingNewLine]list\[LeftDoubleBracket]
+          breedinglist = \(\((a = #; \[IndentingNewLine]Length[
+                      Select[probab, # < a &]] + 1)\) &\) /@ 
+              random\[RightDoubleBracket]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(SelectionUniversal[list_, probab_, number_, opts___] := 
+      Block[{a, 
+          linear = 
+            Range[Random[Real, {0, 1\/number}], 1, 
+              1\/number]}, \[IndentingNewLine]list\[LeftDoubleBracket]
+          breedinglist = \(\((a = #; \[IndentingNewLine]Length[
+                      Select[probab, # < a &]] + 1)\) &\) /@ 
+              linear\[RightDoubleBracket]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(SelectionTruncation[list_, probab_, number_, opts___] := 
+      Block[{a, 
+          b}, \[IndentingNewLine]threshold = \(Global`TruncationThreshold /. \
+{opts}\) /. {Global`TruncationThreshold \[Rule] 0.5}; \[IndentingNewLine]If[
+          printedsetting =!= True, 
+          Print["\<Using TruncationThreshold \[Rule] \>" <> 
+              ToString[threshold]]; 
+          printedsetting = True]; \[IndentingNewLine]a = 
+          MapThread[
+            Subtract, {probab, 
+              Prepend[Most[probab], 0]}]; \[IndentingNewLine]b = 
+          Sort[Transpose[{a, 
+                list}], #1\[LeftDoubleBracket]1\[RightDoubleBracket] < #2\
+\[LeftDoubleBracket]1\[RightDoubleBracket] &]; \[IndentingNewLine]c = 
+          Take[b, \(-Round[
+                threshold*
+                  Length[list]]\)]; \[IndentingNewLine] (*\(Print["\<Number \
+selected = \>", \(-Round[
+                  threshold*
+                    Length[list]]\)];\)*) \[IndentingNewLine]breedinglist = \
+\(\(Position[list, #]\)\[LeftDoubleBracket]1, 1\[RightDoubleBracket] &\) /@ 
+            c\[LeftDoubleBracket]All, 
+              2\[RightDoubleBracket]; \[IndentingNewLine] \
+(*\(Print["\<breedinglist = \>", 
+              breedinglist];\)*) \[IndentingNewLine]\(c\[LeftDoubleBracket]
+            All, 2\[RightDoubleBracket]\)\[LeftDoubleBracket]
+          Table[Random[
+              Integer, {1, Length[c]}], {Length[
+                c]}]\[RightDoubleBracket]\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Crossover", "Subsubsection"],
+
+Cell[BoxData[
+    \(\(bin6[b_, c_] := \(b[\([#]\)] &\) /@ 
+          Split[Ordering[c], 
+            c[\([#1]\)] \[Equal] c[\([#2]\)] &];\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(Clear[SelectforCrossover]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(SelectforCrossover[list_, numbers_:  5, pc_:  0.25] := 
+      Block[{a, crossdatalist, positionsofcross, d, e, f, g, 
+          h}, \[IndentingNewLine] (*Generate\ enough\ random\ numbers\
+*) \[IndentingNewLine]a = 
+          randomnumbers[
+            numbers]; \[IndentingNewLine]\[IndentingNewLine] (*positions\ \
+where\ random\ no\ is\ less\ than\ chance\ of\ \
+crossing*) \[IndentingNewLine]positionsofcross = 
+          Flatten[Position[
+              a, _?\((# < 
+                      pc &)\)]]; \[IndentingNewLine]\[IndentingNewLine] \
+(*elements\ of\ list\ that\ are\ to\ be\ \
+crossed*) \[IndentingNewLine]crossdatalist = \(\((list\[LeftDoubleBracket]#\
+\[RightDoubleBracket])\) &\) /@ 
+            positionsofcross; \[IndentingNewLine]\[IndentingNewLine] (*if\ \
+total\ number\ of\ crossers\ is\ odd ... *) \[IndentingNewLine]If[
+          OddQ[Length[
+              crossdatalist]], \[IndentingNewLine]\[IndentingNewLine] \
+(*randomly\ choose\ to\ add\ another\ or\ drop\ 1, \ 
+            unless\ chosen\ is\ fewer\ than\ 2\  - \ 
+              then\ must\ add*) \[IndentingNewLine]If[
+            Random[Integer, {1, 2}] === 1 && 
+              Length[crossdatalist] > 
+                1, \[IndentingNewLine]\[IndentingNewLine] (*lets\ drop\ a\ \
+gene\ from\ the\ list*) \[IndentingNewLine] (*randomly\ pick\ which\ one\
+*) \[IndentingNewLine]g = 
+              Random[Integer, {1, 
+                  Length[crossdatalist]}]; \[IndentingNewLine]\
+\[IndentingNewLine] (*in\ case\ we\ have\ more\ than\ 1\ of\ them, \ 
+              randomly\ drop\ 1*) \[IndentingNewLine]h = \(#\
+\[LeftDoubleBracket]Random[Integer, {1, Length[#]}]\[RightDoubleBracket] &\)[
+                Select[Flatten[
+                    Position[list, 
+                      crossdatalist\[LeftDoubleBracket]
+                        g\[RightDoubleBracket]]], 
+                  MemberQ[
+                      positionsofcross, #] &]]; \[IndentingNewLine]\
+\[IndentingNewLine] (*edit\ the\ crossover\ \
+lists*) \[IndentingNewLine]positionsofcross = 
+              Select[positionsofcross, # =!= 
+                    h &]; \[IndentingNewLine]crossdatalist = 
+              Drop[crossdatalist, {g}], \
+\[IndentingNewLine]\[IndentingNewLine] (*lets\ add\ an\ extra\ gene\ to\ the\ \
+list*) \[IndentingNewLine] (*randomly\ pick\ one ... *) \[IndentingNewLine]d \
+= Range[1, 
+                numbers]; \[IndentingNewLine] (*edit\ the\ crossover\ lists\
+*) \[IndentingNewLine]AppendTo[
+              positionsofcross, \((f = 
+                  d\[LeftDoubleBracket]Random[
+                      Integer, {1, 
+                        Length[
+                          d]}]\[RightDoubleBracket])\)]; \
+\[IndentingNewLine]AppendTo[crossdatalist, 
+              list\[LeftDoubleBracket]f\[RightDoubleBracket]];]]; \
+\[IndentingNewLine]crossoverlist = 
+          positionsofcross; \[IndentingNewLine]crossdatalist]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(LimitedGaussianSample[mean_, sigma_, limits_List] := 
+      Module[{a, 
+          i = 0}, \[IndentingNewLine]While[\[IndentingNewLine]\((a = 
+                  Random[NormalDistribution[mean, sigma]])\) > 
+              limits\[LeftDoubleBracket]2\[RightDoubleBracket] \
+|| \[IndentingNewLine]a < limits\[LeftDoubleBracket]1\[RightDoubleBracket], 
+          i = i + 1]; \[IndentingNewLine]a]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(newvalue[
+        input_List] := \(Min[#] + 
+            LimitedGaussianSample[\(Max[#] - Min[#]\)\/2, \(Max[#] - Min[#]\)\
+\/6, {\(-10\), 10}] &\) /@ Transpose[input]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(Crossover[datalist_, crosslist_] := 
+      Block[{a = {}, b, c, pos, c1last, c2last, c1new, c2new, 
+          lengths}, \[IndentingNewLine]If[
+          Length[crosslist] > 0, \[IndentingNewLine]a = 
+            RandomUnion[
+              Length[crosslist]]; \[IndentingNewLine]c = \(datalist\
+\[LeftDoubleBracket]#\[RightDoubleBracket] &\) /@ 
+              a; \[IndentingNewLine]\(newvalue[#] &\) /@ 
+            Partition[Join[c, c\[LeftDoubleBracket]{1}\[RightDoubleBracket]], 
+              2, 1], {}]]\)], "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Reinsertion", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(reinsertionmethods = {Global`Elitist, Global`Uniform}\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \({Global`Elitist, Global`Uniform}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(ReinsertPure[olddata_, newdata_, positions_, Null___] := 
+      Block[{a}, 
+        a = olddata; \[IndentingNewLine]\(\((a = 
+                ReplacePart[
+                  a, #\[LeftDoubleBracket]2\[RightDoubleBracket], #\
+\[LeftDoubleBracket]1\[RightDoubleBracket]])\) &\) /@ 
+          Transpose[{positions, newdata}]; a]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(ReinsertFitness[olddata_, newdata_, null_, start_, end_] /; 
+        Length[newdata] \[GreaterEqual] Length[olddata] := 
+      Block[{a, random = RandomUnion[Length[olddata]], bnewdata = newdata, 
+          fitdata}, \[IndentingNewLine]a = 
+          olddata; \[IndentingNewLine]fitdata = \(FitnessValue[#] &\) /@ 
+            bnewdata; \[IndentingNewLine] (*Print["\<Fitdata offspring = \>", 
+            fitdata]; \[IndentingNewLine]Print["\<Fitdata ordered = \>", 
+            Ordering[
+              fitdata, \(-Length[
+                  olddata]\)]];*) \[IndentingNewLine]positions = 
+          Ordering[
+            fitdata, \(-Length[olddata]\)]; \[IndentingNewLine]\(\((a = 
+                ReplacePart[
+                  a, #\[LeftDoubleBracket]2\[RightDoubleBracket], #\
+\[LeftDoubleBracket]1\[RightDoubleBracket]])\) &\) /@ 
+          Transpose[{random, 
+              newdata\[LeftDoubleBracket]
+                positions\[RightDoubleBracket]}]; \[IndentingNewLine]a]\)], \
+"Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(ReinsertFitness[olddata_, newdata_, positions_, start_, end_] /; 
+        Length[newdata] < 
+          Length[olddata] := \[IndentingNewLine]\(( (*\(Print["\<Not enough \
+offspring, using Reinsertion Method \[Rule] Elitist\>"];\)\
+*) \[IndentingNewLine]ReinsertElitist[olddata, newdata])\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(ReinsertUniform[olddata_, newdata_, Null___] := 
+      Block[{a, 
+          positions = 
+            RandomUnion[Length[olddata], 
+              Length[newdata]]}, \[IndentingNewLine] (*\(Print["\<Uniform \
+Positions = \>", positions];\)*) \[IndentingNewLine]a = 
+          olddata; \[IndentingNewLine]\(\((a = 
+                ReplacePart[
+                  a, #\[LeftDoubleBracket]2\[RightDoubleBracket], #\
+\[LeftDoubleBracket]1\[RightDoubleBracket]])\) &\) /@ 
+          Transpose[{positions, newdata}]; \[IndentingNewLine]a]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(ReinsertElitist[olddata_, newdata_, Null___] := 
+      Block[{a, random = RandomUnion[Length[newdata]], 
+          positions}, \[IndentingNewLine]a = 
+          olddata; \[IndentingNewLine]positions = \(\(Ordering[\(SaveFit[#] &\
+\) /@ olddata]\)\[LeftDoubleBracket]
+              Range[Length[
+                  newdata]]\[RightDoubleBracket]\)\[LeftDoubleBracket]
+            random\[RightDoubleBracket]; \[IndentingNewLine]\(\((a = 
+                ReplacePart[
+                  a, #\[LeftDoubleBracket]2\[RightDoubleBracket], #\
+\[LeftDoubleBracket]1\[RightDoubleBracket]])\) &\) /@ 
+          Transpose[{positions, newdata}]; \[IndentingNewLine]a]\)], "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Mutate", "Subsubsection"],
+
+Cell[BoxData[
+    \(Mutate[list_, lengths_, numbers_, mr_] := 
+      Block[{a, b, c, number}, \[IndentingNewLine]If[Head[lengths] === List, 
+          number = Plus @@ lengths, 
+          number = lengths*numbers]; \[IndentingNewLine]a = 
+          Flatten[list]; \[IndentingNewLine]b = 
+          Flatten[Position[
+              Table[Random[
+                  Real, {0, 1}], {Length[
+                    Flatten[a]]}], _?\((# < 
+                      mr &)\)]]; \[IndentingNewLine] (*\(If[
+              Length[b] > 
+                0, \(Print["\<Mutate!\>"];\)];\)*) \[IndentingNewLine]\(If[
+              a\[LeftDoubleBracket]#\[RightDoubleBracket] === 1, 
+              a = ReplacePart[a, 0, #], a = ReplacePart[a, 1, #]] &\) /@ 
+          b; \[IndentingNewLine]Partition[a, 
+          number]\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(Mutate[list_, start_List, end_List, mr_] := 
+      Block[{a, b}, \[IndentingNewLine]startend = 
+          Flatten[Table[Transpose[{start, end}], {Length[Flatten[list]]}], 
+            1]; \[IndentingNewLine]a = Flatten[list]; \[IndentingNewLine]b = 
+          Flatten[Position[
+              Table[Random[
+                  Real, {0, 1}], {Length[
+                    Flatten[a]]}], _?\((# < 
+                      mr &)\)]]; \[IndentingNewLine]\(\((a = 
+                ReplacePart[a, 
+                  Random[Real, 
+                    startend\[LeftDoubleBracket]#\[RightDoubleBracket]], \
+#])\) &\) /@ b; \[IndentingNewLine]Partition[a, 
+          Length[list\[LeftDoubleBracket]1\[RightDoubleBracket]]]\
+\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(Mutate[list_, start_Real | start_Integer, end_List, mr_] := 
+      Block[{a, b, l = Length[end]}, \[IndentingNewLine]startend = 
+          Flatten[Table[
+              Transpose[{Table[start, {l}], end}], {Length[Flatten[list]]}], 
+            1]; \[IndentingNewLine]a = Flatten[list]; \[IndentingNewLine]b = 
+          Flatten[Position[
+              Table[Random[
+                  Real, {0, 1}], {Length[
+                    Flatten[a]]}], _?\((# < 
+                      mr &)\)]]; \[IndentingNewLine]\(\((a = 
+                ReplacePart[a, 
+                  Random[Real, 
+                    startend\[LeftDoubleBracket]#\[RightDoubleBracket]], \
+#])\) &\) /@ b; \[IndentingNewLine]Partition[a, 
+          l]\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(Mutate[list_, start_List, end_Real | end_Integer, mr_] := 
+      Block[{a, b, l = Length[start]}, \[IndentingNewLine]startend = 
+          Flatten[Table[
+              Transpose[{start, Table[end, {l}]}], {Length[Flatten[list]]}], 
+            1]; \[IndentingNewLine]a = Flatten[list]; \[IndentingNewLine]b = 
+          Flatten[Position[
+              Table[Random[
+                  Real, {0, 1}], {Length[
+                    Flatten[a]]}], _?\((# < 
+                      mr &)\)]]; \[IndentingNewLine]\(\((a = 
+                ReplacePart[a, 
+                  Random[Real, 
+                    startend\[LeftDoubleBracket]#\[RightDoubleBracket]], \
+#])\) &\) /@ b; \[IndentingNewLine]Partition[a, 
+          l]\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(Mutate[list_, start_Real | start_Integer, end_Real | end_Integer, mr_] := 
+      Block[{a, b, 
+          l = Length[
+              list\[LeftDoubleBracket]1\[RightDoubleBracket]]}, \
+\[IndentingNewLine]startend = 
+          Flatten[Table[
+              Transpose[{Table[start, {l}], Table[end, {l}]}], {Length[
+                  Flatten[list]]}], 1]; \[IndentingNewLine]a = 
+          Flatten[list]; \[IndentingNewLine]b = 
+          Flatten[Position[
+              Table[Random[
+                  Real, {0, 1}], {Length[
+                    Flatten[a]]}], _?\((# < 
+                      mr &)\)]]; \[IndentingNewLine]\(\((a = 
+                ReplacePart[a, 
+                  Random[Real, 
+                    startend\[LeftDoubleBracket]#\[RightDoubleBracket]], \
+#])\) &\) /@ b; \[IndentingNewLine]Partition[a, 
+          l]\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Main Function", "Subsubsection"],
+
+Cell[BoxData[
+    \(GetIterationNumber[] := iterationno\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(Clear[Dominates]\)], "Input",
+  InitializationCell->True],
+
+Cell["\<\
+Dominates[p_,q_,m_]:=Dominates[p,q,m]=Block[{},
+      pans=SaveFit[#,p]&/@m;
+      qans=SaveFit[#,q]&/@m;
+      And@@{Or@@(#\[LeftDoubleBracket]1\[RightDoubleBracket]>#\
+\[LeftDoubleBracket]2\[RightDoubleBracket]&/@Transpose[{pans,qans}]),
+          Or@@(#\[LeftDoubleBracket]1\[RightDoubleBracket]\[GreaterEqual]#\
+\[LeftDoubleBracket]2\[RightDoubleBracket]&/@Transpose[{pans,qans}])}
+      ]\
+\>", "Text",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(SaveFit[mfunc_, p_] := 
+      Block[{}, \[IndentingNewLine]If[
+          ValueQ[\(Fitness[mfunc]\)[p]], \[IndentingNewLine]\(Fitness[
+              mfunc]\)[p], \[IndentingNewLine]\(Fitness[mfunc]\)[p] = 
+            mfunc[p]]\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(Dominates[p_, q_, m_] := \(Dominates[p, q, m] = 
+        Block[{}, \[IndentingNewLine]pans = \(SaveFit[#, p] &\) /@ 
+              m; \[IndentingNewLine]qans = \(SaveFit[#, q] &\) /@ 
+              m; \[IndentingNewLine]Or @@ {Or @@ \((\(#\[LeftDoubleBracket]1\
+\[RightDoubleBracket] > #\[LeftDoubleBracket]2\[RightDoubleBracket] &\) /@ 
+                    Transpose[{pans, 
+                        qans}])\), \[IndentingNewLine]And @@ \((\(#\
+\[LeftDoubleBracket]1\[RightDoubleBracket] \[GreaterEqual] #\
+\[LeftDoubleBracket]2\[RightDoubleBracket] &\) /@ 
+                    Transpose[{pans, 
+                        qans}])\)}\[IndentingNewLine]]\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(FindNonDominatedFront[P_, m_] := 
+      Block[{Pdash = {}}, \[IndentingNewLine]AppendTo[Pdash, 
+          P\[LeftDoubleBracket]1\[RightDoubleBracket]]; \
+\[IndentingNewLine]\(Block[{a = #}, \[IndentingNewLine]If[
+                And @@ \((\(If[
+                          Dominates[a, 
+                            Pdash\[LeftDoubleBracket]#\[RightDoubleBracket], 
+                            m], Drop[Pdash, {#}]; True, False] &\) /@ 
+                      Range[Length[Pdash]])\), AppendTo[Pdash, a]]] &\) /@ 
+          Rest[P]; \[IndentingNewLine]Pdash\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(FastNonDominatedSort[Pin_, m_] := 
+      Block[{P = Pin, F = {}, i = 0}, \[IndentingNewLine]While[
+          Length[P] > 0, \[IndentingNewLine]F = 
+            AppendTo[F, FindNonDominatedFront[P, m]]; \[IndentingNewLine]P = 
+            Complement[P, 
+              F\[LeftDoubleBracket]\(-1\)\[RightDoubleBracket]]; \
+\[IndentingNewLine]\(i++\);\[IndentingNewLine]]; \[IndentingNewLine]F\
+\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(CumulativeProbabilities[list_List, m_List] := 
+      Block[{a}, \[IndentingNewLine]a = 
+          DominationRank[list, m]\^2; \[IndentingNewLine]Rest[
+          FoldList[Plus, 0, a/Total[a]]]\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(DominationRank[P_List, m_List] := 
+      Block[{P2}, \[IndentingNewLine]P2 = 
+          Outer[Dominates[#1, #2, m] &, P, P, 
+            1]; \[IndentingNewLine]\(Count[#, True] &\) /@ 
+          P2\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(PartialOrder[i_List, j_List] := 
+      Module[{irank, jrankidistance, 
+          jdistance}, \[IndentingNewLine]{{irank, jrank}, {idistance, 
+              jdistance}} = 
+          Transpose[{i, j}]; \[IndentingNewLine]irank > 
+            jrank || \((irank === jrank && 
+              idistance > jdistance)\)\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(ObjectiveSort[I_, mfunc_] := 
+      Module[{ans}, \[IndentingNewLine]ans = \(SaveFit[mfunc, #] &\) /@ 
+            I; \[IndentingNewLine]I\[LeftDoubleBracket]
+          Ordering[ans]\[RightDoubleBracket]\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(Clear[CrowdingDistanceAssignment]\)], "Input",
+  InitializationCell->True],
+
+Cell["\<\
+CrowdingDistanceAssignment[P,m]=Module[{l=Length[P],I=P,Idistance=Table[0,{\
+Length[P]}]},Block[{mfunc=#},I=ObjectiveSort[I,mfunc];
+          Idistance=ReplacePart[Idistance,\[Infinity],{{1},{-1}}];
+          Table[Idistance=ReplacePart[Idistance,Idistance\[LeftDoubleBracket]\
+i\[RightDoubleBracket]+(SaveFit[mfunc,I\[LeftDoubleBracket]i+1\
+\[RightDoubleBracket]]-SaveFit[mfunc,I\[LeftDoubleBracket]i-1\
+\[RightDoubleBracket]]),i];,{i,2,l-1}]]&/@m;
+    Print[\"Idistance = \",Idistance];
+    Idistance]\
+\>", "Text",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(CrowdingDistanceAssignment[P_List, m_List] := 
+      Module[{Idistance = 
+            Table[0, {Length[
+                  P]}]}, \[IndentingNewLine]\(Block[{mfunc = #}, \
+\[IndentingNewLine]ans = \(SaveFit[mfunc, #] &\) /@ 
+                  P; \[IndentingNewLine]Idistance += 
+                MapIndexed[Min[Drop[#1, #2]]\^2 &, 
+                  Outer[Abs[Subtract[##]] &, ans, ans]]] &\) /@ 
+          m; \[IndentingNewLine]Idistance\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(DominationSortingList[P_, distances_, m_] := 
+      Module[{ranks}, \[IndentingNewLine]ranks = 
+          DominationRank[P, m]; \[IndentingNewLine]Ordering[
+          Transpose[{ranks, distances}], All, 
+          PartialOrder[#1, #2] &]\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(DominationSorting[P_, distances_, m_] := 
+      Module[{ranks}, \[IndentingNewLine]ranks = 
+          DominationRank[P, m]; \[IndentingNewLine]P\[LeftDoubleBracket]
+          Ordering[Transpose[{ranks, distances}], All, 
+            PartialOrder[#1, #2] \
+&]\[RightDoubleBracket]\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(SelectionTournament[listin_, funcs_, number_, opts___] := 
+      Block[{participants, 
+          list = listin}, \[IndentingNewLine]tour = \(Global`TournamentNumber \
+/. {opts}\) /. {Global`TournamentNumber \[Rule] 
+                Ceiling[number/5]}; \[IndentingNewLine]If[
+          printedsetting =!= True, 
+          Print["\<Using TournamentNumber \[Rule] \>" <> ToString[tour]]; 
+          printedsetting = 
+            True]; \[IndentingNewLine]rutters = \(Block[{ran = 
+                    Table[Random[
+                        Integer, {1, 
+                          Length[
+                            list]}], {tour}]}, \
+\[IndentingNewLine]participants = 
+                  list\[LeftDoubleBracket]
+                    ran\[RightDoubleBracket]; \[IndentingNewLine]a = 
+                  DominationSortingList[participants, 
+                    CrowdingDistanceAssignment[participants, funcs], 
+                    funcs]; \[IndentingNewLine] (*\(list = 
+                      Drop[list, {ran\[LeftDoubleBracket]
+                            a\[LeftDoubleBracket]1\[RightDoubleBracket]\
+\[RightDoubleBracket]}];\)*) \[IndentingNewLine]breedinglist = {Sequence @@ 
+                      breedinglist, 
+                    ran\[LeftDoubleBracket]
+                      a\[LeftDoubleBracket]1\[RightDoubleBracket]\
+\[RightDoubleBracket]}; \[IndentingNewLine]participants\[LeftDoubleBracket]
+                  a\[LeftDoubleBracket]1\[RightDoubleBracket]\
+\[RightDoubleBracket]] &\) /@ 
+            Range[number]; \[IndentingNewLine] (*\(breedinglist = \
+\(\(Position[listin, #]\)\[LeftDoubleBracket]1, 1\[RightDoubleBracket] &\) /@ 
+                rutters;\)*) \[IndentingNewLine]rutters\[IndentingNewLine]]\)]\
+, "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(SelectionElitist[listin_, funcs_, number_, opts___] := 
+      Block[{participants, 
+          list = listin}, \[IndentingNewLine]breedinglist = \
+\(DominationSortingList[list, CrowdingDistanceAssignment[list, funcs], 
+              funcs]\)\[LeftDoubleBracket]
+            Range[number]\[RightDoubleBracket]; \[IndentingNewLine]list\
+\[LeftDoubleBracket]
+          breedinglist\[RightDoubleBracket]\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Drop[Range[10], {{1}, {3}, {9}}]\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(Drop::"seqs"\), \(\(:\)\(\ \)\), "\<\"Sequence specification \
+(+n, -n, {+n}, {-n}, {m, n}, or {m, n, s}) expected at position \\!\\(2\\) in \
+\\!\\(Drop[\\(\\(\\(\\({1, 2, 3, 4, 5, 6, 7, 8, 9, 10}\\)\\), \
+\\(\\({\\(\\({1}\\)\\), \\(\\({3}\\)\\), \\(\\({9}\\)\\)}\\)\\)\\)\\)]\\). \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::seqs\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    \(Drop[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {{1}, {3}, {9}}]\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(Clear[ReinsertElitist]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(ReinsertElitist[olddata_, newdata_, funcs_, Null___] := 
+      Block[{a, random = RandomUnion[Length[newdata]], 
+          positions}, \[IndentingNewLine]a = 
+          olddata; \[IndentingNewLine]positions = \(\(Reverse[
+                DominationSortingList[olddata, 
+                  CrowdingDistanceAssignment[olddata, funcs], 
+                  funcs]]\)\[LeftDoubleBracket]
+              Range[Length[
+                  newdata]]\[RightDoubleBracket]\)\[LeftDoubleBracket]
+            random\[RightDoubleBracket]; \[IndentingNewLine]\(\((a = 
+                ReplacePart[
+                  a, #\[LeftDoubleBracket]2\[RightDoubleBracket], #\
+\[LeftDoubleBracket]1\[RightDoubleBracket]])\) &\) /@ 
+          Transpose[{positions, newdata}]; \[IndentingNewLine]a]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{\(NDSGA[funcs_List, nochroms_, iters_, pc_:  0.25, mr_:  0.01, 
+          nogenes_, start_, end_, opts___]\), ":=", "\[IndentingNewLine]", 
+        RowBox[{"Block", "[", 
+          
+          RowBox[{\({a, probs, b, c, alldata, current, 
+              best = {\(-\[Infinity]\), 0}, R, Q, N = 10, t = 0}\), ",", 
+            "\[IndentingNewLine]", 
+            
+            RowBox[{\(startgene = \(Global`Start /. {opts}\) /. {Global`Start \
+\[Rule] Null}\), ";", 
+              "\[IndentingNewLine]", \(converge = \(Global`Convergence /. \
+{opts}\) /. {Global`Convergence \[Rule] \[Infinity]}\), ";", 
+              "\[IndentingNewLine]", \(selectmethod = 
+                ToExpression["\<EPOptimise`Private`Selection\>" <> 
+                    ToString[\(If[
+                            MemberQ[
+                              selectionmethods, #], \
+\[IndentingNewLine]Print["\<Using SelectionMethod \[Rule] \>" <> 
+                                ToString[#]]; \[IndentingNewLine]#, 
+                            Print["\<Method not recognised: Using Tournament\n\
+Methods \[Rule] Roulette, Universal, Truncation (TruncationThreshold) and \
+Tournament (TournamentNumber)\>"]; \[IndentingNewLine]Global`Roulette] \
+&\)[\(Global`SelectionMethod /. {opts}\) /. {Global`SelectionMethod \[Rule] 
+                              Tournament}]]]\), 
+              ";", \(printedsetting = False\), ";", 
+              "\[IndentingNewLine]", \(ruttingpopulationsize = \
+\(Global`BreedingPool /. {opts}\) /. {Global`BreedingPool \[Rule] nochroms}\),
+               ";", "\[IndentingNewLine]", \(If[
+                ruttingpopulationsize < nochroms || 
+                  selectmethod === EPOptimise`Private`SelectionTruncation, 
+                reinsertmethod = 
+                  ToExpression["\<EPOptimise`Private`Reinsert\>" <> 
+                      ToString[\(If[
+                              MemberQ[
+                                reinsertionmethods, #], \
+\[IndentingNewLine]Print["\<Using ReinsertionMethod \[Rule] \>" <> 
+                                  ToString[#] <> "\<\nBreedingPool < \
+Population \[Rule] Methods: Elitist and Uniform\>"]; #, \
+\[IndentingNewLine]Print["\<Reinsertion Method not recognised: Using Elitist\n\
+BreedingPool < Population \[Rule] Methods: Elitist and Uniform\>"]; \
+\[IndentingNewLine]Global`Elitist] &\)[\(Global`ReinsertionMethod /. {opts}\) \
+/. {Global`ReinsertionMethod \[Rule] Elitist}]]], \[IndentingNewLine]If[
+                  ruttingpopulationsize > 
+                    nochroms, \[IndentingNewLine]Print["\<Using Reinsertion \
+Method \[Rule] Fitness (BreedingPool > Population)\>"]; \
+\[IndentingNewLine]reinsertmethod = 
+                    EPOptimise`Private`ReinsertFitness, \
+\[IndentingNewLine]Print["\<Using Reinsertion Method \[Rule] Pure \
+(BreedingPool == Population)\>"]; \[IndentingNewLine]reinsertmethod = 
+                    EPOptimise`Private`ReinsertPure;\[IndentingNewLine]]\
+\[IndentingNewLine]]\), ";", "\[IndentingNewLine]", \(SeedRandom[]\), ";", 
+              "\[IndentingNewLine]", 
+              "\[IndentingNewLine]", \(AllF = \(rawdata = {}\)\), ";", 
+              "\[IndentingNewLine]", "\[IndentingNewLine]", 
+              RowBox[{"If", "[", 
+                
+                RowBox[{\(startgene === Null\), 
+                  ",", \(P = CreateChrom[nochroms, nogenes, start, end]\), 
+                  ",", "\[IndentingNewLine]", 
+                  RowBox[{"P", "=", 
+                    RowBox[{"Join", "[", 
+                      RowBox[{
+                        RowBox[{"{", 
+                          FormBox["startgene",
+                            "InputForm"], "}"}], 
+                        ",", \(CreateChrom[nochroms - 1, nogenes, start, 
+                          end]\)}], "]"}]}]}], "\[IndentingNewLine]", "]"}], 
+              ";", "\[IndentingNewLine]", \(AppendTo[rawdata, P]\), ";", 
+              "\[IndentingNewLine]", \(Print["\<Starting population = \>", 
+                P]\), ";", "\[IndentingNewLine]", \(Q = P\), ";", 
+              "\[IndentingNewLine]", \(Do[\[IndentingNewLine]If[
+                  t > 0, \[IndentingNewLine]R = 
+                    Join[P, Q]; \[IndentingNewLine]F = 
+                    FastNonDominatedSort[R, 
+                      funcs]; \[IndentingNewLine]AppendTo[AllF, 
+                    F]; \[IndentingNewLine]i = 1; 
+                  P = {}; \[IndentingNewLine]While[
+                    Length[P] + 
+                        Length[F\[LeftDoubleBracket]i\[RightDoubleBracket]] < 
+                      nochroms, \[IndentingNewLine]P = 
+                      Join[P, 
+                        F\[LeftDoubleBracket]i\[RightDoubleBracket]]; \
+\[IndentingNewLine]\(i++\);\[IndentingNewLine]]; \[IndentingNewLine]P = 
+                    Join[P, \(DominationSorting[
+                          F\[LeftDoubleBracket]i\[RightDoubleBracket], 
+                          CrowdingDistanceAssignment[
+                            F\[LeftDoubleBracket]i\[RightDoubleBracket], 
+                            funcs], funcs]\)\[LeftDoubleBracket]
+                        Range[nochroms - 
+                            Length[
+                              P]]\[RightDoubleBracket]]; \[IndentingNewLine] \
+(*\(Print["\<P = \>", 
+                        P];\)*) \[IndentingNewLine]]; \[IndentingNewLine] \
+(*\(P = Q;\)*) \[IndentingNewLine]SeedRandom[]; \
+\[IndentingNewLine]breedinglist = {}; \[IndentingNewLine]ruttingpopulation = 
+                  SelectionTournament[P, funcs, ruttingpopulationsize, 
+                    opts]; \[IndentingNewLine] (*Print["\<breedinglist = \>", 
+                    breedinglist]; \[IndentingNewLine]Print["\<Rutting \
+population = \>", 
+                    ruttingpopulation];*) \[IndentingNewLine]\
+\[IndentingNewLine]If[
+                  Length[breedinglist] > 
+                    1, \[IndentingNewLine]breedingpopulation = 
+                    SelectforCrossover[ruttingpopulation, 
+                      Length[breedinglist], 
+                      pc]; \[IndentingNewLine]newpopulation = 
+                    Crossover[breedingpopulation, 
+                      crossoverlist];, \[IndentingNewLine]crossoverlist = \
+{1}; \[IndentingNewLine]newpopulation = 
+                    ruttingpopulation;\[IndentingNewLine]]; \
+\[IndentingNewLine] (*\(Print["\<crossoverlist = \>", 
+                      crossoverlist];\)*) \[IndentingNewLine]\
+\[IndentingNewLine] (*\(Print["\<New population = \>", 
+                      newpopulation];\)*) \[IndentingNewLine]Q = 
+                  ReinsertElitist[P, newpopulation, funcs, start, 
+                    end]; \[IndentingNewLine]\[IndentingNewLine] \
+(*\(Print["\<New population = \>", 
+                      Q];\)*) \[IndentingNewLine]\[IndentingNewLine]Q = 
+                  Mutate[Q, start, end, 
+                    mr]; \[IndentingNewLine]\[IndentingNewLine] \
+(*\(Print["\<Final population = \>", Q];\)*) \[IndentingNewLine]AppendTo[
+                  rawdata, 
+                  Q]; \[IndentingNewLine] (*If[\((current = \
+\((\(Union[\(MapThread[List, {Flatten[fitdata, 1], 
+                                        Flatten[rawdata, 
+                                        1]}]\)\[LeftDoubleBracket]#\
+\[RightDoubleBracket]] &\)[\(Position[Flatten[fitdata, 1], 
+                                    Max[Flatten[fitdata, 
+                                        1]]]\)\[LeftDoubleBracket]1, 
+                                  1\[RightDoubleBracket]])\))\)\
+\[LeftDoubleBracket]1\[RightDoubleBracket] > 
+                      best\[LeftDoubleBracket]1\[RightDoubleBracket], 
+                    best = current; 
+                    Print[i, "\<. \>", "\<New Fit Value \[Rule] \>", 
+                      best\[LeftDoubleBracket]1\[RightDoubleBracket], "\<\t\
+Raw Value \[Rule] \>", 
+                      best\[LeftDoubleBracket]2\[RightDoubleBracket]]]; \
+\[IndentingNewLine]If[
+                    best\[LeftDoubleBracket]1\[RightDoubleBracket] >= 
+                      converge, 
+                    Break[]];*) \[IndentingNewLine]\(\(iterationno = 
+                    t;\), \[IndentingNewLine]{t, 0, iters - 1}\)]\), ";"}]}], 
+          "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", 
+      "\[IndentingNewLine]"}]], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    RowBox[{\(EPOptimise[function_, nochroms_, iters_, pc_:  0.25, 
+        mr_:  0.01, nogenes_, start_, end_, opts___]\), ":=", 
+      RowBox[{"Block", "[", 
+        RowBox[{\({a, probs, b, c, alldata, current, 
+            best = {\(-\[Infinity]\), 0}}\), ",", "\[IndentingNewLine]", 
+          
+          RowBox[{\(startgene = \(Global`Start /. {opts}\) /. {Global`Start \
+\[Rule] Null}\), ";", 
+            "\[IndentingNewLine]", \(converge = \(Global`Convergence /. \
+{opts}\) /. {Global`Convergence \[Rule] \[Infinity]}\), ";", 
+            "\[IndentingNewLine]", \(selectmethod = 
+              ToExpression["\<EPOptimise`Private`Selection\>" <> 
+                  ToString[\(If[
+                          MemberQ[
+                            selectionmethods, #], \
+\[IndentingNewLine]Print["\<Using SelectionMethod \[Rule] \>" <> 
+                              ToString[#]]; \[IndentingNewLine]#, 
+                          Print["\<Method not recognised: Using Roulette\n\
+Methods \[Rule] Roulette, Universal, Truncation (TruncationThreshold) and \
+Tournament (TournamentNumber)\>"]; \[IndentingNewLine]Global`Roulette] \
+&\)[\(Global`SelectionMethod /. {opts}\) /. {Global`SelectionMethod \[Rule] 
+                            Roulette}]]]\), ";", \(printedsetting = False\), 
+            ";", "\[IndentingNewLine]", \(ruttingpopulationsize = \
+\(Global`BreedingPool /. {opts}\) /. {Global`BreedingPool \[Rule] nochroms}\),
+             ";", "\[IndentingNewLine]", \(If[
+              ruttingpopulationsize < nochroms || 
+                selectmethod === EPOptimise`Private`SelectionTruncation, 
+              reinsertmethod = 
+                ToExpression["\<EPOptimise`Private`Reinsert\>" <> 
+                    ToString[\(If[
+                            MemberQ[
+                              reinsertionmethods, #], \
+\[IndentingNewLine]Print["\<Using ReinsertionMethod \[Rule] \>" <> 
+                                ToString[#] <> "\<\nBreedingPool < Population \
+\[Rule] Methods: Elitist and Uniform\>"]; #, \
+\[IndentingNewLine]Print["\<Reinsertion Method not recognised: Using Elitist\n\
+BreedingPool < Population \[Rule] Methods: Elitist and Uniform\>"]; \
+\[IndentingNewLine]Global`Elitist] &\)[\(Global`ReinsertionMethod /. {opts}\) \
+/. {Global`ReinsertionMethod \[Rule] Elitist}]]], \[IndentingNewLine]If[
+                ruttingpopulationsize > 
+                  nochroms, \[IndentingNewLine]Print["\<Using Reinsertion \
+Method \[Rule] Fitness (BreedingPool > Population)\>"]; \
+\[IndentingNewLine]reinsertmethod = 
+                  EPOptimise`Private`ReinsertFitness, \
+\[IndentingNewLine]Print["\<Using Reinsertion Method \[Rule] Pure \
+(BreedingPool == Population)\>"]; \[IndentingNewLine]reinsertmethod = 
+                  EPOptimise`Private`ReinsertPure;\[IndentingNewLine]]\
+\[IndentingNewLine]]\), ";", "\[IndentingNewLine]", \(SeedRandom[]\), ";", 
+            "\[IndentingNewLine]", \(alldata = \(Global`AllData /. {opts}\) /. \
+{Global`AllData \[Rule] True}\), ";", 
+            "\[IndentingNewLine]", \(FitnessValue[x___] := function[x]\), ";",
+             "\[IndentingNewLine]", "\[IndentingNewLine]", 
+            RowBox[{"If", "[", 
+              
+              RowBox[{\(startgene === Null\), 
+                ",", \(population = 
+                  CreateChrom[nochroms, nogenes, start, end]\), ",", 
+                "\[IndentingNewLine]", 
+                RowBox[{"population", "=", 
+                  RowBox[{"Join", "[", 
+                    RowBox[{
+                      RowBox[{"{", 
+                        FormBox["startgene",
+                          "InputForm"], "}"}], 
+                      ",", \(CreateChrom[nochroms - 1, nogenes, start, 
+                        end]\)}], "]"}]}]}], "\[IndentingNewLine]", "]"}], 
+            ";", "\[IndentingNewLine]", 
+            "\[IndentingNewLine]", \(fitdata = {}\), ";", \(rawdata = {}\), 
+            ";", "\[IndentingNewLine]", \(Print["\<Starting population = \>", 
+              population]\), ";", "\[IndentingNewLine]", 
+            RowBox[{
+            "Do", "[", 
+              "\[IndentingNewLine]", \( (*\(Print["\<Population = \>", 
+                    population];\)*) \), "\[IndentingNewLine]", 
+              RowBox[{
+                
+                RowBox[{\(AppendTo[rawdata, population]\), ";", 
+                  "\[IndentingNewLine]", \(SeedRandom[]\), ";", 
+                  "\[IndentingNewLine]", \(breedinglist = {}\), ";", 
+                  "\[IndentingNewLine]", 
+                  RowBox[{"ruttingpopulation", "=", 
+                    RowBox[{"selectmethod", "[", 
+                      RowBox[{"population", ",", 
+                        RowBox[{"CumulativeProbabilities", "[", 
+                          RowBox[{
+                            FormBox["population",
+                              "InputForm"], ",", 
+                            FormBox["nogenes",
+                              "InputForm"], ",", "start", ",", "end", ",", 
+                            "rawdata", ",", "fitdata"}], "]"}], ",", 
+                        "ruttingpopulationsize", ",", "opts"}], "]"}]}], ";", 
+                  "\[IndentingNewLine]", \( (*\(Print["\<breedinglist = \>", 
+                        breedinglist];\)*) \), "\[IndentingNewLine]", 
+                  "\[IndentingNewLine]", \( (*\(Print["\<Rutting population = \
+\>", ruttingpopulation];\)*) \), "\[IndentingNewLine]", 
+                  "\[IndentingNewLine]", \(If[
+                    Length[breedinglist] > 
+                      1, \[IndentingNewLine]breedingpopulation = 
+                      SelectforCrossover[ruttingpopulation, 
+                        Length[breedinglist], 
+                        pc]; \[IndentingNewLine]newpopulation = 
+                      Crossover[breedingpopulation, 
+                        crossoverlist];, \[IndentingNewLine]crossoverlist = \
+{1}; \[IndentingNewLine]newpopulation = 
+                      ruttingpopulation;\[IndentingNewLine]]\), ";", 
+                  "\[IndentingNewLine]", \( (*\(Print["\<crossoverlist = \>", 
+                        crossoverlist];\)*) \), "\[IndentingNewLine]", 
+                  "\[IndentingNewLine]", \( (*\(Print["\<New population = \
+\>", newpopulation];\)*) \), 
+                  "\[IndentingNewLine]", \(population = 
+                    reinsertmethod[population, newpopulation, 
+                      breedinglist\[LeftDoubleBracket]crossoverlist\
+\[RightDoubleBracket], start, end]\), ";", "\[IndentingNewLine]", 
+                  "\[IndentingNewLine]", 
+                  "\[IndentingNewLine]", \(population = 
+                    Mutate[population, start, end, mr]\), ";", 
+                  "\[IndentingNewLine]", 
+                  "\[IndentingNewLine]", \( (*\(Print["\<Final population = \
+\>", population];\)*) \), "\[IndentingNewLine]", 
+                  "\[IndentingNewLine]", \(If[\((current = \
+\((\(Union[\(MapThread[List, {Flatten[fitdata, 1], 
+                                        Flatten[rawdata, 
+                                        1]}]\)\[LeftDoubleBracket]#\
+\[RightDoubleBracket]] &\)[\(Position[Flatten[fitdata, 1], 
+                                    Max[Flatten[fitdata, 
+                                        1]]]\)\[LeftDoubleBracket]1, 
+                                  
+                                  1\[RightDoubleBracket]])\))\)\
+\[LeftDoubleBracket]1\[RightDoubleBracket] > 
+                      best\[LeftDoubleBracket]1\[RightDoubleBracket], 
+                    best = current; 
+                    Print[i, "\<. \>", "\<New Fit Value \[Rule] \>", 
+                      best\[LeftDoubleBracket]1\[RightDoubleBracket], "\<\t\
+Raw Value \[Rule] \>", best\[LeftDoubleBracket]2\[RightDoubleBracket]]]\), 
+                  ";", "\[IndentingNewLine]", \(If[
+                    best\[LeftDoubleBracket]1\[RightDoubleBracket] >= 
+                      converge, Break[]]\), ";", 
+                  "\[IndentingNewLine]", \(iterationno = i\), ";"}], ",", 
+                "\[IndentingNewLine]", \({i, 1, iters}\)}], "]"}], ";", 
+            "\[IndentingNewLine]", 
+            "\[IndentingNewLine]", \(If[
+              alldata, {Union[\(Extract[rawdata, #] &\) /@ 
+                    Position[fitdata, Max[fitdata]]], \(MapThread[
+                      List, {#\[LeftDoubleBracket]1\[RightDoubleBracket], #\
+\[LeftDoubleBracket]2\[RightDoubleBracket]}] &\) /@ 
+                  MapThread[List, {rawdata, fitdata}]}]\), ";", 
+            "\[IndentingNewLine]", \(Print["\<Best Results: \>"]\), 
+            ";", \((\(Union[\(MapThread[
+                        List, {Flatten[fitdata, 1], 
+                          Flatten[rawdata, 
+                            1]}]\)\[LeftDoubleBracket]#\[RightDoubleBracket]] \
+&\)[\(Position[Flatten[fitdata, 1], 
+                    Max[Flatten[fitdata, 1]]]\)\[LeftDoubleBracket]1, 
+                  1\[RightDoubleBracket]])\)}]}], "\[IndentingNewLine]", 
+        "]"}]}]], "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(End[]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \("EPOptimise`Private`"\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(EndPackage[]\)], "Input",
+  InitializationCell->True]
+}, Open  ]]
+},
+FrontEndVersion->"5.2 for Microsoft Windows",
+ScreenRectangle->{{3, 1280}, {0, 950}},
+AutoGeneratedPackage->Automatic,
+WindowSize->{1269, 929},
+WindowMargins->{{0, Automatic}, {Automatic, -1}},
+ShowSelection->True
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1754, 51, 139, 3, 30, "Input",
+  InitializationCell->True],
+Cell[1896, 56, 314, 5, 50, "Input",
+  InitializationCell->True],
+Cell[2213, 63, 319, 5, 50, "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+Cell[2557, 72, 214, 4, 30, "Input",
+  InitializationCell->True],
+Cell[2774, 78, 159, 2, 48, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2970, 85, 254, 4, 50, "Input",
+  InitializationCell->True],
+Cell[3227, 91, 193, 3, 124, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3457, 99, 421, 7, 90, "Input",
+  InitializationCell->True],
+Cell[3881, 108, 365, 5, 48, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4283, 118, 440, 7, 90, "Input",
+  InitializationCell->True],
+Cell[4726, 127, 383, 5, 67, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[5146, 137, 492, 7, 90, "Input",
+  InitializationCell->True],
+Cell[5641, 146, 436, 6, 67, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[6114, 157, 267, 4, 70, "Input",
+  InitializationCell->True],
+Cell[6384, 163, 202, 3, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[6623, 171, 331, 5, 70, "Input",
+  InitializationCell->True],
+Cell[6957, 178, 275, 4, 48, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7269, 187, 240, 4, 30, "Input",
+  InitializationCell->True],
+Cell[7512, 193, 156, 2, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7705, 200, 291, 5, 70, "Input",
+  InitializationCell->True],
+Cell[7999, 207, 231, 3, 48, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[8267, 215, 505, 7, 90, "Input",
+  InitializationCell->True],
+Cell[8775, 224, 451, 6, 67, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[9263, 235, 465, 7, 90, "Input",
+  InitializationCell->True],
+Cell[9731, 244, 402, 6, 105, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[10170, 255, 275, 5, 70, "Input",
+  InitializationCell->True],
+Cell[10448, 262, 223, 3, 48, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[10708, 270, 243, 4, 50, "Input",
+  InitializationCell->True],
+Cell[10954, 276, 190, 3, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[11181, 284, 242, 4, 50, "Input",
+  InitializationCell->True],
+Cell[11426, 290, 189, 3, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[11652, 298, 417, 6, 90, "Input",
+  InitializationCell->True],
+Cell[12072, 306, 364, 5, 48, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[12473, 316, 145, 3, 30, "Input",
+  InitializationCell->True],
+Cell[12621, 321, 84, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[12742, 327, 83, 2, 30, "Input",
+  InitializationCell->True],
+Cell[12828, 331, 55, 1, 29, "Output"]
+}, Open  ]],
+Cell[12898, 335, 50, 1, 30, "Input"],
+Cell[12951, 338, 92, 2, 30, "Input",
+  InitializationCell->True],
+Cell[13046, 342, 167, 4, 30, "Input",
+  InitializationCell->True],
+Cell[13216, 348, 577, 11, 110, "Input"],
+Cell[13796, 361, 407, 8, 70, "Input",
+  InitializationCell->True],
+Cell[14206, 371, 418, 8, 70, "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+Cell[14649, 383, 43, 0, 29, "Subsubsection"],
+Cell[14695, 385, 51, 1, 30, "Input"],
+Cell[14749, 388, 325, 6, 30, "Input",
+  InitializationCell->True],
+Cell[15077, 396, 308, 7, 30, "Input",
+  InitializationCell->True],
+Cell[15388, 405, 295, 6, 30, "Input",
+  InitializationCell->True],
+Cell[15686, 413, 248, 5, 30, "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[15971, 423, 60, 0, 23, "Subsubsection"],
+Cell[16034, 425, 119, 2, 30, "Input",
+  InitializationCell->True],
+Cell[16156, 429, 272, 5, 92, "Input",
+  InitializationCell->True],
+Cell[16431, 436, 47, 1, 30, "Input"],
+
+Cell[CellGroupData[{
+Cell[16503, 441, 58, 1, 30, "Input"],
+Cell[16564, 444, 38, 1, 29, "Output"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[16651, 451, 35, 0, 23, "Subsubsection"],
+Cell[16689, 453, 655, 12, 130, "Input",
+  InitializationCell->True],
+Cell[17347, 467, 1194, 20, 410, "Input"],
+Cell[18544, 489, 284, 5, 90, "Input",
+  InitializationCell->True],
+Cell[18831, 496, 66, 1, 30, "Input"],
+Cell[18900, 499, 1072, 21, 170, "Input",
+  InitializationCell->True],
+Cell[19975, 522, 391, 8, 90, "Input",
+  InitializationCell->True],
+Cell[20369, 532, 283, 6, 90, "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+Cell[20677, 542, 65, 1, 30, "Input"],
+Cell[20745, 545, 65, 1, 29, "Output"]
+}, Open  ]],
+Cell[20825, 549, 586, 9, 65, "Input"],
+Cell[21414, 560, 74, 1, 31, "Input"],
+Cell[21491, 563, 148, 3, 30, "Input"],
+Cell[21642, 568, 65, 0, 33, "Text"],
+
+Cell[CellGroupData[{
+Cell[21732, 572, 179, 3, 30, "Input"],
+Cell[21914, 577, 39, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[21990, 583, 70, 1, 30, "Input"],
+Cell[22063, 586, 65, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[22165, 592, 209, 5, 30, "Input"],
+Cell[22377, 599, 15426, 352, 186, 2706, 190, "GraphicsData", "PostScript", \
+"Graphics"],
+Cell[37806, 953, 130, 3, 29, "Output"]
+}, Open  ]],
+Cell[37951, 959, 272, 5, 92, "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+Cell[38248, 968, 84, 1, 30, "Input"],
+Cell[38335, 971, 249, 4, 29, "Output"]
+}, Open  ]],
+Cell[38599, 978, 360, 7, 90, "Input",
+  InitializationCell->True],
+Cell[38962, 987, 153, 3, 30, "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[39152, 995, 34, 0, 23, "Subsubsection"],
+
+Cell[CellGroupData[{
+Cell[39211, 999, 116, 2, 30, "Input",
+  InitializationCell->True],
+Cell[39330, 1003, 114, 2, 29, "Output"]
+}, Open  ]],
+Cell[39459, 1008, 417, 9, 70, "Input",
+  InitializationCell->True],
+Cell[39879, 1019, 446, 9, 84, "Input",
+  InitializationCell->True],
+Cell[40328, 1030, 1527, 30, 230, "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[41892, 1065, 34, 0, 23, "Subsubsection"],
+Cell[41929, 1067, 180, 4, 30, "Input",
+  InitializationCell->True],
+Cell[42112, 1073, 86, 2, 30, "Input",
+  InitializationCell->True],
+Cell[42201, 1077, 2950, 57, 710, "Input",
+  InitializationCell->True],
+Cell[45154, 1136, 452, 8, 110, "Input",
+  InitializationCell->True],
+Cell[45609, 1146, 228, 5, 42, "Input",
+  InitializationCell->True],
+Cell[45840, 1153, 568, 11, 110, "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[46445, 1169, 36, 0, 23, "Subsubsection"],
+
+Cell[CellGroupData[{
+Cell[46506, 1173, 114, 2, 30, "Input",
+  InitializationCell->True],
+Cell[46623, 1177, 66, 1, 29, "Output"]
+}, Open  ]],
+Cell[46704, 1181, 385, 8, 50, "Input",
+  InitializationCell->True],
+Cell[47092, 1191, 1042, 20, 190, "Input",
+  InitializationCell->True],
+Cell[48137, 1213, 350, 6, 70, "Input",
+  InitializationCell->True],
+Cell[48490, 1221, 590, 12, 110, "Input",
+  InitializationCell->True],
+Cell[49083, 1235, 714, 13, 110, "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[49834, 1253, 31, 0, 23, "Subsubsection"],
+Cell[49868, 1255, 859, 17, 170, "Input",
+  InitializationCell->True],
+Cell[50730, 1274, 791, 16, 150, "Input",
+  InitializationCell->True],
+Cell[51524, 1292, 796, 16, 150, "Input",
+  InitializationCell->True],
+Cell[52323, 1310, 796, 16, 150, "Input",
+  InitializationCell->True],
+Cell[53122, 1328, 910, 20, 150, "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[54069, 1353, 38, 0, 23, "Subsubsection"],
+Cell[54110, 1355, 96, 2, 30, "Input",
+  InitializationCell->True],
+Cell[54209, 1359, 77, 2, 30, "Input",
+  InitializationCell->True],
+Cell[54289, 1363, 445, 10, 128, "Text",
+  InitializationCell->True],
+Cell[54737, 1375, 307, 6, 110, "Input",
+  InitializationCell->True],
+Cell[55047, 1383, 713, 12, 130, "Input",
+  InitializationCell->True],
+Cell[55763, 1397, 634, 11, 130, "Input",
+  InitializationCell->True],
+Cell[56400, 1410, 472, 9, 170, "Input",
+  InitializationCell->True],
+Cell[56875, 1421, 272, 5, 92, "Input",
+  InitializationCell->True],
+Cell[57150, 1428, 278, 6, 90, "Input",
+  InitializationCell->True],
+Cell[57431, 1436, 391, 8, 90, "Input",
+  InitializationCell->True],
+Cell[57825, 1446, 284, 5, 90, "Input",
+  InitializationCell->True],
+Cell[58112, 1453, 94, 2, 30, "Input",
+  InitializationCell->True],
+Cell[58209, 1457, 555, 11, 109, "Text",
+  InitializationCell->True],
+Cell[58767, 1470, 517, 10, 134, "Input",
+  InitializationCell->True],
+Cell[59287, 1482, 318, 6, 90, "Input",
+  InitializationCell->True],
+Cell[59608, 1490, 360, 7, 90, "Input",
+  InitializationCell->True],
+Cell[59971, 1499, 1777, 33, 250, "Input",
+  InitializationCell->True],
+Cell[61751, 1534, 479, 9, 90, "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+Cell[62255, 1547, 65, 1, 30, "Input"],
+Cell[62323, 1550, 475, 7, 22, "Message"],
+Cell[62801, 1559, 88, 1, 29, "Output"]
+}, Open  ]],
+Cell[62904, 1563, 83, 2, 30, "Input",
+  InitializationCell->True],
+Cell[62990, 1567, 828, 15, 110, "Input",
+  InitializationCell->True],
+Cell[63821, 1584, 8317, 146, 1590, "Input",
+  InitializationCell->True],
+Cell[72141, 1732, 8987, 156, 1390, "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+Cell[81153, 1892, 66, 2, 30, "Input",
+  InitializationCell->True],
+Cell[81222, 1896, 55, 1, 29, "Output"]
+}, Open  ]],
+Cell[81292, 1900, 73, 2, 30, "Input",
+  InitializationCell->True]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

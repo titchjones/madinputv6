@@ -219,15 +219,3 @@ pip-log.txt
 #############
 ## Mathematica
 #############
-
-#Notebooks
-*.nb
-
-#m-files
-*.m
-
-#MAD files
-*.mad
-
-#all sub-dirs
-/*/

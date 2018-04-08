@@ -1,0 +1,3236 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 6.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[    114728,       3227]
+NotebookOptionsPosition[    108930,       3049]
+NotebookOutlinePosition[    109326,       3066]
+CellTagsIndexPosition[    109283,       3063]
+WindowFrame->Normal
+ContainsDynamic->False*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"BeginPackage", "[", "\"\<EPOptimise`\>\"", "]"}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"EPOptimiseNDSGA", "::", "usage"}], "=", 
+   "\"\<EPOptimise[Objective Function, No Of Chromosomes, Iterations, Prob. \
+of Crossover, Prob. of Mutation, Genes per Chrom., Gene Length \
+(\!\(\*SuperscriptBox[\(2\), \(Gene\\\ Length\)]\)), Start of range, End of \
+range, Options (see EPOptimise[Options])]\\nEPOptimise is a MAXIMISING \
+Function!\>\""}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EPOptimise", "::", "Options"}], "=", 
+  "\"\<EPOptimise supports 3 possible options: SelectionMethod, BreedingPool, \
+ReinsertionMethod;\\nSee EPOptimise[<Option Name>];\>\""}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EPOptimise", "::", "SelectionMethod"}], "=", 
+  "\"\<SelectionMethod specifies one of 4 methods for selecting the possible \
+breeding population.\\nThe options \
+are:\\nRoulette\\nUniversal\\nTruncation\\nTournament\>\""}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EPOptimise", "::", "Roulette"}], "=", 
+  "\"\<In the Roulette SelectionMethod The individuals are mapped to \
+contiguous segments of a line, such that each individual's segment is equal \
+in size to its fitness. A random number is generated and the individual whose \
+segment spans the random number is selected. This is repeated to select the \
+breeding population required.\>\""}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EPOptimise", "::", "Universal"}], "=", 
+  "\"\<In the Universal SelectionMethod the individuals are mapped to \
+contiguous segments of a line, such that each individual's segment is equal \
+in size to its fitness exactly as in Roulette selection. Here equally spaced \
+pointers are placed over the line as many as there are individuals to be \
+selected, and the breeding population thus chosen.\>\""}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EPOptimise", "::", "Truncation"}], "=", 
+  "\"\<In Truncation selection individuals are sorted according to their \
+fitness. Only the best individuals are selected for parents. The parameter \
+for truncation selection is the TruncationThreshold. TruncationThreshold \
+indicates the proportion of the population to be selected as parents and \
+takes values ranging from 50%-10%. Individuals below the truncation threshold \
+do not produce offspring.\>\""}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EPOptimise", "::", "TruncationThreshold"}], "=", 
+  "\"\<TruncationThreshold indicates the proportion of the population to be \
+selected as parents in the Truncation SelectionMethod, and takes values \
+ranging from 50%-10%.\>\""}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EPOptimise", "::", "Tournament"}], "=", 
+  "\"\<In Tournament selection a number TournamentNumber of individuals is \
+chosen randomly from the population and the best individual from this group \
+is selected as a parent. This process is repeated as often as individuals \
+must be chosen.\>\""}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EPOptimise", "::", "TournamentNumber"}], "=", 
+  "\"\<TournamentNumber is the number of individuals to be tested in each \
+tournament round in the Tournament SelectionMethod.\>\"", " "}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EPOptimise", "::", "BreedingPool"}], "=", 
+  "\"\<The BreedingPool is the size of the breeding population at each \
+iteration. This is the total possible breeding population, and not all \
+individuals chosen will breed. See EPOptimise[Breeding].\>\""}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EPOptimise", "::", "Breeding"}], "=", 
+  "\"\<When breeding individuals, the breeding population is chosen using the \
+SelectionMethod variable and the BreedingPool size. The chance of these \
+individuals then breeding is determined randomly using the Crossover \
+Probability. The breeding is then performed using one of the \
+CrossoverMethod's (Not yet implemented), and reinsertion of the resulting \
+offspring is performed according to the ReinsertionMethod.\>\""}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EPOptimise", "::", "ReinsertionMethod"}], "=", 
+  "\"\<ReinsertionMethod specifies the algorithm for reinserting the \
+offspring back into the main population. It is dependant on the choice of \
+BreedingPool relative to the population size. The methods are:\\nBreedingPool \
+= Population Size  \[Rule]  Pure\\nBreedingPool < Population Size  \[Rule]  \
+Elitist or Uniform\\nBreedingPool > Population Size  \[Rule]  \
+Fitness\>\""}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EPOptimise", "::", "Pure"}], "=", 
+  "\"\<In Pure reinsertion the parents are completely replaced with their \
+offspring. Because not all parents reproduce (see EPOptimise[Breeding]), some \
+offspring are clones of their parents.\>\""}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EPOptimise", "::", "Elitist"}], "=", 
+  "\"\<In Elitist reinsertion the worst parents are replaced by the \
+offspring. Elitist reinsertion requires BreedingPool to be less than the \
+population Size.\>\""}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EPOptimise", "::", "Uniform"}], "=", 
+  "\"\<In Uniform reinsertion the offspring randomly replace some of the \
+parents. This is analogous to Pure reinsertion when BreedingPool < Population \
+Size.\>\""}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EPOptimise", "::", "Fitness"}], "=", 
+  "\"\<In Fitness reinsertion the fittest offspring replace all of the \
+parents. This requires BreedingPool > Population Size. The Fitness \
+ReinsertionMethod has a penalty in terms of computational efficiency as the \
+fitness of all offspring must be evaluated in addition to that required in \
+evaluating the chosen SelectionMethod.\>\""}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"GetIterationNumber", "::", "usage"}], "=", 
+  "\"\<Returns Latest Iteration Number from EPOptimise.\>\""}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"Clear", "[", "EPOpimise", "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EPOptimise", "[", "]"}], ":=", 
+  RowBox[{"?", "EPOptimise"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EPOptimise", "[", "help_", "]"}], ":=", 
+  RowBox[{"Print", "[", 
+   RowBox[{"ToExpression", "[", 
+    RowBox[{"Evaluate", "[", 
+     RowBox[{"\"\<EPOptimise::\>\"", "<>", 
+      RowBox[{"ToString", "[", "help", "]"}]}], "]"}], "]"}], 
+   "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PartitionAt", "[", 
+   RowBox[{"list_", ",", "lengths_"}], "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"totallengths", "=", 
+      RowBox[{"Transpose", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"Drop", "[", 
+          RowBox[{
+           RowBox[{"FoldList", "[", 
+            RowBox[{"Plus", ",", "1", ",", "lengths"}], "]"}], ",", 
+           RowBox[{"-", "1"}]}], "]"}], ",", 
+         RowBox[{"Rest", "[", 
+          RowBox[{"FoldList", "[", 
+           RowBox[{"Plus", ",", "0", ",", "lengths"}], "]"}], "]"}]}], "}"}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Fold", "[", 
+         RowBox[{"Plus", ",", "0", ",", "lengths"}], "]"}], "=!=", 
+        RowBox[{"Length", "[", "list", "]"}]}], ",", 
+       RowBox[{"AppendTo", "[", 
+        RowBox[{"totallengths", ",", 
+         RowBox[{
+          RowBox[{"Length", "[", "list", "]"}], "-", 
+          RowBox[{"Fold", "[", 
+           RowBox[{"Plus", ",", "0", ",", "lengths"}], "]"}]}]}], "]"}]}], 
+      "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"list", "\[LeftDoubleBracket]", 
+        RowBox[{"Range", "[", 
+         RowBox[{"Sequence", "@@", "#"}], "]"}], "\[RightDoubleBracket]"}], 
+       "&"}], "/@", "totallengths"}]}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"BinToGray", "[", "bin_", "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"a", ",", "b", ",", "c", ",", "gray", ",", "binary"}], "}"}], 
+    ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"gray", "=", 
+      RowBox[{"{", "}"}]}], ";", 
+     RowBox[{"binary", "=", "bin"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"b", "=", 
+      RowBox[{"First", "[", "binary", "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"AppendTo", "[", 
+      RowBox[{"gray", ",", "b"}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"binary", "=", 
+      RowBox[{"Rest", "[", "binary", "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"a", "=", "#"}], ";", "\[IndentingNewLine]", 
+         RowBox[{"AppendTo", "[", 
+          RowBox[{"gray", ",", 
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{"b", "===", "a"}], ",", "0", ",", "1"}], "]"}]}], "]"}], 
+         ";", "\[IndentingNewLine]", 
+         RowBox[{"b", "=", "a"}], ";"}], "\[IndentingNewLine]", ")"}], "&"}], 
+      "/@", "binary"}], ";", "\[IndentingNewLine]", "gray"}]}], 
+   "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"GrayToBin", "[", "gra_", "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"a", ",", "b", ",", "c", ",", "gray", ",", "binary"}], "}"}], 
+    ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"gray", "=", 
+      RowBox[{"Rest", "[", "gra", "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"binary", "=", 
+      RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"a", "=", 
+      RowBox[{"First", "[", "gra", "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"AppendTo", "[", 
+      RowBox[{"binary", ",", 
+       RowBox[{"First", "[", "gra", "]"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"#", "===", "1"}], "&&", 
+           RowBox[{"a", "===", "1"}]}], ",", 
+          RowBox[{
+           RowBox[{"AppendTo", "[", 
+            RowBox[{"binary", ",", "0"}], "]"}], ";", 
+           RowBox[{"a", "=", "0"}]}], ",", 
+          RowBox[{"If", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"#", "===", "1"}], "&&", 
+             RowBox[{"a", "===", "0"}]}], ",", 
+            RowBox[{
+             RowBox[{"AppendTo", "[", 
+              RowBox[{"binary", ",", "1"}], "]"}], ";", 
+             RowBox[{"a", "=", "1"}]}], ",", 
+            RowBox[{"AppendTo", "[", 
+             RowBox[{"binary", ",", "a"}], "]"}]}], "]"}]}], "]"}], "&"}], "/@",
+        "gray"}], ")"}], ";", "\[IndentingNewLine]", "binary"}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RandomUnion", "[", "no_", "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"randlist", "=", 
+       RowBox[{"Range", "[", "no", "]"}]}], ",", "rand", ",", "randno"}], 
+     "}"}], ",", 
+    RowBox[{"Table", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"rand", "=", 
+        RowBox[{"RandomInteger", "[", 
+         RowBox[{"{", 
+          RowBox[{"1", ",", 
+           RowBox[{"Length", "[", "randlist", "]"}]}], "}"}], "]"}]}], ";", 
+       RowBox[{"randno", "=", 
+        RowBox[{
+        "randlist", "\[LeftDoubleBracket]", "rand", 
+         "\[RightDoubleBracket]"}]}], ";", 
+       RowBox[{"randlist", "=", 
+        RowBox[{"Drop", "[", 
+         RowBox[{"randlist", ",", 
+          RowBox[{"{", "rand", "}"}]}], "]"}]}], ";", "randno"}], ",", 
+      RowBox[{"{", "no", "}"}]}], "]"}]}], "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RandomUnion", "[", 
+   RowBox[{"no_", ",", "subno_"}], "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"randlist", "=", 
+       RowBox[{"Range", "[", "no", "]"}]}], ",", "rand", ",", "randno"}], 
+     "}"}], ",", 
+    RowBox[{"Table", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"rand", "=", 
+        RowBox[{"RandomInteger", "[", 
+         RowBox[{"{", 
+          RowBox[{"1", ",", 
+           RowBox[{"Length", "[", "randlist", "]"}]}], "}"}], "]"}]}], ";", 
+       RowBox[{"randno", "=", 
+        RowBox[{
+        "randlist", "\[LeftDoubleBracket]", "rand", 
+         "\[RightDoubleBracket]"}]}], ";", 
+       RowBox[{"randlist", "=", 
+        RowBox[{"Drop", "[", 
+         RowBox[{"randlist", ",", 
+          RowBox[{"{", "rand", "}"}]}], "]"}]}], ";", "randno"}], ",", 
+      RowBox[{"{", "subno", "}"}]}], "]"}]}], "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"CreateChrom", "[", 
+   RowBox[{"number_", ",", "length_Integer", ",", "numbers_Integer"}], "]"}], 
+  ":=", 
+  RowBox[{"Table", "[", 
+   RowBox[{
+    RowBox[{"IntegerDigits", "[", 
+     RowBox[{
+      RowBox[{"RandomInteger", "[", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", 
+         RowBox[{
+          SuperscriptBox["2", 
+           RowBox[{"length", " ", "numbers"}]], "-", "1"}]}], "}"}], "]"}], 
+      ",", "2", ",", 
+      RowBox[{"length", " ", "numbers"}]}], "]"}], ",", 
+    RowBox[{"{", "number", "}"}]}], "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"CreateChrom", "[", 
+   RowBox[{"number_", ",", "length_List", ",", "numbers_Integer"}], "]"}], ":=",
+   
+  RowBox[{"Table", "[", 
+   RowBox[{
+    RowBox[{"IntegerDigits", "[", 
+     RowBox[{
+      RowBox[{"RandomInteger", "[", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", 
+         RowBox[{
+          SuperscriptBox["2", 
+           RowBox[{"Plus", "@@", "length"}]], "-", "1"}]}], "}"}], "]"}], ",",
+       "2", ",", 
+      RowBox[{
+       RowBox[{"Plus", "@@", "length"}], " ", "numbers"}]}], "]"}], ",", 
+    RowBox[{"{", "number", "}"}]}], "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TurnToBin", "[", 
+   RowBox[{"list_List", ",", "length_Integer", ",", "number_Integer", ",", 
+    RowBox[{"start_Integer", "|", "start_Real"}], ",", 
+    RowBox[{"end_Integer", "|", "end_Real"}]}], "]"}], ":=", 
+  RowBox[{"Flatten", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Block", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"a", "=", "#"}], "}"}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"PadLeft", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"RealDigits", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{
+                RowBox[{"Ordering", "[", 
+                 RowBox[{"Abs", "[", 
+                  RowBox[{
+                   RowBox[{
+                   "list", "\[LeftDoubleBracket]", "a", 
+                    "\[RightDoubleBracket]"}], "-", "#"}], "]"}], "]"}], 
+                "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], "-", 
+               "1"}], ",", "2"}], "]"}], "\[LeftDoubleBracket]", "1", 
+            "\[RightDoubleBracket]"}], ",", "length", ",", "0"}], "]"}], 
+         "&"}], "[", 
+        RowBox[{"Range", "[", 
+         RowBox[{"start", ",", "end", ",", 
+          FractionBox[
+           RowBox[{"(", 
+            RowBox[{"end", "-", "start"}], ")"}], 
+           RowBox[{
+            SuperscriptBox["2", "length"], "-", "1"}]]}], "]"}], "]"}]}], 
+      "]"}], "&"}], "/@", 
+    RowBox[{"Range", "[", "number", "]"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.419833601020641*^9, 3.419833641553188*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TurnToBin", "[", 
+   RowBox[{
+   "list_List", ",", "length_Integer", ",", "number_Integer", ",", 
+    "start_List", ",", 
+    RowBox[{"end_Integer", "|", "end_Real"}]}], "]"}], ":=", 
+  RowBox[{"Flatten", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Block", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"a", "=", "#"}], "}"}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"PadLeft", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"RealDigits", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{
+                RowBox[{"Ordering", "[", 
+                 RowBox[{"Abs", "[", 
+                  RowBox[{
+                   RowBox[{
+                   "list", "\[LeftDoubleBracket]", "a", 
+                    "\[RightDoubleBracket]"}], "-", "#"}], "]"}], "]"}], 
+                "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], "-", 
+               "1"}], ",", "2"}], "]"}], "\[LeftDoubleBracket]", "1", 
+            "\[RightDoubleBracket]"}], ",", "length", ",", "0"}], "]"}], 
+         "&"}], "[", 
+        RowBox[{"Range", "[", 
+         RowBox[{
+          RowBox[{
+          "start", "\[LeftDoubleBracket]", "a", "\[RightDoubleBracket]"}], 
+          ",", "end", ",", 
+          FractionBox[
+           RowBox[{"(", 
+            RowBox[{"end", "-", 
+             RowBox[{
+             "start", "\[LeftDoubleBracket]", "a", 
+              "\[RightDoubleBracket]"}]}], ")"}], 
+           RowBox[{
+            SuperscriptBox["2", "length"], "-", "1"}]]}], "]"}], "]"}]}], 
+      "]"}], "&"}], "/@", 
+    RowBox[{"Range", "[", "number", "]"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.419833601020641*^9, 3.41983366474143*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TurnToBin", "[", 
+   RowBox[{"list_List", ",", "length_Integer", ",", "number_Integer", ",", 
+    RowBox[{"start_Integer", "|", "start_Real"}], ",", "end_List"}], "]"}], ":=",
+   
+  RowBox[{"Flatten", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Block", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"a", "=", "#"}], "}"}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"PadLeft", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"RealDigits", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{
+                RowBox[{"Ordering", "[", 
+                 RowBox[{"Abs", "[", 
+                  RowBox[{
+                   RowBox[{
+                   "list", "\[LeftDoubleBracket]", "a", 
+                    "\[RightDoubleBracket]"}], "-", "#"}], "]"}], "]"}], 
+                "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], "-", 
+               "1"}], ",", "2"}], "]"}], "\[LeftDoubleBracket]", "1", 
+            "\[RightDoubleBracket]"}], ",", "length", ",", "0"}], "]"}], 
+         "&"}], "[", 
+        RowBox[{"Range", "[", 
+         RowBox[{"start", ",", 
+          RowBox[{
+          "end", "\[LeftDoubleBracket]", "a", "\[RightDoubleBracket]"}], ",", 
+          
+          FractionBox[
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{
+             "end", "\[LeftDoubleBracket]", "a", "\[RightDoubleBracket]"}], 
+             "-", "start"}], ")"}], 
+           RowBox[{
+            SuperscriptBox["2", "length"], "-", "1"}]]}], "]"}], "]"}]}], 
+      "]"}], "&"}], "/@", 
+    RowBox[{"Range", "[", "number", "]"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.419833601020641*^9, 3.4198337072740407`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TurnToBin", "[", 
+   RowBox[{
+   "list_List", ",", "length_Integer", ",", "number_Integer", ",", 
+    "start_List", ",", "end_List"}], "]"}], ":=", 
+  RowBox[{"Flatten", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Block", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"a", "=", "#"}], "}"}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"PadLeft", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"RealDigits", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{
+                RowBox[{"Ordering", "[", 
+                 RowBox[{"Abs", "[", 
+                  RowBox[{
+                   RowBox[{
+                   "list", "\[LeftDoubleBracket]", "a", 
+                    "\[RightDoubleBracket]"}], "-", "#"}], "]"}], "]"}], 
+                "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], "-", 
+               "1"}], ",", "2"}], "]"}], "\[LeftDoubleBracket]", "1", 
+            "\[RightDoubleBracket]"}], ",", "length", ",", "0"}], "]"}], 
+         "&"}], "[", 
+        RowBox[{"Range", "[", 
+         RowBox[{
+          RowBox[{
+          "start", "\[LeftDoubleBracket]", "a", "\[RightDoubleBracket]"}], 
+          ",", 
+          RowBox[{
+          "end", "\[LeftDoubleBracket]", "a", "\[RightDoubleBracket]"}], ",", 
+          
+          FractionBox[
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{
+             "end", "\[LeftDoubleBracket]", "a", "\[RightDoubleBracket]"}], 
+             "-", 
+             RowBox[{
+             "start", "\[LeftDoubleBracket]", "a", 
+              "\[RightDoubleBracket]"}]}], ")"}], 
+           RowBox[{
+            SuperscriptBox["2", "length"], "-", "1"}]]}], "]"}], "]"}]}], 
+      "]"}], "&"}], "/@", 
+    RowBox[{"Range", "[", "number", "]"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.419833601020641*^9, 3.419833680976324*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TurnToRange", "[", 
+   RowBox[{
+   "binnumber_", ",", "length_Integer", ",", "number_Integer", ",", 
+    "start_Integer", ",", "range_Integer"}], "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"N", "[", 
+      RowBox[{"start", "+", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"FromDigits", "[", 
+          RowBox[{
+           RowBox[{"Take", "[", 
+            RowBox[{"binnumber", ",", 
+             RowBox[{"{", 
+              RowBox[{"#", ",", 
+               RowBox[{"#", "+", 
+                RowBox[{"(", "length", ")"}], "-", "1"}]}], "}"}]}], "]"}], 
+           ",", "2"}], "]"}], "*", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"range", "-", "start"}], ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{
+             SuperscriptBox["2", 
+              RowBox[{"(", "length", ")"}]], "-", "1"}], ")"}]}], ")"}]}], 
+        ")"}]}], "]"}], "&"}], "/@", 
+    RowBox[{"Range", "[", 
+     RowBox[{"1", ",", 
+      RowBox[{"length", "*", "number"}], ",", 
+      RowBox[{"(", "length", ")"}]}], "]"}]}], ")"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TurnToRange", "[", 
+   RowBox[{
+   "binnumber_", ",", "length_Integer", ",", "number_Integer", ",", 
+    "start_List", ",", "range_Integer"}], "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"N", "[", 
+      RowBox[{
+       RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+       "+", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"FromDigits", "[", 
+          RowBox[{
+           RowBox[{"Take", "[", 
+            RowBox[{"binnumber", ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{
+               "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+               ",", 
+               RowBox[{
+                RowBox[{
+                "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+                "+", 
+                RowBox[{"(", "length", ")"}], "-", "1"}]}], "}"}]}], "]"}], 
+           ",", "2"}], "]"}], "*", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"range", "-", 
+             RowBox[{
+             "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+            ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{
+             SuperscriptBox["2", 
+              RowBox[{"(", "length", ")"}]], "-", "1"}], ")"}]}], ")"}]}], 
+        ")"}]}], "]"}], "&"}], "/@", 
+    RowBox[{"MapThread", "[", 
+     RowBox[{"List", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Range", "[", 
+         RowBox[{"1", ",", 
+          RowBox[{"length", "*", "number"}], ",", 
+          RowBox[{"(", 
+           RowBox[{"length", "/", "number"}], ")"}]}], "]"}], ",", "start"}], 
+       "}"}]}], "]"}]}], ")"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TurnToRange", "[", 
+   RowBox[{
+   "binnumber_", ",", "length_Integer", ",", "number_Integer", ",", 
+    "start_Integer", ",", "range_List"}], "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"N", "[", 
+      RowBox[{"start", "+", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"FromDigits", "[", 
+          RowBox[{
+           RowBox[{"Take", "[", 
+            RowBox[{"binnumber", ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{
+               "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+               ",", 
+               RowBox[{
+                RowBox[{
+                "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+                "+", 
+                RowBox[{"(", "length", ")"}], "-", "1"}]}], "}"}]}], "]"}], 
+           ",", "2"}], "]"}], "*", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{
+             "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], "-",
+              "start"}], ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{
+             SuperscriptBox["2", 
+              RowBox[{"(", 
+               RowBox[{"length", "/", "number"}], ")"}]], "-", "1"}], ")"}]}],
+           ")"}]}], ")"}]}], "]"}], "&"}], "/@", 
+    RowBox[{"MapThread", "[", 
+     RowBox[{"List", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Range", "[", 
+         RowBox[{"1", ",", 
+          RowBox[{"length", "*", "number"}], ",", 
+          RowBox[{"(", 
+           RowBox[{"length", "/", "number"}], ")"}]}], "]"}], ",", "range"}], 
+       "}"}]}], "]"}]}], ")"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TurnToRange", "[", 
+   RowBox[{
+   "binnumber_", ",", "length_Integer", ",", "number_Integer", ",", 
+    "start_List", ",", "range_List"}], "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"N", "[", 
+      RowBox[{
+       RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+       "+", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"FromDigits", "[", 
+          RowBox[{
+           RowBox[{"Take", "[", 
+            RowBox[{"binnumber", ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{
+               "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+               ",", 
+               RowBox[{
+                RowBox[{
+                "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+                "+", 
+                RowBox[{"(", "length", ")"}], "-", "1"}]}], "}"}]}], "]"}], 
+           ",", "2"}], "]"}], "*", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{
+             "#", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}], "-",
+              
+             RowBox[{
+             "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+            ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{
+             SuperscriptBox["2", 
+              RowBox[{"(", "length", ")"}]], "-", "1"}], ")"}]}], ")"}]}], 
+        ")"}]}], "]"}], "&"}], "/@", 
+    RowBox[{"MapThread", "[", 
+     RowBox[{"List", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Range", "[", 
+         RowBox[{"1", ",", 
+          RowBox[{"length", "*", "number"}], ",", "length"}], "]"}], ",", 
+        "start", ",", "range"}], "}"}]}], "]"}]}], ")"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TurnToRange", "[", 
+   RowBox[{
+   "binnumber_", ",", "length_List", ",", "number_Integer", ",", 
+    "start_Integer", ",", "range_Integer"}], "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"N", "[", 
+      RowBox[{"start", "+", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"FromDigits", "[", 
+          RowBox[{
+           RowBox[{"Take", "[", 
+            RowBox[{"binnumber", ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{
+               "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+               ",", 
+               RowBox[{
+                RowBox[{
+                "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+                "+", 
+                RowBox[{
+                "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+                "-", "1"}]}], "}"}]}], "]"}], ",", "2"}], "]"}], "*", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"range", "-", "start"}], ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{
+             SuperscriptBox["2", 
+              RowBox[{
+              "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]], 
+             "-", "1"}], ")"}]}], ")"}]}], ")"}]}], "]"}], "&"}], "/@", 
+    RowBox[{"MapThread", "[", 
+     RowBox[{"List", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Drop", "[", 
+         RowBox[{
+          RowBox[{"FoldList", "[", 
+           RowBox[{"Plus", ",", "1", ",", "length"}], "]"}], ",", 
+          RowBox[{"-", "1"}]}], "]"}], ",", "length"}], "}"}]}], "]"}]}], 
+   ")"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TurnToRange", "[", 
+   RowBox[{
+   "binnumber_", ",", "length_List", ",", "number_Integer", ",", "start_List",
+     ",", "range_Integer"}], "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"N", "[", 
+      RowBox[{
+       RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+       "+", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"FromDigits", "[", 
+          RowBox[{
+           RowBox[{"Take", "[", 
+            RowBox[{"binnumber", ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"#", "\[LeftDoubleBracket]", 
+                RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], ",", 
+               RowBox[{
+                RowBox[{"#", "\[LeftDoubleBracket]", 
+                 RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], "+", 
+                RowBox[{"#", "\[LeftDoubleBracket]", 
+                 RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}], "-", 
+                "1"}]}], "}"}]}], "]"}], ",", "2"}], "]"}], "*", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"range", "-", 
+             RowBox[{
+             "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+            ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{
+             SuperscriptBox["2", 
+              RowBox[{"#", "\[LeftDoubleBracket]", 
+               RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}]], "-", 
+             "1"}], ")"}]}], ")"}]}], ")"}]}], "]"}], "&"}], "/@", 
+    RowBox[{"MapThread", "[", 
+     RowBox[{"List", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"MapThread", "[", 
+         RowBox[{"List", ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"Drop", "[", 
+             RowBox[{
+              RowBox[{"FoldList", "[", 
+               RowBox[{"Plus", ",", "1", ",", "length"}], "]"}], ",", 
+              RowBox[{"-", "1"}]}], "]"}], ",", "length"}], "}"}]}], "]"}], 
+        ",", "start"}], "}"}]}], "]"}]}], ")"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TurnToRange", "[", 
+   RowBox[{
+   "binnumber_", ",", "length_List", ",", "number_Integer", ",", 
+    "start_Integer", ",", "range_List"}], "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"N", "[", 
+      RowBox[{"start", "+", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"FromDigits", "[", 
+          RowBox[{
+           RowBox[{"Take", "[", 
+            RowBox[{"binnumber", ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"#", "\[LeftDoubleBracket]", 
+                RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], ",", 
+               RowBox[{
+                RowBox[{"#", "\[LeftDoubleBracket]", 
+                 RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], "+", 
+                RowBox[{"#", "\[LeftDoubleBracket]", 
+                 RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}], "-", 
+                "1"}]}], "}"}]}], "]"}], ",", "2"}], "]"}], "*", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{
+             "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], "-",
+              "start"}], ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{
+             SuperscriptBox["2", 
+              RowBox[{"#", "\[LeftDoubleBracket]", 
+               RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}]], "-", 
+             "1"}], ")"}]}], ")"}]}], ")"}]}], "]"}], "&"}], "/@", 
+    RowBox[{"MapThread", "[", 
+     RowBox[{"List", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"MapThread", "[", 
+         RowBox[{"List", ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"Drop", "[", 
+             RowBox[{
+              RowBox[{"FoldList", "[", 
+               RowBox[{"Plus", ",", "1", ",", "length"}], "]"}], ",", 
+              RowBox[{"-", "1"}]}], "]"}], ",", "length"}], "}"}]}], "]"}], 
+        ",", "range"}], "}"}]}], "]"}]}], ")"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TurnToRange", "[", 
+   RowBox[{
+   "binnumber_", ",", "length_List", ",", "number_Integer", ",", "start_List",
+     ",", "range_List"}], "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"N", "[", 
+      RowBox[{
+       RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+       "+", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"FromDigits", "[", 
+          RowBox[{
+           RowBox[{"Take", "[", 
+            RowBox[{"binnumber", ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"#", "\[LeftDoubleBracket]", 
+                RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], ",", 
+               RowBox[{
+                RowBox[{"#", "\[LeftDoubleBracket]", 
+                 RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], "+", 
+                RowBox[{"#", "\[LeftDoubleBracket]", 
+                 RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}], "-", 
+                "1"}]}], "}"}]}], "]"}], ",", "2"}], "]"}], "*", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{
+             "#", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}], "-",
+              
+             RowBox[{
+             "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+            ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{
+             SuperscriptBox["2", 
+              RowBox[{"#", "\[LeftDoubleBracket]", 
+               RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}]], "-", 
+             "1"}], ")"}]}], ")"}]}], ")"}]}], "]"}], "&"}], "/@", 
+    RowBox[{"MapThread", "[", 
+     RowBox[{"List", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"MapThread", "[", 
+         RowBox[{"List", ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"Drop", "[", 
+             RowBox[{
+              RowBox[{"FoldList", "[", 
+               RowBox[{"Plus", ",", "1", ",", "length"}], "]"}], ",", 
+              RowBox[{"-", "1"}]}], "]"}], ",", "length"}], "}"}]}], "]"}], 
+        ",", "start", ",", "range"}], "}"}]}], "]"}]}], ")"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TurnToRange", "[", 
+   RowBox[{
+   "binnumber_", ",", "length_List", ",", "number_List", ",", "start_Integer",
+     ",", "range_Integer"}], "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"N", "[", 
+      RowBox[{"start", "+", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"FromDigits", "[", 
+          RowBox[{
+           RowBox[{"Take", "[", 
+            RowBox[{"binnumber", ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{
+               "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+               ",", 
+               RowBox[{
+                RowBox[{
+                "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+                "+", 
+                RowBox[{
+                "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+                "-", "1"}]}], "}"}]}], "]"}], ",", "2"}], "]"}], "*", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"range", "-", "start"}], ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{
+             SuperscriptBox["2", 
+              RowBox[{
+              "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]], 
+             "-", "1"}], ")"}]}], ")"}]}], ")"}]}], "]"}], "&"}], "/@", 
+    RowBox[{"MapThread", "[", 
+     RowBox[{"List", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Drop", "[", 
+         RowBox[{
+          RowBox[{"FoldList", "[", 
+           RowBox[{"Plus", ",", "1", ",", "length"}], "]"}], ",", 
+          RowBox[{"-", "1"}]}], "]"}], ",", "length"}], "}"}]}], "]"}]}], 
+   ")"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TurnToRange", "[", 
+   RowBox[{
+   "binnumber_", ",", "length_List", ",", "number_List", ",", "start_List", 
+    ",", "range_Integer"}], "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"N", "[", 
+      RowBox[{
+       RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+       "+", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"FromDigits", "[", 
+          RowBox[{
+           RowBox[{"Take", "[", 
+            RowBox[{"binnumber", ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"#", "\[LeftDoubleBracket]", 
+                RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], ",", 
+               RowBox[{
+                RowBox[{"#", "\[LeftDoubleBracket]", 
+                 RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], "+", 
+                RowBox[{"#", "\[LeftDoubleBracket]", 
+                 RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}], "-", 
+                "1"}]}], "}"}]}], "]"}], ",", "2"}], "]"}], "*", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"range", "-", 
+             RowBox[{
+             "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+            ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{
+             SuperscriptBox["2", 
+              RowBox[{"#", "\[LeftDoubleBracket]", 
+               RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}]], "-", 
+             "1"}], ")"}]}], ")"}]}], ")"}]}], "]"}], "&"}], "/@", 
+    RowBox[{"MapThread", "[", 
+     RowBox[{"List", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"MapThread", "[", 
+         RowBox[{"List", ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"Drop", "[", 
+             RowBox[{
+              RowBox[{"FoldList", "[", 
+               RowBox[{"Plus", ",", "1", ",", "length"}], "]"}], ",", 
+              RowBox[{"-", "1"}]}], "]"}], ",", "length"}], "}"}]}], "]"}], 
+        ",", "start"}], "}"}]}], "]"}]}], ")"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TurnToRange", "[", 
+   RowBox[{
+   "binnumber_", ",", "length_List", ",", "number_List", ",", "start_Integer",
+     ",", "range_List"}], "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"N", "[", 
+      RowBox[{"start", "+", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"FromDigits", "[", 
+          RowBox[{
+           RowBox[{"Take", "[", 
+            RowBox[{"binnumber", ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"#", "\[LeftDoubleBracket]", 
+                RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], ",", 
+               RowBox[{
+                RowBox[{"#", "\[LeftDoubleBracket]", 
+                 RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], "+", 
+                RowBox[{"#", "\[LeftDoubleBracket]", 
+                 RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}], "-", 
+                "1"}]}], "}"}]}], "]"}], ",", "2"}], "]"}], "*", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{
+             "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], "-",
+              "start"}], ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{
+             SuperscriptBox["2", 
+              RowBox[{"#", "\[LeftDoubleBracket]", 
+               RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}]], "-", 
+             "1"}], ")"}]}], ")"}]}], ")"}]}], "]"}], "&"}], "/@", 
+    RowBox[{"MapThread", "[", 
+     RowBox[{"List", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"MapThread", "[", 
+         RowBox[{"List", ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"Drop", "[", 
+             RowBox[{
+              RowBox[{"FoldList", "[", 
+               RowBox[{"Plus", ",", "1", ",", "length"}], "]"}], ",", 
+              RowBox[{"-", "1"}]}], "]"}], ",", "length"}], "}"}]}], "]"}], 
+        ",", "range"}], "}"}]}], "]"}]}], ")"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TurnToRange", "[", 
+   RowBox[{
+   "binnumber_", ",", "length_List", ",", "number_List", ",", "start_List", 
+    ",", "range_List"}], "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"N", "[", 
+      RowBox[{
+       RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+       "+", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"FromDigits", "[", 
+          RowBox[{
+           RowBox[{"Take", "[", 
+            RowBox[{"binnumber", ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"#", "\[LeftDoubleBracket]", 
+                RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], ",", 
+               RowBox[{
+                RowBox[{"#", "\[LeftDoubleBracket]", 
+                 RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], "+", 
+                RowBox[{"#", "\[LeftDoubleBracket]", 
+                 RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}], "-", 
+                "1"}]}], "}"}]}], "]"}], ",", "2"}], "]"}], "*", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{
+             "#", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}], "-",
+              
+             RowBox[{
+             "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+            ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{
+             SuperscriptBox["2", 
+              RowBox[{"#", "\[LeftDoubleBracket]", 
+               RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}]], "-", 
+             "1"}], ")"}]}], ")"}]}], ")"}]}], "]"}], "&"}], "/@", 
+    RowBox[{"MapThread", "[", 
+     RowBox[{"List", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"MapThread", "[", 
+         RowBox[{"List", ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"Drop", "[", 
+             RowBox[{
+              RowBox[{"FoldList", "[", 
+               RowBox[{"Plus", ",", "1", ",", "length"}], "]"}], ",", 
+              RowBox[{"-", "1"}]}], "]"}], ",", "length"}], "}"}]}], "]"}], 
+        ",", "start", ",", "range"}], "}"}]}], "]"}]}], ")"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FitnessAll", "[", 
+   RowBox[{
+   "funcs_", ",", "list_", ",", "length_", ",", "number_", ",", "start_", ",",
+     "range_", ",", "rawdata_", ",", "fitdata_"}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"values", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"TurnToRange", "[", 
+         RowBox[{
+         "#", ",", "length", ",", "number", ",", "start", ",", "range"}], 
+         "]"}], "&"}], "/@", "list"}]}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"DominationSortingList", "[", 
+     RowBox[{"values", ",", 
+      RowBox[{"CrowdingDistanceAssignment", "[", 
+       RowBox[{"values", ",", "funcs"}], "]"}], ",", "funcs"}], "]"}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"bin6", "[", 
+   RowBox[{"b_", ",", "c_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"b", "\[LeftDoubleBracket]", "#1", "\[RightDoubleBracket]"}], 
+     "&"}], ")"}], "/@", 
+   RowBox[{"Split", "[", 
+    RowBox[{
+     RowBox[{"Ordering", "[", "c", "]"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"c", "\[LeftDoubleBracket]", "#1", "\[RightDoubleBracket]"}], 
+       "\[Equal]", 
+       RowBox[{"c", "\[LeftDoubleBracket]", "#2", "\[RightDoubleBracket]"}]}],
+       "&"}]}], "]"}]}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"CumulativeProbabilities", "[", 
+   RowBox[{
+   "funcs_", ",", "list_", ",", "length_", ",", "number_", ",", "start_", ",",
+     "range_", ",", "rawdata_", ",", "fitdata2_"}], "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", "a", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"locations", "=", 
+      RowBox[{"FitnessAll", "[", 
+       RowBox[{
+       "funcs", ",", "list", ",", "length", ",", "number", ",", "start", ",", 
+        "range", ",", "rawdata", ",", "fitdata2"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"Print", "[", 
+        RowBox[{"\"\<locations = \>\"", ",", "locations"}], "]"}], ";"}], 
+      "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"ans", "=", 
+      RowBox[{
+       RowBox[{
+        FractionBox["#", 
+         RowBox[{"Total", "[", "##", "]"}]], "&"}], "[", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"1", "/", 
+           SuperscriptBox[
+            RowBox[{"(", "1.5", ")"}], 
+            FractionBox["#", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"Length", "[", "list", "]"}], "/", "10"}], ")"}]]]}], 
+          "&"}], "/@", 
+         RowBox[{"Range", "[", 
+          RowBox[{"Length", "[", "list", "]"}], "]"}]}], ")"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Flatten", "[", 
+      RowBox[{
+       RowBox[{"bin6", "[", 
+        RowBox[{"ans", ",", "locations"}], "]"}], ",", "1"}], "]"}]}]}], 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4198338243246613`*^9, 3.4198338254028206`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"randomnumbers", "[", "number_", "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"SeedRandom", "[", "]"}], ";", 
+    RowBox[{"RandomReal", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"0", ",", "1"}], "}"}], ",", "number"}], "]"}]}], 
+   ")"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"selectionmethods", "=", 
+  RowBox[{"{", 
+   RowBox[{
+   "Global`Roulette", ",", "Global`Universal", ",", "Global`Truncation", ",", 
+    "Global`Tournament"}], "}"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SelectionRoulette", "[", 
+   RowBox[{"list_", ",", "probab_", ",", "number_", ",", "opts___"}], "]"}], ":=",
+   
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"a", ",", 
+      RowBox[{"random", "=", 
+       RowBox[{"randomnumbers", "[", "number", "]"}]}]}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"list", "\[LeftDoubleBracket]", 
+     RowBox[{"breedinglist", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"a", "=", "#"}], ";", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"Length", "[", 
+            RowBox[{"Select", "[", 
+             RowBox[{"probab", ",", 
+              RowBox[{
+               RowBox[{"#", "<", "a"}], "&"}]}], "]"}], "]"}], "+", "1"}]}], 
+         ")"}], "&"}], "/@", "random"}]}], "\[RightDoubleBracket]"}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SelectionUniversal", "[", 
+   RowBox[{"list_", ",", "probab_", ",", "number_", ",", "opts___"}], "]"}], ":=",
+   
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"a", ",", 
+      RowBox[{"linear", "=", 
+       RowBox[{"Range", "[", 
+        RowBox[{
+         RowBox[{"RandomReal", "[", 
+          RowBox[{"{", 
+           RowBox[{"0", ",", 
+            FractionBox["1", "number"]}], "}"}], "]"}], ",", "1", ",", 
+         FractionBox["1", "number"]}], "]"}]}]}], "}"}], ",", 
+    RowBox[{
+     RowBox[{"ans", "=", 
+      RowBox[{"list", "\[LeftDoubleBracket]", 
+       RowBox[{"breedinglist", "=", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"a", "=", "#1"}], ";", 
+             RowBox[{"Length", "[", 
+              RowBox[{"Select", "[", 
+               RowBox[{"probab", ",", 
+                RowBox[{
+                 RowBox[{"#1", "<", "a"}], "&"}]}], "]"}], "]"}]}], ")"}], 
+           "&"}], ")"}], "/@", "linear"}]}], "\[RightDoubleBracket]"}]}], ";",
+      
+     RowBox[{"Print", "[", 
+      RowBox[{"\"\<output = \>\"", ",", "breedinglist"}], "]"}], ";", 
+     "ans"}]}], "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SelectionTruncation", "[", 
+   RowBox[{"list_", ",", "probab_", ",", "number_", ",", "opts___"}], "]"}], ":=",
+   
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"a", ",", "b"}], "}"}], ",", 
+    RowBox[{
+     RowBox[{"threshold", "=", 
+      RowBox[{
+       RowBox[{"TruncationThreshold", "/.", "\[InvisibleSpace]", 
+        RowBox[{"{", "opts", "}"}]}], "/.", "\[InvisibleSpace]", 
+       RowBox[{"{", 
+        RowBox[{"TruncationThreshold", "\[Rule]", "0.5`"}], "}"}]}]}], ";", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"printedsetting", "=!=", "True"}], ",", 
+       RowBox[{
+        RowBox[{"Print", "[", 
+         RowBox[{"\"\<Using TruncationThreshold \[Rule] \>\"", "<>", 
+          RowBox[{"ToString", "[", "threshold", "]"}]}], "]"}], ";", 
+        RowBox[{"printedsetting", "=", "True"}]}]}], "]"}], ";", 
+     RowBox[{"a", "=", 
+      RowBox[{"MapThread", "[", 
+       RowBox[{"Subtract", ",", 
+        RowBox[{"{", 
+         RowBox[{"probab", ",", 
+          RowBox[{"Prepend", "[", 
+           RowBox[{
+            RowBox[{"Most", "[", "probab", "]"}], ",", "0"}], "]"}]}], 
+         "}"}]}], "]"}]}], ";", 
+     RowBox[{"b", "=", 
+      RowBox[{"Sort", "[", 
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", 
+          RowBox[{"a", ",", "list"}], "}"}], "]"}], ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{
+          "#1", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], "<", 
+          RowBox[{
+          "#2", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
+         "&"}]}], "]"}]}], ";", 
+     RowBox[{"c", "=", 
+      RowBox[{"Take", "[", 
+       RowBox[{"b", ",", 
+        RowBox[{"-", 
+         RowBox[{"Round", "[", 
+          RowBox[{"threshold", " ", 
+           RowBox[{"Length", "[", "list", "]"}]}], "]"}]}]}], "]"}]}], ";", 
+     RowBox[{"Print", "[", 
+      RowBox[{"\"\<Number selected = \>\"", ",", 
+       RowBox[{"-", 
+        RowBox[{"Round", "[", 
+         RowBox[{"threshold", " ", 
+          RowBox[{"Length", "[", "list", "]"}]}], "]"}]}]}], "]"}], ";", 
+     RowBox[{"breedinglist", "=", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Position", "[", 
+           RowBox[{"list", ",", "#1"}], "]"}], "\[LeftDoubleBracket]", 
+          RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], "&"}], ")"}], "/@",
+        
+       RowBox[{"c", "\[LeftDoubleBracket]", 
+        RowBox[{"All", ",", "2"}], "\[RightDoubleBracket]"}]}]}], ";", 
+     RowBox[{"Print", "[", 
+      RowBox[{"\"\<breedinglist = \>\"", ",", "breedinglist"}], "]"}], ";", 
+     RowBox[{
+      RowBox[{"c", "\[LeftDoubleBracket]", 
+       RowBox[{"All", ",", "2"}], "\[RightDoubleBracket]"}], 
+      "\[LeftDoubleBracket]", 
+      RowBox[{"RandomInteger", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", 
+          RowBox[{"Length", "[", "c", "]"}]}], "}"}], ",", 
+        RowBox[{"Length", "[", "c", "]"}]}], "]"}], 
+      "\[RightDoubleBracket]"}]}]}], "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SelectionTournament", "[", 
+   RowBox[{"list_", ",", "probab_", ",", "number_", ",", "opts___"}], "]"}], ":=",
+   
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"a", "=", 
+       RowBox[{"MapThread", "[", 
+        RowBox[{"Subtract", ",", 
+         RowBox[{"{", 
+          RowBox[{"probab", ",", 
+           RowBox[{"Prepend", "[", 
+            RowBox[{
+             RowBox[{"Most", "[", "probab", "]"}], ",", "0"}], "]"}]}], 
+          "}"}]}], "]"}]}], ",", 
+      RowBox[{"b", "=", "a"}], ",", "tour"}], "}"}], ",", 
+    RowBox[{
+     RowBox[{"tour", "=", 
+      RowBox[{
+       RowBox[{"Global`TournamentNumber", "/.", "\[InvisibleSpace]", 
+        RowBox[{"{", "opts", "}"}]}], "/.", "\[InvisibleSpace]", 
+       RowBox[{"{", 
+        RowBox[{"Global`TournamentNumber", "\[Rule]", 
+         RowBox[{"Ceiling", "[", 
+          FractionBox["number", "5"], "]"}]}], "}"}]}]}], ";", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"printedsetting", "=!=", "True"}], ",", 
+       RowBox[{
+        RowBox[{"Print", "[", 
+         RowBox[{"\"\<Using TournamentNumber \[Rule] \>\"", "<>", 
+          RowBox[{"ToString", "[", "tour", "]"}]}], "]"}], ";", 
+        RowBox[{"printedsetting", "=", "True"}]}]}], "]"}], ";", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"a", "=", 
+             RowBox[{"ReplacePart", "[", 
+              RowBox[{"a", ",", "0", ",", "#1"}], "]"}]}], ";", 
+            RowBox[{"AppendTo", "[", 
+             RowBox[{"breedinglist", ",", "#1"}], "]"}], ";", 
+            RowBox[{
+            "list", "\[LeftDoubleBracket]", "#1", "\[RightDoubleBracket]"}]}],
+            ")"}], "&"}], ")"}], "[", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"Position", "[", 
+             RowBox[{"a", ",", 
+              RowBox[{"Max", "[", "#1", "]"}]}], "]"}], 
+            "\[LeftDoubleBracket]", 
+            RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], "&"}], ")"}], 
+         "[", 
+         RowBox[{"a", "\[LeftDoubleBracket]", 
+          RowBox[{"RandomInteger", "[", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"1", ",", 
+              RowBox[{"Length", "[", "list", "]"}]}], "}"}], ",", "tour"}], 
+           "]"}], "\[RightDoubleBracket]"}], "]"}], "]"}], ",", 
+       RowBox[{"{", "number", "}"}]}], "]"}]}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.419832409763772*^9, 3.4198324107169275`*^9}, {
+  3.4198324699531975`*^9, 3.4198324826254787`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"bin6", "[", 
+    RowBox[{"b_", ",", "c_"}], "]"}], ":=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"b", "[", 
+      RowBox[{"[", "#", "]"}], "]"}], "&"}], "/@", 
+    RowBox[{"Split", "[", 
+     RowBox[{
+      RowBox[{"Ordering", "[", "c", "]"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"c", "[", 
+         RowBox[{"[", "#1", "]"}], "]"}], "\[Equal]", 
+        RowBox[{"c", "[", 
+         RowBox[{"[", "#2", "]"}], "]"}]}], "&"}]}], "]"}]}]}], 
+  ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"Clear", "[", "SelectforCrossover", "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SelectforCrossover", "[", 
+   RowBox[{"list_", ",", 
+    RowBox[{"numbers_", ":", "5"}], ",", 
+    RowBox[{"pc_", ":", "0.25`"}]}], "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "a", ",", "crossdatalist", ",", "positionsofcross", ",", "d", ",", "e", 
+      ",", "f", ",", "g", ",", "h"}], "}"}], ",", 
+    RowBox[{
+     RowBox[{"a", "=", 
+      RowBox[{"randomnumbers", "[", "numbers", "]"}]}], ";", 
+     RowBox[{"positionsofcross", "=", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{"Position", "[", 
+        RowBox[{"a", ",", 
+         RowBox[{"_", "?", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"#1", "<", "pc"}], "&"}], ")"}]}]}], "]"}], "]"}]}], ";", 
+     
+     RowBox[{"crossdatalist", "=", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+         "list", "\[LeftDoubleBracket]", "#1", "\[RightDoubleBracket]"}], 
+         "&"}], ")"}], "/@", "positionsofcross"}]}], ";", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"OddQ", "[", 
+        RowBox[{"Length", "[", "crossdatalist", "]"}], "]"}], ",", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{
+           RowBox[{"RandomInteger", "[", 
+            RowBox[{"{", 
+             RowBox[{"1", ",", "2"}], "}"}], "]"}], "===", "1"}], "&&", 
+          RowBox[{
+           RowBox[{"Length", "[", "crossdatalist", "]"}], ">", "1"}]}], ",", 
+         RowBox[{
+          RowBox[{"g", "=", 
+           RowBox[{"RandomInteger", "[", 
+            RowBox[{"{", 
+             RowBox[{"1", ",", 
+              RowBox[{"Length", "[", "crossdatalist", "]"}]}], "}"}], "]"}]}],
+           ";", 
+          RowBox[{"h", "=", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"#1", "\[LeftDoubleBracket]", 
+               RowBox[{"RandomInteger", "[", 
+                RowBox[{"{", 
+                 RowBox[{"1", ",", 
+                  RowBox[{"Length", "[", "#1", "]"}]}], "}"}], "]"}], 
+               "\[RightDoubleBracket]"}], "&"}], ")"}], "[", 
+            RowBox[{"Select", "[", 
+             RowBox[{
+              RowBox[{"Flatten", "[", 
+               RowBox[{"Position", "[", 
+                RowBox[{"list", ",", 
+                 RowBox[{
+                 "crossdatalist", "\[LeftDoubleBracket]", "g", 
+                  "\[RightDoubleBracket]"}]}], "]"}], "]"}], ",", 
+              RowBox[{
+               RowBox[{"MemberQ", "[", 
+                RowBox[{"positionsofcross", ",", "#1"}], "]"}], "&"}]}], 
+             "]"}], "]"}]}], ";", 
+          RowBox[{"positionsofcross", "=", 
+           RowBox[{"Select", "[", 
+            RowBox[{"positionsofcross", ",", 
+             RowBox[{
+              RowBox[{"#1", "=!=", "h"}], "&"}]}], "]"}]}], ";", 
+          RowBox[{"crossdatalist", "=", 
+           RowBox[{"Drop", "[", 
+            RowBox[{"crossdatalist", ",", 
+             RowBox[{"{", "g", "}"}]}], "]"}]}]}], ",", 
+         RowBox[{
+          RowBox[{"d", "=", 
+           RowBox[{"Range", "[", 
+            RowBox[{"1", ",", "numbers"}], "]"}]}], ";", 
+          RowBox[{"AppendTo", "[", 
+           RowBox[{"positionsofcross", ",", 
+            RowBox[{"f", "=", 
+             RowBox[{"d", "\[LeftDoubleBracket]", 
+              RowBox[{"RandomInteger", "[", 
+               RowBox[{"{", 
+                RowBox[{"1", ",", 
+                 RowBox[{"Length", "[", "d", "]"}]}], "}"}], "]"}], 
+              "\[RightDoubleBracket]"}]}]}], "]"}], ";", 
+          RowBox[{"AppendTo", "[", 
+           RowBox[{"crossdatalist", ",", 
+            RowBox[{
+            "list", "\[LeftDoubleBracket]", "f", "\[RightDoubleBracket]"}]}], 
+           "]"}], ";"}]}], "]"}]}], "]"}], ";", 
+     RowBox[{"crossoverlist", "=", "positionsofcross"}], ";", 
+     "crossdatalist"}]}], "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Crossover", "[", 
+   RowBox[{"datalist_", ",", "crosslist_", ",", "length_", ",", "numbers_"}], 
+   "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"a", "=", 
+       RowBox[{"{", "}"}]}], ",", "b", ",", "c", ",", "pos", ",", "c1last", 
+      ",", "c2last", ",", "c1new", ",", "c2new", ",", "lengths"}], "}"}], ",",
+     
+    RowBox[{
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Head", "[", "length", "]"}], "===", "List"}], ",", 
+       RowBox[{"lengths", "=", 
+        RowBox[{"Plus", "@@", "length"}]}], ",", 
+       RowBox[{"lengths", "=", 
+        RowBox[{"length", " ", "numbers"}]}]}], "]"}], ";", 
+     RowBox[{"pos", "=", 
+      RowBox[{"RandomInteger", "[", 
+       RowBox[{"{", 
+        RowBox[{"1", ",", 
+         RowBox[{"lengths", "-", "1"}]}], "}"}], "]"}]}], ";", 
+     RowBox[{"a", "=", 
+      RowBox[{"RandomUnion", "[", 
+       RowBox[{"Length", "[", "crosslist", "]"}], "]"}]}], ";", 
+     RowBox[{"c", "=", 
+      RowBox[{"Partition", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{
+           "datalist", "\[LeftDoubleBracket]", "#1", 
+            "\[RightDoubleBracket]"}], "&"}], ")"}], "/@", "a"}], ",", "2"}], 
+       "]"}]}], ";", 
+     RowBox[{"Partition", "[", 
+      RowBox[{
+       RowBox[{"Flatten", "[", 
+        RowBox[{"bin6", "[", 
+         RowBox[{
+          RowBox[{"Partition", "[", 
+           RowBox[{
+            RowBox[{"Flatten", "[", 
+             RowBox[{
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{"(", 
+                 RowBox[{
+                  RowBox[{"pos", "=", 
+                   RowBox[{"RandomInteger", "[", 
+                    RowBox[{"{", 
+                    RowBox[{"1", ",", "lengths"}], "}"}], "]"}]}], ";", 
+                  RowBox[{"c1last", "=", 
+                   RowBox[{"Take", "[", 
+                    RowBox[{
+                    RowBox[{
+                    "#1", "\[LeftDoubleBracket]", "1", 
+                    "\[RightDoubleBracket]"}], ",", 
+                    RowBox[{"-", 
+                    RowBox[{"(", 
+                    RowBox[{"lengths", "-", "pos"}], ")"}]}]}], "]"}]}], ";", 
+                  
+                  RowBox[{"c2last", "=", 
+                   RowBox[{"Take", "[", 
+                    RowBox[{
+                    RowBox[{
+                    "#1", "\[LeftDoubleBracket]", "2", 
+                    "\[RightDoubleBracket]"}], ",", 
+                    RowBox[{"-", 
+                    RowBox[{"(", 
+                    RowBox[{"lengths", "-", "pos"}], ")"}]}]}], "]"}]}], ";", 
+                  
+                  RowBox[{"c1new", "=", 
+                   RowBox[{"Flatten", "[", 
+                    RowBox[{"Append", "[", 
+                    RowBox[{
+                    RowBox[{"Delete", "[", 
+                    RowBox[{
+                    RowBox[{
+                    "#1", "\[LeftDoubleBracket]", "1", 
+                    "\[RightDoubleBracket]"}], ",", 
+                    RowBox[{"Table", "[", 
+                    RowBox[{
+                    RowBox[{"{", "\[Iota]", "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"\[Iota]", ",", 
+                    RowBox[{"pos", "+", "1"}], ",", "lengths"}], "}"}]}], 
+                    "]"}]}], "]"}], ",", "c2last"}], "]"}], "]"}]}], ";", 
+                  RowBox[{"c2new", "=", 
+                   RowBox[{"Flatten", "[", 
+                    RowBox[{"Append", "[", 
+                    RowBox[{
+                    RowBox[{"Delete", "[", 
+                    RowBox[{
+                    RowBox[{
+                    "#1", "\[LeftDoubleBracket]", "2", 
+                    "\[RightDoubleBracket]"}], ",", 
+                    RowBox[{"Table", "[", 
+                    RowBox[{
+                    RowBox[{"{", "\[Iota]", "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"\[Iota]", ",", 
+                    RowBox[{"pos", "+", "1"}], ",", "lengths"}], "}"}]}], 
+                    "]"}]}], "]"}], ",", "c1last"}], "]"}], "]"}]}], ";", 
+                  RowBox[{"{", 
+                   RowBox[{"c1new", ",", "c2new"}], "}"}]}], ")"}], "&"}], 
+               ")"}], "/@", "c"}], "]"}], ",", "lengths"}], "]"}], ",", "a"}],
+          "]"}], "]"}], ",", "lengths"}], "]"}]}]}], "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"reinsertionmethods", "=", 
+  RowBox[{"{", 
+   RowBox[{"Global`Elitist", ",", "Global`Uniform"}], "}"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ReinsertPure", "[", 
+   RowBox[{"olddata_", ",", "newdata_", ",", "positions_", ",", "Null___"}], 
+   "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", "a", "}"}], ",", 
+    RowBox[{
+     RowBox[{"a", "=", "olddata"}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"a", "=", 
+         RowBox[{"ReplacePart", "[", 
+          RowBox[{"a", ",", 
+           RowBox[{
+           "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], ",", 
+           RowBox[{
+           "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
+          "]"}]}], ")"}], "&"}], "/@", 
+      RowBox[{"Transpose", "[", 
+       RowBox[{"{", 
+        RowBox[{"positions", ",", "newdata"}], "}"}], "]"}]}], ";", "a"}]}], 
+   "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"ReinsertFitness", "[", 
+    RowBox[{
+    "olddata_", ",", "newdata_", ",", "null_", ",", "genelength_", ",", 
+     "nogenes_", ",", "start_", ",", "end_", ",", "funcs_"}], "]"}], "/;", 
+   RowBox[{
+    RowBox[{"Length", "[", "newdata", "]"}], "\[GreaterEqual]", 
+    RowBox[{"Length", "[", "olddata", "]"}]}]}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"a", ",", 
+      RowBox[{"random", "=", 
+       RowBox[{"RandomUnion", "[", 
+        RowBox[{"Length", "[", "olddata", "]"}], "]"}]}], ",", "fitdata"}], 
+     "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"a", "=", "olddata"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"fitdata", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"FitnessValue", "[", 
+         RowBox[{"TurnToRange", "[", 
+          RowBox[{
+          "#", ",", "genelength", ",", "nogenes", ",", "start", ",", "end"}], 
+          "]"}], "]"}], "&"}], "/@", "newdata"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"Print", "[", 
+        RowBox[{"\"\<Fitdata offspring = \>\"", ",", "fitdata"}], "]"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Print", "[", 
+        RowBox[{"\"\<Fitdata ordered = \>\"", ",", 
+         RowBox[{"Ordering", "[", 
+          RowBox[{"fitdata", ",", 
+           RowBox[{"-", 
+            RowBox[{"Length", "[", "olddata", "]"}]}]}], "]"}]}], "]"}], 
+       ";"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"positions", "=", 
+      RowBox[{"Ordering", "[", 
+       RowBox[{"fitdata", ",", 
+        RowBox[{"-", 
+         RowBox[{"Length", "[", "olddata", "]"}]}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"a", "=", 
+         RowBox[{"ReplacePart", "[", 
+          RowBox[{"a", ",", 
+           RowBox[{
+           "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], ",", 
+           RowBox[{
+           "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
+          "]"}]}], ")"}], "&"}], "/@", 
+      RowBox[{"Transpose", "[", 
+       RowBox[{"{", 
+        RowBox[{"random", ",", 
+         RowBox[{
+         "newdata", "\[LeftDoubleBracket]", "positions", 
+          "\[RightDoubleBracket]"}]}], "}"}], "]"}]}], ";", "a"}]}], 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.419832882403896*^9, 3.4198328932011166`*^9}, {
+  3.419832973422433*^9, 3.419832974609971*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"ReinsertFitness", "[", 
+    RowBox[{
+    "olddata_", ",", "newdata_", ",", "positions_", ",", "genelength_", ",", 
+     RowBox[{"nogenes", "_"}], ",", "start_", ",", "end_", ",", "funcs_"}], 
+    "]"}], "/;", 
+   RowBox[{
+    RowBox[{"Length", "[", "newdata", "]"}], "<", 
+    RowBox[{"Length", "[", "olddata", "]"}]}]}], ":=", "\[IndentingNewLine]", 
+  
+  RowBox[{"(", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+     "Print", "[", 
+      "\"\<Not enough offspring, using Reinsertion Method \[Rule] \
+Elitist\>\"", "]"}], ";"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{"ReinsertElitist", "[", 
+    RowBox[{"olddata", ",", "newdata"}], "]"}], ")"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.419832969453556*^9, 3.4198329706567197`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ReinsertUniform", "[", 
+   RowBox[{"olddata_", ",", "newdata_", ",", "Null___"}], "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"a", ",", 
+      RowBox[{"positions", "=", 
+       RowBox[{"RandomUnion", "[", 
+        RowBox[{
+         RowBox[{"Length", "[", "olddata", "]"}], ",", 
+         RowBox[{"Length", "[", "newdata", "]"}]}], "]"}]}]}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"(*", 
+     RowBox[{
+      RowBox[{"Print", "[", 
+       RowBox[{"\"\<Uniform Positions = \>\"", ",", "positions"}], "]"}], 
+      ";"}], "*)"}], "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"a", "=", "olddata"}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"a", "=", 
+         RowBox[{"ReplacePart", "[", 
+          RowBox[{"a", ",", 
+           RowBox[{
+           "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], ",", 
+           RowBox[{
+           "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
+          "]"}]}], ")"}], "&"}], "/@", 
+      RowBox[{"Transpose", "[", 
+       RowBox[{"{", 
+        RowBox[{"positions", ",", "newdata"}], "}"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "a"}]}], "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Ordering", "[", 
+  RowBox[{"{", 
+   RowBox[{"1", ",", "2", ",", "58", ",", "4"}], "}"}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"1", ",", "2", ",", "4", ",", "3"}], "}"}]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ReinsertElitist", "[", 
+   RowBox[{"olddata_", ",", "newdata_", ",", "Null___"}], "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"a", ",", 
+      RowBox[{"random", "=", 
+       RowBox[{"RandomUnion", "[", 
+        RowBox[{"Length", "[", "newdata", "]"}], "]"}]}], ",", "positions"}], 
+     "}"}], ",", 
+    RowBox[{
+     RowBox[{"a", "=", "olddata"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"positions", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Ordering", "[", 
+         RowBox[{"fitdata", "\[LeftDoubleBracket]", 
+          RowBox[{"-", "1"}], "\[RightDoubleBracket]"}], "]"}], 
+        "\[LeftDoubleBracket]", 
+        RowBox[{"Range", "[", 
+         RowBox[{"Length", "[", "newdata", "]"}], "]"}], 
+        "\[RightDoubleBracket]"}], "\[LeftDoubleBracket]", "random", 
+       "\[RightDoubleBracket]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"a", "=", 
+         RowBox[{"ReplacePart", "[", 
+          RowBox[{"a", ",", 
+           RowBox[{
+           "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], ",", 
+           RowBox[{
+           "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
+          "]"}]}], ")"}], "&"}], "/@", 
+      RowBox[{"Transpose", "[", 
+       RowBox[{"{", 
+        RowBox[{"positions", ",", "newdata"}], "}"}], "]"}]}], ";", "a"}]}], 
+   "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ReinsertElitist", "[", 
+   RowBox[{
+   "olddata_", ",", "newdata_", ",", "crosspositions_", ",", "genelength_", 
+    ",", "nogenes_", ",", "start_", ",", "end_", ",", "funcs_"}], "]"}], ":=",
+   
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"a", ",", 
+      RowBox[{"random", "=", 
+       RowBox[{"RandomUnion", "[", 
+        RowBox[{"Length", "[", "newdata", "]"}], "]"}]}], ",", "positions", 
+      ",", 
+      RowBox[{"values", "=", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"TurnToRange", "[", 
+          RowBox[{
+          "#", ",", "genelength", ",", "nogenes", ",", "start", ",", "end"}], 
+          "]"}], "&"}], "/@", "olddata"}]}]}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"a", "=", "olddata"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"positions", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Reverse", "[", 
+         RowBox[{"DominationSortingList", "[", 
+          RowBox[{"values", ",", 
+           RowBox[{"CrowdingDistanceAssignment", "[", 
+            RowBox[{"values", ",", "funcs"}], "]"}], ",", "funcs"}], "]"}], 
+         "]"}], "\[LeftDoubleBracket]", 
+        RowBox[{"Range", "[", 
+         RowBox[{"Length", "[", "newdata", "]"}], "]"}], 
+        "\[RightDoubleBracket]"}], "\[LeftDoubleBracket]", "random", 
+       "\[RightDoubleBracket]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"a", "=", 
+         RowBox[{"ReplacePart", "[", 
+          RowBox[{"a", ",", 
+           RowBox[{
+            RowBox[{
+            "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+            "\[Rule]", 
+            RowBox[{
+            "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}]}], 
+          "]"}]}], ")"}], "&"}], "/@", 
+      RowBox[{"Transpose", "[", 
+       RowBox[{"{", 
+        RowBox[{"positions", ",", "newdata"}], "}"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "a"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4198328050264196`*^9, 3.419832839902536*^9}, {
+  3.4198329075609508`*^9, 3.419832962562711*^9}, {3.4198330758475857`*^9, 
+  3.4198330912543287`*^9}, {3.4198331228334646`*^9, 3.4198331512718744`*^9}}],\
+
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Mutate", "[", 
+   RowBox[{"list_", ",", "lengths_", ",", "numbers_", ",", "mr_"}], "]"}], ":=",
+   
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"a", ",", "b", ",", "c", ",", "number"}], "}"}], ",", 
+    RowBox[{
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Head", "[", "lengths", "]"}], "===", "List"}], ",", 
+       RowBox[{"number", "=", 
+        RowBox[{"Plus", "@@", "lengths"}]}], ",", 
+       RowBox[{"number", "=", 
+        RowBox[{"lengths", " ", "numbers"}]}]}], "]"}], ";", 
+     RowBox[{"a", "=", 
+      RowBox[{"Flatten", "[", "list", "]"}]}], ";", 
+     RowBox[{"b", "=", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{"Position", "[", 
+        RowBox[{
+         RowBox[{"RandomReal", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", "1"}], "}"}], ",", 
+           RowBox[{"Length", "[", 
+            RowBox[{"Flatten", "[", "a", "]"}], "]"}]}], "]"}], ",", 
+         RowBox[{"_", "?", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"#1", "<", "mr"}], "&"}], ")"}]}]}], "]"}], "]"}]}], ";", 
+     
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{
+           "a", "\[LeftDoubleBracket]", "#1", "\[RightDoubleBracket]"}], "===",
+            "1"}], ",", 
+          RowBox[{"a", "=", 
+           RowBox[{"ReplacePart", "[", 
+            RowBox[{"a", ",", "0", ",", "#1"}], "]"}]}], ",", 
+          RowBox[{"a", "=", 
+           RowBox[{"ReplacePart", "[", 
+            RowBox[{"a", ",", "1", ",", "#1"}], "]"}]}]}], "]"}], "&"}], 
+       ")"}], "/@", "b"}], ";", 
+     RowBox[{"Partition", "[", 
+      RowBox[{"a", ",", "number"}], "]"}]}]}], "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"GetIterationNumber", "[", "]"}], ":=", "iterationno"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SaveFit", "[", 
+   RowBox[{"mfunc_", ",", "p_"}], "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{"ValueQ", "[", 
+       RowBox[{
+        RowBox[{"Fitness", "[", "mfunc", "]"}], "[", "p", "]"}], "]"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"Fitness", "[", "mfunc", "]"}], "[", "p", "]"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Fitness", "[", "mfunc", "]"}], "[", "p", "]"}], "=", 
+       RowBox[{"mfunc", "[", "p", "]"}]}]}], "]"}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Dominates", "[", 
+   RowBox[{"p_", ",", "q_", ",", "m_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"Dominates", "[", 
+    RowBox[{"p", ",", "q", ",", "m"}], "]"}], "=", 
+   RowBox[{"Block", "[", 
+    RowBox[{
+     RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"pans", "=", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"SaveFit", "[", 
+          RowBox[{"#", ",", "p"}], "]"}], "&"}], "/@", "m"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"qans", "=", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"SaveFit", "[", 
+          RowBox[{"#", ",", "q"}], "]"}], "&"}], "/@", "m"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Or", "@@", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"Or", "@@", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{
+             RowBox[{
+              RowBox[{
+              "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+              ">", 
+              RowBox[{
+              "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+             "&"}], "/@", 
+            RowBox[{"Transpose", "[", 
+             RowBox[{"{", 
+              RowBox[{"pans", ",", "qans"}], "}"}], "]"}]}], ")"}]}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{"And", "@@", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{
+             RowBox[{
+              RowBox[{
+              "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+              "\[GreaterEqual]", 
+              RowBox[{
+              "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+             "&"}], "/@", 
+            RowBox[{"Transpose", "[", 
+             RowBox[{"{", 
+              RowBox[{"pans", ",", "qans"}], "}"}], "]"}]}], ")"}]}]}], 
+        "}"}]}]}]}], "\[IndentingNewLine]", "]"}]}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FindNonDominatedFront", "[", 
+   RowBox[{"P_", ",", "m_"}], "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"Pdash", "=", 
+      RowBox[{"{", "}"}]}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"AppendTo", "[", 
+      RowBox[{"Pdash", ",", 
+       RowBox[{"P", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
+      "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Block", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"a", "=", "#"}], "}"}], ",", "\[IndentingNewLine]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"And", "@@", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"If", "[", 
+                RowBox[{
+                 RowBox[{"Dominates", "[", 
+                  RowBox[{"a", ",", 
+                   RowBox[{
+                   "Pdash", "\[LeftDoubleBracket]", "#", 
+                    "\[RightDoubleBracket]"}], ",", "m"}], "]"}], ",", 
+                 RowBox[{
+                  RowBox[{"Drop", "[", 
+                   RowBox[{"Pdash", ",", 
+                    RowBox[{"{", "#", "}"}]}], "]"}], ";", "True"}], ",", 
+                 "False"}], "]"}], "&"}], "/@", 
+              RowBox[{"Range", "[", 
+               RowBox[{"Length", "[", "Pdash", "]"}], "]"}]}], ")"}]}], ",", 
+           RowBox[{"AppendTo", "[", 
+            RowBox[{"Pdash", ",", "a"}], "]"}]}], "]"}]}], "]"}], "&"}], "/@",
+       
+      RowBox[{"Rest", "[", "P", "]"}]}], ";", "\[IndentingNewLine]", 
+     "Pdash"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FastNonDominatedSort", "[", 
+   RowBox[{"Pin_", ",", "m_"}], "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"P", "=", "Pin"}], ",", 
+      RowBox[{"F", "=", 
+       RowBox[{"{", "}"}]}], ",", 
+      RowBox[{"i", "=", "0"}]}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"While", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Length", "[", "P", "]"}], ">", "0"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"F", "=", 
+         RowBox[{"AppendTo", "[", 
+          RowBox[{"F", ",", 
+           RowBox[{"FindNonDominatedFront", "[", 
+            RowBox[{"P", ",", "m"}], "]"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"P", "=", 
+         RowBox[{"Complement", "[", 
+          RowBox[{"P", ",", 
+           RowBox[{"F", "\[LeftDoubleBracket]", 
+            RowBox[{"-", "1"}], "\[RightDoubleBracket]"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"i", "++"}], ";"}]}], "\[IndentingNewLine]", "]"}], ";", 
+     "\[IndentingNewLine]", "F"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",\
+
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DominationRank", "[", 
+   RowBox[{"P_List", ",", "m_List"}], "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", "P2", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"P2", "=", 
+      RowBox[{"Outer", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Dominates", "[", 
+          RowBox[{"#1", ",", "#2", ",", "m"}], "]"}], "&"}], ",", "P", ",", 
+        "P", ",", "1"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Count", "[", 
+        RowBox[{"#", ",", "True"}], "]"}], "&"}], "/@", "P2"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PartialOrder", "[", 
+   RowBox[{"i_List", ",", "j_List"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"irank", ",", "jrankidistance", ",", "jdistance"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"irank", ",", "jrank"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"idistance", ",", "jdistance"}], "}"}]}], "}"}], "=", 
+      RowBox[{"Transpose", "[", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "j"}], "}"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"irank", ">", "jrank"}], "||", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"irank", "===", "jrank"}], "&&", 
+        RowBox[{"idistance", ">", "jdistance"}]}], ")"}]}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ObjectiveSort", "[", 
+   RowBox[{"I_", ",", "mfunc_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "ans", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"ans", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"SaveFit", "[", 
+         RowBox[{"mfunc", ",", "#"}], "]"}], "&"}], "/@", "I"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"I", "\[LeftDoubleBracket]", 
+      RowBox[{"Ordering", "[", "ans", "]"}], "\[RightDoubleBracket]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"CrowdingDistanceAssignment", "[", 
+   RowBox[{"P_List", ",", "m_List"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"Idistance", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{"0", ",", 
+        RowBox[{"{", 
+         RowBox[{"Length", "[", "P", "]"}], "}"}]}], "]"}]}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"Block", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"mfunc", "=", "#"}], "}"}], ",", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"ans", "=", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"SaveFit", "[", 
+              RowBox[{"mfunc", ",", "#"}], "]"}], "&"}], "/@", "P"}]}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{"Idistance", "+=", 
+           RowBox[{"MapIndexed", "[", 
+            RowBox[{
+             RowBox[{
+              SuperscriptBox[
+               RowBox[{"Min", "[", 
+                RowBox[{"Drop", "[", 
+                 RowBox[{"#1", ",", "#2"}], "]"}], "]"}], "2"], "&"}], ",", 
+             RowBox[{"Outer", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"Abs", "[", 
+                 RowBox[{"Subtract", "[", "##", "]"}], "]"}], "&"}], ",", 
+               "ans", ",", "ans"}], "]"}]}], "]"}]}]}]}], "]"}], "&"}], "/@", 
+      "m"}], ";", "\[IndentingNewLine]", "Idistance"}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DominationSortingList", "[", 
+   RowBox[{"P_", ",", "distances_", ",", "m_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "ranks", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"ranks", "=", 
+      RowBox[{"DominationRank", "[", 
+       RowBox[{"P", ",", "m"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Ordering", "[", 
+      RowBox[{
+       RowBox[{"Transpose", "[", 
+        RowBox[{"{", 
+         RowBox[{"ranks", ",", "distances"}], "}"}], "]"}], ",", "All", ",", 
+       RowBox[{
+        RowBox[{"PartialOrder", "[", 
+         RowBox[{"#1", ",", "#2"}], "]"}], "&"}]}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DominationSorting", "[", 
+   RowBox[{"P_", ",", "distances_", ",", "m_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "ranks", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"ranks", "=", 
+      RowBox[{"DominationRank", "[", 
+       RowBox[{"P", ",", "m"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"P", "\[LeftDoubleBracket]", 
+      RowBox[{"Ordering", "[", 
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", 
+          RowBox[{"ranks", ",", "distances"}], "}"}], "]"}], ",", "All", ",", 
+        
+        RowBox[{
+         RowBox[{"PartialOrder", "[", 
+          RowBox[{"#1", ",", "#2"}], "]"}], "&"}]}], "]"}], 
+      "\[RightDoubleBracket]"}]}]}], "\[IndentingNewLine]", "]"}]}]], "Input",\
+
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DominationSortingValues", "[", 
+   RowBox[{"P_", ",", "distances_", ",", "m_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "ranks", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"ranks", "=", 
+      RowBox[{"DominationRank", "[", 
+       RowBox[{"P", ",", "m"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"ranks", "*", "distances"}]}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EPOptimiseNDSGA", "[", 
+   RowBox[{"funcs_", ",", "nochroms_", ",", "iters_", ",", 
+    RowBox[{"pc_:", "0.25"}], ",", 
+    RowBox[{"mr_:", "0.01"}], ",", "nogenes_", ",", "genelength_", ",", 
+    "start_", ",", "end_", ",", "opts___"}], "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "a", ",", "probs", ",", "b", ",", "c", ",", "alldata", ",", "current", 
+      ",", 
+      RowBox[{"best", "=", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"-", "\[Infinity]"}], ",", "0"}], "}"}]}]}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"startgene", "=", 
+      RowBox[{
+       RowBox[{"Global`Start", "/.", 
+        RowBox[{"{", "opts", "}"}]}], "/.", 
+       RowBox[{"{", 
+        RowBox[{"Global`Start", "\[Rule]", "Null"}], "}"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"converge", "=", 
+      RowBox[{
+       RowBox[{"Global`Convergence", "/.", 
+        RowBox[{"{", "opts", "}"}]}], "/.", 
+       RowBox[{"{", 
+        RowBox[{"Global`Convergence", "\[Rule]", "\[Infinity]"}], "}"}]}]}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"selectmethod", "=", 
+      RowBox[{"ToExpression", "[", 
+       RowBox[{"\"\<EPOptimise`Private`Selection\>\"", "<>", 
+        RowBox[{"ToString", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{"MemberQ", "[", 
+              RowBox[{"selectionmethods", ",", "#"}], "]"}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{"Print", "[", 
+               RowBox[{"\"\<Using SelectionMethod \[Rule] \>\"", "<>", 
+                RowBox[{"ToString", "[", "#", "]"}]}], "]"}], ";", 
+              "\[IndentingNewLine]", "#"}], ",", 
+             RowBox[{
+              RowBox[{
+              "Print", "[", 
+               "\"\<Method not recognised: Using Roulette\\nMethods \[Rule] \
+Roulette, Universal, Truncation (TruncationThreshold) and Tournament \
+(TournamentNumber)\>\"", "]"}], ";", "\[IndentingNewLine]", 
+              "Global`Roulette"}]}], "]"}], "&"}], "[", 
+          RowBox[{
+           RowBox[{"Global`SelectionMethod", "/.", 
+            RowBox[{"{", "opts", "}"}]}], "/.", 
+           RowBox[{"{", 
+            RowBox[{"Global`SelectionMethod", "\[Rule]", "Roulette"}], 
+            "}"}]}], "]"}], "]"}]}], "]"}]}], ";", 
+     RowBox[{"printedsetting", "=", "False"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"ruttingpopulationsize", "=", 
+      RowBox[{
+       RowBox[{"Global`BreedingPool", "/.", 
+        RowBox[{"{", "opts", "}"}]}], "/.", 
+       RowBox[{"{", 
+        RowBox[{"Global`BreedingPool", "\[Rule]", "nochroms"}], "}"}]}]}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"ruttingpopulationsize", "<", "nochroms"}], "||", 
+        RowBox[{
+        "selectmethod", "===", "EPOptimise`Private`SelectionTruncation"}]}], 
+       ",", 
+       RowBox[{"reinsertmethod", "=", 
+        RowBox[{"ToExpression", "[", 
+         RowBox[{"\"\<EPOptimise`Private`Reinsert\>\"", "<>", 
+          RowBox[{"ToString", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"If", "[", 
+              RowBox[{
+               RowBox[{"MemberQ", "[", 
+                RowBox[{"reinsertionmethods", ",", "#"}], "]"}], ",", 
+               "\[IndentingNewLine]", 
+               RowBox[{
+                RowBox[{"Print", "[", 
+                 RowBox[{"\"\<Using ReinsertionMethod \[Rule] \>\"", "<>", 
+                  RowBox[{"ToString", "[", "#", "]"}], "<>", 
+                  "\"\<\\nBreedingPool < Population \[Rule] Methods: Elitist \
+and Uniform\>\""}], "]"}], ";", "#"}], ",", "\[IndentingNewLine]", 
+               RowBox[{
+                RowBox[{
+                "Print", "[", 
+                 "\"\<Reinsertion Method not recognised: Using \
+Elitist\\nBreedingPool < Population \[Rule] Methods: Elitist and Uniform\>\"",
+                  "]"}], ";", "\[IndentingNewLine]", "Global`Elitist"}]}], 
+              "]"}], "&"}], "[", 
+            RowBox[{
+             RowBox[{"Global`ReinsertionMethod", "/.", 
+              RowBox[{"{", "opts", "}"}]}], "/.", 
+             RowBox[{"{", 
+              RowBox[{"Global`ReinsertionMethod", "\[Rule]", "Elitist"}], 
+              "}"}]}], "]"}], "]"}]}], "]"}]}], ",", "\[IndentingNewLine]", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"ruttingpopulationsize", ">", "nochroms"}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{
+          "Print", "[", 
+           "\"\<Using Reinsertion Method \[Rule] Fitness (BreedingPool > \
+Population)\>\"", "]"}], ";", "\[IndentingNewLine]", 
+          RowBox[{
+          "reinsertmethod", "=", "EPOptimise`Private`ReinsertFitness"}]}], 
+         ",", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{
+          "Print", "[", 
+           "\"\<Using Reinsertion Method \[Rule] Pure (BreedingPool == \
+Population)\>\"", "]"}], ";", "\[IndentingNewLine]", 
+          RowBox[{"reinsertmethod", "=", "EPOptimise`Private`ReinsertPure"}], 
+          ";"}]}], "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", 
+      "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"SeedRandom", "[", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"alldata", "=", 
+      RowBox[{
+       RowBox[{"Global`AllData", "/.", 
+        RowBox[{"{", "opts", "}"}]}], "/.", 
+       RowBox[{"{", 
+        RowBox[{"Global`AllData", "\[Rule]", "True"}], "}"}]}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"startgene", "===", "Null"}], ",", 
+       RowBox[{"P", "=", 
+        RowBox[{"CreateChrom", "[", 
+         RowBox[{"nochroms", ",", "genelength", ",", "nogenes"}], "]"}]}], 
+       ",", "\[IndentingNewLine]", 
+       RowBox[{"P", "=", 
+        RowBox[{"Join", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"TurnToBin", "[", 
+            RowBox[{
+            "startgene", ",", "genelength", ",", "nogenes", ",", "start", ",",
+              "end"}], "]"}], "}"}], ",", 
+          RowBox[{"CreateChrom", "[", 
+           RowBox[{
+            RowBox[{"nochroms", "-", "1"}], ",", "genelength", ",", 
+            "nogenes"}], "]"}]}], "]"}]}]}], "\[IndentingNewLine]", "]"}], 
+     ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"fitdata", "=", 
+      RowBox[{"{", "}"}]}], ";", 
+     RowBox[{"rawdata", "=", 
+      RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"Print", "[", 
+        RowBox[{"\"\<Starting population = \>\"", ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"BinToGray", "[", "#", "]"}], "&"}], "/@", 
+          "population"}]}], "]"}], ";"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"AllF", "=", 
+      RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Do", "[", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"i", ">", "1"}], ",", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"Qreal", "=", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"TurnToRange", "[", 
+              RowBox[{
+              "#", ",", "genelength", ",", "nogenes", ",", "start", ",", 
+               "end"}], "]"}], "&"}], "/@", "Q"}]}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{"R", "=", 
+           RowBox[{"Join", "[", 
+            RowBox[{"Preal", ",", "Qreal"}], "]"}]}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{"(*", 
+           RowBox[{
+            RowBox[{"Print", "[", 
+             RowBox[{"\"\<R = \>\"", ",", "R"}], "]"}], ";"}], "*)"}], 
+          "\[IndentingNewLine]", 
+          RowBox[{"F", "=", 
+           RowBox[{"FastNonDominatedSort", "[", 
+            RowBox[{"R", ",", "funcs"}], "]"}]}], ";", "\[IndentingNewLine]", 
+          
+          RowBox[{"AppendTo", "[", 
+           RowBox[{"AllF", ",", "F"}], "]"}], ";", "\[IndentingNewLine]", 
+          RowBox[{"i", "=", "1"}], ";", 
+          RowBox[{"Preal", "=", 
+           RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+          RowBox[{"While", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{
+              RowBox[{"Length", "[", "Preal", "]"}], "+", 
+              RowBox[{"Length", "[", 
+               RowBox[{
+               "F", "\[LeftDoubleBracket]", "i", "\[RightDoubleBracket]"}], 
+               "]"}]}], "<", "nochroms"}], ",", "\[IndentingNewLine]", 
+            RowBox[{
+             RowBox[{"Preal", "=", 
+              RowBox[{"Join", "[", 
+               RowBox[{"Preal", ",", 
+                RowBox[{
+                "F", "\[LeftDoubleBracket]", "i", "\[RightDoubleBracket]"}]}],
+                "]"}]}], ";", "\[IndentingNewLine]", 
+             RowBox[{"i", "++"}], ";"}]}], "\[IndentingNewLine]", "]"}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{"Preal", "=", 
+           RowBox[{"Join", "[", 
+            RowBox[{"Preal", ",", 
+             RowBox[{
+              RowBox[{"DominationSorting", "[", 
+               RowBox[{
+                RowBox[{
+                "F", "\[LeftDoubleBracket]", "i", "\[RightDoubleBracket]"}], 
+                ",", 
+                RowBox[{"CrowdingDistanceAssignment", "[", 
+                 RowBox[{
+                  RowBox[{
+                  "F", "\[LeftDoubleBracket]", "i", "\[RightDoubleBracket]"}],
+                   ",", "funcs"}], "]"}], ",", "funcs"}], "]"}], 
+              "\[LeftDoubleBracket]", 
+              RowBox[{"Range", "[", 
+               RowBox[{"nochroms", "-", 
+                RowBox[{"Length", "[", "Preal", "]"}]}], "]"}], 
+              "\[RightDoubleBracket]"}]}], "]"}]}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{"(*", 
+           RowBox[{
+            RowBox[{"Print", "[", 
+             RowBox[{"\"\<Preal = \>\"", ",", "Preal"}], "]"}], ";"}], "*)"}],
+           "\[IndentingNewLine]", 
+          RowBox[{"P", "=", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"TurnToBin", "[", 
+              RowBox[{
+              "#", ",", "genelength", ",", "nogenes", ",", "start", ",", 
+               "end"}], "]"}], "&"}], "/@", "Preal"}]}], ";"}], 
+         "\[IndentingNewLine]", 
+         RowBox[{"(*", 
+          RowBox[{
+           RowBox[{"Print", "[", 
+            RowBox[{"\"\<P = \>\"", ",", "P"}], "]"}], ";"}], "*)"}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"Preal", "=", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"TurnToRange", "[", 
+              RowBox[{
+              "#", ",", "genelength", ",", "nogenes", ",", "start", ",", 
+               "end"}], "]"}], "&"}], "/@", "P"}]}], ";"}]}], 
+        "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+       "\[IndentingNewLine]", 
+       RowBox[{"AppendTo", "[", 
+        RowBox[{"rawdata", ",", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"TurnToRange", "[", 
+             RowBox[{
+             "#", ",", "genelength", ",", "nogenes", ",", "start", ",", 
+              "end"}], "]"}], "&"}], "/@", "P"}], ")"}]}], "]"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"SeedRandom", "[", "]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"breedinglist", "=", 
+        RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+       "\[IndentingNewLine]", 
+       RowBox[{"ruttingpopulation", "=", 
+        RowBox[{"selectmethod", "[", 
+         RowBox[{"P", ",", 
+          RowBox[{"CumulativeProbabilities", "[", 
+           RowBox[{
+           "funcs", ",", "P", ",", "genelength", ",", "nogenes", ",", "start",
+             ",", "end", ",", "rawdata", ",", "fitdata"}], "]"}], ",", 
+          "ruttingpopulationsize", ",", "opts"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{
+         RowBox[{"Print", "[", 
+          RowBox[{"\"\<breedinglist = \>\"", ",", "breedinglist"}], "]"}], 
+         ";"}], "*)"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+       RowBox[{"gruttingpopulation", "=", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"BinToGray", "[", "#", "]"}], "&"}], "/@", 
+         "ruttingpopulation"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{
+         RowBox[{"Print", "[", 
+          RowBox[{
+          "\"\<Rutting population = \>\"", ",", "gruttingpopulation"}], "]"}],
+          ";"}], "*)"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Length", "[", "breedinglist", "]"}], ">", "1"}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"gbreedingpopulation", "=", 
+           RowBox[{"SelectforCrossover", "[", 
+            RowBox[{"gruttingpopulation", ",", 
+             RowBox[{"Length", "[", "breedinglist", "]"}], ",", "pc"}], 
+            "]"}]}], ";", "\[IndentingNewLine]", 
+          RowBox[{"gnewpopulation", "=", 
+           RowBox[{"Crossover", "[", 
+            RowBox[{
+            "gbreedingpopulation", ",", "crossoverlist", ",", "genelength", 
+             ",", "nogenes"}], "]"}]}], ";", "\[IndentingNewLine]", 
+          RowBox[{"(*", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Print", "[", 
+              RowBox[{"\"\<gnewpopulation = \>\"", ",", "gnewpopulation"}], 
+              "]"}], ";"}], ","}], "*)"}], "\[IndentingNewLine]", 
+          RowBox[{"gnewpopulation", "=", "gruttingpopulation"}], ";"}]}], 
+        "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{
+         RowBox[{"Print", "[", 
+          RowBox[{"\"\<crossoverlist = \>\"", ",", "crossoverlist"}], "]"}], 
+         ";"}], "*)"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+       RowBox[{"newpopulation", "=", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"GrayToBin", "[", "#", "]"}], "&"}], "/@", 
+         "gnewpopulation"}]}], ";", "\[IndentingNewLine]", 
+       "\[IndentingNewLine]", 
+       RowBox[{"population", "=", 
+        RowBox[{"reinsertmethod", "[", 
+         RowBox[{"P", ",", "newpopulation", ",", 
+          RowBox[{
+          "breedinglist", "\[LeftDoubleBracket]", "crossoverlist", 
+           "\[RightDoubleBracket]"}], ",", "genelength", ",", "nogenes", ",", 
+          "start", ",", "end", ",", "funcs"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"gpopulation", "=", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"BinToGray", "[", "#", "]"}], "&"}], "/@", "population"}]}],
+        ";", "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{
+         RowBox[{"Print", "[", 
+          RowBox[{"\"\<New population = \>\"", ",", "gpopulation"}], "]"}], 
+         ";"}], "*)"}], "\[IndentingNewLine]", 
+       RowBox[{"gpopulation", "=", 
+        RowBox[{"Mutate", "[", 
+         RowBox[{
+         "gpopulation", ",", "genelength", ",", "nogenes", ",", "mr"}], 
+         "]"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+       RowBox[{"Q", "=", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"GrayToBin", "[", "#", "]"}], "&"}], "/@", 
+         "gpopulation"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{
+         RowBox[{"Print", "[", 
+          RowBox[{"\"\<Final population = \>\"", ",", "Q"}], "]"}], ";"}], 
+        "*)"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"current", "=", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"Union", "[", 
+                   RowBox[{
+                    RowBox[{"MapThread", "[", 
+                    RowBox[{"List", ",", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"Flatten", "[", 
+                    RowBox[{"fitdata", ",", "1"}], "]"}], ",", 
+                    RowBox[{"Flatten", "[", 
+                    RowBox[{"rawdata", ",", "1"}], "]"}]}], "}"}]}], "]"}], 
+                    "\[LeftDoubleBracket]", "#", "\[RightDoubleBracket]"}], 
+                   "]"}], "&"}], "[", 
+                 RowBox[{
+                  RowBox[{"Position", "[", 
+                   RowBox[{
+                    RowBox[{"Flatten", "[", 
+                    RowBox[{"fitdata", ",", "1"}], "]"}], ",", 
+                    RowBox[{"Max", "[", 
+                    RowBox[{"Flatten", "[", 
+                    RowBox[{"fitdata", ",", "1"}], "]"}], "]"}]}], "]"}], 
+                  "\[LeftDoubleBracket]", 
+                  RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], "]"}], 
+                ")"}]}], ")"}], "\[LeftDoubleBracket]", "1", 
+             "\[RightDoubleBracket]"}], ">", 
+            RowBox[{
+            "best", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
+           ",", 
+           RowBox[{
+            RowBox[{"best", "=", "current"}], ";", 
+            RowBox[{"Print", "[", 
+             RowBox[{"\"\<New Fit Value \[Rule] \>\"", ",", 
+              RowBox[{
+              "best", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+              ",", "\"\<\\tRaw Value \[Rule] \>\"", ",", 
+              RowBox[{
+              "best", "\[LeftDoubleBracket]", "2", 
+               "\[RightDoubleBracket]"}]}], "]"}]}]}], "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{
+            "best", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], ">=",
+             "converge"}], ",", 
+           RowBox[{"Break", "[", "]"}]}], "]"}], ";"}], "*)"}], 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"iterationno", "=", "i"}], ";"}], ",", "\[IndentingNewLine]",
+         
+        RowBox[{"{", 
+         RowBox[{"i", ",", "1", ",", "iters"}], "}"}]}]}], "]"}], ";"}]}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{"If", "[", 
+      RowBox[{"alldata", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"Union", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"Extract", "[", 
+             RowBox[{"rawdata", ",", "#"}], "]"}], "&"}], "/@", 
+           RowBox[{"Position", "[", 
+            RowBox[{"fitdata", ",", 
+             RowBox[{"Max", "[", "fitdata", "]"}]}], "]"}]}], "]"}], ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"MapThread", "[", 
+            RowBox[{"List", ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{
+               "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+               ",", 
+               RowBox[{
+               "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+              "}"}]}], "]"}], "&"}], "/@", 
+          RowBox[{"MapThread", "[", 
+           RowBox[{"List", ",", 
+            RowBox[{"{", 
+             RowBox[{"rawdata", ",", "fitdata"}], "}"}]}], "]"}]}]}], "}"}]}],
+       "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Print", "[", "\"\<Best Results: \>\"", "]"}], ";", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Union", "[", 
+         RowBox[{
+          RowBox[{"MapThread", "[", 
+           RowBox[{"List", ",", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"Flatten", "[", 
+               RowBox[{"fitdata", ",", "1"}], "]"}], ",", 
+              RowBox[{"Flatten", "[", 
+               RowBox[{"rawdata", ",", "1"}], "]"}]}], "}"}]}], "]"}], 
+          "\[LeftDoubleBracket]", "#", "\[RightDoubleBracket]"}], "]"}], 
+        "&"}], "[", 
+       RowBox[{
+        RowBox[{"Position", "[", 
+         RowBox[{
+          RowBox[{"Flatten", "[", 
+           RowBox[{"fitdata", ",", "1"}], "]"}], ",", 
+          RowBox[{"Max", "[", 
+           RowBox[{"Flatten", "[", 
+            RowBox[{"fitdata", ",", "1"}], "]"}], "]"}]}], "]"}], 
+        "\[LeftDoubleBracket]", 
+        RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], "]"}], ")"}]}], 
+    "\[IndentingNewLine]", "*)"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.419832498954126*^9, 3.4198325596904445`*^9}, {
+  3.419833003501521*^9, 3.419833004204668*^9}, {3.41983323004002*^9, 
+  3.4198332532751384`*^9}, {3.419833309198803*^9, 3.4198333684038224`*^9}, {
+  3.4198337803545046`*^9, 3.419833814043082*^9}, {3.419833943594103*^9, 
+  3.4198339644541454`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"End", "[", "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"EndPackage", "[", "]"}]], "Input",
+ InitializationCell->True]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{832, 926},
+WindowMargins->{{Automatic, 0}, {Automatic, 0}},
+ShowSelection->True,
+FrontEndVersion->"6.0 for Microsoft Windows (32-bit) (February 7, 2008)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[568, 21, 128, 3, 31, "Input",
+ InitializationCell->True],
+Cell[699, 26, 443, 9, 92, "Input",
+ InitializationCell->True],
+Cell[1145, 37, 249, 5, 72, "Input",
+ InitializationCell->True],
+Cell[1397, 44, 295, 6, 72, "Input",
+ InitializationCell->True],
+Cell[1695, 52, 455, 8, 112, "Input",
+ InitializationCell->True],
+Cell[2153, 62, 474, 8, 112, "Input",
+ InitializationCell->True],
+Cell[2630, 72, 528, 9, 132, "Input",
+ InitializationCell->True],
+Cell[3161, 83, 303, 6, 72, "Input",
+ InitializationCell->True],
+Cell[3467, 91, 367, 7, 92, "Input",
+ InitializationCell->True],
+Cell[3837, 100, 259, 5, 72, "Input",
+ InitializationCell->True],
+Cell[4099, 107, 325, 6, 92, "Input",
+ InitializationCell->True],
+Cell[4427, 115, 541, 9, 132, "Input",
+ InitializationCell->True],
+Cell[4971, 126, 504, 9, 112, "Input",
+ InitializationCell->True],
+Cell[5478, 137, 309, 6, 72, "Input",
+ InitializationCell->True],
+Cell[5790, 145, 279, 6, 72, "Input",
+ InitializationCell->True],
+Cell[6072, 153, 278, 6, 72, "Input",
+ InitializationCell->True],
+Cell[6353, 161, 453, 8, 112, "Input",
+ InitializationCell->True],
+Cell[6809, 171, 179, 4, 31, "Input",
+ InitializationCell->True],
+Cell[6991, 177, 101, 2, 31, "Input",
+ InitializationCell->True],
+Cell[7095, 181, 66, 1, 31, "Input"],
+Cell[7164, 184, 136, 4, 31, "Input",
+ InitializationCell->True],
+Cell[7303, 190, 319, 9, 31, "Input",
+ InitializationCell->True],
+Cell[7625, 201, 1483, 40, 132, "Input"],
+Cell[9111, 243, 1241, 32, 212, "Input",
+ InitializationCell->True],
+Cell[10355, 277, 1629, 44, 192, "Input",
+ InitializationCell->True],
+Cell[11987, 323, 925, 27, 72, "Input",
+ InitializationCell->True],
+Cell[12915, 352, 957, 28, 72, "Input",
+ InitializationCell->True],
+Cell[13875, 382, 600, 18, 54, "Input",
+ InitializationCell->True],
+Cell[14478, 402, 627, 19, 54, "Input",
+ InitializationCell->True],
+Cell[15108, 423, 1587, 42, 120, "Input",
+ InitializationCell->True],
+Cell[16698, 467, 1762, 49, 120, "Input",
+ InitializationCell->True],
+Cell[18463, 518, 1760, 48, 120, "Input",
+ InitializationCell->True],
+Cell[20226, 568, 1931, 54, 120, "Input",
+ InitializationCell->True],
+Cell[22160, 624, 1171, 35, 76, "Input",
+ InitializationCell->True],
+Cell[23334, 661, 1759, 52, 98, "Input",
+ InitializationCell->True],
+Cell[25096, 715, 1727, 51, 98, "Input",
+ InitializationCell->True],
+Cell[26826, 768, 1805, 53, 76, "Input",
+ InitializationCell->True],
+Cell[28634, 823, 1693, 49, 76, "Input",
+ InitializationCell->True],
+Cell[30330, 874, 2085, 56, 98, "Input",
+ InitializationCell->True],
+Cell[32418, 932, 2010, 54, 98, "Input",
+ InitializationCell->True],
+Cell[34431, 988, 2198, 59, 98, "Input",
+ InitializationCell->True],
+Cell[36632, 1049, 1690, 49, 76, "Input",
+ InitializationCell->True],
+Cell[38325, 1100, 2082, 56, 98, "Input",
+ InitializationCell->True],
+Cell[40410, 1158, 2007, 54, 98, "Input",
+ InitializationCell->True],
+Cell[42420, 1214, 2195, 59, 98, "Input",
+ InitializationCell->True],
+Cell[44618, 1275, 825, 22, 92, "Input",
+ InitializationCell->True],
+Cell[45446, 1299, 591, 18, 31, "Input",
+ InitializationCell->True],
+Cell[46040, 1319, 1648, 46, 166, "Input",
+ InitializationCell->True],
+Cell[47691, 1367, 333, 11, 31, "Input",
+ InitializationCell->True],
+Cell[48027, 1380, 228, 6, 31, "Input",
+ InitializationCell->True],
+Cell[48258, 1388, 943, 27, 92, "Input",
+ InitializationCell->True],
+Cell[49204, 1417, 1265, 37, 112, "Input",
+ InitializationCell->True],
+Cell[50472, 1456, 3097, 83, 172, "Input",
+ InitializationCell->True],
+Cell[53572, 1541, 2680, 71, 179, "Input",
+ InitializationCell->True],
+Cell[56255, 1614, 546, 19, 31, "Input",
+ InitializationCell->True],
+Cell[56804, 1635, 102, 2, 31, "Input",
+ InitializationCell->True],
+Cell[56909, 1639, 3891, 102, 212, "Input",
+ InitializationCell->True],
+Cell[60803, 1743, 4442, 113, 312, "Input",
+ InitializationCell->True],
+Cell[65248, 1858, 166, 4, 31, "Input",
+ InitializationCell->True],
+Cell[65417, 1864, 858, 25, 52, "Input",
+ InitializationCell->True],
+Cell[66278, 1891, 2491, 67, 172, "Input",
+ InitializationCell->True],
+Cell[68772, 1960, 808, 22, 92, "Input",
+ InitializationCell->True],
+Cell[69583, 1984, 1298, 36, 132, "Input",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[70906, 2024, 129, 3, 31, "Input"],
+Cell[71038, 2029, 93, 2, 30, "Output"]
+}, Open  ]],
+Cell[71146, 2034, 1480, 40, 92, "Input",
+ InitializationCell->True],
+Cell[72629, 2076, 2254, 58, 172, "Input",
+ InitializationCell->True],
+Cell[74888, 2137, 1819, 53, 92, "Input",
+ InitializationCell->True],
+Cell[76710, 2192, 127, 3, 31, "Input",
+ InitializationCell->True],
+Cell[76840, 2197, 724, 21, 112, "Input",
+ InitializationCell->True],
+Cell[77567, 2220, 1911, 56, 132, "Input",
+ InitializationCell->True],
+Cell[79481, 2278, 1698, 45, 152, "Input",
+ InitializationCell->True],
+Cell[81182, 2325, 1192, 34, 172, "Input",
+ InitializationCell->True],
+Cell[82377, 2361, 681, 20, 92, "Input",
+ InitializationCell->True],
+Cell[83061, 2383, 918, 27, 92, "Input",
+ InitializationCell->True],
+Cell[83982, 2412, 599, 17, 92, "Input",
+ InitializationCell->True],
+Cell[84584, 2431, 1522, 43, 141, "Input",
+ InitializationCell->True],
+Cell[86109, 2476, 746, 20, 92, "Input",
+ InitializationCell->True],
+Cell[86858, 2498, 834, 23, 92, "Input",
+ InitializationCell->True],
+Cell[87695, 2523, 497, 13, 92, "Input",
+ InitializationCell->True],
+Cell[88195, 2538, 20562, 501, 2152, "Input",
+ InitializationCell->True],
+Cell[108760, 3041, 78, 2, 31, "Input",
+ InitializationCell->True],
+Cell[108841, 3045, 85, 2, 31, "Input",
+ InitializationCell->True]
+}
+]
+*)
+
+(* End of internal cache information *)

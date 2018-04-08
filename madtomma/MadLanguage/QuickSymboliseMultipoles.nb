@@ -1,0 +1,1013 @@
+(************** Content-type: application/mathematica **************
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     26795,        760]*)
+(*NotebookOutlinePosition[     28084,        803]*)
+(*  CellTagsIndexPosition[     27927,        795]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell["SymboliseMultipoles", "Title",
+  CellTags->"Examples section"],
+
+Cell["John Jowett, 21/2/2001", "Subtitle"],
+
+Cell["\<\
+Follow this example to do the process of restoring symbolic dependences to \
+the multipoles in MAD8 files created by mad9.57. \
+\>", "Text"],
+
+Cell["\<\
+The following is adapted from the examples section in the notebook \
+defining the package.  The process can also be executed as a system call \
+inside MAD9, except for possible CERN Unix setup problems experienced by at \
+least one person.\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell["Initialisation", "Section"],
+
+Cell["Where have we gone today?", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \({$MachineName, $Version}\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \({"PCSLAP25", 
+      "4.1 for Microsoft Windows (November 2, 2000)"}\)], "Output"]
+}, Open  ]],
+
+Cell[TextData[{
+  "Check ",
+  StyleBox["Mathematica",
+    FontSlant->"Italic"],
+  "'s $Path variable: if my package directory is not there, then add it"
+}], "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(jmjpath = 
+      If[$OperatingSystem == "\<Unix\>", \
+"\</afs/cern.ch/user/j/jowett/public/math/\>", \
+"\<P:\\cern.ch\\user\\j\\jowett\\public\\math\\\>"]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \("P:\\cern.ch\\user\\j\\jowett\\public\\math\\"\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(If[\(! MemberQ[$Path, jmjpath]\), AppendTo[$Path, jmjpath]]\)], "Input",\
+
+  InitializationCell->True],
+
+Cell[BoxData[
+    \({"C:\\Program Files\\Common Files\\Mathematica\\4.1\\Kernel", 
+      "C:\\Program Files\\Common Files\\Mathematica\\4.1\\AddOns\\Autoload", 
+      "C:\\Program Files\\Common \
+Files\\Mathematica\\4.1\\AddOns\\Applications", ".", "J:\\", 
+      "C:\\Program Files\\Wolfram \
+Research\\Mathematica\\4.1\\AddOns\\StandardPackages", 
+      "C:\\Program Files\\Wolfram \
+Research\\Mathematica\\4.1\\AddOns\\StandardPackages\\StartUp", 
+      "C:\\Program Files\\Wolfram \
+Research\\Mathematica\\4.1\\AddOns\\Autoload", 
+      "C:\\Program Files\\Wolfram \
+Research\\Mathematica\\4.1\\AddOns\\Applications", 
+      "C:\\Program Files\\Wolfram \
+Research\\Mathematica\\4.1\\AddOns\\ExtraPackages", 
+      "C:\\Program Files\\Wolfram \
+Research\\Mathematica\\4.1\\SystemFiles\\Graphics\\Packages", 
+      "C:\\Program Files\\Wolfram \
+Research\\Mathematica\\4.1\\Configuration\\Kernel", 
+      "D:\\My Documents\\math\\", 
+      "P:\\cern.ch\\user\\j\\jowett\\public\\math\\"}\)], "Output"]
+}, Open  ]],
+
+Cell["Load the packages", "Text",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(Needs["\<JMJUtils`BumpEtc`\>"]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    StyleBox[\(Needs["\<Madtomma`MadLanguage`SymboliseMultipoles`\>"]\),
+      "Input"]], "InputOnly",
+  InitializationCell->True,
+  CellTags->"Setup section"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Try a small example", "Section"],
+
+Cell["Create a directory to work in", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(SetDirectory[AfsHomeDirectory[]]\)], "Input"],
+
+Cell[BoxData[
+    \("P:\\cern.ch\\user\\j\\jowett"\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(CreateDirectory["\<SymboliseMultipolesTest\>"]; \)], "Input"],
+
+Cell[BoxData[
+    \(CreateDirectory::"ioerr" \(\(:\)\(\ \)\) 
+      "I/O error occurred during \
+\!\(CreateDirectory[\"SymboliseMultipolesTest\"]\)."\)], "Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(SetDirectory["\<SymboliseMultipolesTest\>"]\)], "Input"],
+
+Cell[BoxData[
+    \("P:\\cern.ch\\user\\j\\jowett\\SymboliseMultipolesTest"\)], "Output"]
+}, Open  ]],
+
+Cell["Define names of files", "Text"],
+
+Cell[BoxData[{
+    \(thickFile = "\<small.mad\>"; \), "\[IndentingNewLine]", 
+    \(thinFile = "\<thinlittle.mad\>"; \), "\[IndentingNewLine]", 
+    \(fixedFile = "\<fixed.thinlittle.mad\>"; \)}], "Input"],
+
+Cell["MAD input for the example", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(TableForm[
+      testInput = {"\<n0=2; n1=3;\>", \ "\<n3=SQRT(n1)+n2; s0=11; s1=13; \
+s2=17;\>", \ "\<m1: multipole,L=5.,KN={n0,n1,n2,n3};\>", \ \n\ "\<m2: \
+multipole,L=7.,KN:={n0-7,n1+SQRT(n1*n2/3),n2,n3},KS:={s0,0,2};\>", \ \
+"\<little: sequence,L=30.;\>", \ "\<        m1,at=5.;\>", \ \n\ "\<        \
+m2,at=20;\>", \ "\<endsequence;\>", \ "\<select,line=little,full;\>", \ \n\ "\
+\<setint,line=little,TYPE=MPSPLITINTEGRATOR,SLICES=3;\>", \ \
+"\<Option,MAD8;\>", \ "\<save,file=\"thinlittle.mad\";\>", \ \
+"\<stop;\>"}]\)], "Input"],
+
+Cell[BoxData[
+    InterpretationBox[GridBox[{
+          {"\<\"n0=2; n1=3;\"\>"},
+          {"\<\"n3=SQRT(n1)+n2; s0=11; s1=13; s2=17;\"\>"},
+          {"\<\"m1: multipole,L=5.,KN={n0,n1,n2,n3};\"\>"},
+          {"\<\"m2: \
+multipole,L=7.,KN:={n0-7,n1+SQRT(n1*n2/3),n2,n3},KS:={s0,0,2};\"\>"},
+          {"\<\"little: sequence,L=30.;\"\>"},
+          {"\<\"        m1,at=5.;\"\>"},
+          {"\<\"        m2,at=20;\"\>"},
+          {"\<\"endsequence;\"\>"},
+          {"\<\"select,line=little,full;\"\>"},
+          {"\<\"setint,line=little,TYPE=MPSPLITINTEGRATOR,SLICES=3;\"\>"},
+          {"\<\"Option,MAD8;\"\>"},
+          {"\<\"save,file=\\\"thinlittle.mad\\\";\"\>"},
+          {"\<\"stop;\"\>"}
+          },
+        RowSpacings->1,
+        ColumnSpacings->3,
+        RowAlignments->Baseline,
+        ColumnAlignments->{Left}],
+      TableForm[ {"n0=2; n1=3;", "n3=SQRT(n1)+n2; s0=11; s1=13; s2=17;", 
+        "m1: multipole,L=5.,KN={n0,n1,n2,n3};", 
+        "m2: multipole,L=7.,KN:={n0-7,n1+SQRT(n1*n2/3),n2,n3},KS:={s0,0,2};", 
+        "little: sequence,L=30.;", "        m1,at=5.;", "        m2,at=20;", 
+        "endsequence;", "select,line=little,full;", 
+        "setint,line=little,TYPE=MPSPLITINTEGRATOR,SLICES=3;", "Option,MAD8;",
+         "save,file=\"thinlittle.mad\";", "stop;"}]]], "Output"]
+}, Open  ]],
+
+Cell["Delete any existing files ", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(DeleteFile /@ {thinFile, thickFile, fixedFile}\)], "Input"],
+
+Cell[BoxData[
+    \({Null, Null, Null}\)], "Output"]
+}, Open  ]],
+
+Cell["and create the new input", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Export["\<small.mad\>", testInput, "\<Lines\>"]\)], "Input"],
+
+Cell[BoxData[
+    \("small.mad"\)], "Output"]
+}, Open  ]],
+
+Cell["\<\
+Run mad9.57 on that file (we assume the kernel is running on lxplus \
+at this point).\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(ReadList["\<!mad9.57 small.mad\>", Record]\)], "Input"],
+
+Cell[BoxData[
+    \({}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(FileNames[]\)], "Input"],
+
+Cell[BoxData[
+    \({"small.mad", "thinlittle.mad"}\)], "Output"]
+}, Open  ]],
+
+Cell["Look at the MAD8 file created by MAD9", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Import["\<thinlittle.mad\>", "\<Text\>"]\)], "Input"],
+
+Cell[BoxData[
+    \("!! <MAD Version 8 data, created by MAD Version 9.>\n\n!! <Parameter \
+definitions>\nBRHO:=P0/P0TESLA;\nJMJECHO=1;\nJMJINFO=1;\nJMJMAD8=0;\n\
+JMJTFS=1;\nJMJTRACE=1;\nJMJVERIFY=0;\nJMJWARN=1;\nN0:=2;\nN1:=3;\nN2:=0;\n\
+N3:=1.73205;\nP0:=1;\nP0TESLA:CONSTANT=0.299792;\nS0:=11;\nS1:=13;\nS2:=17;\n\
+!! </Parameter definitions>\n\n!! <Element definitions>\n\
+M1:MULTIPOLE,LRAD=5,K0L=(2)*(5),K1L=(3)*(5),K3L=(1.73205)*(5);\n\
+M2:MULTIPOLE,LRAD=7,K0L=(12.083)*(7),T0=-0.998712,K1L=(3)*(7),K2L=(2)*(7),&\n \
+ T2=0.523599,K3L=(1.73205)*(7);\nTOYD:DRIFT,L=1.23457;\n!! </Element \
+definitions>\n\n!! <Line (and split element) definitions>\n\
+M1..1:M1,LRAD=1.66667,K0L=(2)*(1.66667),K1L=(3)*(1.66667),&\n  \
+K3L=(1.73205)*(1.66667);\n\
+M1..2:M1,LRAD=1.66667,K0L=(2)*(1.66667),K1L=(3)*(1.66667),&\n  \
+K3L=(1.73205)*(1.66667);\n\
+M1..3:M1,LRAD=1.66667,K0L=(2)*(1.66667),K1L=(3)*(1.66667),&\n  \
+K3L=(1.73205)*(1.66667);\n\
+M2..1:M2,LRAD=2.33333,K0L=(12.083)*(2.33333),T0=-0.998712,&\n  \
+K1L=(3)*(2.33333),K2L=(2)*(2.33333),T2=0.523599,K3L=(1.73205)*(2.33333);\n\
+M2..2:M2,LRAD=2.33333,K0L=(12.083)*(2.33333),T0=-0.998712,&\n  \
+K1L=(3)*(2.33333),K2L=(2)*(2.33333),T2=0.523599,K3L=(1.73205)*(2.33333);\n\
+M2..3:M2,LRAD=2.33333,K0L=(12.083)*(2.33333),T0=-0.998712,&\n  \
+K1L=(3)*(2.33333),K2L=(2)*(2.33333),T2=0.523599,K3L=(1.73205)*(2.33333);\n\
+LITTLE:SEQUENCE,REFER=\"CENTRE\"\n  M1..1,AT=3.125;\n  M1..2,AT=5;\n  \
+M1..3,AT=6.875;\n  M2..1,AT=17.375;\n  M2..2,AT=20;\n  M2..3,AT=22.625;\n  \
+MARKER,AT=30;\nENDSEQUENCE\nTOYLINE:LINE=(TOYD);\n!! </Line (and split \
+element) definitions>\n\n!! <Special definitions>\n!! </Special definitions>\n\
+\n!! </MAD Version 8 data, created by MAD Version 9.>\n\n"\)], "Output"]
+}, Open  ]],
+
+Cell["The function we need is", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(?SymboliseMultipolesMAD8\)\)], "Input"],
+
+Cell[BoxData[
+    \("SymboliseMultipolesMAD8[mad9file,mad8file,fixedFile] uses the original \
+multipole definitions in a MAD9 file to restore correct symbolic dependences \
+of multipole strengths in a MAD8 file generated by MAD9. The output is given \
+on a new file fixedFile (which is overwritten if it already exists)."\)], \
+"Print",
+  CellTags->"Info3212927805-9793427"]
+}, Open  ]],
+
+Cell["\<\
+Use it to restore symbolic multipole dependences.  This always \
+creates a few harmless messages.\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(SymboliseMultipolesMAD8[thickFile, thinFile, fixedFile]\)], "Input"],
+
+Cell[BoxData[
+    \(Part::"partw" \(\(:\)\(\ \)\) 
+      "Part \!\(1\) of \!\({}\) does not exist."\)], "Message"],
+
+Cell[BoxData[
+    \(Part::"partw" \(\(:\)\(\ \)\) 
+      "Part \!\(1\) of \!\({}\) does not exist."\)], "Message"],
+
+Cell[BoxData[
+    \(Part::"partw" \(\(:\)\(\ \)\) 
+      "Part \!\(1\) of \!\({}\) does not exist."\)], "Message"],
+
+Cell[BoxData[
+    \(General::"stop" \(\(:\)\(\ \)\) 
+      "Further output of \!\(Part :: \"partw\"\) will be suppressed during \
+this calculation."\)], "Message"],
+
+Cell[BoxData[
+    \(DeleteFile::"nffil" \(\(:\)\(\ \)\) 
+      "File not found during \!\(DeleteFile[\"fixed.thinlittle.mad\"]\)."\)], \
+"Message"],
+
+Cell[BoxData[
+    \("fixed.thinlittle.mad"\)], "Output"]
+}, Open  ]],
+
+Cell["Look at the resulting file", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Import["\<fixed.thinlittle.mad\>", "\<Text\>"]\)], "Input"],
+
+Cell[BoxData[
+    \("!! <MAD8 file processed by SymboliseMultipoles.m>;\n!! <MAD Version 8 \
+data, created by MAD Version 9.>;\n!! <Parameter definitions>;\n\
+BRHO:=P0/P0TESLA;\nJMJECHO=1;\nJMJINFO=1;\nJMJMAD8=0;\nJMJTFS=1;\nJMJTRACE=1;\
+\nJMJVERIFY=0;\nJMJWARN=1;\nN0:=2;\nN1:=3;\nN2:=0;\nN3:=1.73205;\nP0:=1;\n\
+P0TESLA:CONSTANT=0.299792;\nS0:=11;\nS1:=13;\nS2:=17;\n!! </Parameter \
+definitions>;\n!! <Element definitions>;\n\
+M1:MULTIPOLE,LRAD=5,K0L=(N0)*(5),K1L=(N1)*(5),K2L=(N2)*(5),K3L=(N3)*(5);\n\
+M2:MULTIPOLE,LRAD=7,K0L=SQRT((N0-7)^2+(S0)^2)*(7),T0=ATAN2((S0),&\n     \
+(N0-7))/1,K1L=(N1+SQRT(N1*N2/3))*(7),K2L=SQRT((N2)^2+(2)^2)*(7),&\n     \
+T2=ATAN2((2),(N2))/3,K3L=(N3)*(7);\nTOYD:DRIFT,L=1.23457;\n!! </Element \
+definitions>;\n!! <Line (and split element) definitions>;\n\
+M1..1:M1,LRAD=1.66667,K0L=(N0)*(1.66667),K1L=(N1)*(1.66667),&\n     \
+K2L=(N2)*(1.66667),K3L=(N3)*(1.66667);\n\
+M1..2:M1,LRAD=1.66667,K0L=(N0)*(1.66667),K1L=(N1)*(1.66667),&\n     \
+K2L=(N2)*(1.66667),K3L=(N3)*(1.66667);\n\
+M1..3:M1,LRAD=1.66667,K0L=(N0)*(1.66667),K1L=(N1)*(1.66667),&\n     \
+K2L=(N2)*(1.66667),K3L=(N3)*(1.66667);\n\
+M2..1:M2,LRAD=2.33333,K0L=SQRT((N0-7)^2+(S0)^2)*(2.33333),&\n     \
+T0=ATAN2((S0),(N0-7))/1,K1L=(N1+SQRT(N1*N2/3))*(2.33333),&\n     \
+K2L=SQRT((N2)^2+(2)^2)*(2.33333),T2=ATAN2((2),(N2))/3,K3L=(N3)*(2.33333);\n\
+M2..2:M2,LRAD=2.33333,K0L=SQRT((N0-7)^2+(S0)^2)*(2.33333),&\n     \
+T0=ATAN2((S0),(N0-7))/1,K1L=(N1+SQRT(N1*N2/3))*(2.33333),&\n     \
+K2L=SQRT((N2)^2+(2)^2)*(2.33333),T2=ATAN2((2),(N2))/3,K3L=(N3)*(2.33333);\n\
+M2..3:M2,LRAD=2.33333,K0L=SQRT((N0-7)^2+(S0)^2)*(2.33333),&\n     \
+T0=ATAN2((S0),(N0-7))/1,K1L=(N1+SQRT(N1*N2/3))*(2.33333),&\n     \
+K2L=SQRT((N2)^2+(2)^2)*(2.33333),T2=ATAN2((2),(N2))/3,K3L=(N3)*(2.33333);\n\
+LITTLE:SEQUENCE,REFER=\"CENTRE\";\n  M1..1,AT=3.125;\n  M1..2,AT=5;\n  \
+M1..3,AT=6.875;\n  M2..1,AT=17.375;\n  M2..2,AT=20;\n  M2..3,AT=22.625;\n  \
+MARKER,AT=30;\nENDSEQUENCE;\nTOYLINE:LINE=(TOYD);\n!! </Line (and split \
+element) definitions>;\n!! <Special definitions>;\n!! </Special definitions>;\
+\n!! </MAD Version 8 data, created by MAD Version 9.>;\n!! </MAD8 file \
+processed by SymboliseMultipoles.m>;\n"\)], "Output"]
+}, Open  ]],
+
+Cell["\<\
+9/3/2001: this latest version shows that we still have a problem to \
+deal with.  Expressions for variables defined as expressions in terms of \
+other variables are converted to low-precision numbers.\
+\>", "Text"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Test case for LHC", "Section"],
+
+Cell[TextData[{
+  "Modify the following to get the directory and files you want.  The path is \
+given in system-independent style; you can also give an explicit form for a \
+given system in quotes as in the first form.    Throughout this section, \
+everything that you may want to modify is shown in ",
+  StyleBox["blue",
+    FontColor->RGBColor[0, 0, 1]],
+  "."
+}], "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"testDir", "=", 
+      RowBox[{"ToFileName", "[", 
+        StyleBox[\({$AfsRoot, "\<cern.ch\>", "\<eng\>", "\<lhc\>", \
+"\<spdyn\>", "\<MAD9\>", "\<Problems\>", "\<ThinLens\>"}\),
+          FontColor->RGBColor[0, 0, 1]], "]"}]}]], "Input"],
+
+Cell[BoxData[
+    \("P:\\cern.ch\\eng\\lhc\\spdyn\\MAD9\\Problems\\ThinLens\\"\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(SetDirectory[testDir]\)], "Input"],
+
+Cell[BoxData[
+    \("P:\\cern.ch\\eng\\lhc\\spdyn\\MAD9\\Problems\\ThinLens"\)], "Output"]
+}, Open  ]],
+
+Cell["\<\
+Define the files.  You can modify the following assignments to give \
+the names of your files.\
+\>", "Text"],
+
+Cell[TextData[{
+  "Note that if ",
+  StyleBox["you",
+    FontSlant->"Italic"],
+  " want to run ",
+  StyleBox["my",
+    FontSlant->"Italic"],
+  " LHC example, you cannot write in this directory so the output file is \
+given a unique temporary name (on a Unix system this will typically be in the \
+/tmp/ directory, on  Windows it will be in the folder defined by the TEMP \
+environment variable).   "
+}], "Commentary"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{\(thinFile = "\<\!\(\*
+StyleBox[\"B1V6\",\nFontColor->RGBColor[0, 0, 1]]\)\!\(\*
+StyleBox[\".1\",\nFontColor->RGBColor[0, 0, 1]]\)\!\(\*
+StyleBox[\".\",\nFontColor->RGBColor[0, 0, 1]]\)\!\(\*
+StyleBox[\"thin\",\nFontColor->RGBColor[0, 0, 1]]\)\!\(\*
+StyleBox[\".\",\nFontColor->RGBColor[0, 0, 1]]\)\!\(\*
+StyleBox[\"slice\",\nFontColor->RGBColor[0, 0, 1]]\)\!\(\*
+StyleBox[\".\",\nFontColor->RGBColor[0, 0, 1]]\)\!\(\*
+StyleBox[\"seq\",\nFontColor->RGBColor[0, 0, 1]]\)\>"; \), "\
+\[IndentingNewLine]", 
+    RowBox[{
+      RowBox[{"thickFile", "=", 
+        StyleBox[\(ToFileName[{"\<ldb.link\>"}, "\<B1B2V6.1.sep.seq\>"]\),
+          FontColor->RGBColor[0, 0, 1]]}], ";"}], "\[IndentingNewLine]", 
+    RowBox[{"fixedFile", "=", 
+      StyleBox[\(Close[OpenTemporary[]] <> "\<.mad\>"\),
+        FontColor->RGBColor[0, 0, 1]]}]}], "Input"],
+
+Cell[BoxData[
+    \("C:\\TEMP\\000001a00323.mad"\)], "Output"]
+}, Open  ]],
+
+Cell["\<\
+Check their sizes (to be sure they exist).The last one probably \
+does not.\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(FileByteCount /@ {thinFile, thickFile, fixedFile}\)], "Input"],
+
+Cell[BoxData[
+    \(FileByteCount::"nffil" \(\(:\)\(\ \)\) 
+      "File not found during \!\(FileByteCount[\(\(\"\\!\\(\\* \
+StyleBox[\\\"B1V6\\\",\\nFontColor->RGBC\" \[Ellipsis] \
+\"\\\"seq\\\",\\nFontColor->RGBColor[0, 0, 1]]\\)\"\)\)]\)."\)], "Message"],
+
+Cell[BoxData[
+    \(FileByteCount::"nffil" \(\(:\)\(\ \)\) 
+      "File not found during \!\(FileByteCount[\"ldb.link\\\\B1B2V6.1.sep.seq\
+\"]\)."\)], "Message"],
+
+Cell[BoxData[
+    \(FileByteCount::"nffil" \(\(:\)\(\ \)\) 
+      "File not found during \
+\!\(FileByteCount[\"C:\\\\TEMP\\\\000001a00323.mad\"]\)."\)], "Message"],
+
+Cell[BoxData[
+    \(General::"stop" \(\(:\)\(\ \)\) 
+      "Further output of \!\(FileByteCount :: \"nffil\"\) will be suppressed \
+during this calculation."\)], "Message"],
+
+Cell[BoxData[
+    \({$Failed, $Failed, $Failed}\)], "Output"]
+}, Open  ]],
+
+Cell["\<\
+Try to delete the output file, just in case it already \
+exists.\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(DeleteFile[fixedFile]\)], "Input"],
+
+Cell[BoxData[
+    \(DeleteFile::"nffil" \(\(:\)\(\ \)\) 
+      "File not found during \
+\!\(DeleteFile[\"C:\\\\TEMP\\\\000001a00323.mad\"]\)."\)], "Message"],
+
+Cell[BoxData[
+    \($Failed\)], "Output"]
+}, Open  ]],
+
+Cell["\<\
+Do not run the MAD9 job here because I already ran it elsewhere. \
+Switch off the error messages to give a professional look (if desired).\
+\>", \
+"Text"],
+
+Cell[BoxData[
+    \(Off[Part::partw]; Off[First::first]; 
+    Off[DeleteFile::nffil]; \)], "Input"],
+
+Cell["Now the real work:", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{
+      StyleBox["Timing",
+        FontColor->GrayLevel[0.500008]], 
+      StyleBox["[",
+        FontColor->GrayLevel[0.500008]], "\[IndentingNewLine]", 
+      StyleBox[\(SymboliseMultipolesMAD8[thickFile, thinFile, fixedFile]\),
+        FontSize->14], "\[IndentingNewLine]", 
+      StyleBox["]",
+        FontColor->GrayLevel[0.500008]]}]], "Input"],
+
+Cell[BoxData[
+    RowBox[{"{", 
+      RowBox[{
+        RowBox[{"46.828`", " ", "Second"}], 
+        ",", "\<\"C:\\\\TEMP\\\\000005a00275.mad\"\>"}], "}"}]], "Output"]
+}, Open  ]],
+
+Cell["\<\
+Show the beginning of the interesting part of the file.  For the \
+example, we know that it comes after the first occurrence of \"MCDO\".\
+\>", \
+"Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    RowBox[{
+      RowBox[{"fixedFileContents", "=", 
+        RowBox[{"Import", "[", 
+          RowBox[{"fixedFile", ",", "\"\<Text\>\""}], "]"}]}], ";"}], "\n", 
+    RowBox[{
+      RowBox[{"f1", "=", 
+        RowBox[{"First", "[", 
+          RowBox[{"First", "[", 
+            RowBox[{"StringPosition", "[", 
+              RowBox[{"fixedFileContents", ",", "\"\<\!\(\*
+StyleBox[\\\"MCDO\\\",\\nFontColor->RGBColor[0, 0, 1]]\)\>\""}], "]"}], "]"}],
+           "]"}]}], ";"}], "\n", 
+    RowBox[{"StringTake", "[", 
+      RowBox[{"fixedFileContents", ",", 
+        RowBox[{"{", 
+          RowBox[{"f1", ",", 
+            RowBox[{"f1", "+", "2000"}]}], "}"}]}], "]"}]}], "Input"],
+
+Cell[BoxData["\<\"MCDO:MULTIPOLE,LRAD=0.066;\\nRCDO10.L1B1:MCDO,LRAD=0.066,\
+K2L=(KRCO.A81B1)*(0.066),K8L=(KRCD.A81B1)*(0.066);\\nMCDO.10L1.B1:RCDO10.L1B1,\
+LRAD=0.066,K2L=(KRCO.A81B1)*(0.066),&\\n     \
+K8L=(KRCD.A81B1)*(0.066);\\nRCDO10.L1B2:MCDO,LRAD=0.066,K2L=(KRCO.A81B2)*(0.\
+066),K8L=(KRCD.A81B2)*(0.066);\\nMCDO.10L1.B2:RCDO10.L1B2,LRAD=0.066,K2L=(\
+KRCO.A81B2)*(0.066),&\\n     \
+K8L=(KRCD.A81B2)*(0.066);\\nRCDO10.L2B1:MCDO,LRAD=0.066,K2L=(KRCO.A12B1)*(0.\
+066),K8L=(KRCD.A12B1)*(0.066);\\nMCDO.10L2.B1:RCDO10.L2B1,LRAD=0.066,K2L=(\
+KRCO.A12B1)*(0.066),&\\n     \
+K8L=(KRCD.A12B1)*(0.066);\\nRCDO10.L2B2:MCDO,LRAD=0.066,K2L=(KRCO.A12B2)*(0.\
+066),K8L=(KRCD.A12B2)*(0.066);\\nMCDO.10L2.B2:RCDO10.L2B2,LRAD=0.066,K2L=(\
+KRCO.A12B2)*(0.066),&\\n     \
+K8L=(KRCD.A12B2)*(0.066);\\nRCDO10.L3B1:MCDO,LRAD=0.066,K2L=(KRCO.A23B1)*(0.\
+066),K8L=(KRCD.A23B1)*(0.066);\\nMCDO.10L3.B1:RCDO10.L3B1,LRAD=0.066,K2L=(\
+KRCO.A23B1)*(0.066),&\\n     \
+K8L=(KRCD.A23B1)*(0.066);\\nRCDO10.L3B2:MCDO,LRAD=0.066,K2L=(KRCO.A23B2)*(0.\
+066),K8L=(KRCD.A23B2)*(0.066);\\nMCDO.10L3.B2:RCDO10.L3B2,LRAD=0.066,K2L=(\
+KRCO.A23B2)*(0.066),&\\n     \
+K8L=(KRCD.A23B2)*(0.066);\\nRCDO10.L4B1:MCDO,LRAD=0.066,K2L=(KRCO.A34B1)*(0.\
+066),K8L=(KRCD.A34B1)*(0.066);\\nMCDO.10L4.B1:RCDO10.L4B1,LRAD=0.066,K2L=(\
+KRCO.A34B1)*(0.066),&\\n     \
+K8L=(KRCD.A34B1)*(0.066);\\nRCDO10.L4B2:MCDO,LRAD=0.066,K2L=(KRCO.A34B2)*(0.\
+066),K8L=(KRCD.A34B2)*(0.066);\\nMCDO.10L4.B2:RCDO10.L4B2,LRAD=0.066,K2L=(\
+KRCO.A34B2)*(0.066),&\\n     \
+K8L=(KRCD.A34B2)*(0.066);\\nRCDO10.L5B1:MCDO,LRAD=0.066,K2L=(KRCO.A45B1)*(0.\
+066),K8L=(KRCD.A45B1)*(0.066);\\nMCDO.10L5.B1:RCDO10.L5B1,LRAD=0.066,K2L=(\
+KRCO.A45B1)*(0.066),&\\n     \
+K8L=(KRCD.A45B1)*(0.066);\\nRCDO10.L5B2:MCDO,LRAD=0.066,K2L=(KRCO.A45B2)*(0.\
+066),K8L=(KRCD.A45B2)*(0.066);\\nMCDO.10L5.B2:RCDO10.L5B2,LRAD=0.066,K2L=(\
+KRCO.A45B2)*(0.066),&\\n     \
+K8L=(KRCD.A45B2)*(0.066);\\nRCDO10.L6B1:MCDO,LRAD=0.066,K2L=(KRCO.A56B1)*(0.\
+066),K8L=(KRCD.A56B1)*(0.066);\\nMCDO.10L6.B1:RCDO10.L6B1,LRAD=0.066,K2L=(\
+KRCO.A56B1)*(0.066),&\\n     \
+K8L=(KRCD.A56B1)*(0.066);\\nRCDO10.L6B2:MCDO,LRAD=0.066,K2L=(KRCO.A56B2)*(0.\
+066),K8L=(KRCD.A56B2)*(\"\>"], "Output"]
+}, Open  ]],
+
+Cell["Compare the way it was left by MAD9", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    RowBox[{
+      RowBox[{"thinFileContents", "=", 
+        RowBox[{"Import", "[", 
+          RowBox[{"thinFile", ",", "\"\<Text\>\""}], "]"}]}], ";"}], "\n", 
+    RowBox[{
+      RowBox[{"t1", "=", 
+        RowBox[{"First", "[", 
+          RowBox[{"First", "[", 
+            RowBox[{"StringPosition", "[", 
+              RowBox[{"thinFileContents", ",", "\"\<\!\(\*
+StyleBox[\\\"MCDO\\\",\\nFontColor->RGBColor[0, 0, 1]]\)\>\""}], "]"}], "]"}],
+           "]"}]}], ";"}], "\n", 
+    RowBox[{"StringTake", "[", 
+      RowBox[{"thinFileContents", ",", 
+        RowBox[{"{", 
+          RowBox[{"t1", ",", 
+            RowBox[{"t1", "+", "2000"}]}], "}"}]}], "]"}]}], "Input"],
+
+Cell[BoxData["\<\"MCDO:MULTIPOLE,LRAD=0.066;\\nRCDO10.L1B1:MCDO,LRAD=0.066,\
+K2L=(0.0001)*(0.066);\\nMCDO.10L1.B1:RCDO10.L1B1,LRAD=0.066,K2L=(0.0001)*(0.\
+066);\\nRCDO10.L1B2:MCDO,LRAD=0.066;\\nMCDO.10L1.B2:RCDO10.L1B2,LRAD=0.066;\\\
+nRCDO10.L2B1:MCDO,LRAD=0.066;\\nMCDO.10L2.B1:RCDO10.L2B1,LRAD=0.066;\\nRCDO10.\
+L2B2:MCDO,LRAD=0.066;\\nMCDO.10L2.B2:RCDO10.L2B2,LRAD=0.066;\\nRCDO10.L3B1:\
+MCDO,LRAD=0.066;\\nMCDO.10L3.B1:RCDO10.L3B1,LRAD=0.066;\\nRCDO10.L3B2:MCDO,\
+LRAD=0.066;\\nMCDO.10L3.B2:RCDO10.L3B2,LRAD=0.066;\\nRCDO10.L4B1:MCDO,LRAD=0.\
+066;\\nMCDO.10L4.B1:RCDO10.L4B1,LRAD=0.066;\\nRCDO10.L4B2:MCDO,LRAD=0.066;\\\
+nMCDO.10L4.B2:RCDO10.L4B2,LRAD=0.066;\\nRCDO10.L5B1:MCDO,LRAD=0.066;\\nMCDO.\
+10L5.B1:RCDO10.L5B1,LRAD=0.066;\\nRCDO10.L5B2:MCDO,LRAD=0.066;\\nMCDO.10L5.B2:\
+RCDO10.L5B2,LRAD=0.066;\\nRCDO10.L6B1:MCDO,LRAD=0.066;\\nMCDO.10L6.B1:RCDO10.\
+L6B1,LRAD=0.066;\\nRCDO10.L6B2:MCDO,LRAD=0.066;\\nMCDO.10L6.B2:RCDO10.L6B2,\
+LRAD=0.066;\\nRCDO10.L7B1:MCDO,LRAD=0.066;\\nMCDO.10L7.B1:RCDO10.L7B1,LRAD=0.\
+066;\\nRCDO10.L7B2:MCDO,LRAD=0.066;\\nMCDO.10L7.B2:RCDO10.L7B2,LRAD=0.066;\\\
+nRCDO10.L8B1:MCDO,LRAD=0.066;\\nMCDO.10L8.B1:RCDO10.L8B1,LRAD=0.066;\\nRCDO10.\
+L8B2:MCDO,LRAD=0.066;\\nMCDO.10L8.B2:RCDO10.L8B2,LRAD=0.066;\\nRCDO10.R1B1:\
+MCDO,LRAD=0.066;\\nMCDO.10R1.B1:RCDO10.R1B1,LRAD=0.066;\\nRCDO10.R1B2:MCDO,\
+LRAD=0.066;\\nMCDO.10R1.B2:RCDO10.R1B2,LRAD=0.066;\\nRCDO10.R2B1:MCDO,LRAD=0.\
+066;\\nMCDO.10R2.B1:RCDO10.R2B1,LRAD=0.066;\\nRCDO10.R2B2:MCDO,LRAD=0.066;\\\
+nMCDO.10R2.B2:RCDO10.R2B2,LRAD=0.066;\\nRCDO10.R3B1:MCDO,LRAD=0.066;\\nMCDO.\
+10R3.B1:RCDO10.R3B1,LRAD=0.066;\\nRCDO10.R3B2:MCDO,LRAD=0.066;\\nMCDO.10R3.B2:\
+RCDO10.R3B2,LRAD=0.066;\\nRCDO10.R4B1:MCDO,LRAD=0.066;\\nMCDO.10R4.B1:RCDO10.\
+R4B1,LRAD=0.066;\\nRCDO10.R4B2:MCDO,LRAD=0.066;\\nMCDO.10R4.B2:RCDO10.R4B2,\
+LRAD=0.066;\\nRCDO10.R5B1:MCDO,LRAD=0.066;\\nMCDO.10R5.B1:RCDO10.R5B1,LRAD=0.\
+066;\\nRCDO10.R5B2:MCDO,LRAD=0.066;\\nMCDO.10R5.B2:RCDO10.R5B2,LRAD=0.066;\\\
+nRCDO10.R6B1:MCDO,LRAD=0.066;\\nMCDO.10R6.B1:RCDO10.R6B1,LRAD=0.066;\\nRCDO10.\
+R6B2:MCDO,LRAD=0.066;\\nMCDO.10R6.B2:RCDO10.R6B2,LRAD=0.066;\\nRCDO10.R7B1:\
+MCDO,LRAD=0.066;\\nMCDO.10R7.B1:RCDO10.R7B1,LRAD=0.066;\\nRCDO10.R7B2:MCDO,L\"\
+\>"], "Output"]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Other things in the package", "Section"],
+
+Cell["Generate concise documentation", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"UsageNotebook", "[", 
+      RowBox[{
+      "Names", "[", "\"\<Madtomma`MadLanguage`SymboliseMultipoles`*\>\"", 
+        "]"}], "]"}]], "Input"],
+
+Cell[BoxData[
+    InterpretationBox[
+      RowBox[{"NotebookObject", "[", 
+        RowBox[{"\[LeftSkeleton]", "\<\"Untitled-2\"\>", "\[RightSkeleton]"}],
+         "]"}],
+      NotebookObject[ 
+        FrontEndObject[ 
+          LinkObject[ "9cf", 1, 1]], 15]]], "Output"]
+}, Open  ]],
+
+Cell["The notebook defining the package", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"ps", "=", 
+      RowBox[{
+      "packageSourceNotebook", "[", "\"\<SymboliseMultipoles\>\"", 
+        "]"}]}]], "Input"],
+
+Cell[BoxData["\<\"P:\\\\cern.ch\\\\user\\\\j\\\\jowett\\\\public\\\\math\\\\\
+Madtomma\\\\MadLanguage\\\\SymboliseMultipoles.nb\"\>"], "Output"]
+}, Open  ]],
+
+Cell["\<\
+The following command only works if kernel and Front End are \
+running on the same machine\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"NotebookOpen", "[", "ps", "]"}]], "Input"],
+
+Cell[BoxData[
+    InterpretationBox[
+      RowBox[{"NotebookObject", "[", 
+        RowBox[{
+        "\[LeftSkeleton]", "\<\"SymboliseMultipoles.nb\"\>", 
+          "\[RightSkeleton]"}], "]"}],
+      NotebookObject[ 
+        FrontEndObject[ 
+          LinkObject[ "9cf", 1, 1]], 17]]], "Output"]
+}, Open  ]]
+}, Closed]]
+},
+FrontEndVersion->"4.1 for Microsoft Windows",
+ScreenRectangle->{{0, 1280}, {0, 951}},
+AutoGeneratedPackage->Automatic,
+Evaluator->"Local",
+InitializationCellEvaluation->Automatic,
+PageWidth->WindowWidth,
+WindowSize->{762, 795},
+WindowMargins->{{94, Automatic}, {Automatic, 1}},
+CellLabelAutoDelete->True,
+StyleDefinitions -> "DemoText.nb"
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{
+  "Examples section"->{
+    Cell[1705, 50, 68, 1, 70, "Title",
+      CellTags->"Examples section"]},
+  "Setup section"->{
+    Cell[4392, 141, 173, 4, 48, "InputOnly",
+      InitializationCell->True,
+      CellTags->"Setup section"]},
+  "Info3212927805-9793427"->{
+    Cell[10411, 323, 374, 6, 82, "Print",
+      CellTags->"Info3212927805-9793427"]}
+  }
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{
+  {"Examples section", 27576, 781},
+  {"Setup section", 27674, 784},
+  {"Info3212927805-9793427", 27816, 788}
+  }
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1705, 50, 68, 1, 70, "Title",
+  CellTags->"Examples section"],
+Cell[1776, 53, 42, 0, 41, "Subtitle"],
+Cell[1821, 55, 150, 3, 29, "Text"],
+Cell[1974, 60, 263, 5, 48, "Text"],
+
+Cell[CellGroupData[{
+Cell[2262, 69, 33, 0, 54, "Section"],
+Cell[2298, 71, 41, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[2364, 75, 85, 2, 40, "Input",
+  InitializationCell->True],
+Cell[2452, 79, 101, 2, 70, "Output"]
+}, Open  ]],
+Cell[2568, 84, 164, 5, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[2757, 93, 215, 5, 60, "Input",
+  InitializationCell->True],
+Cell[2975, 100, 80, 1, 70, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3092, 106, 122, 3, 40, "Input",
+  InitializationCell->True],
+Cell[3217, 111, 1002, 20, 70, "Output"]
+}, Open  ]],
+Cell[4234, 134, 61, 1, 29, "Text",
+  InitializationCell->True],
+Cell[4298, 137, 91, 2, 40, "Input",
+  InitializationCell->True],
+Cell[4392, 141, 173, 4, 48, "InputOnly",
+  InitializationCell->True,
+  CellTags->"Setup section"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[4602, 150, 38, 0, 34, "Section"],
+Cell[4643, 152, 45, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[4713, 156, 65, 1, 40, "Input"],
+Cell[4781, 159, 64, 1, 49, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4882, 165, 81, 1, 40, "Input"],
+Cell[4966, 168, 164, 3, 25, "Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[5167, 176, 76, 1, 40, "Input"],
+Cell[5246, 179, 89, 1, 49, "Output"]
+}, Open  ]],
+Cell[5350, 183, 37, 0, 29, "Text"],
+Cell[5390, 185, 205, 3, 80, "Input"],
+Cell[5598, 190, 41, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[5664, 194, 556, 9, 180, "Input"],
+Cell[6223, 205, 1310, 27, 252, "Output"]
+}, Open  ]],
+Cell[7548, 235, 42, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[7615, 239, 79, 1, 40, "Input"],
+Cell[7697, 242, 52, 1, 49, "Output"]
+}, Open  ]],
+Cell[7764, 246, 40, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[7829, 250, 80, 1, 40, "Input"],
+Cell[7912, 253, 45, 1, 49, "Output"]
+}, Open  ]],
+Cell[7972, 257, 109, 3, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[8106, 264, 75, 1, 40, "Input"],
+Cell[8184, 267, 36, 1, 49, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[8257, 273, 44, 1, 40, "Input"],
+Cell[8304, 276, 65, 1, 49, "Output"]
+}, Open  ]],
+Cell[8384, 280, 53, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[8462, 284, 73, 1, 40, "Input"],
+Cell[8538, 287, 1730, 26, 1170, "Output"]
+}, Open  ]],
+Cell[10283, 316, 39, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[10347, 320, 61, 1, 40, "Input"],
+Cell[10411, 323, 374, 6, 82, "Print",
+  CellTags->"Info3212927805-9793427"]
+}, Open  ]],
+Cell[10800, 332, 121, 3, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[10946, 339, 88, 1, 40, "Input"],
+Cell[11037, 342, 114, 2, 25, "Message"],
+Cell[11154, 346, 114, 2, 25, "Message"],
+Cell[11271, 350, 114, 2, 25, "Message"],
+Cell[11388, 354, 163, 3, 25, "Message"],
+Cell[11554, 359, 147, 3, 25, "Message"],
+Cell[11704, 364, 56, 1, 49, "Output"]
+}, Open  ]],
+Cell[11775, 368, 42, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[11842, 372, 79, 1, 40, "Input"],
+Cell[11924, 375, 2190, 32, 1170, "Output"]
+}, Open  ]],
+Cell[14129, 410, 224, 4, 48, "Text"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[14390, 419, 36, 0, 34, "Section"],
+Cell[14429, 421, 374, 8, 67, "Text"],
+
+Cell[CellGroupData[{
+Cell[14828, 433, 265, 5, 60, "Input"],
+Cell[15096, 440, 92, 1, 49, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[15225, 446, 54, 1, 40, "Input"],
+Cell[15282, 449, 90, 1, 49, "Output"]
+}, Open  ]],
+Cell[15387, 453, 118, 3, 29, "Text"],
+Cell[15508, 458, 417, 11, 36, "Commentary"],
+
+Cell[CellGroupData[{
+Cell[15950, 473, 852, 16, 240, "Input"],
+Cell[16805, 491, 62, 1, 49, "Output"]
+}, Open  ]],
+Cell[16882, 495, 99, 3, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[17006, 502, 82, 1, 40, "Input"],
+Cell[17091, 505, 257, 4, 63, "Message"],
+Cell[17351, 511, 161, 3, 25, "Message"],
+Cell[17515, 516, 163, 3, 25, "Message"],
+Cell[17681, 521, 172, 3, 44, "Message"],
+Cell[17856, 526, 61, 1, 49, "Output"]
+}, Open  ]],
+Cell[17932, 530, 88, 3, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[18045, 537, 54, 1, 40, "Input"],
+Cell[18102, 540, 157, 3, 25, "Message"],
+Cell[18262, 545, 41, 1, 49, "Output"]
+}, Open  ]],
+Cell[18318, 549, 164, 4, 48, "Text"],
+Cell[18485, 555, 99, 2, 40, "Input"],
+Cell[18587, 559, 34, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[18646, 563, 374, 9, 80, "Input"],
+Cell[19023, 574, 166, 4, 49, "Output"]
+}, Open  ]],
+Cell[19204, 581, 163, 4, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[19392, 589, 692, 17, 100, "Input"],
+Cell[20087, 608, 2172, 34, 695, "Output"]
+}, Open  ]],
+Cell[22274, 645, 51, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[22350, 649, 688, 17, 100, "Input"],
+Cell[23041, 668, 2210, 28, 1170, "Output"]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[25300, 702, 46, 0, 34, "Section"],
+Cell[25349, 704, 46, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[25420, 708, 170, 4, 40, "Input"],
+Cell[25593, 714, 271, 7, 49, "Output"]
+}, Open  ]],
+Cell[25879, 724, 49, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[25953, 728, 147, 4, 40, "Input"],
+Cell[26103, 734, 144, 1, 49, "Output"]
+}, Open  ]],
+Cell[26262, 738, 114, 3, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[26401, 745, 69, 1, 40, "Input"],
+Cell[26473, 748, 294, 8, 49, "Output"]
+}, Open  ]]
+}, Closed]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

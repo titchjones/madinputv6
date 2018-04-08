@@ -1,0 +1,984 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.4' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     37799,        976]
+NotebookOptionsPosition[     35551,        895]
+NotebookOutlinePosition[     35926,        911]
+CellTagsIndexPosition[     35883,        908]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{"BeginPackage", "[", "\"\<MinimumVolumeEllipse`\>\"", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.6790349507208805`*^9, 3.679034977480381*^9}}],
+
+Cell[BoxData["\<\"MinimumVolumeEllipse`\"\>"], "Output",
+ CellChangeTimes->{3.679034979712381*^9, 3.679035494986881*^9, 
+  3.679035835841381*^9, 3.679118830730874*^9, 3.679118865928412*^9, 
+  3.679119288688947*^9, 3.679121037697679*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"MinimumVolumeEllipse", "::", "usage"}], "=", 
+  "\"\<MinimumVolumeEllipse[P,tolerance] provides the matrix A for \
+determining the Minimum volume ellipse covering the points P, along with the \
+centre point array c.\>\""}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.679034988181881*^9, 3.679034988358881*^9}, {
+  3.6790350381598806`*^9, 3.679035095720381*^9}, {3.679035140203881*^9, 
+  3.679035141610881*^9}, {3.679035245203881*^9, 3.6790352570418806`*^9}}],
+
+Cell[BoxData["\<\"MinimumVolumeEllipse[P,tolerance] provides the matrix A for \
+determining the Minimum volume ellipse covering the points P, along with the \
+centre point array c.\"\>"], "Output",
+ CellChangeTimes->{3.6790350970038805`*^9, 3.679035495150381*^9, 
+  3.679035836002881*^9, 3.6791188309584193`*^9, 3.679118866156458*^9, 
+  3.679119288930996*^9, 3.6791210379142227`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"MinimumVolumeEllipsePlot", "::", "usage"}], "=", 
+  "\"\<MinimumVolumeEllipse[P,tol,plotopts] provides a plot of the Minimum \
+volume ellipse covering the points P.\>\""}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.679034988181881*^9, 3.679034988358881*^9}, {
+  3.6790350381598806`*^9, 3.6790351459453807`*^9}, {3.6790353290818806`*^9, 
+  3.6790353301373806`*^9}}],
+
+Cell[BoxData["\<\"MinimumVolumeEllipse[P,tol,plotopts] provides a plot of the \
+Minimum volume ellipse covering the points P.\"\>"], "Output",
+ CellChangeTimes->{3.679035150805381*^9, 3.679035495200381*^9, 
+  3.6790358360558805`*^9, 3.6791188310769434`*^9, 3.6791188662409744`*^9, 
+  3.679119289008011*^9, 3.6791210379902377`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"MinimumVolumeEllipsePlot", "::", "usage"}], "=", 
+  "\"\<MinimumVolumeEllipse[A,c,plotopts] provides a plot of the Minimum \
+volume ellipse covering the points P.\>\""}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.679034988181881*^9, 3.679034988358881*^9}, {
+  3.6790350381598806`*^9, 3.6790351459453807`*^9}, {3.6790353290818806`*^9, 
+  3.6790353414643807`*^9}}],
+
+Cell[BoxData["\<\"MinimumVolumeEllipse[A,c,plotopts] provides a plot of the \
+Minimum volume ellipse covering the points P.\"\>"], "Output",
+ CellChangeTimes->{3.679035495252381*^9, 3.6790358361303806`*^9, 
+  3.679118831188966*^9, 3.6791188663189898`*^9, 3.679119289088027*^9, 
+  3.679121038063252*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"MinimumVolumeEllipsePlotDisk", "::", "usage"}], "=", 
+  "\"\<MinimumVolumeEllipse[A,c,plotopts] provides a plot of the Minimum \
+volume ellipse covering the points P.\>\""}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.679034988181881*^9, 3.679034988358881*^9}, {
+  3.6790350381598806`*^9, 3.6790351459453807`*^9}, {3.6790353290818806`*^9, 
+  3.6790353414643807`*^9}, {3.6790389288563805`*^9, 3.6790389292553806`*^9}}],
+
+Cell[BoxData["\<\"MinimumVolumeEllipse[A,c,plotopts] provides a plot of the \
+Minimum volume ellipse covering the points P.\"\>"], "Output",
+ CellChangeTimes->{3.6791188312644806`*^9, 3.679118866399006*^9, 
+  3.6791192891660423`*^9, 3.6791210381402674`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"MinimumVolumeEllipsePlotDiskList", "::", "usage"}], "=", 
+  "\"\<MinimumVolumeEllipse[A,c,plotopts] provides a plot of the Minimum \
+volume ellipse covering the points P.\>\""}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.679034988181881*^9, 3.679034988358881*^9}, {
+  3.6790350381598806`*^9, 3.6790351459453807`*^9}, {3.6790353290818806`*^9, 
+  3.6790353414643807`*^9}, {3.6790389288563805`*^9, 3.6790389292553806`*^9}, {
+  3.679039379705881*^9, 3.6790393802118807`*^9}}],
+
+Cell[BoxData["\<\"MinimumVolumeEllipse[A,c,plotopts] provides a plot of the \
+Minimum volume ellipse covering the points P.\"\>"], "Output",
+ CellChangeTimes->{3.679118831338996*^9, 3.679118866476022*^9, 
+  3.679119289246559*^9, 3.679121038221284*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"MinimumVolumeEllipseLogPlotDiskList", "::", "usage"}], "=", 
+  "\"\<MinimumVolumeEllipse[A,c,plotopts] provides a plot of the Minimum \
+volume ellipse covering the points P.\>\""}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.679034988181881*^9, 3.679034988358881*^9}, {
+  3.6790350381598806`*^9, 3.6790351459453807`*^9}, {3.6790353290818806`*^9, 
+  3.6790353414643807`*^9}, {3.6790389288563805`*^9, 3.6790389292553806`*^9}, {
+  3.679039379705881*^9, 3.6790393802118807`*^9}, {3.6790609527542114`*^9, 
+  3.679060953066774*^9}}],
+
+Cell[BoxData["\<\"MinimumVolumeEllipse[A,c,plotopts] provides a plot of the \
+Minimum volume ellipse covering the points P.\"\>"], "Output",
+ CellChangeTimes->{3.6791188314130106`*^9, 3.6791188665600386`*^9, 
+  3.679119289339077*^9, 3.6791210382957983`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData["\<\"MinimumVolumeEllipse`Private`\"\>"], "Output",
+ CellChangeTimes->{3.679035153186381*^9, 3.679035495304381*^9, 
+  3.679035836182881*^9, 3.679118831481024*^9, 3.679118866638554*^9, 
+  3.6791192894205933`*^9, 3.6791210383703136`*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"khachiyan", "[", "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"X", "=", 
+      RowBox[{"Q", ".", 
+       RowBox[{"DiagonalMatrix", "[", "u", "]"}], ".", 
+       RowBox[{"Transpose", "[", "Q", "]"}]}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"M", "=", 
+      RowBox[{"Diagonal", "[", 
+       RowBox[{
+        RowBox[{"Transpose", "[", "Q", "]"}], ".", 
+        RowBox[{"PseudoInverse", "[", "X", "]"}], ".", "Q"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"maximum", "=", 
+      RowBox[{"Max", "[", "M", "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"j", "=", 
+      RowBox[{
+       RowBox[{"Position", "[", 
+        RowBox[{"M", ",", "maximum"}], "]"}], "[", 
+       RowBox[{"[", 
+        RowBox[{"1", ",", "1"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"stepsize", "=", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"maximum", "-", "d", "-", "1"}], ")"}], "/", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"d", "+", "1"}], ")"}], 
+         RowBox[{"(", 
+          RowBox[{"maximum", "-", "1"}], ")"}]}], ")"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"newu", "=", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"1", "-", "stepsize"}], ")"}], "u"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"newu", "[", 
+       RowBox[{"[", "j", "]"}], "]"}], "=", 
+      RowBox[{
+       RowBox[{"newu", "[", 
+        RowBox[{"[", "j", "]"}], "]"}], "+", "stepsize"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"count", "=", 
+      RowBox[{"count", "+", "1"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"err", "=", 
+      RowBox[{"Norm", "[", 
+       RowBox[{"newu", "-", "u"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"u", "=", "newu"}], ";", "\[IndentingNewLine]", "err"}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.6790317169358807`*^9, 3.6790318937543807`*^9}, {
+   3.6790329756183805`*^9, 3.679032976545881*^9}, {3.6790330336093807`*^9, 
+   3.679033037448881*^9}, 3.6790330993853807`*^9, {3.679033138235881*^9, 
+   3.6790331714413805`*^9}, 3.6790334801808805`*^9, 3.679033649646381*^9, 
+   3.679033701702881*^9, {3.679049179456381*^9, 3.679049180202881*^9}, {
+   3.679121010931327*^9, 3.6791210206907787`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"MinimumVolumeEllipse", "[", 
+   RowBox[{"P_", ",", "tol_"}], "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "d", ",", "Np", ",", "Q", ",", "count", ",", "err", ",", "u", ",", "U", 
+      ",", "A", ",", "c"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"d", ",", "Np"}], "}"}], "=", 
+      RowBox[{"Dimensions", "[", "P", "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Q", "=", 
+      RowBox[{"ConstantArray", "[", 
+       RowBox[{"0", ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"d", "+", "1"}], ",", "Np"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"Q", "[", 
+       RowBox[{"[", 
+        RowBox[{"1", ";;", "d"}], "]"}], "]"}], "=", 
+      RowBox[{"P", "[", 
+       RowBox[{"[", 
+        RowBox[{
+         RowBox[{"1", ";;", "d"}], ",", 
+         RowBox[{"1", ";;", "Np"}]}], "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"Q", "[", 
+       RowBox[{"[", 
+        RowBox[{"d", "+", "1"}], "]"}], "]"}], "=", 
+      RowBox[{"ConstantArray", "[", 
+       RowBox[{"1", ",", 
+        RowBox[{"{", "Np", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"count", "=", "1"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"err", "=", "1"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"u", "=", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"1", "/", "Np"}], ")"}], "*", 
+       RowBox[{"ConstantArray", "[", 
+        RowBox[{"1", ",", 
+         RowBox[{"{", "Np", "}"}]}], "]"}]}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"While", "[", 
+      RowBox[{
+       RowBox[{"err", " ", ">", " ", "tol"}], ",", 
+       RowBox[{"khachiyan", "[", "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"U", " ", "=", " ", 
+      RowBox[{"DiagonalMatrix", "[", "u", "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"A", " ", "=", " ", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"1", "/", "d"}], ")"}], " ", "*", 
+       RowBox[{"PseudoInverse", "[", 
+        RowBox[{
+         RowBox[{"P", ".", "U", ".", 
+          RowBox[{"Transpose", "[", "P", "]"}]}], " ", "-", " ", 
+         RowBox[{
+          RowBox[{"Transpose", "[", 
+           RowBox[{"{", 
+            RowBox[{"P", ".", "u"}], "}"}], "]"}], ".", 
+          RowBox[{"{", 
+           RowBox[{"P", ".", "u"}], "}"}]}]}], "]"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"c", "=", 
+      RowBox[{"P", ".", "u"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"A", ",", "c"}], "}"}]}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.679035172634381*^9, 3.679035228245881*^9}, {
+  3.679035262905881*^9, 3.6790352708093805`*^9}, {3.679049188405881*^9, 
+  3.679049190733381*^9}, {3.679050016696881*^9, 3.679050038775881*^9}, {
+  3.679120990577757*^9, 3.6791210041389685`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"MinimumVolumeEllipsePlot", "[", 
+   RowBox[{"A_", ",", "c_", ",", "opts___Rule"}], "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"uu", ",", "qq", ",", "vv", ",", "a", ",", "b"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"uu", ",", "qq", ",", "vv"}], "}"}], "=", 
+      RowBox[{"SingularValueDecomposition", "[", "A", "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"a", ",", "b"}], "}"}], "=", 
+      RowBox[{"1", "/", 
+       SqrtBox[
+        RowBox[{"Diagonal", "[", "qq", "]"}]]}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"theta", "=", 
+      RowBox[{"Range", "[", 
+       RowBox[{"0", ",", 
+        RowBox[{
+         RowBox[{"2", "\[Pi]"}], "+", 
+         FractionBox["1", "20"]}], ",", 
+        RowBox[{"1", "/", "20"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"ListPlot", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"Transpose", "[", "P", "]"}], ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"c", "+", "#"}], "&"}], "/@", 
+          RowBox[{"Transpose", "[", 
+           RowBox[{"vv", ".", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"a", " ", 
+               RowBox[{"Cos", "[", "theta", "]"}]}], ",", 
+              RowBox[{"b", " ", 
+               RowBox[{"Sin", "[", "theta", "]"}]}]}], "}"}]}], "]"}]}]}], 
+        "}"}], ",", "opts", ",", 
+       RowBox[{"Joined", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{"False", ",", "True"}], "}"}]}], ",", 
+       RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.679035295723381*^9, 3.6790354258213806`*^9}, {
+  3.6790358308543806`*^9, 3.679035831212881*^9}, {3.6791209813224063`*^9, 
+  3.6791209853702154`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"MinimumVolumeEllipsePlot", "[", 
+   RowBox[{"P_", ",", 
+    RowBox[{"tol_Real", "|", "tol_Integer"}], ",", "opts___Rule"}], "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "A", ",", "uu", ",", "qq", ",", "vv", ",", "a", ",", "b", ",", "c"}], 
+     "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"A", ",", "c"}], "}"}], "=", 
+      RowBox[{"MinimumVolumeEllipse", "[", 
+       RowBox[{"P", ",", "tol"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"uu", ",", "qq", ",", "vv"}], "}"}], "=", 
+      RowBox[{"SingularValueDecomposition", "[", "A", "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"a", ",", "b"}], "}"}], "=", 
+      RowBox[{"1", "/", 
+       SqrtBox[
+        RowBox[{"Diagonal", "[", "qq", "]"}]]}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"theta", "=", 
+      RowBox[{"Range", "[", 
+       RowBox[{"0", ",", 
+        RowBox[{
+         RowBox[{"2", "\[Pi]"}], "+", 
+         FractionBox["1", "20"]}], ",", 
+        RowBox[{"1", "/", "20"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"ListPlot", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"Transpose", "[", "P", "]"}], ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"c", "+", "#"}], "&"}], "/@", 
+          RowBox[{"Transpose", "[", 
+           RowBox[{"vv", ".", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"a", " ", 
+               RowBox[{"Cos", "[", "theta", "]"}]}], ",", 
+              RowBox[{"b", " ", 
+               RowBox[{"Sin", "[", "theta", "]"}]}]}], "}"}]}], "]"}]}]}], 
+        "}"}], ",", "opts", ",", 
+       RowBox[{"Joined", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{"False", ",", "True"}], "}"}]}], ",", 
+       RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.679035295723381*^9, 3.679035408558381*^9}, {
+  3.679035833214881*^9, 3.6790358334773808`*^9}, {3.6791209641454716`*^9, 
+  3.6791209725931606`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Clear", "[", "addEpilog", "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.679050779478381*^9, 3.679050784003381*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"addEpilog", "[", 
+   RowBox[{"g_Legended", ",", "epi_List", ",", "opts___Rule"}], "]"}], ":=", 
+  RowBox[{"Quiet", "@", 
+   RowBox[{"With", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"styles", "=", 
+       RowBox[{"Cases", "[", 
+        RowBox[{
+         RowBox[{"g", "[", 
+          RowBox[{"[", "1", "]"}], "]"}], ",", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"dir__", ",", 
+            RowBox[{
+            "__GeometricTransformation", "|", "__Point", "|", "__Line"}]}], 
+           "}"}], "\[RuleDelayed]", 
+          RowBox[{"Directive", "[", "dir", "]"}]}], ",", 
+         RowBox[{"-", "5"}]}], "]"}]}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"Show", "[", 
+      RowBox[{"g", ",", 
+       RowBox[{"Epilog", "\[Rule]", 
+        RowBox[{"Flatten", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"styles", ",", "epi"}], "}"}], ",", 
+          RowBox[{"{", "2", "}"}]}], "]"}]}], ",", 
+       RowBox[{"FilterRules", "[", 
+        RowBox[{
+         RowBox[{"{", "opts", "}"}], ",", 
+         RowBox[{"Options", "[", "Show", "]"}]}], "]"}]}], "]"}]}], 
+    "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.6790388640928807`*^9, 3.679038864096881*^9}, {
+   3.679038989752381*^9, 3.679039016627881*^9}, {3.679039111511881*^9, 
+   3.679039118470381*^9}, {3.6790391783263807`*^9, 3.679039202634381*^9}, {
+   3.679039233254881*^9, 3.679039246756381*^9}, {3.679039549457881*^9, 
+   3.6790395495698805`*^9}, {3.679039684143881*^9, 3.6790397377763805`*^9}, {
+   3.679050224166381*^9, 3.6790502391233807`*^9}, 3.679050273015381*^9, {
+   3.679050305803381*^9, 3.6790503388788805`*^9}, {3.679050369853881*^9, 
+   3.6790504029343805`*^9}, 3.6790505326773806`*^9, 3.6790505793598804`*^9, {
+   3.6790506678248806`*^9, 3.679050720837381*^9}, {3.679050794657881*^9, 
+   3.679050795825381*^9}, 3.679119138442404*^9, {3.6791191882213573`*^9, 
+   3.6791192025177164`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"addEpilog", "[", 
+   RowBox[{"g_Graphics", ",", "epi_List", ",", "opts___Rule"}], "]"}], ":=", 
+  RowBox[{"Quiet", "@", 
+   RowBox[{"With", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"styles", "=", 
+       RowBox[{"Cases", "[", 
+        RowBox[{
+         RowBox[{"g", "[", 
+          RowBox[{"[", "1", "]"}], "]"}], ",", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"dir__", ",", 
+            RowBox[{
+            "__GeometricTransformation", "|", "__Point", "|", "__Line"}]}], 
+           "}"}], "\[RuleDelayed]", 
+          RowBox[{"Directive", "[", "dir", "]"}]}], ",", 
+         RowBox[{"-", "5"}]}], "]"}]}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"Show", "[", 
+      RowBox[{"g", ",", 
+       RowBox[{"Epilog", "\[Rule]", 
+        RowBox[{"Flatten", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"styles", ",", "epi"}], "}"}], ",", 
+          RowBox[{"{", "2", "}"}]}], "]"}]}], ",", 
+       RowBox[{"FilterRules", "[", 
+        RowBox[{
+         RowBox[{"{", "opts", "}"}], ",", 
+         RowBox[{"Options", "[", "Show", "]"}]}], "]"}]}], "]"}]}], 
+    "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.6790388640928807`*^9, 3.679038864096881*^9}, {
+   3.679038989752381*^9, 3.679039016627881*^9}, {3.679039111511881*^9, 
+   3.679039118470381*^9}, {3.6790391783263807`*^9, 3.679039202634381*^9}, {
+   3.679039233254881*^9, 3.679039246756381*^9}, {3.679039549457881*^9, 
+   3.6790395495698805`*^9}, {3.679039684143881*^9, 3.6790397377763805`*^9}, {
+   3.679050224166381*^9, 3.6790502391233807`*^9}, 3.679050273015381*^9, {
+   3.679050305803381*^9, 3.6790503388788805`*^9}, {3.679050369853881*^9, 
+   3.6790504029343805`*^9}, 3.6790505326773806`*^9, 3.6790505793598804`*^9, {
+   3.6790506678248806`*^9, 3.679050668115881*^9}, 3.6790507239148808`*^9, {
+   3.679050767205881*^9, 3.6790507723003807`*^9}, {3.6790609648921385`*^9, 
+   3.6790609652522106`*^9}, 3.679119136483012*^9, {3.6791191826132364`*^9, 
+   3.679119204622137*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"MinimumVolumeEllipsePlotDisk", "[", 
+   RowBox[{"P_", ",", 
+    RowBox[{"tol_Real", "|", "tol_Integer"}], ",", "opts___Rule"}], "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "data", ",", "A", ",", "uu", ",", "qq", ",", "vv", ",", "a", ",", "b", 
+      ",", "c"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"A", ",", "c"}], "}"}], "=", 
+      RowBox[{"MinimumVolumeEllipse", "[", 
+       RowBox[{"P", ",", "tol"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"uu", ",", "qq", ",", "vv"}], "}"}], "=", 
+      RowBox[{"SingularValueDecomposition", "[", "A", "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"a", ",", "b"}], "}"}], "=", 
+      RowBox[{"1", "/", 
+       SqrtBox[
+        RowBox[{"Diagonal", "[", "qq", "]"}]]}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"addEpilog", "[", 
+      RowBox[{
+       RowBox[{"ListPlot", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"Transpose", "[", "P", "]"}], "}"}], ",", 
+         RowBox[{"FilterRules", "[", 
+          RowBox[{
+           RowBox[{"{", "opts", "}"}], ",", 
+           RowBox[{"Options", "[", "ListPlot", "]"}]}], "]"}], ",", 
+         RowBox[{"Joined", "\[Rule]", 
+          RowBox[{"{", "False", "}"}]}], ",", 
+         RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"Opacity", "[", "0.2", "]"}], ",", 
+          RowBox[{"Translate", "[", 
+           RowBox[{
+            RowBox[{"Rotate", "[", 
+             RowBox[{
+              RowBox[{"Disk", "[", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"0", ",", "0"}], "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"b", ",", "a"}], "}"}]}], "]"}], ",", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"1", ",", "1"}], "}"}], ",", 
+                RowBox[{"vv", ".", 
+                 RowBox[{"{", 
+                  RowBox[{"1", ",", "1"}], "}"}]}]}], "}"}]}], "]"}], ",", 
+            "c"}], "]"}]}], "}"}], "}"}], ",", "opts"}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.679035295723381*^9, 3.679035408558381*^9}, {
+  3.679035833214881*^9, 3.6790358334773808`*^9}, {3.679038730972881*^9, 
+  3.679038788708881*^9}, {3.679038868504881*^9, 3.679038877855381*^9}, {
+  3.6790392504133806`*^9, 3.679039282096881*^9}, {3.679039552108881*^9, 
+  3.679039554851381*^9}, {3.679050283968381*^9, 3.679050312660381*^9}, {
+  3.679120951169877*^9, 3.679120957256094*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"MinimumVolumeEllipsePlotDiskList", "[", 
+   RowBox[{"Plist_", ",", 
+    RowBox[{"tol_Real", "|", "tol_Integer"}], ",", "opts___Rule"}], "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"data", ",", "A", ",", "uu", ",", "qq", ",", "vv"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"data", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Block", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"P", "=", "#"}], ",", "a", ",", "b", ",", "c"}], "}"}], 
+          ",", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"A", ",", "c"}], "}"}], "=", 
+            RowBox[{"MinimumVolumeEllipse", "[", 
+             RowBox[{"P", ",", "tol"}], "]"}]}], ";", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"uu", ",", "qq", ",", "vv"}], "}"}], "=", 
+            RowBox[{"SingularValueDecomposition", "[", "A", "]"}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"a", ",", "b"}], "}"}], "=", 
+            RowBox[{"1", "/", 
+             SqrtBox[
+              RowBox[{"Diagonal", "[", "qq", "]"}]]}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"Transpose", "[", "P", "]"}], ",", "a", ",", "b", ",", 
+             "c", ",", 
+             RowBox[{"vv", ".", 
+              RowBox[{"{", 
+               RowBox[{"1", ",", "1"}], "}"}]}]}], "}"}]}]}], "]"}], "&"}], "/@",
+        "Plist"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"addEpilog", "[", 
+      RowBox[{
+       RowBox[{"ListPlot", "[", 
+        RowBox[{
+         RowBox[{"data", "[", 
+          RowBox[{"[", 
+           RowBox[{"All", ",", "1"}], "]"}], "]"}], ",", 
+         RowBox[{"FilterRules", "[", 
+          RowBox[{
+           RowBox[{"{", "opts", "}"}], ",", 
+           RowBox[{"Options", "[", "ListPlot", "]"}]}], "]"}], ",", 
+         RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Block", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"p", ",", "a", ",", "b", ",", "c", ",", "d"}], "}"}], ",", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"p", ",", "a", ",", "b", ",", "c", ",", "d"}], "}"}], 
+             "=", "#"}], ";", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"Opacity", "[", "0.2", "]"}], ",", 
+              RowBox[{"Translate", "[", 
+               RowBox[{
+                RowBox[{"Rotate", "[", 
+                 RowBox[{
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"b", ",", "a"}], "}"}]}], "]"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"1", ",", "1"}], "}"}], ",", "d"}], "}"}]}], 
+                 "]"}], ",", "c"}], "]"}]}], "}"}]}]}], "]"}], "&"}], "/@", 
+        "data"}], ",", "opts"}], "]"}]}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.679035295723381*^9, 3.679035408558381*^9}, {
+   3.679035833214881*^9, 3.6790358334773808`*^9}, {3.679038730972881*^9, 
+   3.679038788708881*^9}, {3.679038868504881*^9, 3.679038877855381*^9}, {
+   3.6790392504133806`*^9, 3.679039282096881*^9}, {3.679039337784381*^9, 
+   3.679039371549381*^9}, {3.679039465904381*^9, 3.679039513424881*^9}, {
+   3.6790395810558805`*^9, 3.679039640294881*^9}, {3.6790396761943808`*^9, 
+   3.6790396763858805`*^9}, {3.679050255261381*^9, 3.679050258766881*^9}, 
+   3.679050315729881*^9, {3.6791209121915827`*^9, 3.6791209459518337`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"MinimumVolumeEllipseLogPlotDiskList", "[", 
+   RowBox[{"Plist_", ",", 
+    RowBox[{"tol_Real", "|", "tol_Integer"}], ",", "opts___Rule"}], "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "data", ",", "A", ",", "c", ",", "uu", ",", "qq", ",", "vv", ",", "a", 
+      ",", "b", ",", "logplot", ",", "ticks", ",", "range", ",", "gr"}], 
+     "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"data", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Block", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"P", "=", "#"}], "}"}], ",", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"A", ",", "c"}], "}"}], "=", 
+            RowBox[{"MinimumVolumeEllipse", "[", 
+             RowBox[{
+              RowBox[{"Log", "[", "P", "]"}], ",", "tol"}], "]"}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"uu", ",", "qq", ",", "vv"}], "}"}], "=", 
+            RowBox[{"SingularValueDecomposition", "[", "A", "]"}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"a", ",", "b"}], "}"}], "=", 
+            RowBox[{"1", "/", 
+             SqrtBox[
+              RowBox[{"Diagonal", "[", "qq", "]"}]]}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"Transpose", "[", 
+              RowBox[{"Log", "[", "P", "]"}], "]"}], ",", "a", ",", "b", ",", 
+             "c", ",", 
+             RowBox[{"vv", ".", 
+              RowBox[{"{", 
+               RowBox[{"1", ",", "1"}], "}"}]}], ",", 
+             RowBox[{"Transpose", "[", "P", "]"}]}], "}"}]}]}], "]"}], "&"}], 
+       "/@", "Plist"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Off", "[", 
+      RowBox[{"NumberForm", "::", "iprf"}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"logplot", "=", 
+      RowBox[{"ListLogLogPlot", "[", 
+       RowBox[{
+        RowBox[{"data", "[", 
+         RowBox[{"[", 
+          RowBox[{"All", ",", 
+           RowBox[{"-", "1"}]}], "]"}], "]"}], ",", 
+        RowBox[{"FilterRules", "[", 
+         RowBox[{
+          RowBox[{"{", "opts", "}"}], ",", "PlotRange"}], "]"}]}], "]"}]}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"ticks", "=", 
+      RowBox[{
+       RowBox[{"Quiet", "[", 
+        RowBox[{"AbsoluteOptions", "[", 
+         RowBox[{"logplot", ",", "Ticks"}], "]"}], "]"}], "[", 
+       RowBox[{"[", 
+        RowBox[{"1", ",", "2"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"range", "=", 
+      RowBox[{"Quiet", "[", 
+       RowBox[{
+        RowBox[{"AbsoluteOptions", "[", 
+         RowBox[{"logplot", ",", "PlotRange"}], "]"}], "[", 
+        RowBox[{"[", "1", "]"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"gr", "=", 
+      RowBox[{"addEpilog", "[", 
+       RowBox[{
+        RowBox[{"ListPlot", "[", 
+         RowBox[{
+          RowBox[{"data", "[", 
+           RowBox[{"[", 
+            RowBox[{"All", ",", "1"}], "]"}], "]"}], ",", 
+          RowBox[{"Ticks", "\[Rule]", "ticks"}], ",", "range", ",", 
+          RowBox[{"FrameTicks", "\[Rule]", 
+           RowBox[{"Evaluate", "@", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"ticks", "[", 
+                 RowBox[{"[", "2", "]"}], "]"}], ",", "None"}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"ticks", "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], ",", "None"}], "}"}]}], 
+             "}"}]}]}], ",", 
+          RowBox[{"FilterRules", "[", 
+           RowBox[{
+            RowBox[{"{", "opts", "}"}], ",", 
+            RowBox[{"Options", "[", "ListPlot", "]"}]}], "]"}], ",", 
+          RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}], ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Block", "[", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"p", ",", "a", ",", "b", ",", "c", ",", "d", ",", "p2"}],
+              "}"}], ",", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{
+               "p", ",", "a", ",", "b", ",", "c", ",", "d", ",", "p2"}], 
+               "}"}], "=", "#"}], ";", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"Opacity", "[", "0.2", "]"}], ",", 
+               RowBox[{"Translate", "[", 
+                RowBox[{
+                 RowBox[{"Rotate", "[", 
+                  RowBox[{
+                   RowBox[{"Scale", "[", 
+                    RowBox[{
+                    RowBox[{"Disk", "[", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"1", ",", "1"}], "}"}]}], "]"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"b", ",", "a"}], "}"}]}], "]"}], ",", 
+                   RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"1", ",", "1"}], "}"}], ",", "d"}], "}"}]}], 
+                  "]"}], ",", "c"}], "]"}]}], "}"}]}]}], "]"}], "&"}], "/@", 
+         "data"}], ",", 
+        RowBox[{"Sequence", "@@", 
+         RowBox[{"{", 
+          RowBox[{"range", ",", "opts"}], "}"}]}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "gr"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.679035295723381*^9, 3.679035408558381*^9}, {
+   3.679035833214881*^9, 3.6790358334773808`*^9}, {3.679038730972881*^9, 
+   3.679038788708881*^9}, {3.679038868504881*^9, 3.679038877855381*^9}, {
+   3.6790392504133806`*^9, 3.679039282096881*^9}, {3.679039337784381*^9, 
+   3.679039371549381*^9}, {3.679039465904381*^9, 3.679039513424881*^9}, {
+   3.6790395810558805`*^9, 3.679039640294881*^9}, {3.6790396761943808`*^9, 
+   3.6790396763858805`*^9}, {3.679050255261381*^9, 3.679050258766881*^9}, 
+   3.679050315729881*^9, {3.679060926010864*^9, 3.6790609307813177`*^9}, {
+   3.67906106942004*^9, 3.6790610775891733`*^9}, {3.6790611706677856`*^9, 
+   3.6790611774046326`*^9}, {3.6790612335273547`*^9, 
+   3.6790613355017457`*^9}, {3.679061373487841*^9, 3.679061373616867*^9}, {
+   3.6790614314444304`*^9, 3.6790614417809973`*^9}, {3.6790618028917046`*^9, 
+   3.6790619436283464`*^9}, {3.6790619897515697`*^9, 
+   3.6790619960468283`*^9}, {3.679062088581832*^9, 3.679062119775569*^9}, {
+   3.6790621609718065`*^9, 3.6790621619675055`*^9}, {3.679062411713945*^9, 
+   3.6790624350261064`*^9}, {3.6790624801036205`*^9, 3.679062480262652*^9}, {
+   3.6790625153221626`*^9, 3.6790625415949163`*^9}, {3.6791172683084517`*^9, 
+   3.6791172934879866`*^9}, {3.679117588928063*^9, 3.6791175895906954`*^9}, {
+   3.6791176257394238`*^9, 3.679117638708517*^9}, {3.6791176830148764`*^9, 
+   3.6791176929113555`*^9}, {3.679117741427057*^9, 3.679117742850341*^9}, {
+   3.679118264859722*^9, 3.6791184592250876`*^9}, {3.679118567167672*^9, 
+   3.6791186130743513`*^9}, {3.679118643518439*^9, 3.679118862572741*^9}, 
+   3.67911889317486*^9, 3.6791189294821205`*^9, {3.6791189784899197`*^9, 
+   3.679119123177352*^9}, {3.679119155862387*^9, 3.679119163262367*^9}, {
+   3.6791192214875097`*^9, 3.6791193446116295`*^9}, {3.679119376804567*^9, 
+   3.679119376988104*^9}, {3.6791194243675776`*^9, 3.679119572265651*^9}, {
+   3.679119656751545*^9, 3.679119731067405*^9}, 3.679119792463682*^9, {
+   3.6791198506028075`*^9, 3.6791198844445744`*^9}, {3.6791199195350914`*^9, 
+   3.679119922263137*^9}, {3.6791199655472918`*^9, 3.6791199755187855`*^9}, {
+   3.6791200071561117`*^9, 3.6791201864734683`*^9}, {3.6791202441094933`*^9, 
+   3.6791202820730844`*^9}, {3.6791203256362953`*^9, 
+   3.6791203307698216`*^9}, {3.679120479310524*^9, 3.679120509286018*^9}, {
+   3.679120890933332*^9, 3.6791209053507147`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"On", "[", 
+   RowBox[{"NumberForm", "::", "iprf"}], "]"}], ";"}]], "Input",
+ CellChangeTimes->{{3.6791193286624403`*^9, 3.6791193288379755`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"End", "[", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.679035431082381*^9, 3.6790354485763807`*^9}}],
+
+Cell[BoxData["\<\"MinimumVolumeEllipse`Private`\"\>"], "Output",
+ CellChangeTimes->{{3.679035490955381*^9, 3.679035495546381*^9}, 
+   3.6790356523143806`*^9, 3.679035836431881*^9, 3.6791188326357546`*^9, 
+   3.6791188676477556`*^9, 3.679119290597829*^9, 3.6791210394415274`*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"EndPackage", "[", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.6790354520523806`*^9, 3.6790354541563807`*^9}}]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{1367, 910},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"10.4 for Microsoft Windows (64-bit) (April 11, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 188, 3, 31, "Input",
+ InitializationCell->True],
+Cell[771, 27, 236, 3, 31, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1044, 35, 509, 9, 72, "Input",
+ InitializationCell->True],
+Cell[1556, 46, 383, 5, 52, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1976, 56, 416, 8, 31, "Input",
+ InitializationCell->True],
+Cell[2395, 66, 330, 4, 31, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2762, 75, 414, 8, 31, "Input",
+ InitializationCell->True],
+Cell[3179, 85, 302, 4, 31, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3518, 94, 468, 8, 31, "Input",
+ InitializationCell->True],
+Cell[3989, 104, 257, 3, 31, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4283, 112, 523, 9, 31, "Input",
+ InitializationCell->True],
+Cell[4809, 123, 251, 3, 31, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5097, 131, 577, 10, 31, "Input",
+ InitializationCell->True],
+Cell[5677, 143, 257, 3, 31, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5971, 151, 101, 2, 31, "Input",
+ InitializationCell->True],
+Cell[6075, 155, 248, 3, 31, "Output"]
+}, Open  ]],
+Cell[6338, 161, 2422, 61, 272, "Input",
+ InitializationCell->True],
+Cell[8763, 224, 2951, 78, 292, "Input",
+ InitializationCell->True],
+Cell[11717, 304, 1943, 53, 172, "Input",
+ InitializationCell->True],
+Cell[13663, 359, 2204, 60, 192, "Input",
+ InitializationCell->True],
+Cell[15870, 421, 177, 4, 31, "Input",
+ InitializationCell->True],
+Cell[16050, 427, 1969, 45, 52, "Input",
+ InitializationCell->True],
+Cell[18022, 474, 2047, 46, 52, "Input",
+ InitializationCell->True],
+Cell[20072, 522, 2774, 70, 176, "Input",
+ InitializationCell->True],
+Cell[22849, 594, 3939, 97, 232, "Input",
+ InitializationCell->True],
+Cell[26791, 693, 7951, 176, 352, "Input",
+ InitializationCell->True],
+Cell[34745, 871, 180, 4, 31, "Input"],
+Cell[CellGroupData[{
+Cell[34950, 879, 146, 3, 31, "Input",
+ InitializationCell->True],
+Cell[35099, 884, 278, 3, 31, "Output"]
+}, Open  ]],
+Cell[35392, 890, 155, 3, 31, "Input",
+ InitializationCell->True]
+}
+]
+*)
+

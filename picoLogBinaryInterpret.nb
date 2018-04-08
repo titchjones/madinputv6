@@ -1,0 +1,466 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     18063,        457]
+NotebookOptionsPosition[     17562,        435]
+NotebookOutlinePosition[     17906,        450]
+CellTagsIndexPosition[     17863,        447]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{"Directory", "[", "]"}]], "Input",
+ CellChangeTimes->{{3.6530444096357393`*^9, 3.6530444122017393`*^9}}],
+
+Cell[BoxData["\<\"F:\\\\My Documents\\\\Reports\\\\VELA\\\\20151002 Beam \
+Jitter\\\\Friday\"\>"], "Output",
+ CellChangeTimes->{3.653044412778739*^9, 3.6537225598750486`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"parameters", "=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"Sequence", "@@", "parameters"}], ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Switch", "[", 
+       RowBox[{"#", ",", "\[IndentingNewLine]", "\"\<string\>\"", ",", 
+        RowBox[{
+         RowBox[{"strlen", "=", 
+          RowBox[{"BinaryRead", "[", 
+           RowBox[{"file", ",", "\"\<Integer32\>\""}], "]"}]}], ";", 
+         RowBox[{"StringJoin", "@@", 
+          RowBox[{"BinaryReadList", "[", 
+           RowBox[{"file", ",", "\"\<Character8\>\"", ",", "strlen"}], 
+           "]"}]}]}], ",", "\[IndentingNewLine]", "\"\<double\>\"", ",", 
+        RowBox[{"BinaryRead", "[", 
+         RowBox[{"file", ",", "\"\<Real64\>\""}], "]"}], ",", 
+        "\[IndentingNewLine]", "\"\<long\>\"", ",", 
+        RowBox[{"BinaryRead", "[", 
+         RowBox[{"file", ",", "\"\<Integer32\>\""}], "]"}]}], 
+       "\[IndentingNewLine]", "]"}], "&"}], "/@", "parametertypes"}]}], 
+   "}"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"$RecursionLimit", "::", "reclim2"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Recursion depth of \[NoBreak]\\!\\(1024\\)\[NoBreak] \
+exceeded during evaluation of \[NoBreak]\\!\\({parameters, parametertypes}\\)\
+\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/$RecursionLimit\\\", ButtonNote -> \
+\\\"$RecursionLimit::reclim2\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.653722559984248*^9}],
+
+Cell[BoxData[
+ RowBox[{"Hold", "[", 
+  RowBox[{"{", 
+   RowBox[{"parameters", ",", "parametertypes"}], "}"}], "]"}]], "Output",
+ CellChangeTimes->{3.653722559984248*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"picoLogBinaryInterpret", "[", 
+   RowBox[{"filename_String", ",", "opts___Rule"}], "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "param", ",", "antal", ",", "file", ",", "nr", ",", "nc", ",", "rawdata",
+       ",", "verbose", ",", "date"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"verbose", "=", 
+      RowBox[{
+       RowBox[{"Global`picoVerbose", "/.", 
+        RowBox[{"{", "opts", "}"}]}], "/.", 
+       RowBox[{"{", 
+        RowBox[{"Global`picoVerbose", "\[Rule]", "False"}], "}"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"date", "=", 
+      RowBox[{
+       RowBox[{"Global`picoDate", "/.", 
+        RowBox[{"{", "opts", "}"}]}], "/.", 
+       RowBox[{"{", 
+        RowBox[{"Global`picoDate", "\[Rule]", "False"}], "}"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"file", "=", 
+      RowBox[{"OpenRead", "[", 
+       RowBox[{"filename", ",", 
+        RowBox[{"BinaryFormat", "\[Rule]", "True"}]}], "]"}]}], ";", "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "headerbytes", "]"}], "=", 
+      RowBox[{"BinaryRead", "[", 
+       RowBox[{"file", ",", "\"\<Integer16\>\""}], "]"}]}], ";", "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "signature", "]"}], "=", 
+      RowBox[{"StringJoin", "@@", 
+       RowBox[{"BinaryReadList", "[", 
+        RowBox[{"file", ",", "\"\<Character8\>\"", ",", "40"}], "]"}]}]}], 
+     ";", "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "version", "]"}], "=", 
+      RowBox[{"BinaryRead", "[", 
+       RowBox[{"file", ",", "\"\<Integer32\>\""}], "]"}]}], ";", "\n", 
+     RowBox[{"Switch", "[", 
+      RowBox[{
+       RowBox[{"param", "[", "version", "]"}], ",", "\n", "1", ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"antal", "[", "parametrar", "]"}], "=", "50"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"antal", "[", "notes", "]"}], "=", "200"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"antal", "[", "spare", "]"}], "=", "78"}], ";"}], ",", 
+       "\[IndentingNewLine]", "2", ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"antal", "[", "parametrar", "]"}], "=", "50"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"antal", "[", "notes", "]"}], "=", "200"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"antal", "[", "spare", "]"}], "=", "78"}], ";"}], 
+       "\[IndentingNewLine]", ",", "3", ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"antal", "[", "parametrar", "]"}], "=", "250"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"antal", "[", "notes", "]"}], "=", "1000"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"antal", "[", "spare", "]"}], "=", "78"}], ";"}], 
+       "\[IndentingNewLine]", ",", "4", ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"antal", "[", "parametrar", "]"}], "=", "250"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"antal", "[", "notes", "]"}], "=", "1000"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"antal", "[", "spare", "]"}], "=", "78"}], ";"}], 
+       "\[IndentingNewLine]", ",", "5", ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"antal", "[", "parametrar", "]"}], "=", "250"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"antal", "[", "notes", "]"}], "=", "1000"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"antal", "[", "spare", "]"}], "=", "58"}], ";"}]}], 
+      "\[IndentingNewLine]", "]"}], ";", "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "noofparameters", "]"}], "=", 
+      RowBox[{"BinaryRead", "[", 
+       RowBox[{"file", ",", "\"\<Integer32\>\""}], "]"}]}], ";", "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "parameters", "]"}], "=", 
+      RowBox[{"BinaryReadList", "[", 
+       RowBox[{"file", ",", "\"\<Integer16\>\"", ",", 
+        RowBox[{"antal", "[", "parametrar", "]"}]}], "]"}]}], ";", "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "sampleno", "]"}], "=", 
+      RowBox[{"BinaryRead", "[", 
+       RowBox[{"file", ",", "\"\<Integer32\>\""}], "]"}]}], ";", "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "noofsamples", "]"}], "=", 
+      RowBox[{"BinaryRead", "[", 
+       RowBox[{"file", ",", "\"\<Integer32\>\""}], "]"}]}], ";", "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "maxsamples", "]"}], "=", 
+      RowBox[{"BinaryRead", "[", 
+       RowBox[{"file", ",", "\"\<Integer32\>\""}], "]"}]}], ";", "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "interval", "]"}], "=", 
+      RowBox[{"BinaryRead", "[", 
+       RowBox[{"file", ",", "\"\<Integer32\>\""}], "]"}]}], ";", "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "intervalunits", "]"}], "=", 
+      RowBox[{"BinaryRead", "[", 
+       RowBox[{"file", ",", "\"\<Integer16\>\""}], "]"}]}], ";", "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "intervalunitsstring", "]"}], "=", 
+      RowBox[{"Switch", "[", 
+       RowBox[{
+        RowBox[{"param", "[", "intervalunits", "]"}], ",", "\n", "0", ",", 
+        RowBox[{"units", "=", "\"\<fs\>\""}], ",", "\n", "1", ",", 
+        RowBox[{"units", "=", "\"\<ps\>\""}], ",", "\n", "2", ",", 
+        RowBox[{"units", "=", "\"\<ns\>\""}], ",", "\n", "3", ",", 
+        RowBox[{"units", "=", "\"\<us\>\""}], ",", "\n", "4", ",", 
+        RowBox[{"units", "=", "\"\<ms\>\""}], ",", "\n", "5", ",", 
+        RowBox[{"units", "=", "\"\<s\>\""}], ",", "\n", "6", ",", 
+        RowBox[{"units", "=", "\"\<min\>\""}], ",", "\n", "7", ",", 
+        RowBox[{"units", "=", "\"\<h\>\""}], ",", "\n", "_", ",", 
+        RowBox[{"units", "=", "\"\<with unknown unit\>\""}]}], "]"}]}], ";", 
+     "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "triggersample", "]"}], "=", 
+      RowBox[{"BinaryRead", "[", 
+       RowBox[{"file", ",", "\"\<Integer32\>\""}], "]"}]}], ";", "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "triggered", "]"}], "=", 
+      RowBox[{"BinaryRead", "[", 
+       RowBox[{"file", ",", "\"\<Integer16\>\""}], "]"}]}], ";", "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "firstsample", "]"}], "=", 
+      RowBox[{"BinaryRead", "[", 
+       RowBox[{"file", ",", "\"\<Integer32\>\""}], "]"}]}], ";", "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "samplebytes", "]"}], "=", 
+      RowBox[{"BinaryRead", "[", 
+       RowBox[{"file", ",", "\"\<Integer32\>\""}], "]"}]}], ";", "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "settingsbytes", "]"}], "=", 
+      RowBox[{"BinaryRead", "[", 
+       RowBox[{"file", ",", "\"\<Integer32\>\""}], "]"}]}], ";", "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "startdate", "]"}], "=", 
+      RowBox[{"BinaryRead", "[", 
+       RowBox[{"file", ",", "\"\<Integer32\>\""}], "]"}]}], ";", "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "starttime", "]"}], "=", 
+      RowBox[{"BinaryRead", "[", 
+       RowBox[{"file", ",", "\"\<Integer32\>\""}], "]"}]}], ";", "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "minimumtime", "]"}], "=", 
+      RowBox[{"BinaryRead", "[", 
+       RowBox[{"file", ",", "\"\<Integer32\>\""}], "]"}]}], ";", "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "maximumtime", "]"}], "=", 
+      RowBox[{"BinaryRead", "[", 
+       RowBox[{"file", ",", "\"\<Integer32\>\""}], "]"}]}], ";", "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "notes", "]"}], "=", 
+      RowBox[{"StringJoin", "@@", 
+       RowBox[{"BinaryReadList", "[", 
+        RowBox[{"file", ",", "\"\<Character8\>\"", ",", 
+         RowBox[{"antal", "[", "notes", "]"}]}], "]"}]}]}], ";", "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "currenttime", "]"}], "=", 
+      RowBox[{"BinaryRead", "[", 
+       RowBox[{"file", ",", "\"\<Integer32\>\""}], "]"}]}], ";", "\n", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"param", "[", "version", "]"}], "===", "5"}], ",", "\n", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"param", "[", "stopAfter", "]"}], "=", 
+         RowBox[{"BinaryRead", "[", 
+          RowBox[{"file", ",", "\"\<Integer16\>\""}], "]"}]}], ";", "\n", 
+        RowBox[{
+         RowBox[{"param", "[", "maxTimeUnit", "]"}], "=", 
+         RowBox[{"BinaryRead", "[", 
+          RowBox[{"file", ",", "\"\<Integer16\>\""}], "]"}]}], ";", "\n", 
+        RowBox[{
+         RowBox[{"param", "[", "maxSampleTime", "]"}], "=", 
+         RowBox[{"BinaryRead", "[", 
+          RowBox[{"file", ",", "\"\<Integer32\>\""}], "]"}]}], ";", "\n", 
+        RowBox[{
+         RowBox[{"param", "[", "startTimeMsAccuracy", "]"}], "=", 
+         RowBox[{"BinaryRead", "[", 
+          RowBox[{"file", ",", "\"\<Integer32\>\""}], "]"}]}], ";", "\n", 
+        RowBox[{
+         RowBox[{"param", "[", "previousTimeMsAccuracy", "]"}], "=", 
+         RowBox[{"BinaryRead", "[", 
+          RowBox[{"file", ",", "\"\<Integer32\>\""}], "]"}]}], ";", "\n", 
+        RowBox[{
+         RowBox[{"param", "[", "noOfDays", "]"}], "=", 
+         RowBox[{"BinaryRead", "[", 
+          RowBox[{"file", ",", "\"\<Integer32\>\""}], "]"}]}], ";"}]}], 
+      "\[IndentingNewLine]", "]"}], ";", "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "spare", "]"}], "=", 
+      RowBox[{"BinaryReadList", "[", 
+       RowBox[{"file", ",", "\"\<Integer8\>\"", ",", 
+        RowBox[{"antal", "[", "spare", "]"}]}], "]"}]}], ";", "\n", 
+     RowBox[{"nr", "=", 
+      RowBox[{
+       RowBox[{"param", "[", "noofparameters", "]"}], "+", "1"}]}], ";", "\n", 
+     RowBox[{"nc", "=", 
+      RowBox[{"param", "[", "noofsamples", "]"}]}], ";", "\n", 
+     RowBox[{"rawdata", "=", 
+      RowBox[{"BinaryReadList", "[", 
+       RowBox[{"file", ",", 
+        RowBox[{"Join", "[", 
+         RowBox[{
+          RowBox[{"{", "\"\<Integer32\>\"", "}"}], ",", 
+          RowBox[{"Table", "[", 
+           RowBox[{"\"\<Real32\>\"", ",", 
+            RowBox[{"{", 
+             RowBox[{"param", "[", "noofparameters", "]"}], "}"}]}], "]"}]}], 
+         "]"}], ",", "nc"}], "]"}]}], ";", "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "PLS", "]"}], "=", 
+      RowBox[{"Block", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"str", "=", "\"\<\>\""}], "}"}], ",", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"While", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"ans", "=", 
+              RowBox[{"BinaryReadList", "[", 
+               RowBox[{"file", ",", "\"\<Character8\>\""}], "]"}]}], ")"}], "=!=", 
+            RowBox[{"{", "}"}]}], ",", "\[IndentingNewLine]", 
+           RowBox[{"str", "=", 
+            RowBox[{"str", "<>", "ans"}]}]}], "\[IndentingNewLine]", "]"}], 
+         ";", "\[IndentingNewLine]", "str"}]}], "\[IndentingNewLine]", 
+       "]"}]}], ";", "\n", 
+     RowBox[{
+      RowBox[{"param", "[", "names", "]"}], "=", 
+      RowBox[{"Prepend", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"StringCases", "[", 
+          RowBox[{
+           RowBox[{"Rest", "[", 
+            RowBox[{"StringSplit", "[", 
+             RowBox[{
+              RowBox[{"param", "[", "PLS", "]"}], ",", 
+              RowBox[{"\"\<[Parameter\>\"", "~~", 
+               RowBox[{
+                RowBox[{"(", 
+                 RowBox[{
+                 "WordCharacter", "|", "DigitCharacter", "|", 
+                  "WhitespaceCharacter"}], ")"}], ".."}], "~~", 
+               "\"\<]\>\""}]}], "]"}], "]"}], ",", 
+           RowBox[{
+            RowBox[{"\"\<Name=\>\"", "~~", 
+             RowBox[{"x", ":", 
+              RowBox[{
+              "RegularExpression", "[", "\"\<(.*?)\\\\r\\\\n\>\"", "]"}]}]}], 
+            "\[RuleDelayed]", 
+            RowBox[{"StringTrim", "[", "x", "]"}]}]}], "]"}], "[", 
+         RowBox[{"[", 
+          RowBox[{"All", ",", "1"}], "]"}], "]"}], ",", 
+        "\"\<RelativeTime\>\""}], "]"}]}], ";", "\n", 
+     RowBox[{"parameternames", "=", 
+      RowBox[{"StringReplace", "[", 
+       RowBox[{
+        RowBox[{"param", "[", "names", "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"\"\<-\>\"", "\[Rule]", "\"\<$\>\""}], ",", 
+          RowBox[{"\"\<_\>\"", "\[Rule]", "\"\<$\>\""}], ",", 
+          RowBox[{"\"\<  \>\"", "\[Rule]", "\"\<$\>\""}], ",", 
+          RowBox[{"\"\< \>\"", "\[Rule]", "\"\<$\>\""}], ",", 
+          RowBox[{"\"\<Sum\>\"", "\[Rule]", "\"\<sum\>\""}]}], "}"}]}], 
+       "]"}]}], ";", "\n", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Clear", "[", 
+        RowBox[{"Evaluate", "[", "#", "]"}], "]"}], "&"}], "/@", 
+      "parameternames"}], ";", "\n", 
+     RowBox[{
+      RowBox[{"Evaluate", "[", 
+       RowBox[{"Map", "[", 
+        RowBox[{"Symbol", ",", "parameternames"}], "]"}], "]"}], "=", 
+      RowBox[{"Transpose", "[", "rawdata", "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Clear", "[", "Time", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"ListQ", "[", "date", "]"}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"Time", "=", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"DateList", "[", 
+            RowBox[{"Join", "[", 
+             RowBox[{"date", ",", 
+              RowBox[{"{", 
+               RowBox[{"0", ",", "#", ",", 
+                RowBox[{"param", "[", "starttime", "]"}]}], "}"}]}], "]"}], 
+            "]"}], "&"}], "/@", "RelativeTime"}]}], ";"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"Time", "=", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"DateList", "[", 
+            RowBox[{"{", 
+             RowBox[{"0", ",", "0", ",", 
+              RowBox[{"param", "[", "startdate", "]"}], ",", "0", ",", "#", 
+              ",", 
+              RowBox[{"param", "[", "starttime", "]"}]}], "}"}], "]"}], "&"}],
+           "/@", "RelativeTime"}]}], ";"}]}], "\[IndentingNewLine]", "]"}], 
+     ";", "\n", 
+     RowBox[{"If", "[", 
+      RowBox[{"verbose", ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"Print", "[", 
+         RowBox[{"\"\<Time Unit: \>\"", "<>", 
+          RowBox[{"ToString", "[", 
+           RowBox[{"param", "[", "intervalunitsstring", "]"}], "]"}]}], "]"}],
+         ";", "\[IndentingNewLine]", 
+        RowBox[{"Print", "[", 
+         RowBox[{"\"\<Parameters (Re)Assigned: \>\"", "<>", 
+          RowBox[{"ToString", "[", 
+           RowBox[{"Join", "[", 
+            RowBox[{
+             RowBox[{"{", "\"\<Time\>\"", "}"}], ",", "parameternames"}], 
+            "]"}], "]"}]}], "]"}]}]}], "\[IndentingNewLine]", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Close", "[", "file", "]"}], ";"}]}], "\n", "]"}]}]], "Input",
+ CellChangeTimes->{{3.6530476266457396`*^9, 3.6530477360627394`*^9}, {
+  3.6530478127537394`*^9, 3.653047833799739*^9}, {3.6530481694977393`*^9, 
+  3.6530482766427393`*^9}}]
+},
+WindowSize->{1219, 835},
+WindowMargins->{{148, Automatic}, {38, Automatic}},
+FrontEndVersion->"10.2 for Microsoft Windows (64-bit) (July 29, 2015)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 127, 2, 31, "Input"],
+Cell[710, 26, 174, 2, 31, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[921, 33, 981, 23, 112, "Input"],
+Cell[1905, 58, 542, 11, 21, "Message"],
+Cell[2450, 71, 169, 4, 31, "Output"]
+}, Open  ]],
+Cell[2634, 78, 14924, 355, 1852, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)

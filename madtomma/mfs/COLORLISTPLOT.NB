@@ -1,0 +1,2223 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     74707,       2213]
+NotebookOptionsPosition[     35560,       1238]
+NotebookOutlinePosition[     65507,       1914]
+CellTagsIndexPosition[     65331,       1906]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell["CERN SL Note 97-56 (AP)", "Text",
+ TextAlignment->Right],
+
+Cell[CellGroupData[{
+
+Cell["Time Evolution and Colour", "Title"],
+
+Cell[TextData[{
+ ButtonBox["Krzysztof Goral",
+  BaseStyle->"Hyperlink",
+  ButtonData:>{
+    URL["http://nicewww.cern.ch/~kgoral/welcome.htm"], None}],
+ ", ",
+ ButtonBox["John M. Jowett",
+  BaseStyle->"Hyperlink",
+  ButtonData:>{
+    URL["http://wwwslap.cern.ch/~jowett/"], None}]
+}], "Subsubtitle"],
+
+Cell[CellGroupData[{
+
+Cell["Introduction", "Section"],
+
+Cell[TextData[{
+ "This note documents a small ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " [",
+ ButtonBox["1",
+  BaseStyle->"Hyperlink",
+  ButtonData:>"Wolfram book"],
+ "] package designed to enhance the capabilities of the standard function ",
+ StyleBox["ListPlot", "Input"],
+ " by introduction of evolving colour for plotted data.  This adds an extra \
+dimension to many two-dimensional graphics. "
+}], "Text"],
+
+Cell[TextData[{
+ "When studying, e.g, particle tracking data it is often difficult to analyse \
+a plot of a particle trajectory in phase space when it is presented \
+statically as a collection of dots.  With the present package,  the colours \
+of the dots contain information about the time-evolution of the system.  \
+Typically, the points progressively change colour (actually their ",
+ StyleBox["hue",
+  FontSlant->"Italic"],
+ ") from red at the beginning of the trajectory to violet at the end."
+}], "Text"],
+
+Cell["\<\
+The usefulness of this representation will be illustrated in the Examples \
+section below.\
+\>", "Text"],
+
+Cell[TextData[{
+ "This package and others will be made available in the context ",
+ StyleBox["Madtomma`Mfs`", "Input"],
+ "  (the word ",
+ StyleBox["context",
+  FontSlant->"Italic"],
+ " is used in a special sense in ",
+ StyleBox["Mathematica).  ",
+  FontSlant->"Italic"],
+ "It is intended to be used in conjunction with other packages in Madtomma to \
+analyse tracking data computed with ",
+ ButtonBox["MAD",
+  BaseStyle->"Hyperlink",
+  ButtonData:>{
+    URL["http://wwwslap.cern.ch/~fci/mad/mad.html"], None}],
+ ".  However it is perfectly autonomous and can be used for other purposes \
+(see the examples below)."
+}], "Text"],
+
+Cell[TextData[{
+ "This notebook adheres to the conventions for ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " package structure and documentation set out in [",
+ ButtonBox["2",
+  BaseStyle->"Hyperlink",
+  ButtonData:>"Meader book"],
+ "].  As such it serves as the development medium for the package itself.  ",
+ StyleBox["For this reason , some sections of the printed versions of this \
+document are hidden.  ",
+  FontWeight->"Bold"],
+ "They contain the definitions (\"code\") of the functions.  The visible \
+sections contain the documentation and examples of interest to users."
+}], "Text"],
+
+Cell[TextData[{
+ "To make the package available, you need only copy a couple of commands from \
+the \"",
+ ButtonBox["Setup",
+  BaseStyle->"Hyperlink",
+  ButtonData:>"Setup section"],
+ "\" section.  The \"",
+ ButtonBox["Examples",
+  BaseStyle->"Hyperlink",
+  ButtonData:>"Examples section"],
+ "\" section illustrates basic use of the package.  A final subsection \
+illustrating some less useful features is hidden."
+}], "Text"],
+
+Cell["The latest version is available on-line at", "Text"],
+
+Cell[TextData[ButtonBox["http://wwwslap.cern.ch/jowett/Madtomma",
+ BaseStyle->"Hyperlink",
+ ButtonData:>{
+   URL["http://wwwslap.cern.ch/jowett/Madtomma"], None}]], "Program"],
+
+Cell[TextData[{
+ "This notebook is based on the template for package and notebook development \
+by R. Maeder  and supplied with ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " 3.0."
+}], "Text"],
+
+Cell["\<\
+Since colour is very important in this notebook, the benefits of reading it \
+on a computer screen are even greater than usual.\
+\>", "Text"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Reference", "Section"],
+
+Cell[CellGroupData[{
+
+Cell["Title", "Subsubsection"],
+
+Cell[TextData[StyleBox["ColorListPlot Package ",
+ FontSlant->"Italic"]], "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Author", "Subsubsection"],
+
+Cell["Krzysztof Goral, John M. Jowett", "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Summary", "Subsubsection"],
+
+Cell[TextData[{
+ "The function  ",
+ StyleBox["colorListPlot", "Input"],
+ " operates similarly to the standard function ",
+ StyleBox["ListPlot", "Input"],
+ " (e.g. inheriting all its options), but marks subsequent dots with a colour \
+evolving from red to blue. This indicates the order of dots without \
+introducing the third dimension."
+}], "Text"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Copyright", "Subsubsection"],
+
+Cell[TextData[{
+ "\[Copyright] Copyright ",
+ StyleBox["CERN.1997",
+  FontSlant->"Italic"],
+ "\n\n",
+ "The copyright and all other rights relating to this computer software, in \
+whatever form, including but not\nlimited to the source code, the object code \
+and user documentation, are vested in CERN. \n\nCERN, on a royalty-free and \
+non-exclusive basis, hereby grants permission to use, copy, change, modify,\n\
+translate, display, distribute and make available this computer software, \
+subject to the following conditions:\n\n(1) this computer software is \
+provided on an as-is basis and CERN provides no express or implied\n\
+warranties of any kind, including but not limited to those of \
+merchantability, fitness for a particular purpose\nand non-infringement of \
+the proprietary rights, such as copyrights, patents and trade secrets, of \
+third\nparties. CERN accepts no liability whatsoever for or in connection \
+with the use of this computer software; \n\n(2) all copies made of this \
+computer software or of parts thereof shall include this copyright statement \
+in\nfull; \n\n(3) however, if this computer software or parts thereof are \
+made available in any other form than their\noriginal form, or are included \
+in any other computer software, the following short acknowledgement only\n\
+must be mentioned in the copyright statement and in the user documentation \
+(or, in the absence thereof, in\nany other appropriate place) concerning the \
+computer software thus made available or created: \n\n\"This product includes \
+computer software created and made available by CERN. This acknowledgement\n\
+shall be mentioned in full in any product which includes the CERN computer \
+software included herein or\nparts thereof.\" "
+}], "Text"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Notebook Version", "Subsubsection"],
+
+Cell["1.4", "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " Version"
+}], "Subsubsection"],
+
+Cell["3.0 (but it should also work with earlier versions)", "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["History", "Subsubsection"],
+
+Cell["\<\
+Version 1.1, 24/4/98, improved handling of $Path, etc., as in Mfs package.
+Version 1.2  28/4/98, overloaded colorListPlot for lists of {x,y,z} values, \
+inspired by mail from Sean Ross.
+Version1.3 15/1/1999, corrected colour variation for 3D data (JMJ).
+Version1.4 29/6/1999, simplified the Setup section.\
+\>", "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Keywords", "Subsubsection"],
+
+Cell["plot, data, colour, color, phase space", "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Warnings", "Subsubsection"],
+
+Cell[TextData[{
+ "Note: all cells marked as \"InitializationCell\" will be written to the \
+Auto-Save package. This package can then be read in programs that use it with \
+",
+ StyleBox["Needs[\"Madtomma`Mfs`ColorListPlot`\"]", "Input"],
+ ". Cells not intended to belong to the package should not have this property."
+}], "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Limitation", "Subsubsection"],
+
+Cell[TextData[{
+ "All options of the standard function ",
+ StyleBox["ListPlot", "Input"],
+ " are supported except for ",
+ StyleBox["PlotStyle", "Input"],
+ ".  The purpose of the package is in fact to allow a distinct ",
+ StyleBox["PlotStyle", "Input"],
+ " at each point."
+}], "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Requirements", "Subsubsection"],
+
+Cell[TextData[{
+ "Internally, this package uses the standard package\n",
+ Cell[BoxData["Utilities`FilterOptions`"], "Input"]
+}], "Text"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Setup", "Section",
+ CellTags->"Setup section"],
+
+Cell[TextData[{
+ "This section contains commands needed to load the corresponding package \
+file.  The contents of this file are equivalent to the following sections \
+(Interface, Implementation, Epilog) in which the package is developed.  These \
+sections are hidden when this notebook is used as the package documentation \
+but may be inspected in the online copy of this notebook that can be found in \
+the appropriate  sub-directory of the directory added to the ",
+ StyleBox["$Path", "Input"],
+ " variable below."
+}], "Text",
+ CellTags->"Setup section"],
+
+Cell[CellGroupData[{
+
+Cell["Search Path (ESSENTIAL!)", "Subsection",
+ CellTags->"Setup section"],
+
+Cell["\<\
+To have access to these packages, you may need to add my packages directory \
+to your search path.  This is system-dependent and the latest information \
+about arranging it on CERN computer systems can be found at\
+\>", "Text"],
+
+Cell[TextData[ButtonBox["http://wwwslap.cern.ch/~jowett/Madtomma/AboutFiles.\
+html",
+ BaseStyle->"Hyperlink",
+ ButtonData:>{
+   URL["http://wwwslap.cern.ch/~jowett/Madtomma/AboutFiles.html"], 
+   None}]], "Program"],
+
+Cell[TextData[{
+ "and is not reproduced here.  I strongly recommend that you modify your \
+kernel initialisation file once and for all as explained on this page.  Then \
+all my packages will be found as easily as the Standard Packages that come \
+with ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ "."
+}], "Text",
+ CellTags->"Setup section"],
+
+Cell[CellGroupData[{
+
+Cell["Read in the Package", "Subsubsection",
+ CellTags->"Setup section"],
+
+Cell[TextData[{
+ "The code is contained in the package ",
+ StyleBox["Mfs", "Input"],
+ StyleBox[".m", "Input",
+  FontFamily->"Courier",
+  FontWeight->"Bold"],
+ ", which is simply read in here. "
+}], "Text",
+ CellTags->"Setup section"],
+
+Cell[TextData[StyleBox["Needs[\"Madtomma`Mfs`ColorListPlot`\"]", "Input"]], \
+"Input",
+ CellTags->"Setup section"],
+
+Cell["\<\
+This is all you need to start using the package in your own applications.\
+\>", "Text",
+ CellTags->"Setup section"]
+}, Open  ]]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Interface", "Section",
+ InitializationCell->True],
+
+Cell["\<\
+This part declares the publicly visible functions, options, and values.\
+\>", "Text",
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell["Set up the package context, including public imports", "Subsection",
+ InitializationCell->True],
+
+Cell[TextData[{
+ "BeginPackage[",
+ StyleBox["\"Madtomma`Mfs`ColorListPlot`\",\n{", "Input"],
+ "\"JMJUtils`BumpEtc`\"}",
+ "]"
+}], "Input",
+ InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Usage messages for the exported functions and the context itself\
+\>", "Subsection",
+ InitializationCell->True],
+
+Cell["\<\
+colorListPlot::usage = \"colorListPlot[list] behaves like ListPlot but varies \
+the colour (or other attributes) of successive points according to its option \
+ColourScale.\\nIf the data list is a list of {x,y,z} values then the points \
+are coloured according to the z value.\";\
+\>", "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"rainbow", "::", "usage"}], " ", "=", " ", 
+   "\"\<rainbow is the default value of ColorScale, an option for the \
+function colorListPlot.  It varies the colour progressively from red to \
+violet.\>\""}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"grayfade", "::", "usage"}], " ", "=", 
+   "\"\<grayfade is a possible value of ColorScale, an option for the \
+function colorListPlot.  It varies the colour progressively from black to a \
+light grey.\>\""}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"ColorScale", "::", "usage"}], "=", 
+   "\"\<ColorScale is an option for colorListPlot.  It is a function mapping \
+the interval [0,1] to a graphics directive that will be applied to successive \
+points.  It's default is the function rainbow.\\nIt is ignored in the case of \
+3-dimensional data.\>\""}], ";"}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Implementation", "Section",
+ InitializationCell->True],
+
+Cell["\<\
+This part contains the actual definitions and any auxiliary functions that \
+should not be visible outside.\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell["Setting options for exported functions", "Subsection",
+ CellDingbat->None,
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"Options", "[", "colorListPlot", "]"}], "=", 
+   RowBox[{"Join", "[", 
+    RowBox[{
+     RowBox[{"Options", "[", "Graphics", "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"ColorScale", "->", "rainbow"}], ",", 
+       RowBox[{"PlotJoined", "->", "False"}]}], "}"}]}], "]"}]}], 
+  ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SetOptions", "[", 
+   RowBox[{"colorListPlot", ",", 
+    RowBox[{"Prolog", "->", 
+     RowBox[{"{", " ", 
+      RowBox[{"PointSize", "[", "0.02", "]"}], "}"}]}], ",", 
+    RowBox[{"Axes", "->", "True"}], ",", 
+    RowBox[{"Background", "->", 
+     RowBox[{"RGBColor", "[", 
+      RowBox[{"1", ",", "1", ",", "1"}], "]"}]}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Begin the private context (implementation part)", "Subsection",
+ InitializationCell->True],
+
+Cell["Begin[\"`Private`\"]", "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<Utilities`FilterOptions`\>\"", "]"}]], "Input",
+ InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Definition of the exported functions", "Subsection",
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell["Typical colouring functions", "Subsubsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"rainbow", "[", "z_", "]"}], ":=", 
+  RowBox[{"Hue", "[", 
+   RowBox[{".8", " ", "z"}], "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"grayfade", "[", "z_", "]"}], ":=", 
+  RowBox[{"GrayLevel", "[", 
+   RowBox[{".8", "z"}], "]"}]}]], "Input",
+ InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["colorListPlot ", "Subsubsection",
+ CellDingbat->None],
+
+Cell["\<\
+The main definition expects to receive a list of pairs of coordinates.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"colorListPlot", "[", 
+   RowBox[{
+    RowBox[{"x", ":", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"_", ",", " ", "_"}], "}"}], ".."}], "}"}]}], ",", 
+    "opts___Rule"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"ptdots", ",", "joins", ",", "pcolr"}], "}"}], ",", "\n", "\t\t", 
+    RowBox[{
+     RowBox[{"joins", "=", 
+      RowBox[{
+       RowBox[{"PlotJoined", "/.", 
+        RowBox[{"{", "opts", "}"}]}], "/.", 
+       RowBox[{"Options", "[", "colorListPlot", "]"}]}]}], ";", "\n", "\t\t", 
+     
+     RowBox[{"pcolr", " ", "=", " ", 
+      RowBox[{
+       RowBox[{"ColorScale", "/.", 
+        RowBox[{"{", "opts", "}"}]}], "/.", 
+       RowBox[{"Options", "[", "colorListPlot", "]"}]}]}], ";", "\n", "\t\t", 
+     
+     RowBox[{"If", "[", 
+      RowBox[{"joins", ",", "\n", "\t\t\t", 
+       RowBox[{"(", "\t", 
+        RowBox[{
+         RowBox[{"ptdots", "=", 
+          RowBox[{"MapIndexed", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"Flatten", "[", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"pcolr", "[", 
+                  RowBox[{
+                   RowBox[{"First", "[", "#2", "]"}], "/", 
+                   RowBox[{"Length", "[", "x", "]"}]}], "]"}], ",", 
+                 RowBox[{"Line", "[", "#1", "]"}]}], "}"}], "]"}], ")"}], 
+             "&"}], ",", 
+            RowBox[{"Partition", "[", 
+             RowBox[{"x", ",", "2", ",", "1"}], "]"}]}], "]"}]}], ";"}], 
+        ")"}], ",", "\n", "\t\t\t", 
+       RowBox[{"(", "\t", 
+        RowBox[{
+         RowBox[{"ptdots", "=", 
+          RowBox[{"MapIndexed", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"Flatten", "[", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"pcolr", "[", 
+                  RowBox[{
+                   RowBox[{"First", "[", "#2", "]"}], "/", 
+                   RowBox[{"Length", "[", "x", "]"}]}], "]"}], ",", 
+                 RowBox[{"Point", "[", "#1", "]"}]}], "}"}], "]"}], ")"}], 
+             "&"}], ",", "x"}], "]"}]}], ";"}], ")"}]}], "]"}], ";", "\n", 
+     "\t\t", 
+     RowBox[{"Show", "[", 
+      RowBox[{
+       RowBox[{"Graphics", "[", "ptdots", "]"}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"FilterOptions", "[", 
+          RowBox[{"Graphics", ",", " ", "##"}], "]"}], "&"}], " ", "@@", "\n",
+         "\t\t\t      ", 
+        RowBox[{"Flatten", "[", 
+         RowBox[{"{", 
+          RowBox[{"opts", ",", " ", 
+           RowBox[{"Options", "[", "colorListPlot", "]"}]}], "}"}], "]"}]}]}],
+       "]"}]}]}], "\n", "\t\t", "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[TextData[{
+ "In order that our function behaves in a way analogous to ",
+ StyleBox["ListPlot", "Input"],
+ ", we should also deal with the case of a list of single values.   Then the \
+horizontal coordinate is just the index of the list."
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"colorListPlot", "[", 
+   RowBox[{
+    RowBox[{"x_", "/;", 
+     RowBox[{
+      RowBox[{"Length", "[", 
+       RowBox[{"Dimensions", "[", "x", "]"}], "]"}], "==", "1"}]}], ",", 
+    "opts___"}], "]"}], ":=", 
+  RowBox[{"colorListPlot", "[", 
+   RowBox[{
+    RowBox[{"MapIndexed", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"First", "[", "#2", "]"}], ",", "#1"}], "}"}], "&"}], ",", 
+      "x"}], "]"}], ",", "opts"}], "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[TextData[{
+ "In response to a common need (see mail from Sean Ross), here is a further \
+overloading  to take ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"(", 
+    RowBox[{"x", ",", "y", ",", "z"}], ")"}], TraditionalForm]]],
+ " values"
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"colorListPlot", "[", 
+   RowBox[{
+    RowBox[{"data3", ":", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"_", ",", " ", "_", ",", "_"}], "}"}], ".."}], "}"}]}], ",", 
+    "opts___Rule"}], "]"}], ":=", "\n", "\t", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "data2", ",", "dataz", ",", "zhuecolor", ",", "ldata", ",", "a", ",", 
+      "b"}], "}"}], ",", "\n", "\t\t", 
+    RowBox[{
+     RowBox[{"ldata", "=", 
+      RowBox[{"Length", "[", "data3", "]"}]}], ";", "\n", "\t\t", 
+     RowBox[{"data2", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Take", "[", 
+         RowBox[{"#", ",", "2"}], "]"}], "&"}], " ", "/@", "data3"}]}], ";", 
+     "\n", "\t\t", 
+     RowBox[{"dataz", "=", 
+      RowBox[{"N", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Last", "[", "#", "]"}], "&"}], " ", "/@", " ", "data3"}], 
+       "]"}]}], ";", "\n", "\t\t", 
+     RowBox[{"a", "=", 
+      RowBox[{"Min", "[", "dataz", "]"}]}], ";", 
+     RowBox[{"b", "=", 
+      RowBox[{"Max", "[", "dataz", "]"}]}], ";", "\n", "\t\t", 
+     RowBox[{"dataz", "=", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"dataz", "-", "a"}], ")"}], "/", 
+       RowBox[{"(", 
+        RowBox[{"b", "-", "a"}], ")"}]}]}], ";", "\n", "\t\t", 
+     RowBox[{
+      RowBox[{"zhuecolor", "[", "z_", "]"}], ":=", 
+      RowBox[{"Hue", "[", 
+       RowBox[{"0.8", " ", 
+        RowBox[{"dataz", "[", 
+         RowBox[{"[", 
+          RowBox[{"Floor", "[", 
+           RowBox[{"1", "+", 
+            RowBox[{"z", 
+             RowBox[{"(", " ", 
+              RowBox[{"ldata", "-", "1"}], ")"}]}]}], "]"}], "]"}], "]"}]}], 
+       " ", "]"}]}], ";", "\n", "\t\t", 
+     RowBox[{"colorListPlot", "[", 
+      RowBox[{"data2", ",", 
+       RowBox[{"ColorScale", "->", "zhuecolor"}], ",", "opts"}], "]"}]}]}], 
+   "\n", "\t\t", "]"}]}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["End the private context", "Subsection",
+ InitializationCell->True],
+
+Cell["End[ ]", "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Epilog", "Section",
+ InitializationCell->True],
+
+Cell["This section protects exported symbols and ends the package.", "Text"],
+
+Cell[CellGroupData[{
+
+Cell["Protect exported symbol", "Subsection",
+ InitializationCell->True],
+
+Cell["Protect[ colorListPlot]", "Input",
+ InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["End the package context", "Subsection",
+ InitializationCell->True],
+
+Cell["EndPackage[ ]", "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Basic documentation", "Section"],
+
+Cell["\<\
+A quick way to document this small package is to list the names of the \
+functions it exports [1]:\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"Names", "[", 
+  StyleBox["\"\<Madtomma`Mfs`ColorListPlot`*\>\"", "Input"], "]"}]], "Input",
+ CellTags->"Setup section"],
+
+Cell["\<\
+and then print their usage messages that say what they do.  Normally these \
+messages are accessible by typing, e.g., \
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"?", "colorListPlot"}]], "Input"],
+
+Cell["\<\
+but the following utility function generates the same information in \
+formatted form (the following subsections!).\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"UsageCells", "[", 
+  RowBox[{"Names", "[", 
+   StyleBox["\"\<Madtomma`Mfs`ColorListPlot`*\>\"", "Input"], "]"}], 
+  "]"}]], "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Examples, Tests", "Section",
+ CellTags->"Examples section"],
+
+Cell[CellGroupData[{
+
+Cell["Basic use of the package", "Subsection",
+ CellTags->"Examples section"],
+
+Cell["This package provides a function ", "Text",
+ CellTags->"Examples section"],
+
+Cell[BoxData[
+ RowBox[{"?", "colorListPlot"}]], "Input",
+ CellTags->"Examples section"],
+
+Cell[TextData[{
+ "This can be used in just the same way as Mathematica's standard function ",
+ StyleBox["ListPlot.", "Input"],
+ " The graphics produced are similar except that the points start out red and \
+gradually change to violet."
+}], "Text",
+ CellTags->"Examples section"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"data", " ", "=", " ", 
+   RowBox[{"Table", "[", " ", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"Sin", "[", "x", "]"}], ",", 
+       RowBox[{"Cos", "[", 
+        RowBox[{
+         RowBox[{"3", 
+          RowBox[{"x", "/", "2"}]}], "+", ".2"}], "]"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"x", ",", "0", ",", 
+       RowBox[{
+        RowBox[{"2", "\[Pi]"}], "-", ".3"}], ",", ".1"}], "}"}]}], "]"}]}], 
+  ";"}]], "Input",
+ CellTags->"Examples section"],
+
+Cell[BoxData[
+ RowBox[{"colorListPlot", "[", " ", "data", "]"}]], "Input",
+ CellTags->"Examples section"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Options", "Subsection",
+ CellTags->"Examples section"],
+
+Cell[TextData[{
+ "In particular, it should be noted that ",
+ StyleBox["colorListPlot", "Input"],
+ " supports all the meaningful options of ",
+ StyleBox["ListPlot", "Input"],
+ "."
+}], "Text",
+ CellTags->"Examples section"],
+
+Cell[BoxData[
+ RowBox[{"colorListPlot", "[", 
+  RowBox[{"data", ",", 
+   RowBox[{"AxesLabel", "->", 
+    RowBox[{"{", 
+     RowBox[{"\"\<X\>\"", ",", "\"\<Y in some units\>\""}], "}"}]}], ",", 
+   RowBox[{"GridLines", "->", "Automatic"}], ",", 
+   RowBox[{"Background", "->", 
+    RowBox[{"GrayLevel", "[", ".9", "]"}]}], ",", 
+   RowBox[{"Frame", "->", "True"}], ",", 
+   RowBox[{"FrameBox", "->", "True"}], ",", 
+   RowBox[{"AspectRatio", "->", "Automatic"}], ",", 
+   RowBox[{"Prolog", "->", 
+    RowBox[{"{", 
+     RowBox[{"PointSize", "[", ".03", "]"}], "}"}]}]}], "]"}]], "Input",
+ CellTags->"Examples section"],
+
+Cell[TextData[{
+ "One of the options you may want to switch on more often is ",
+ StyleBox["PlotJoined", "Input"],
+ ".  This draws",
+ StyleBox[" ", "Input"],
+ "lines are drawn between subsequent points.  The colour of the lines is \
+varied."
+}], "Text",
+ CellTags->"Examples section"],
+
+Cell[BoxData[
+ RowBox[{"colorListPlot", "[", 
+  RowBox[{"data", ",", 
+   RowBox[{"PlotJoined", "->", "True"}]}], "]"}]], "Input",
+ CellTags->"Examples section"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Three-dimensional data", "Subsection"],
+
+Cell["\<\
+A common need is to colour the points according to the value of the  \
+z-coordinate in a three dimensional data set:\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"Short", "[", 
+  RowBox[{"data3", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"t", " ", 
+        RowBox[{"Cos", "[", "t", "]"}]}], ",", 
+       RowBox[{"t", " ", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "t"}], "]"}]}], ",", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"t", "-", "2"}], ")"}], " ", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"3", "t"}], "]"}]}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"t", ",", "0", ",", 
+       RowBox[{"7", "\[Pi]"}], ",", 
+       RowBox[{"\[Pi]", "/", "16"}]}], "}"}]}], "]"}]}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"colorListPlot", "[", "data3", "]"}]], "Input"],
+
+Cell[TextData[{
+ "When ",
+ StyleBox["colorListPlot ", "Input"],
+ "receives 3D data the colorScale option is ignored.  The colour of the \
+points change from red for the lowest z-value to violet at the highest."
+}], "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Other colouring methods", "Subsection",
+ CellTags->"Examples section"],
+
+Cell["\<\
+The rainbow colouring is not much use when the graphics is printed in black \
+and white. However the function has an option that allows the colouring to be \
+done differently and convey some information on the time-evolution despite \
+the limitations of the medium.  Two standard ways are \
+\>", "Text",
+ CellTags->"Examples section"],
+
+Cell[BoxData[
+ RowBox[{"?", "rainbow"}]], "Input",
+ CellTags->"Examples section"],
+
+Cell[BoxData[
+ RowBox[{"?", "grayfade"}]], "Input",
+ CellTags->"Examples section"],
+
+Cell[BoxData[
+ RowBox[{"colorListPlot", "[", 
+  RowBox[{"data", ",", 
+   RowBox[{"ColorScale", "->", "grayfade"}]}], "]"}]], "Input",
+ CellTags->"Examples section"],
+
+Cell[TextData[{
+ "In fact, ",
+ StyleBox["ColourScale", "Input"],
+ " can be any function on the interval [0,1] that returns a graphics \
+primitive or a list of graphics primitives [",
+ ButtonBox["1",
+  BaseStyle->"Hyperlink",
+  ButtonData:>"Wolfram book"],
+ "].  For example, we can gradually increase the size of the points"
+}], "Text",
+ CellTags->"Examples section"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"inflate", "[", "z_", "]"}], ":=", 
+  RowBox[{"PointSize", "[", 
+   RowBox[{"z", "/", "20"}], "]"}]}]], "Input",
+ CellTags->"Examples section"],
+
+Cell[BoxData[
+ RowBox[{"colorListPlot", "[", " ", 
+  RowBox[{"data", ",", 
+   RowBox[{"ColorScale", "->", "inflate"}]}], "]"}]], "Input",
+ CellTags->"Examples section"],
+
+Cell["\<\
+or decrease them while simultaneously cycling the grey scale four times over.\
+\
+\>", "Text",
+ CellTags->"Examples section"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"deflate", "[", "z_", "]"}], ":=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"PointSize", "[", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"2", "-", 
+        SuperscriptBox["z", "2"]}], ")"}], "/", "80"}], "]"}], ",", 
+    RowBox[{"GrayLevel", "[", 
+     RowBox[{"Mod", "[", 
+      RowBox[{
+       RowBox[{"4", "z"}], ",", "1"}], "]"}], "]"}]}], "}"}]}]], "Input",
+ CellTags->"Examples section"],
+
+Cell[BoxData[
+ RowBox[{"colorListPlot", "[", 
+  RowBox[{"data", ",", 
+   RowBox[{"ColorScale", "->", "deflate"}]}], "]"}]], "Input",
+ CellTags->"Examples section"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["A Stochastic Nonlinear Oscillator", "Subsection",
+ CellTags->"Examples section"],
+
+Cell["\<\
+As a less trivial example, consider the following map defining a non-linear \
+oscillator with amplitude-dependent frequency and subject to damping and \
+random fluctuations of its momentum.\
+\>", "Text",
+ CellTags->"Examples section"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"oscmap", "[", 
+   RowBox[{"{", 
+    RowBox[{"x_", ",", "p_"}], "}"}], "]"}], ":=", 
+  RowBox[{
+   SuperscriptBox["\[ExponentialE]", 
+    RowBox[{"-", "0.007"}]], 
+   RowBox[{
+    RowBox[{"(", GridBox[{
+       {
+        RowBox[{"Cos", "[", "mu", "]"}], 
+        RowBox[{"Sin", "[", "mu", "]"}]},
+       {
+        RowBox[{"-", 
+         RowBox[{"Sin", "[", "mu", "]"}]}], 
+        RowBox[{"Cos", "[", "mu", "]"}]}
+      }], ")"}], ".", 
+    RowBox[{"(", GridBox[{
+       {
+        RowBox[{"Cos", "[", 
+         RowBox[{".01", 
+          RowBox[{"(", 
+           RowBox[{
+            SuperscriptBox["x", "2"], "+", 
+            SuperscriptBox["p", "2"]}], ")"}]}], "]"}], 
+        RowBox[{"Sin", "[", 
+         RowBox[{".01", 
+          RowBox[{"(", 
+           RowBox[{
+            SuperscriptBox["x", "2"], "+", 
+            SuperscriptBox["p", "2"]}], ")"}]}], "]"}]},
+       {
+        RowBox[{"-", 
+         RowBox[{"Sin", "[", 
+          RowBox[{".01", 
+           RowBox[{"(", 
+            RowBox[{
+             SuperscriptBox["x", "2"], "+", 
+             SuperscriptBox["p", "2"]}], ")"}]}], "]"}]}], 
+        RowBox[{"Cos", "[", 
+         RowBox[{".01", 
+          RowBox[{"(", 
+           RowBox[{
+            SuperscriptBox["x", "2"], "+", 
+            SuperscriptBox["p", "2"]}], ")"}]}], "]"}]}
+      }], ")"}], ".", 
+    RowBox[{"{", 
+     RowBox[{"x", ",", "p"}], "}"}]}]}]}], "\n", 
+ RowBox[{"\t\t", 
+  RowBox[{
+   RowBox[{"+", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", 
+      RowBox[{"0.05", 
+       SuperscriptBox["x", "2"]}]}], "}"}]}], "+", 
+   RowBox[{
+    RowBox[{"Random", "[", 
+     RowBox[{"Real", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"-", ".1"}], ",", ".1"}], "}"}]}], "]"}], 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "1"}], "}"}]}]}]}]}], "Input",
+ CellTags->"Examples section"],
+
+Cell["\<\
+We put the zero-amplitude frequency close to the third-integer resonance\
+\>", "Text",
+ CellTags->"Examples section"],
+
+Cell[BoxData[
+ RowBox[{"mu", "=", 
+  RowBox[{
+   RowBox[{"(", "0.33", ")"}], "2", " ", "\[Pi]"}]}]], "Input",
+ CellTags->"Examples section"],
+
+Cell["\<\
+Initialise the random number generator (so that we can reproduce results if \
+required).\
+\>", "Text",
+ CellTags->"Examples section"],
+
+Cell[BoxData[
+ RowBox[{"SeedRandom", "[", "123456", "]"}]], "Input",
+ CellTags->"Examples section"],
+
+Cell[TextData[{
+ StyleBox["Mathematica ",
+  FontSlant->"Italic"],
+ "provides a very easy way [1,2] to compute multiple iterations of the map."
+}], "Text",
+ CellTags->"Examples section"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"traj", "=", 
+   RowBox[{"NestList", "[", 
+    RowBox[{"oscmap", ",", 
+     RowBox[{"{", 
+      RowBox[{"2", ",", "1"}], "}"}], ",", "3000"}], "]"}]}], ";"}]], "Input",\
+
+ CellTags->"Examples section"],
+
+Cell["\<\
+A straightforward monochrome phase-space plot is difficult to interpret.  \
+Many things can happen as the particle is trapped or escapes from various \
+resonant island chains.  It is hard to tell whether the amplitude is being \
+damped, anti-damped or in some kind of equilibrium.\
+\>", "Text",
+ CellTags->"Examples section"],
+
+Cell[BoxData[
+ RowBox[{"ListPlot", "[", 
+  RowBox[{"traj", ",", 
+   RowBox[{"PlotRange", "->", "All"}]}], "]"}]], "Input",
+ CellTags->"Examples section"],
+
+Cell[TextData[{
+ "However, with ",
+ StyleBox["colorListPlot", "Input"],
+ ", much more information can be apprehended.  Typically (but depending  on \
+the actual realisation of the fluctuating term via ",
+ StyleBox["SeedRandom", "Input"],
+ ") the following plot shows initial trapping in an island chain, diffusion \
+out of it, damping to a neighbourhood of the origin,  diffusive growth of the \
+amplitude and, finally, further resonant trapping in the islands.  \
+Physically, it is important to know the sequence in which these events can \
+occur."
+}], "Text",
+ CellTags->"Examples section"],
+
+Cell[BoxData[
+ RowBox[{"colorListPlot", "[", 
+  RowBox[{"traj", ",", 
+   RowBox[{"PlotRange", "->", "All"}], ",", 
+   RowBox[{"Prolog", "->", 
+    RowBox[{"{", 
+     RowBox[{"PointSize", "[", "0.01", "]"}], "}"}]}]}], "]"}]], "Input",
+ CellTags->"Examples section"],
+
+Cell["\<\
+To provide a color scale we can read off the x-axis from the plot of a simple \
+function:\
+\>", "Text",
+ CellTags->"Examples section"],
+
+Cell[BoxData[
+ RowBox[{"colorListPlot", "[", 
+  RowBox[{"Table", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"k", ",", 
+      RowBox[{"1", "+", 
+       RowBox[{"Sin", "[", 
+        RowBox[{"k", "/", "200"}], "]"}]}]}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"k", ",", "1", ",", 
+      RowBox[{"Length", "[", "traj", "]"}]}], "}"}]}], "]"}], "]"}]], "Input",\
+
+ CellTags->"Examples section"],
+
+Cell["\<\
+This makes it easy to isolate a portion of the trajectory for a closer look.  \
+Here are the first 400 iterations:\
+\>", "Text",
+ CellTags->"Examples section"],
+
+Cell[BoxData[
+ RowBox[{"colorListPlot", "[", 
+  RowBox[{
+   RowBox[{"Take", "[", 
+    RowBox[{"traj", ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "400"}], "}"}]}], "]"}], ",", 
+   RowBox[{"PlotRange", "->", "All"}]}], "]"}]], "Input",
+ CellTags->"Examples section"],
+
+Cell[TextData[{
+ "Further insight into the time evolution can be obtained by looking at the \
+",
+ StyleBox["x ",
+  FontSlant->"Italic"],
+ "variable alone."
+}], "Text",
+ CellTags->"Examples section"],
+
+Cell[BoxData[
+ RowBox[{"colorListPlot", "[", 
+  RowBox[{"First", " ", "/@", " ", "traj"}], "]"}]], "Input",
+ CellTags->"Examples section"],
+
+Cell["\<\
+or at a plot in the action angle variables of the linearised system\
+\>", "Text",
+ CellTags->"Examples section"],
+
+Cell[BoxData[
+ RowBox[{"colorListPlot", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Plus", "@@", 
+         SuperscriptBox["#", "2"]}], "/", "2"}], ",", 
+       RowBox[{"-", 
+        RowBox[{"ArcTan", "@@", " ", "#"}]}]}], " ", "}"}], "&"}], " ", "/@", 
+    " ", "traj"}], ",", 
+   RowBox[{"Prolog", "->", 
+    RowBox[{"PointSize", "[", "0.012", "]"}]}]}], "]"}]], "Input",
+ CellTags->"Examples section"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["References", "Section"],
+
+Cell[TextData[{
+ StyleBox["[1] Stephen Wolfram, ", "SR"],
+ StyleBox["The Mathematica Book", "SO",
+  FontSlant->"Italic"],
+ StyleBox[", 3rd ed., Wolfram Media/Cambridge University Press, 1996.", "SR"]
+}], "Text",
+ CellTags->"Wolfram book"],
+
+Cell[TextData[{
+ "[2]  Roman Maeder, ",
+ StyleBox["Programming in Mathematica",
+  FontSlant->"Italic"],
+ ", 3rd ed. Addison-Wesley, 1996"
+}], "Text",
+ CellTags->"Meader book"]
+}, Closed]]
+}, Open  ]]
+},
+AutoGeneratedPackage->Automatic,
+InitializationCellEvaluation->False,
+CellGrouping->Automatic,
+WindowSize->{677, 764},
+WindowMargins->{{214, Automatic}, {Automatic, 0}},
+DockedCells->FEPrivate`FrontEndResource[
+ "FEExpressions", "CompatibilityToolbar"],
+PrivateNotebookOptions->{"ColorPalette"->{RGBColor, 128}},
+RenderingOptions->{"ObjectDithering"->True,
+"RasterDithering"->False},
+FrontEndVersion->"8.0 for Microsoft Windows (32-bit) (February 23, 2011)",
+StyleDefinitions->Notebook[{
+   Cell[
+    CellGroupData[{
+      Cell["Style Definitions", "Subtitle"], 
+      Cell[
+      "Modify the definitions below to change the default appearance of all \
+cells in a given style.\nMake modifications to any definition using commands \
+in the Format menu.", "Text"], 
+      Cell[
+       CellGroupData[{
+         Cell["Style Environment Names", "Section"], 
+         Cell[
+          StyleData[All, "Working"], PageWidth -> WindowWidth, 
+          CellBracketOptions -> {"Color" -> RGBColor[0.4, 0, 0.239994]}, 
+          ScriptMinSize -> 9, Background -> None], 
+         Cell[
+          StyleData[All, "Presentation"], PageWidth -> PaperWidth, 
+          CellBracketOptions -> {"Color" -> RGBColor[0, 0, 1]}, ScriptMinSize -> 
+          9], 
+         Cell[
+          StyleData[All, "Printout"], PageWidth -> PaperWidth, ShowCellLabel -> 
+          False, ImageSize -> {200, 200}, 
+          PrivateFontOptions -> {"FontType" -> "Outline"}]}, Open]], 
+      Cell[
+       CellGroupData[{
+         Cell["Notebook Options", "Section"], 
+         Cell[
+         "The options defined for the style below will be used at the \
+Notebook level.", "Text"], 
+         Cell[
+          StyleData["Notebook"], PageHeaders -> {{
+             Cell[
+              TextData[{
+                CounterBox["Page"]}], "PageNumber"], None, 
+             Cell[
+              TextData[{
+                ValueBox["FileName"]}], "Header"]}, {
+             Cell[
+              TextData[{
+                ValueBox["FileName"]}], "Header"], None, 
+             Cell[
+              TextData[{
+                CounterBox["Page"]}], "PageNumber"]}}, CellFrameLabelMargins -> 
+          6, StyleMenuListing -> None]}, Open]], 
+      Cell[
+       CellGroupData[{
+         Cell["Styles for Headings", "Section"], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Title"], CellFrame -> {{0, 0}, {0, 0.25}}, 
+             CellMargins -> {{18, 10}, {0, 20}}, 
+             CellGroupingRules -> {"TitleGrouping", 0}, PageBreakBelow -> 
+             False, CellFrameMargins -> 6, CellFrameColor -> GrayLevel[0], 
+             LineSpacing -> {0.95, 0}, 
+             CounterAssignments -> {{"Section", 0}, {"Equation", 0}, {
+               "Figure", 0}}, FontFamily -> "Helvetica", FontSize -> 36, 
+             FontWeight -> "Bold", FontColor -> RGBColor[0.4, 0, 0.239994]], 
+            Cell[
+             StyleData["Title", "Presentation"], 
+             CellMargins -> {{20, 10}, {2, 20}}, CellFrameMargins -> 5, 
+             FontColor -> RGBColor[0, 0, 1]], 
+            Cell[
+             StyleData["Title", "Printout"], 
+             CellMargins -> {{18, 30}, {0, 0}}, CellFrameMargins -> 4, 
+             FontSize -> 24]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Subtitle"], CellMargins -> {{20, 30}, {2, 10}}, 
+             CellGroupingRules -> {"TitleGrouping", 10}, PageBreakBelow -> 
+             False, CellFrameMargins -> {{0, 4}, {8, 4}}, 
+             LineSpacing -> {1, 0}, 
+             CounterAssignments -> {{"Section", 0}, {"Equation", 0}, {
+               "Figure", 0}}, FontFamily -> "Helvetica", FontSize -> 24], 
+            Cell[
+             StyleData["Subtitle", "Presentation"], 
+             CellMargins -> {{20, 10}, {2, 10}}], 
+            Cell[
+             StyleData["Subtitle", "Printout"], 
+             CellMargins -> {{18, 30}, {0, 10}}, FontSize -> 18]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Section 1"], CellFrame -> {{0, 0}, {0, 3}}, 
+             CellMargins -> {{18, 10}, {10, 30}}, 
+             CellGroupingRules -> {"SectionGrouping", 40}, PageBreakBelow -> 
+             False, CellFrameMargins -> {{0, 4}, {8, 4}}, CellFrameColor -> 
+             RGBColor[0.4, 0, 0.239994], CounterIncrements -> "Section", 
+             CounterAssignments -> {{"Subsection", 0}, {"Subsubsection", 0}}, 
+             FontFamily -> "Helvetica", FontSize -> 18, FontWeight -> "Bold"], 
+            Cell[
+             StyleData["Section 1", "Presentation"], 
+             CellMargins -> {{20, 10}, {6, 30}}, CellFrameMargins -> 5], 
+            Cell[
+             StyleData["Section 1", "Printout"], 
+             CellMargins -> {{18, 30}, {4, 30}}, CellFrameMargins -> 4, 
+             FontSize -> 14]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Section"], CellFrame -> False, 
+             CellMargins -> {{18, 10}, {10, 30}}, 
+             CellGroupingRules -> {"SectionGrouping", 40}, PageBreakBelow -> 
+             False, CellFrameMargins -> 4, CellFrameLabels -> {{
+                Cell[
+                 TextData[{
+                   CounterBox["Section"]}]], None}, {None, None}}, 
+             CounterIncrements -> "Section", 
+             CounterAssignments -> {{"Subsection", 0}, {"Subsubsection", 0}}, 
+             FontFamily -> "Helvetica", FontSize -> 18, FontWeight -> "Bold"], 
+            Cell[
+             StyleData["Section", "Presentation"], 
+             CellMargins -> {{20, 10}, {0, 30}}], 
+            Cell[
+             StyleData["Section", "Printout"], 
+             CellMargins -> {{18, 30}, {0, 30}}, CellFrameMargins -> 5, 
+             FontSize -> 14]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Subsection"], CellDingbat -> None, 
+             CellMargins -> {{38, 30}, {2, 20}}, 
+             CellGroupingRules -> {"SectionGrouping", 50}, PageBreakBelow -> 
+             False, CellFrameLabels -> {{
+                Cell[
+                 TextData[{
+                   CounterBox["Section"], ".", 
+                   CounterBox["Subsection"]}]], None}, {None, None}}, 
+             CounterIncrements -> "Subsection", 
+             CounterAssignments -> {{"Subsubsection", 0}}, FontFamily -> 
+             "Times", FontSize -> 14, FontWeight -> "Bold"], 
+            Cell[
+             StyleData["Subsection", "Presentation"], 
+             CellMargins -> {{35, 30}, {0, 20}}], 
+            Cell[
+             StyleData["Subsection", "Printout"], 
+             CellMargins -> {{18, 30}, {0, 10}}, FontSize -> 12]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Subsubsection"], CellDingbat -> None, 
+             CellMargins -> {{55, 30}, {4, 10}}, 
+             CellGroupingRules -> {"SectionGrouping", 60}, PageBreakBelow -> 
+             False, CellFrameLabels -> {{
+                Cell[
+                 TextData[{
+                   CounterBox["Section"], ".", 
+                   CounterBox["Subsection"], ".", 
+                   CounterBox["Subsubsection"]}]], None}, {None, None}}, 
+             CounterIncrements -> "Subsubsection", FontFamily -> "Times", 
+             FontSize -> 12, FontWeight -> "Bold"], 
+            Cell[
+             StyleData["Subsubsection", "Presentation"], 
+             CellMargins -> {{31, 30}, {0, 12}}], 
+            Cell[
+             StyleData["Subsubsection", "Printout"], 
+             CellMargins -> {{18, 30}, {0, 12}}, FontSize -> 10]}, Open]]}, 
+        Open]], 
+      Cell[
+       CellGroupData[{
+         Cell["Styles for Body Text", "Section"], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Text"], CellMargins -> {{55, 10}, {6, 6}}, 
+             TextJustification -> 1, LineSpacing -> {1, 2}, FontFamily -> 
+             "Times"], 
+            Cell[
+             StyleData["Text", "Presentation"], 
+             CellMargins -> {{20, 10}, {6, 6}}, TextAlignment -> Left, 
+             TextJustification -> 0, LineSpacing -> {1.3, 0}, FontSize -> 14], 
+            Cell[
+             StyleData["Text", "Printout"], CellMargins -> {{18, 4}, {4, 4}}, 
+             LineSpacing -> {1, 3}, FontSize -> 10]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Commentary"], CellMargins -> {{55, 10}, {2, 6}}, 
+             TextJustification -> 1, LineSpacing -> {1, 2}, FontFamily -> 
+             "Helvetica", FontSize -> 10, FontColor -> RGBColor[0, 0, 0.4]], 
+            Cell[
+             StyleData["Commentary", "Presentation"], 
+             CellMargins -> {{60, 30}, {2, 6}}, TextJustification -> 1, 
+             LineSpacing -> {1.3, 0}, FontSize -> 12], 
+            Cell[
+             StyleData["Commentary", "Printout"], 
+             CellMargins -> {{18, 30}, {3, 0}}, LineSpacing -> {1, 3}, 
+             FontFamily -> "Times", FontSize -> 10]}, Open]]}, Closed]], 
+      Cell[
+       CellGroupData[{
+         Cell["Styles for Input/Output", "Section"], 
+         Cell[
+         "The cells in this section define styles used for input and output \
+to the kernel.  Be careful when modifying, renaming, or removing these \
+styles, because the front end associates special meanings with these style \
+names.", "Text"], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Input"], CellFrame -> {{1, 1}, {0, 1}}, 
+             CellMargins -> {{55, 10}, {0, 0}}, Evaluatable -> True, 
+             CellGroupingRules -> "InputGrouping", CellHorizontalScrolling -> 
+             True, PageBreakWithin -> False, GroupPageBreakWithin -> False, 
+             CellLabelPositioning -> Automatic, 
+             CellLabelMargins -> {{23, Inherited}, {Inherited, Inherited}}, 
+             DefaultFormatType -> DefaultInputFormatType, FormatType -> 
+             InputForm, ShowStringCharacters -> True, NumberMarks -> True, 
+             FontSize -> 12, FontWeight -> "Bold", Background -> None], 
+            Cell[
+             StyleData["Input", "Presentation"], 
+             CellMargins -> {{60, 10}, {0, 10}}, Background -> None], 
+            Cell[
+             StyleData["Input", "Printout"], 
+             CellMargins -> {{55, 10}, {0, 10}}, FontSize -> 10, Background -> 
+             None]}, Open]], 
+         Cell[
+          StyleData["InlineInput"], Evaluatable -> True, CellGroupingRules -> 
+          "InputGrouping", CellHorizontalScrolling -> True, PageBreakWithin -> 
+          False, GroupPageBreakWithin -> False, DefaultFormatType -> 
+          DefaultInputFormatType, AutoItalicWords -> {}, FormatType -> 
+          InputForm, ShowStringCharacters -> True, NumberMarks -> True, 
+          CounterIncrements -> "Input", FontWeight -> "Bold"], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Output"], CellFrame -> {{1, 1}, {1, 0}}, 
+             CellMargins -> {{55, 10}, {15, 0}}, CellEditDuplicate -> True, 
+             CellGroupingRules -> "OutputGrouping", CellHorizontalScrolling -> 
+             True, PageBreakWithin -> False, GroupPageBreakWithin -> False, 
+             GeneratedCell -> True, CellAutoOverwrite -> True, 
+             CellLabelMargins -> {{23, Inherited}, {Inherited, Inherited}}, 
+             DefaultFormatType -> DefaultOutputFormatType, FormatType -> 
+             InputForm, FontSize -> 12, Background -> None], 
+            Cell[
+             StyleData["Output", "Presentation"], 
+             CellMargins -> {{60, Inherited}, {10, 0}}, Background -> None], 
+            Cell[
+             StyleData["Output", "Printout"], 
+             CellMargins -> {{55, Inherited}, {10, 0}}, FontSize -> 10, 
+             Background -> None]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["InputOnly"], CellFrame -> 1, 
+             CellMargins -> {{55, 10}, {15, 0}}, Evaluatable -> True, 
+             CellGroupingRules -> "InputGrouping", CellHorizontalScrolling -> 
+             True, PageBreakWithin -> False, GroupPageBreakWithin -> False, 
+             CellLabelPositioning -> Automatic, 
+             CellLabelMargins -> {{23, Inherited}, {Inherited, Inherited}}, 
+             DefaultFormatType -> DefaultInputFormatType, FormatType -> 
+             InputForm, ShowStringCharacters -> True, NumberMarks -> True, 
+             FontSize -> 12, FontWeight -> "Bold", Background -> 
+             GrayLevel[0.966674]], 
+            Cell[
+             StyleData["InputOnly", "Presentation"], 
+             CellMargins -> {{60, Inherited}, {10, 10}}], 
+            Cell[
+             StyleData["InputOnly", "Printout"], 
+             CellMargins -> {{55, Inherited}, {10, 10}}, FontSize -> 10]}, 
+           Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Message"], CellFrame -> {{1, 1}, {0, 0}}, CellDingbat -> 
+             "\[LongDash]", CellMargins -> {{55, 10}, {0, 0}}, 
+             CellGroupingRules -> "OutputGrouping", PageBreakWithin -> False, 
+             GroupPageBreakWithin -> False, GeneratedCell -> True, 
+             CellAutoOverwrite -> True, ShowCellLabel -> False, 
+             CellLabelMargins -> {{23, Inherited}, {Inherited, Inherited}}, 
+             DefaultFormatType -> DefaultOutputFormatType, FormatType -> 
+             InputForm, StyleMenuListing -> None, FontFamily -> "Helvetica", 
+             FontSize -> 10, FontSlant -> "Oblique", FontColor -> 
+             GrayLevel[0], Background -> GrayLevel[1]], 
+            Cell[
+             StyleData["Message", "Presentation"], 
+             CellMargins -> {{60, Inherited}, {Inherited, Inherited}}, 
+             LineSpacing -> {1, 0}], 
+            Cell[
+             StyleData["Message", "Printout"], 
+             CellMargins -> {{55, Inherited}, {0, 0}}, FontSize -> 8]}, 
+           Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Print"], CellFrame -> True, 
+             CellMargins -> {{55, 26}, {1, 6}}, CellGroupingRules -> 
+             "OutputGrouping", CellHorizontalScrolling -> True, 
+             PageBreakWithin -> False, GroupPageBreakWithin -> False, 
+             GeneratedCell -> True, CellAutoOverwrite -> True, ShowCellLabel -> 
+             False, CellLabelMargins -> {{23, Inherited}, {
+               Inherited, Inherited}}, DefaultFormatType -> 
+             DefaultOutputFormatType, TextAlignment -> Left, FormatType -> 
+             InputForm, StyleMenuListing -> None, FontSize -> 9, Background -> 
+             GrayLevel[0.849989]], 
+            Cell[
+             StyleData["Print", "Presentation"], CellFrame -> True, 
+             CellMargins -> {{60, Inherited}, {10, 2}}, Background -> 
+             GrayLevel[0.849989]], 
+            Cell[
+             StyleData["Print", "Printout"], CellFrame -> True, 
+             CellMargins -> {{54, Inherited}, {2, 6}}, FontSize -> 10, 
+             Background -> GrayLevel[0.849989]]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Graphics"], CellFrame -> {{1, 1}, {0, 0}}, 
+             CellMargins -> {{55, 10}, {0, 0}}, CellGroupingRules -> 
+             "GraphicsGrouping", CellHorizontalScrolling -> True, 
+             PageBreakWithin -> False, GeneratedCell -> True, 
+             CellAutoOverwrite -> True, ShowCellLabel -> False, 
+             DefaultFormatType -> DefaultOutputFormatType, FormatType -> 
+             InputForm, ImageSize -> {288, 288}, 
+             ImageMargins -> {{35, Inherited}, {Inherited, 0}}, 
+             StyleMenuListing -> None, Background -> GrayLevel[1]], 
+            Cell[
+             StyleData["Graphics", "Presentation"], 
+             CellMargins -> {{60, Inherited}, {0, 0}}, 
+             ImageMargins -> {{10, 10}, {10, 10}}], 
+            Cell[
+             StyleData["Graphics", "Printout"], 
+             CellMargins -> {{55, Inherited}, {0, 0}}, 
+             ImageSize -> {288, 288}]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["CellLabel"], StyleMenuListing -> None, FontFamily -> 
+             "Helvetica", FontSize -> 10, FontSlant -> "Oblique", FontColor -> 
+             RGBColor[0, 0, 1]], 
+            Cell[
+             StyleData["CellLabel", "Presentation"], 
+             CellMargins -> {{18, Inherited}, {Inherited, Inherited}}], 
+            Cell[
+             StyleData["CellLabel", "Printout"], 
+             CellMargins -> {{0, Inherited}, {Inherited, Inherited}}, 
+             FontSize -> 8]}, Open]]}, Open]], 
+      Cell[
+       CellGroupData[{
+         Cell["Unique Styles", "Section"], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Author"], CellMargins -> {{20, 30}, {45, 5}}, 
+             CellGroupingRules -> {"TitleGrouping", 20}, PageBreakBelow -> 
+             False, CellFrameMargins -> {{0, 4}, {8, 4}}, 
+             LineSpacing -> {1, 0}, 
+             CounterAssignments -> {{"Section", 0}, {"Equation", 0}, {
+               "Figure", 0}}, FontFamily -> "Helvetica", FontSize -> 16, 
+             FontSlant -> "Italic"], 
+            Cell[
+             StyleData["Author", "Presentation"], 
+             CellMargins -> {{20, 30}, {45, 10}}, FontSize -> 18], 
+            Cell[
+             StyleData["Author", "Printout"], 
+             CellMargins -> {{18, 30}, {45, 5}}, FontSize -> 16]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Abstract"], CellFrame -> False, 
+             CellMargins -> {{18, 140}, {4, 30}}, LineSpacing -> {0.9, 0}, 
+             FontFamily -> "Times", FontSize -> 12], 
+            Cell[
+             StyleData["Abstract", "Presentation"], CellFrame -> True, 
+             CellMargins -> {{20, 10}, {Inherited, 30}}], 
+            Cell[
+             StyleData["Abstract", "Printout"], LineSpacing -> {1, 2}, 
+             FontSize -> 10]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Caption"], CellMargins -> {{55, 10}, {5, 3}}, 
+             FontFamily -> "Helvetica", FontSize -> 9], 
+            Cell[
+             StyleData["Caption", "Presentation"], 
+             CellMargins -> {{60, 65}, {6, 4}}, FontSize -> 10], 
+            Cell[
+             StyleData["Caption", "Printout"], 
+             CellMargins -> {{55, 55}, {5, 4}}, LineSpacing -> {1, 2}, 
+             FontSize -> 8]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Reference"], CellMargins -> {{24, 40}, {6, 6}}, 
+             TextJustification -> 1, LineSpacing -> {1, 0}, FontFamily -> 
+             "Times"], 
+            Cell[
+             StyleData["Reference", "Presentation"], 
+             CellMargins -> {{20, 40}, {Inherited, 6}}, TextJustification -> 
+             0, LineSpacing -> {1, 4}, FontSize -> 12], 
+            Cell[
+             StyleData["Reference", "Printout"], 
+             CellMargins -> {{18, 4}, {4, 4}}, FontSize -> 9]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["PictureGroup"], CellFrame -> {{1, 1}, {0, 0}}, 
+             CellMargins -> {{55, Inherited}, {0, 0}}, CellGroupingRules -> 
+             "GraphicsGrouping", CellHorizontalScrolling -> True, 
+             PageBreakWithin -> False, ShowCellLabel -> False, 
+             ImageMargins -> {{35, Inherited}, {Inherited, 0}}, 
+             StyleMenuListing -> None, Background -> None], 
+            Cell[
+             StyleData["PictureGroup", "Presentation"], 
+             CellMargins -> {{60, Inherited}, {0, 0}}, 
+             ImageMargins -> {{10, 10}, {10, 10}}, Background -> None], 
+            Cell[
+             StyleData["PictureGroup", "Printout"], 
+             CellMargins -> {{55, Inherited}, {0, 0}}, 
+             ImageSize -> {288, 288}, Background -> None]}, Open]]}, Open]], 
+      Cell[
+       CellGroupData[{
+         Cell["Formulas and Programming", "Section"], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["DisplayFormula"], 
+             CellMargins -> {{55, Inherited}, {Inherited, Inherited}}, 
+             CellHorizontalScrolling -> True, ScriptLevel -> 0, 
+             SingleLetterItalics -> True, StyleMenuListing -> None, 
+             UnderoverscriptBoxOptions -> {LimitsPositioning -> True}], 
+            Cell[
+             StyleData["DisplayFormula", "Presentation"], 
+             CellMargins -> {{60, 10}, {Inherited, 6}}, 
+             LineSpacing -> {1, 5}], 
+            Cell[
+             StyleData["DisplayFormula", "Printout"], 
+             CellMargins -> {{18, 4}, {4, 4}}]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["ChemicalFormula"], 
+             CellMargins -> {{55, 10}, {Inherited, 0}}, 
+             CellHorizontalScrolling -> True, TextJustification -> 1, 
+             AutoSpacing -> False, ScriptBaselineShifts -> {0.6, Automatic}, 
+             ScriptLevel -> 1, SingleLetterItalics -> False, ZeroWidthTimes -> 
+             True], 
+            Cell[
+             StyleData["ChemicalFormula", "Presentation"], 
+             CellMargins -> {{60, 10}, {Inherited, 6}}], 
+            Cell[
+             StyleData["ChemicalFormula", "Printout"], 
+             CellMargins -> {{18, 4}, {4, 4}}, LineSpacing -> {1, 3}, 
+             FontSize -> 10]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["Program"], CellMargins -> {{55, 10}, {Inherited, 0}}, 
+             CellHorizontalScrolling -> True, FontFamily -> "Courier"], 
+            Cell[
+             StyleData["Program", "Presentation"], 
+             CellMargins -> {{60, 10}, {Inherited, 6}}], 
+            Cell[
+             StyleData["Program", "Printout"], 
+             CellMargins -> {{18, 4}, {4, 4}}, LineSpacing -> {1, 3}, 
+             FontSize -> 9.5]}, Open]]}, Closed]], 
+      Cell[
+       CellGroupData[{
+         Cell["Styles for Automatic Numbering", "Section"], 
+         Cell[
+         "The following styles are useful for numbered equations, figures, \
+etc.  They automatically give the cell a FrameLabel containing a reference to \
+a particular counter, and also increment that counter.", "Text"], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["NumberedEquation"], 
+             CellMargins -> {{55, 85}, {Inherited, Inherited}}, 
+             CellFrameLabels -> {{None, 
+                Cell[
+                 TextData[{"(", 
+                   CounterBox["NumberedEquation"], ")"}]]}, {None, None}}, 
+             DefaultFormatType -> DefaultInputFormatType, CounterIncrements -> 
+             "NumberedEquation", FormatTypeAutoConvert -> False, FontFamily -> 
+             "Times"], 
+            Cell[
+             StyleData["NumberedEquation", "Presentation"], 
+             CellMargins -> {{60, 10}, {Inherited, 6}}, 
+             LineSpacing -> {1, 0}], 
+            Cell[
+             StyleData["NumberedEquation", "Printout"], 
+             CellMargins -> {{18, 4}, {4, 4}}, FontSize -> 8]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["NumberedFigure"], 
+             CellMargins -> {{55, 95}, {Inherited, Inherited}}, 
+             CellFrameLabels -> {{None, None}, {
+                Cell[
+                 TextData[{"Figure ", 
+                   CounterBox["NumberedFigure"]}], FontWeight -> "Bold"], 
+                None}}, CounterIncrements -> "NumberedFigure", 
+             FormatTypeAutoConvert -> False, FontFamily -> "Times"], 
+            Cell[
+             StyleData["NumberedFigure", "Presentation"], 
+             CellMargins -> {{60, 80}, {Inherited, 6}}, 
+             LineSpacing -> {1, 0}], 
+            Cell[
+             StyleData["NumberedFigure", "Printout"], 
+             CellMargins -> {{18, 80}, {4, 4}}, FontSize -> 8]}, Open]], 
+         Cell[
+          CellGroupData[{
+            Cell[
+             StyleData["NumberedTable"], 
+             CellMargins -> {{55, 95}, {Inherited, Inherited}}, 
+             CellFrameLabels -> {{None, None}, {
+                Cell[
+                 TextData[{"Table ", 
+                   CounterBox["NumberedTable"]}], FontWeight -> "Bold"], 
+                None}}, TextAlignment -> Center, CounterIncrements -> 
+             "NumberedTable", FormatTypeAutoConvert -> False, FontFamily -> 
+             "Times"], 
+            Cell[
+             StyleData["NumberedTable", "Presentation"], 
+             CellMargins -> {{60, 80}, {Inherited, 6}}, 
+             LineSpacing -> {1, 0}], 
+            Cell[
+             StyleData["NumberedTable", "Printout"], 
+             CellMargins -> {{18, 80}, {4, 4}}, FontSize -> 8]}, Open]]}, 
+        Open]], 
+      Cell[
+       CellGroupData[{
+         Cell["Styles for Headers and Footers", "Section"], 
+         Cell[
+          StyleData["Header"], StyleMenuListing -> None, FontFamily -> 
+          "Helvetica", FontSize -> 9], 
+         Cell[
+          StyleData["PageNumber"], StyleMenuListing -> None, FontFamily -> 
+          "Helvetica", FontSize -> 9, FontWeight -> "Bold"], 
+         Cell[
+          StyleData["Footer"], TextAlignment -> Center, StyleMenuListing -> 
+          None, FontFamily -> "Helvetica", FontSize -> 9]}, Closed]]}, 
+     Open]]}, Visible -> False, FrontEndVersion -> 
+  "8.0 for Microsoft Windows (32-bit) (February 23, 2011)", StyleDefinitions -> 
+  "Default.nb"]
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{
+ "Setup section"->{
+  Cell[8785, 290, 52, 1, 35, "Section",
+   CellTags->"Setup section"],
+  Cell[8840, 293, 558, 10, 98, "Text",
+   CellTags->"Setup section"],
+  Cell[9423, 307, 74, 1, 41, "Subsection",
+   CellTags->"Setup section"],
+  Cell[9958, 323, 348, 9, 63, "Text",
+   CellTags->"Setup section"],
+  Cell[10331, 336, 72, 1, 31, "Subsubsection",
+   CellTags->"Setup section"],
+  Cell[10406, 339, 233, 8, 30, "Text",
+   CellTags->"Setup section"],
+  Cell[10642, 349, 114, 2, 27, "Input",
+   CellTags->"Setup section"],
+  Cell[10759, 353, 125, 3, 29, "Text",
+   CellTags->"Setup section"],
+  Cell[21820, 743, 143, 3, 27, "Input",
+   CellTags->"Setup section"]},
+ "Examples section"->{
+  Cell[22505, 770, 65, 1, 35, "Section",
+   CellTags->"Examples section"],
+  Cell[22595, 775, 77, 1, 41, "Subsection",
+   CellTags->"Examples section"],
+  Cell[22675, 778, 80, 1, 29, "Text",
+   CellTags->"Examples section"],
+  Cell[22758, 781, 87, 2, 27, "Input",
+   CellTags->"Examples section"],
+  Cell[22848, 785, 278, 6, 47, "Text",
+   CellTags->"Examples section"],
+  Cell[23129, 793, 517, 17, 27, "Input",
+   CellTags->"Examples section"],
+  Cell[23649, 812, 105, 2, 27, "Input",
+   CellTags->"Examples section"],
+  Cell[23791, 819, 60, 1, 41, "Subsection",
+   CellTags->"Examples section"],
+  Cell[23854, 822, 221, 7, 30, "Text",
+   CellTags->"Examples section"],
+  Cell[24078, 831, 617, 15, 67, "Input",
+   CellTags->"Examples section"],
+  Cell[24698, 848, 283, 8, 47, "Text",
+   CellTags->"Examples section"],
+  Cell[24984, 858, 160, 4, 27, "Input",
+   CellTags->"Examples section"],
+  Cell[26346, 909, 76, 1, 41, "Subsection",
+   CellTags->"Examples section"],
+  Cell[26425, 912, 344, 6, 63, "Text",
+   CellTags->"Examples section"],
+  Cell[26772, 920, 81, 2, 27, "Input",
+   CellTags->"Examples section"],
+  Cell[26856, 924, 82, 2, 27, "Input",
+   CellTags->"Examples section"],
+  Cell[26941, 928, 164, 4, 27, "Input",
+   CellTags->"Examples section"],
+  Cell[27108, 934, 367, 10, 47, "Text",
+   CellTags->"Examples section"],
+  Cell[27478, 946, 177, 5, 27, "Input",
+   CellTags->"Examples section"],
+  Cell[27658, 953, 168, 4, 27, "Input",
+   CellTags->"Examples section"],
+  Cell[27829, 959, 134, 4, 29, "Text",
+   CellTags->"Examples section"],
+  Cell[27966, 965, 434, 14, 28, "Input",
+   CellTags->"Examples section"],
+  Cell[28403, 981, 163, 4, 27, "Input",
+   CellTags->"Examples section"],
+  Cell[28603, 990, 86, 1, 41, "Subsection",
+   CellTags->"Examples section"],
+  Cell[28692, 993, 244, 5, 46, "Text",
+   CellTags->"Examples section"],
+  Cell[28939, 1000, 1859, 64, 89, "Input",
+   CellTags->"Examples section"],
+  Cell[30801, 1066, 127, 3, 29, "Text",
+   CellTags->"Examples section"],
+  Cell[30931, 1071, 140, 4, 27, "Input",
+   CellTags->"Examples section"],
+  Cell[31074, 1077, 143, 4, 29, "Text",
+   CellTags->"Examples section"],
+  Cell[31220, 1083, 99, 2, 27, "Input",
+   CellTags->"Examples section"],
+  Cell[31322, 1087, 185, 5, 29, "Text",
+   CellTags->"Examples section"],
+  Cell[31510, 1094, 235, 8, 27, "Input",
+   CellTags->"Examples section"],
+  Cell[31748, 1104, 335, 6, 63, "Text",
+   CellTags->"Examples section"],
+  Cell[32086, 1112, 153, 4, 27, "Input",
+   CellTags->"Examples section"],
+  Cell[32242, 1118, 592, 12, 99, "Text",
+   CellTags->"Examples section"],
+  Cell[32837, 1132, 265, 7, 27, "Input",
+   CellTags->"Examples section"],
+  Cell[33105, 1141, 144, 4, 29, "Text",
+   CellTags->"Examples section"],
+  Cell[33252, 1147, 400, 13, 27, "Input",
+   CellTags->"Examples section"],
+  Cell[33655, 1162, 169, 4, 29, "Text",
+   CellTags->"Examples section"],
+  Cell[33827, 1168, 270, 8, 27, "Input",
+   CellTags->"Examples section"],
+  Cell[34100, 1178, 198, 7, 29, "Text",
+   CellTags->"Examples section"],
+  Cell[34301, 1187, 138, 3, 27, "Input",
+   CellTags->"Examples section"],
+  Cell[34442, 1192, 122, 3, 29, "Text",
+   CellTags->"Examples section"],
+  Cell[34567, 1197, 468, 15, 49, "Input",
+   CellTags->"Examples section"]},
+ "Wolfram book"->{
+  Cell[35116, 1220, 238, 6, 29, "Text",
+   CellTags->"Wolfram book"]},
+ "Meader book"->{
+  Cell[35357, 1228, 175, 6, 29, "Text",
+   CellTags->"Meader book"]}
+ }
+*)
+(*CellTagsIndex
+CellTagsIndex->{
+ {"Setup section", 61182, 1789},
+ {"Examples section", 61850, 1808},
+ {"Wolfram book", 65149, 1897},
+ {"Meader book", 65238, 1900}
+ }
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 62, 1, 27, "Text"],
+Cell[CellGroupData[{
+Cell[644, 25, 42, 0, 69, "Title"],
+Cell[689, 27, 298, 10, 28, "Subsubtitle"],
+Cell[CellGroupData[{
+Cell[1012, 41, 31, 0, 61, "Section"],
+Cell[1046, 43, 422, 12, 65, "Text"],
+Cell[1471, 57, 511, 9, 80, "Text"],
+Cell[1985, 68, 114, 3, 29, "Text"],
+Cell[2102, 73, 626, 17, 81, "Text"],
+Cell[2731, 92, 601, 14, 80, "Text"],
+Cell[3335, 108, 426, 12, 46, "Text"],
+Cell[3764, 122, 58, 0, 29, "Text"],
+Cell[3825, 124, 175, 3, 21, "Program"],
+Cell[4003, 129, 200, 6, 46, "Text"],
+Cell[4206, 137, 151, 3, 46, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[4394, 145, 28, 0, 35, "Section"],
+Cell[CellGroupData[{
+Cell[4447, 149, 30, 0, 31, "Subsubsection"],
+Cell[4480, 151, 80, 1, 29, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4597, 157, 31, 0, 31, "Subsubsection"],
+Cell[4631, 159, 47, 0, 29, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4715, 164, 32, 0, 31, "Subsubsection"],
+Cell[4750, 166, 349, 8, 133, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[5136, 179, 34, 0, 25, "Subsubsection"],
+Cell[5173, 181, 1759, 27, 930, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[6969, 213, 41, 0, 25, "Subsubsection"],
+Cell[7013, 215, 19, 0, 29, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7069, 220, 97, 4, 31, "Subsubsection"],
+Cell[7169, 226, 67, 0, 29, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7273, 231, 32, 0, 31, "Subsubsection"],
+Cell[7308, 233, 329, 6, 80, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7674, 244, 33, 0, 31, "Subsubsection"],
+Cell[7710, 246, 54, 0, 29, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7801, 251, 33, 0, 31, "Subsubsection"],
+Cell[7837, 253, 328, 6, 64, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8202, 264, 35, 0, 31, "Subsubsection"],
+Cell[8240, 266, 283, 8, 48, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8560, 279, 37, 0, 31, "Subsubsection"],
+Cell[8600, 281, 136, 3, 45, "Text"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[8785, 290, 52, 1, 35, "Section",
+ CellTags->"Setup section"],
+Cell[8840, 293, 558, 10, 98, "Text",
+ CellTags->"Setup section"],
+Cell[CellGroupData[{
+Cell[9423, 307, 74, 1, 41, "Subsection",
+ CellTags->"Setup section"],
+Cell[9500, 310, 237, 4, 46, "Text"],
+Cell[9740, 316, 215, 5, 21, "Program"],
+Cell[9958, 323, 348, 9, 63, "Text",
+ CellTags->"Setup section"],
+Cell[CellGroupData[{
+Cell[10331, 336, 72, 1, 31, "Subsubsection",
+ CellTags->"Setup section"],
+Cell[10406, 339, 233, 8, 30, "Text",
+ CellTags->"Setup section"],
+Cell[10642, 349, 114, 2, 27, "Input",
+ CellTags->"Setup section"],
+Cell[10759, 353, 125, 3, 29, "Text",
+ CellTags->"Setup section"]
+}, Open  ]]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[10945, 363, 55, 1, 35, "Section",
+ InitializationCell->True],
+Cell[11003, 366, 122, 3, 29, "Text",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[11150, 373, 101, 1, 41, "Subsection",
+ InitializationCell->True],
+Cell[11254, 376, 164, 6, 45, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[11455, 387, 121, 3, 41, "Subsection",
+ InitializationCell->True],
+Cell[11579, 392, 331, 6, 81, "Input",
+ InitializationCell->True],
+Cell[11913, 400, 295, 7, 67, "Input",
+ InitializationCell->True],
+Cell[12211, 409, 299, 7, 67, "Input",
+ InitializationCell->True],
+Cell[12513, 418, 393, 8, 107, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[12955, 432, 60, 1, 35, "Section",
+ InitializationCell->True],
+Cell[13018, 435, 131, 3, 29, "Text"],
+Cell[CellGroupData[{
+Cell[13174, 442, 107, 2, 41, "Subsection",
+ InitializationCell->True],
+Cell[13284, 446, 384, 12, 27, "Input",
+ InitializationCell->True],
+Cell[13671, 460, 411, 11, 47, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[14119, 476, 96, 1, 41, "Subsection",
+ InitializationCell->True],
+Cell[14218, 479, 64, 1, 27, "Input",
+ InitializationCell->True],
+Cell[14285, 482, 116, 2, 27, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[14438, 489, 85, 1, 41, "Subsection",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[14548, 494, 52, 0, 31, "Subsubsection"],
+Cell[14603, 496, 167, 5, 27, "Input",
+ InitializationCell->True],
+Cell[14773, 503, 169, 5, 27, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[14979, 513, 59, 1, 31, "Subsubsection"],
+Cell[15041, 516, 94, 2, 29, "Text"],
+Cell[15138, 520, 2782, 78, 207, "Input",
+ InitializationCell->True],
+Cell[17923, 600, 254, 5, 47, "Text"],
+Cell[18180, 607, 544, 18, 47, "Input",
+ InitializationCell->True],
+Cell[18727, 627, 249, 8, 29, "Text"],
+Cell[18979, 637, 1936, 57, 207, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[20964, 700, 72, 1, 41, "Subsection",
+ InitializationCell->True],
+Cell[21039, 703, 50, 1, 27, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[21138, 710, 52, 1, 35, "Section",
+ InitializationCell->True],
+Cell[21193, 713, 76, 0, 29, "Text"],
+Cell[CellGroupData[{
+Cell[21294, 717, 72, 1, 41, "Subsection",
+ InitializationCell->True],
+Cell[21369, 720, 67, 1, 27, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[21473, 726, 72, 1, 41, "Subsection",
+ InitializationCell->True],
+Cell[21548, 729, 57, 1, 27, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[21654, 736, 38, 0, 35, "Section"],
+Cell[21695, 738, 122, 3, 29, "Text"],
+Cell[21820, 743, 143, 3, 27, "Input",
+ CellTags->"Setup section"],
+Cell[21966, 748, 142, 3, 29, "Text"],
+Cell[22111, 753, 56, 1, 27, "Input"],
+Cell[22170, 756, 139, 3, 29, "Text"],
+Cell[22312, 761, 156, 4, 27, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[22505, 770, 65, 1, 35, "Section",
+ CellTags->"Examples section"],
+Cell[CellGroupData[{
+Cell[22595, 775, 77, 1, 41, "Subsection",
+ CellTags->"Examples section"],
+Cell[22675, 778, 80, 1, 29, "Text",
+ CellTags->"Examples section"],
+Cell[22758, 781, 87, 2, 27, "Input",
+ CellTags->"Examples section"],
+Cell[22848, 785, 278, 6, 47, "Text",
+ CellTags->"Examples section"],
+Cell[23129, 793, 517, 17, 27, "Input",
+ CellTags->"Examples section"],
+Cell[23649, 812, 105, 2, 27, "Input",
+ CellTags->"Examples section"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[23791, 819, 60, 1, 41, "Subsection",
+ CellTags->"Examples section"],
+Cell[23854, 822, 221, 7, 30, "Text",
+ CellTags->"Examples section"],
+Cell[24078, 831, 617, 15, 67, "Input",
+ CellTags->"Examples section"],
+Cell[24698, 848, 283, 8, 47, "Text",
+ CellTags->"Examples section"],
+Cell[24984, 858, 160, 4, 27, "Input",
+ CellTags->"Examples section"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[25181, 867, 44, 0, 41, "Subsection"],
+Cell[25228, 869, 140, 3, 29, "Text"],
+Cell[25371, 874, 640, 20, 27, "Input"],
+Cell[26014, 896, 70, 1, 27, "Input"],
+Cell[26087, 899, 222, 5, 47, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[26346, 909, 76, 1, 41, "Subsection",
+ CellTags->"Examples section"],
+Cell[26425, 912, 344, 6, 63, "Text",
+ CellTags->"Examples section"],
+Cell[26772, 920, 81, 2, 27, "Input",
+ CellTags->"Examples section"],
+Cell[26856, 924, 82, 2, 27, "Input",
+ CellTags->"Examples section"],
+Cell[26941, 928, 164, 4, 27, "Input",
+ CellTags->"Examples section"],
+Cell[27108, 934, 367, 10, 47, "Text",
+ CellTags->"Examples section"],
+Cell[27478, 946, 177, 5, 27, "Input",
+ CellTags->"Examples section"],
+Cell[27658, 953, 168, 4, 27, "Input",
+ CellTags->"Examples section"],
+Cell[27829, 959, 134, 4, 29, "Text",
+ CellTags->"Examples section"],
+Cell[27966, 965, 434, 14, 28, "Input",
+ CellTags->"Examples section"],
+Cell[28403, 981, 163, 4, 27, "Input",
+ CellTags->"Examples section"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[28603, 990, 86, 1, 41, "Subsection",
+ CellTags->"Examples section"],
+Cell[28692, 993, 244, 5, 46, "Text",
+ CellTags->"Examples section"],
+Cell[28939, 1000, 1859, 64, 89, "Input",
+ CellTags->"Examples section"],
+Cell[30801, 1066, 127, 3, 29, "Text",
+ CellTags->"Examples section"],
+Cell[30931, 1071, 140, 4, 27, "Input",
+ CellTags->"Examples section"],
+Cell[31074, 1077, 143, 4, 29, "Text",
+ CellTags->"Examples section"],
+Cell[31220, 1083, 99, 2, 27, "Input",
+ CellTags->"Examples section"],
+Cell[31322, 1087, 185, 5, 29, "Text",
+ CellTags->"Examples section"],
+Cell[31510, 1094, 235, 8, 27, "Input",
+ CellTags->"Examples section"],
+Cell[31748, 1104, 335, 6, 63, "Text",
+ CellTags->"Examples section"],
+Cell[32086, 1112, 153, 4, 27, "Input",
+ CellTags->"Examples section"],
+Cell[32242, 1118, 592, 12, 99, "Text",
+ CellTags->"Examples section"],
+Cell[32837, 1132, 265, 7, 27, "Input",
+ CellTags->"Examples section"],
+Cell[33105, 1141, 144, 4, 29, "Text",
+ CellTags->"Examples section"],
+Cell[33252, 1147, 400, 13, 27, "Input",
+ CellTags->"Examples section"],
+Cell[33655, 1162, 169, 4, 29, "Text",
+ CellTags->"Examples section"],
+Cell[33827, 1168, 270, 8, 27, "Input",
+ CellTags->"Examples section"],
+Cell[34100, 1178, 198, 7, 29, "Text",
+ CellTags->"Examples section"],
+Cell[34301, 1187, 138, 3, 27, "Input",
+ CellTags->"Examples section"],
+Cell[34442, 1192, 122, 3, 29, "Text",
+ CellTags->"Examples section"],
+Cell[34567, 1197, 468, 15, 49, "Input",
+ CellTags->"Examples section"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[35084, 1218, 29, 0, 35, "Section"],
+Cell[35116, 1220, 238, 6, 29, "Text",
+ CellTags->"Wolfram book"],
+Cell[35357, 1228, 175, 6, 29, "Text",
+ CellTags->"Meader book"]
+}, Closed]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+

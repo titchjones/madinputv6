@@ -1,0 +1,3259 @@
+(***********************************************************************
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used on any computer system with Mathematica 4.0,
+MathReader 4.0, or any compatible application. The data for the notebook 
+starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do one of 
+the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing the 
+word CacheID, otherwise Mathematica-compatible applications may try to 
+use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+***********************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     58467,       1833]*)
+(*NotebookOutlinePosition[     81798,       2680]*)
+(*  CellTagsIndexPosition[     81719,       2674]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["BumpEtc: Some System Utilities", "Title"],
+
+Cell["John M. Jowett", "Subtitle"],
+
+Cell[CellGroupData[{
+
+Cell["Introduction", "Section"],
+
+Cell["\<\
+This package provides some utilities that I like to have on hand all the \
+time.  They are mostly related to the operating system and some are specific \
+for the CERN computing environment.\
+\>", "Text"],
+
+Cell["To make this package available use", "Text"],
+
+Cell[BoxData[
+    RowBox[{"Needs", "[", "\"\<JMJUtils`BumpEt`\>\"", "]"}]], "Input"],
+
+Cell["or put this command in the file ", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"ToFileName", "[", 
+      RowBox[{
+        RowBox[{"{", 
+          RowBox[{"$PreferencesDirectory", ",", "\"\<Kernel\>\""}], "}"}], 
+        ",", "\"\<init.m\>\""}], "]"}]], "Input"],
+
+Cell[BoxData["\<\"J:\\\\home\\\\jowett\\\\Mathematica\\\\4.0\\\\Kernel\\\\\
+init.m\"\>"], "Output"]
+}, Open  ]],
+
+Cell[TextData[{
+  "Examples of use are given in a ",
+  ButtonBox["section",
+    ButtonData:>"applications",
+    ButtonStyle->"Hyperlink"],
+  " below."
+}], "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Reference", "Section"],
+
+Cell[CellGroupData[{
+
+Cell["Copyright", "Subsubsection"],
+
+Cell[TextData[{
+  "\[Copyright] Copyright ",
+  StyleBox["CERN.1997",
+    FontSlant->"Italic"],
+  "\n\n",
+  "The copyright and all other rights relating to this computer software, in \
+whatever form, including but not\nlimited to the source code, the object code \
+and user documentation, are vested in CERN. \n\nCERN, on a royalty-free and \
+non-exclusive basis, hereby grants permission to use, copy, change, modify,\n\
+translate, display, distribute and make available this computer software, \
+subject to the following conditions:\n\n(1) this computer software is \
+provided on an as-is basis and CERN provides no express or implied\n\
+warranties of any kind, including but not limited to those of \
+merchantability, fitness for a particular purpose\nand non-infringement of \
+the proprietary rights, such as copyrights, patents and trade secrets, of \
+third\nparties. CERN accepts no liability whatsoever for or in connection \
+with the use of this computer software; \n\n(2) all copies made of this \
+computer software or of parts thereof shall include this copyright statement \
+in\nfull; \n\n(3) however, if this computer software or parts thereof are \
+made available in any other form than their\noriginal form, or are included \
+in any other computer software, the following short acknowledgement only\n\
+must be mentioned in the copyright statement and in the user documentation \
+(or, in the absence thereof, in\nany other appropriate place) concerning the \
+computer software thus made available or created: \n\n\"This product includes \
+computer software created and made available by CERN. This acknowledgement\n\
+shall be mentioned in full in any product which includes the CERN computer \
+software included herein or\nparts thereof.\" "
+}], "Text"]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Implementation", "Section"],
+
+Cell[TextData[StyleBox[
+"This section is equivalent to the automatically saved package associated \
+with this notebook.  It contains all initialisation cells in the notebook.  \
+Do not create any elsewhere.  When the notebook is saved, this will \
+automatically generate a new version of the package file.",
+  FontSize->14,
+  FontWeight->"Bold",
+  FontSlant->"Italic"]], "Text"],
+
+Cell[CellGroupData[{
+
+Cell["Package header", "Subsection"],
+
+Cell[CellGroupData[{
+
+Cell["Tagged comments for the package file", "Subsubsection"],
+
+Cell[BoxData[
+    \(\( (* : 
+        Title : BumpEtc . \(m\ --\)\ a\ package\ containing\ miscellaneous\ 
+            system  utilities\ \ *) \ \)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \( (*\  : Context : \ JMJUtils`BumpEtc`\ *) \)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \( (*\  : Author : \ John\ M . \ Jowett\ *) \)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \( (*\  : \(Summary : \)\ \ *) \)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \( (*\  : Copyright : \ \[Copyright]\ 1997\ by\ CERN\ *) \)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \( (*\  : Package\ \(Version : \ 1.0\)\ *) \)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \( (*\  : Mathematica\ \(Version : \ 3.0\)\ *) \)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \( (*\( : History : \n\ \ 
+        1.0\ 6\ June\ 1997\ split\ off\ from\ Imperfections . m\n\t\t\t\t\t
+          Various\ additions\ not\ documented\n\t\ \ 1.2\ 20\ January\ 1999\ 
+          added\ packageSourceDirectory\), \ \(etc . \)\n*) \)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \( (*\  : Keywords : \ System\ Files\ Bump\ Links\ *) \)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \( (*\  : \(Sources : \)\ \ *) \)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\( (*\( : Warnings : \n\ \ \ \( < description\ of\ global\ effects\)\), 
+      \(incompatibilities > \)\n*) \n\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \( (*\ \( : Limitations : \n\ \ \ \( < special\ cases\ not\ handled\)\), 
+      \ \(known\ problems > \)\n*) \)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \( (*\ \( : Discussion : \n\ \ \ \( < description\ of\ algorithm\)\), 
+      \(information\ for\ experts > \)\n*) \)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \( (*\  : \(Requirements : \)\n\ \ \ \n*) \)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{"(*", 
+        RowBox[{":", 
+          RowBox[{"Examples", ":", "\n", "  ", 
+            RowBox[{
+              RowBox[{"<", 
+                RowBox[{
+                "sample", " ", "input", " ", "that", " ", "demonstrates", " ",
+                   "the", " ", "features", " ", "of", " ", "this", 
+                  "package"}]}], ">"}]}]}], "\n", "*)"}], 
+      "                               "}]], "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Set up the package context, including public imports", "Subsubsection",
+  InitializationCell->True],
+
+Cell[BoxData[
+    RowBox[{"BeginPackage", "[", "\"\<JMJUtils`BumpEtc`\>\"", "]"}]], "Input",\
+
+  InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Usage messages for the exported functions and the context itself\
+\>", "Subsubsection",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(onPC::usage\  = 
+      "\<A logical value which says if we are running on a PC.  Otherwise a \
+Unix environment is assumed.  This is used to select directories.\>"; \)\)], 
+  "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \($AfsRoot::usage = 
+      "\<$AfsRoot is a string defining the root directory of the AFS \
+system.\>"\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(AfsHomeDirectory::usage = 
+      "\<AfsHomeDirectory[user] returns a string defining a user's AFS home \
+directory under CERN Unix or CERN Windows NT with the AFS client.  The \
+default value of the string user is the current user's id.\>"\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(makeBatchScript::usage = 
+      "\<makeBatchScript[mathFile,batchFile] creates a batch job script for \
+the CERN batch system that will run the commands in the file mathFile.\>"\)], 
+  "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{"toWindowsFileName", "::", "usage"}], "=", 
+      "\"\<toWindowsFileName[unixFileName] converts an AFS file's complete \
+name under CERN Unix to the corresponding name under CERN Windows NT with the \
+AFS client.\>\""}]], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(toUnixFileName::usage = 
+      "\<toUnixFileName[windowsFileName] converts an AFS file's complete name \
+under CERN Windows NT with the AFS client to the corresponding name under \
+CERN Unix .\>"\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{"explorer", "::", "usage"}], "=", 
+      "\"\<explorer[dirspec] opens a Windows Explorer window in a specified \
+directory. This can be given as an explicit string or as an operating systen \
+independent path (as for ToFileName).  Under CERN Windows NT with the AFS \
+client, explicit Unix format directory names will work.\>\""}]], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{
+        RowBox[{"dirJoin", "::", "usage"}], "=", 
+        "\"\<dirJoin[dir1,subdir1,subdir2] constructs the name of a directory \
+path from a sequence of strings, dealing quite robustly with the separating \
+symbols as appropriate for the operating system.\>\""}], ";"}]], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{
+        RowBox[{"newFileName", "::", "usage"}], "=", 
+        "\"\<newFileName[\\\"ext\\\"] constructs a new file name with the \
+extension .ext that is not already used in the current directory.\>\""}], 
+      ";"}]], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{
+        RowBox[{"ThisNotebookDirectory", "::", "usage"}], "=", 
+        "\"\<ThisNotebookDirectory[] returns the\ndirectory of the file \
+containing the current notebook.  If the file has\nnot been saved, the \
+current working directory is returned.\\nIntended\nusage is \
+SetDirectory[ThisNotebookDirectory[]].\>\""}], ";"}]], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{"packageSourceDirectory", "::", "usage"}], "=", 
+      "\"\<packageSourceDirectory[\\\"package\\\"] returns the list of \
+directories where the source of the first currently loaded package containing \
+\\\"package\\\" in its context string might be located.\>\""}]], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(packageSourceNotebook::usage = 
+      "\<packageSourceNotebook[\"package\"] returns the name of a notebook \
+that may be the source of the first currently loaded package containing \
+\"package\" in its context string.\>"\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{"UnixLinkQ", "::", "usage"}], ":=", 
+      "\"\<UnixLinkQ[filename] returns True if a file exists with the name \
+filename and is a Unix link.\>\""}]], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(makeShortLinks::usage\  = 
+      "\<makeShortLinks[linkRules] issues Unix commands to set up the links \
+defined in linkRules.\>"; \)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(shortFileName::usage\  = 
+      "\<shortFileName[filename] shortens a file name (including a path) by \
+using any applicable links in the list linkRules.\>"; \)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(bumpFileName::usage\  = 
+      "\<bumpFileName[file] returns a unique name for a backup copy of a \
+file, using the current date and time.\>"; \)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(bumpFile::usage\  = 
+      "\<bumpFile[file] saves a backup copy of a file in the local TRASH \
+directory. This is created if it does not already exist.\>"; \)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(generateLaunchScript::usage = 
+      "\<generateLaunchScript[cmd,dirs,scriptname] will create a Unix shell \
+script, named scriptname, that will execute the command cmd in each of the \
+directories in the list dirs.\>"; \)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(stringReplaceInFile::usage = "\<stringReplaceInFile[\"file1\",\"file2\
+\",\"s1\" -> \"sp1\"] or stringReplaceInFile[\"file1\",\"file2\", {\"s1\" -> \
+\"sp1\", \"s2\" -> \"sp2\", ... }] creates a new file, file2, from file1 \
+using StringReplace to apply  string substitution rules to each record in \
+file1. \nIf file2=file1 then the original file is replaced.\>";\)\)], "Input",\
+
+  InitializationCell->True],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{
+        RowBox[{"DOStoUnix", "::", "usage"}], "=", 
+        "\"\<DOStoUnix[\\\"file\\\"] changes the DOS line end characters in a \
+file to Unix ones.\>\""}], ";"}]], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{"domain", "::", "usage"}], "=", 
+      "\"\<domain[f] returns a list of values (or patterns) for which the \
+function f is defined.\>\"", " "}]], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{
+        RowBox[{"UsageNotebook", "::", "usage"}], "=", 
+        "\"\<UsageNotebook[Names[\\\"Li*\\\"]] will create a new notebook \
+containing the usage messages for all functions whose names start with \
+Li.\>\""}], ";"}]], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{
+        RowBox[{"UsageCells", "::", "usage"}], "=", 
+        "\"\<UsageCells[Names[\\\"Li*\\\"]] will generated formatted cells \
+containing the usage messages for all functions whose names start with \
+Li.\>\""}], ";"}]], "Input",
+  InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Error messages for the exported objects", "Subsubsection"],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{
+        RowBox[{
+          RowBox[{"BumpEtc", "::", "badarg"}], " ", "=", 
+          "\"\<You called `1` with argument `2`!\>\""}], " ", ";"}], 
+      "                     "}]], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{
+        RowBox[{"explorer", "::", "notWindows"}], "=", 
+        "\"\<Can't call Windows Explorer; kernel running on wrong operating \
+system.\>\""}], ";"}]], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{
+        RowBox[{"nbdir", "::", "\"\<nofile\>\""}], "=", 
+        "\"\<This notebook has not been saved.\>\""}], ";"}]], "Input",
+  InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Begin the private context (implementation part)", "Subsubsection"],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}], " ", ";"}]], "Input",
+  InitializationCell->True]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Directory and file manipulation functions", "Subsection"],
+
+Cell["\<\
+This is a test to see if we are running on a PC.  If not then assume we are \
+running on a Unix system.\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(onPC = Length[StringPosition[$Version, "\<Windows\>"]] > 0\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(True\)], "Output"]
+}, Open  ]],
+
+Cell["\<\
+Join  directory paths, eliminationg double occurrences of the separator \
+character.  Designed to work on Unix or Windows.\
+\>", "Text"],
+
+Cell[TextData[{
+  "It looks as if dirJoin is now redundant and can be replaced with the new ",
+  
+  StyleBox["ToFileName", "Input"],
+  " function in ",
+  StyleBox["Mathematica",
+    FontSlant->"Italic"],
+  " 3.0.  Still it may be useful where ",
+  StyleBox["Mathematica",
+    FontSlant->"Italic"],
+  " 3.0 is not yet installed and for backwards compatibility.  Besides, ",
+  StyleBox["ToFileName", "Input"],
+  " always wants the branches as a list.  dirJoin allows sequences of \
+arguments but is that really needed or a good idea?  Try not to use this any \
+more and eventually get rid of it."
+}], "Text"],
+
+Cell[BoxData[
+    RowBox[{
+    \(Clear[dirJoin]\), ";", "\n", \(dirJoin[a_List] := Apply[dirJoin, a]\), 
+      ";", "\n", "\t\t", 
+      StyleBox[
+        \(dirJoin[a_String, \ b_String]\  := 
+          Block[{psep}, \ \n\t\tpsep\  = \ If[onPC, \ "\<\\\>", \ "\</\>"]; \n
+            \t\tStringReplace[StringJoin[a, \ psep, \ b]\n\t\t, 
+              \ {"\<///\>" -> psep, "\<//\>"\  -> \ psep, 
+                "\<\\\\\\\>" -> psep\ , "\<\\\\\>"\  -> \ psep}]\n\t]\),
+        ShowStringCharacters->True,
+        NumberMarks->True], 
+      StyleBox[";",
+        ShowStringCharacters->True,
+        NumberMarks->True], "\n", 
+      \(dirJoin[a_List, b] := dirJoin[dirJoin[a], b]\), ";", "\n", 
+      \(dirJoin[a_, b_] := dirJoin[ToString[a], ToString[b]]\), ";", "\n", 
+      \(dirJoin[a_, b_, c__] := dirJoin[dirJoin[a, b], c]\)}]], "InputOnly",
+  InitializationCell->True],
+
+Cell["\<\
+This function returns True if a file exists and is a Unix link.\
+\>", "Text",
+  InitializationCell->True],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{"UnixLinkQ", "[", "fn_String", "]"}], ":=", 
+      RowBox[{"If", "[", 
+        RowBox[{"onPC", ",", "False", ",", "\n", "\t\t", 
+          RowBox[{"StringMatchQ", "[", 
+            RowBox[{
+              RowBox[{"First", "[", 
+                RowBox[{"Join", "[", 
+                  RowBox[{
+                    RowBox[{"ReadList", "[", 
+                      RowBox[{
+                        RowBox[{"\"\<!ls -l \>\"", "<>", "fn"}], ",", 
+                        "String"}], "]"}], ",", 
+                    RowBox[{"{", "\"\< \>\"", "}"}]}], "]"}], "]"}], ",", 
+              "\"\<*->*\>\""}], "]"}]}], "\n", "\t", "]"}]}]], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(SetAttributes[UnixLinkQ, Listable]\)], "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Directory of the current notebook", "Subsection"],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{
+        RowBox[{"ThisNotebookDirectory", "[", "]"}], ":=", 
+        RowBox[{"Block", "[", 
+          RowBox[{
+            RowBox[{"{", 
+              RowBox[{"info", "=", 
+                RowBox[{"NotebookInformation", "[", 
+                  RowBox[{"InputNotebook", "[", "]"}], "]"}]}], "}"}], ",", 
+            RowBox[{"If", "[", 
+              RowBox[{
+                RowBox[{"FreeQ", "[", 
+                  RowBox[{"info", ",", "\"\<FileName\>\"", ",", 
+                    RowBox[{"{", "2", "}"}]}], "]"}], ",", 
+                RowBox[{
+                  RowBox[{"Message", "[", 
+                    RowBox[{"nbdir", "::", "nofile"}], "]"}], ";", 
+                  "\[IndentingNewLine]", 
+                  RowBox[{"Directory", "[", "]"}]}], ",", 
+                RowBox[{"ToFileName", "[", 
+                  RowBox[{"First", "[", 
+                    RowBox[{"\"\<FileName\>\"", "/.", "info"}], "]"}], 
+                  "]"}]}], "]"}]}], "]"}]}], ";"}]], "Input",
+  InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["AFS file system in CERN", "Subsection"],
+
+Cell["\<\
+Set up that will work on CERN Unix or CERN Windows NT with AFS client.\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \($AfsRoot = If[$OperatingSystem == "\<Unix\>", "\</afs\>", "\<P:\>"]\)], 
+  "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \("P:"\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{"AfsHomeDirectory", "[", 
+        RowBox[{"username_String:", "$UserName"}], "]"}], ":=", 
+      RowBox[{"ToFileName", "[", 
+        RowBox[{"{", 
+          RowBox[{
+          "$AfsRoot", ",", "\"\<cern.ch\>\"", ",", "\"\<user\>\"", ",", 
+            RowBox[{"StringTake", "[", 
+              RowBox[{"username", ",", "1"}], "]"}], ",", "username"}], "}"}],
+         "]"}]}]], "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+  StyleBox["Mathematica",
+    FontSlant->"Italic"],
+  " batch jobs in CERN"
+}], "Subsection"],
+
+Cell[TextData[{
+  "This creates a batch job script with inline ",
+  StyleBox["Mathematica",
+    FontSlant->"Italic"],
+  " input copied from the specified input file.  This is better than putting \
+a Get[] in the job file because it is then possible to see each input and \
+output expression on the job file.  I need to maintain the head and tail \
+fragments up to date with current CERN batch job system."
+}], "Text"],
+
+Cell["\<\
+Note that because of csh special character escapes, the $ and ` characters \
+need to be preceded by backslashes wherever they are given in the inline \
+input to the Unix cat command.  I believe that these are the only two \
+characters that need this treatment.  I tested this on 30/11/1999 with a \
+small test script (testchars.csh) that covered all the special characters on \
+the keyboard.\
+\>", "Text"],
+
+Cell["\<\
+It's even worse.  We found out that the cat command works differently on HP \
+and IBM Unix.  On HP \\\" is copied directly while on IBM it is replaced by \
+just \".  Solution here is to replace every \\\" by \\\\\\\" .   Horrors.\
+\>", "Text"],
+
+Cell[BoxData[
+    \(makeBatchScript[mathFile_String, batchFile_String] := 
+      Block[{\n\t\t\theadFile = 
+            ToFileName[{AfsHomeDirectory["\<jowett\>"], "\<public\>", \
+"\<scripts\>"}, "\<MathBatchHead.csh\>"], \n\t\t\ttailFile = 
+            ToFileName[{AfsHomeDirectory["\<jowett\>"], "\<public\>", \
+"\<scripts\>"}, "\<MathBatchTail.csh\>"], \n\t\t\ttempFile = \
+"\<makeBatchScript.temp.orary.junk\>", \n\t\t\tbatchJobName = 
+            StringReplace[
+              mathFile, {"\<.m\>" \[Rule] "\<\>"}], \n\t\t\tmathInput, tail, 
+          jobStream\n\t\t}, \n\t\tbumpFile[batchFile]; \n\t\tSplice[headFile, 
+          tempFile, FormatType \[Rule] OutputForm]; \n\t\thead = 
+          ReadList[tempFile, String]; \n\t\tDeleteFile[
+          tempFile]; \n\t\tmathInput = \(StringReplace[#, {"\<$\>" -> \
+"\<\$\>", "\<`\>" \[Rule] "\<\`\>", "\<\"\>" \[Rule] "\<\\\"\>", "\<\t\>" \
+\[Rule] "\<   \>"}] &\)\  /@ \ ReadList[mathFile, String]; \n\t\ttail = 
+          ReadList[tailFile, String]; \n\t\tjobStream = 
+          OpenWrite[batchFile, 
+            DOSTextFormat \[Rule] False]; \n\t\t\(Write[jobStream, 
+              OutputForm[#]] &\) /@ \ 
+          Flatten[{\ head, mathInput, tail}]; \n\t\tClose[
+          jobStream]\n\t]\)], "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["File name conversions", "Subsection"],
+
+Cell["Sometimes we need to convert", "Text"],
+
+Cell[BoxData[
+    \(toWindowsFileName[unixFilename_] := 
+      StringReplace[
+        unixFilename, {"\</afs\>" \[Rule] $AfsRoot, "\</\>" \[Rule] \
+"\<\\\>"}]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(toUnixFileName[windowsFilename_] := 
+      StringReplace[
+        windowsFilename, {$AfsRoot \[Rule] "\</afs\>", 
+          "\<\\\\\>" \[Rule] "\</\>", "\<\\\>" \[Rule] "\</\>"}]\)], "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Calling Windows Explorer on a directory", "Subsection"],
+
+Cell["\<\
+Call Windows Explorer on a directory.  The directory can be specified in \
+Windows or Unxi format (with the AFS client on CERN NICE NT).\
+\>", "Text"],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{"explorer", "[", "dir_String", "]"}], ":=", 
+      "\[IndentingNewLine]", 
+      RowBox[{"If", "[", 
+        RowBox[{
+          RowBox[{"StringMatchQ", "[", 
+            RowBox[{"$OperatingSystem", ",", "\"\<Windows*\>\""}], "]"}], ",",
+           " ", "\[IndentingNewLine]", 
+          RowBox[{"Module", "[", "\[IndentingNewLine]", 
+            RowBox[{
+              RowBox[{"{", 
+                RowBox[{"windir", "=", 
+                  RowBox[{"toWindowsFileName", "[", "dir", "]"}]}], "}"}], 
+              ",", "\[IndentingNewLine]", 
+              RowBox[{
+                RowBox[{"ReadList", "[", 
+                  RowBox[{
+                    RowBox[{"\"\<!explorer \>\"", "<>", "windir"}], ",", 
+                    "Record"}], "]"}], ";", "\[IndentingNewLine]", 
+                RowBox[{"Return", "[", "windir", "]"}]}]}], 
+            "\[IndentingNewLine]", "]"}], ",", "\[IndentingNewLine]", 
+          RowBox[{
+            RowBox[{"Message", "[", 
+              RowBox[{"explorer", "::", "notWindows"}], "]"}], ";", 
+            "\[IndentingNewLine]", 
+            RowBox[{"Return", "[", "dir", "]"}]}]}], "\[IndentingNewLine]", 
+        "]"}]}]], "Input",
+  InitializationCell->True],
+
+Cell["\<\
+Consider some appropriate behaviour for Unix?  E.g., open an xterm in the \
+directory.  But need to be careful if the Front End is on Windows.\
+\>", "Text"],
+
+Cell["\<\
+This function is NOT listable.  A list argument is taken to be an \
+operating-system independent specification of a directory path.\
+\>", "Text"],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{"explorer", "[", "mdir_List", "]"}], ":=", 
+      RowBox[{"explorer", "[", 
+        RowBox[{"ToFileName", "[", "mdir", "]"}], "]"}]}]], "Input",
+  InitializationCell->True],
+
+Cell["\<\
+With no argument, just open explorer in the current directory.\
+\>", "Text"],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{"explorer", "[", "]"}], ":=", 
+      RowBox[{"explorer", "[", 
+        RowBox[{"Directory", "[", "]"}], "]"}]}]], "Input",
+  InitializationCell->True],
+
+Cell["", "Text"],
+
+Cell[CellGroupData[{
+
+Cell["Microsoft Information about explorer command line options", \
+"Subsubsection"],
+
+Cell["\<\
+Windows NT Explorer
+   Command-Line Options
+
+
+
+  The information in this article applies to:
+
+       Microsoft Windows NT Workstation version 4.0 
+       Microsoft Windows NT Server version 4.0 
+       Microsoft Windows 2000 Professional 
+       Microsoft Windows 2000 Server 
+       Microsoft Windows 2000 Advanced Server
+
+
+
+  SUMMARY
+
+  This article lists the command-line switches that you can use with Windows \
+NT
+  Explorer (Explorer.exe) in Windows NT version 4.0 
+
+
+  MORE INFORMATION
+
+  Explorer [/n] [/e] [(,)/root,<object>] [/select,<object>]
+
+  /n                Opens a new single-pane window for the default
+                    selection. This is usually the root of the drive Windows
+                    NT is installed on. If the window is already open, a
+                    duplicate opens.
+
+  /e                Opens Windows Explorer in its default view.
+
+  /root,<object>    Opens a window view of the specified object.
+
+
+  /select,<object>  Opens a window view with the specified folder, file or
+                    application selected.
+
+  Examples:
+
+     Example 1:     Explorer /select,C:\\TestDir\\TestApp.exe
+
+        Opens a window view with TestApp selected.
+
+     Example 2:  Explorer /e,/root,C:\\TestDir\\TestApp.exe
+
+        This opens Explorer with C: expanded and TestApp selected.
+
+     Example 3:  Explorer /root,\\\\TestSvr\\TestShare
+
+        Opens a window view of the specified share.
+
+     Example 4:  Explorer /root,\\\\TestSvr\\TestShare,select,TestApp.exe
+
+        Opens a window view of the specified share with TestApp selected. \
+\>", "SmallText"]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Finding the source of a package", "Subsection"],
+
+Cell["This was developed in a notebook", "Text"],
+
+Cell[BoxData[
+    \(packageSourceDirectory[package_String] := \n\t
+      Module[{mdir}, \n\t\t
+        mdir = DirectoryName[
+            ContextToFilename[
+              First[Select[Contexts[], 
+                  StringMatchQ[#, "\<*\>"<>package<>"\<*\>"]&]]\n\t\t\t\t]]; 
+        Select[\ \((\(ToFileName[{#, mdir}]&\)\ /@\ $Path)\), 
+          FileType[#] == Directory&]\n\t\t]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(packageSourceNotebook[package_String] := 
+      ToFileName[Take[packageSourceDirectory[package], 1], package<>"\<.nb\>"]
+        \)], "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Shortening file names", "Subsection"],
+
+Cell[TextData[{
+  "Rules for shortening filenames to avoid spilling over 80 columns in MAD \
+scripts and similar.  ",
+  StyleBox["Originally we had to put  longer rules first i",
+    FontSlant->"Italic"],
+  "n this list for best effect.  Now the function sorts the rules according \
+to the amount by which they shorten file paths.   Note the use of Reverse in \
+the information message.  The syntax then corresponds to the Unix convention \
+(e.g. in a listing from the command \"ls -l\"."
+}], "Text"],
+
+Cell[BoxData[
+    \(makeShortLinks[linkrule_Rule] := \n\t
+      If[onPC, \n\t\tPrint["\<On Unix would link: \>", Reverse[linkrule]], 
+        Run["\<ln -sf \>"<>First[linkrule]<>"\< \>"<>Last[linkrule]]\ \n
+        \t\t]; \nmakeShortLinks[linkrules_List] := 
+      Map[makeShortLinks, 
+        Sort[linkrules, 
+          \(({1, \(-1\)} . 
+                  StringLength\ /@\(List@@\ \((\ #1)\)\) > {1, \(-1\)} . 
+                  StringLength\ /@\ \(List@@\ \ \((#2)\)\))\)&]]\)], "Input",
+  InitializationCell->True],
+
+Cell["\<\
+The following is a bit suspect as programming practice.  However it seems \
+natural.  Normally the user needs to define his link rules in the global \
+context.  In other cases, it is barely worth having this function.\
+\>", "Text"],
+
+Cell[BoxData[
+    \(\(shortFileName[fn_String] := StringReplace[fn, Global`linkRules]\ 
+    \)\)], "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Inventing new file names", "Subsection"],
+
+Cell[TextData[{
+  "Generate a new file name with extension ",
+  StyleBox["ext", "Input"],
+  " that is not already in use."
+}], "Text"],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{"newFileName", "[", "ext_", "]"}], ":=", "\n", "\t", 
+      RowBox[{"\"\<autoFile\>\"", "<>", 
+        RowBox[{"ToString", "[", 
+          RowBox[{"1", "+", 
+            RowBox[{"Max", "[", 
+              RowBox[{"ToExpression", "[", 
+                RowBox[{"StringReplace", "[", 
+                  RowBox[{
+                    RowBox[{
+                      RowBox[{"{", "\"\<0\>\"", "}"}], "\[Union]", 
+                      RowBox[{"FileNames", "[", 
+                        RowBox[{"\"\<autoFile*.\>\"", "<>", "ext"}], "]"}]}], 
+                    ",", 
+                    RowBox[{"{", 
+                      RowBox[{
+                        RowBox[{"\"\<autoFile\>\"", "->", "\"\<\>\""}], ",", 
+                        RowBox[{
+                          RowBox[{"\"\<.\>\"", "<>", "ext"}], "->", 
+                          "\"\<\>\""}]}], "}"}]}], "]"}], "]"}], "]"}]}], 
+          "\n", "\t\t\t", "]"}], "<>", "\"\<.\>\"", "<>", "ext"}]}]], "Input",\
+
+  InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Backups of files ", "Subsection"],
+
+Cell["The functions in this section work on all systems.", "Text"],
+
+Cell["\<\
+A function that invents a unique name for a backup copy of a file in the \
+current directory, using the current date and time.\
+\>", "Text"],
+
+Cell[BoxData[
+    \(bumpFileName[fn_String] := 
+      fn<>Apply[StringJoin, Map[\(("\<_\>"<>ToString[#])\)&, FileDate[fn]]]
+          \)], "InputOnly",
+  InitializationCell->True],
+
+Cell["\<\
+A function that saves a backup copy of a file in the local TRASH directory.\
+\>", "Text"],
+
+Cell[BoxData[
+    \(bumpFile[fn_String] := 
+      Block[{tfn}, \n\t\t
+        If[FileNames["\<TRASH\>"] == {}, CreateDirectory["\<TRASH\>"]]; \n\t\t
+        If[FileNames[fn] == {}, $Failed, \n\t\t\t
+          tfn = CopyFile[fn, dirJoin["\<TRASH\>", bumpFileName[fn]]]; \t
+          DeleteFile[fn]; tfn\n\t\t\t]\n\t]\)], "InputOnly",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Executing system commands", "Subsection"],
+
+Cell[TextData[{
+  "Some Unix  system commands are better executed outside ",
+  StyleBox["Mathematica",
+    FontSlant->"Italic"],
+  " so that their output can be seen on the terminal.  Here is a procedure to \
+generate scripts to execute a given command in a list of directories. This \
+might typically be used for batch job submission."
+}], "Text"],
+
+Cell[BoxData[
+    \(generateLaunchScript[cmd_String, dirs_List, scriptName_String] := \ \n
+      Block[{cmd1, cmd2}, \n\t\tbumpFile[scriptName]; \n\t\t
+        script = OpenWrite[scriptName]; \n\t\t
+        WriteString[script, "\<#!/usr/bin/sh  \n\>"]; \n\t\t
+        WriteString[script, 
+          "\<# Created by generateLaunchScript at \>"<>ToString[Date[]], 
+          "\<\n\>"]; \n\t\t
+        Map[\((WriteString[script, "\<cd \>", #, "\<\n\>"\n
+                \t\t\t\t\t\t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \
+\ \ \ \ \ \ , cmd, "\<\n\>", \n
+                \t\t\t\t\t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \
+\ \ \ \ \ \ \ "\<cd ..\>", "\<\n\>"]\n\t\t\t)\)&, dirs]; \n\t\tClose[script]; 
+        \n\t\tRun["\<chmod u+x \>"<>scriptName]\n\t\t]\)], "InputOnly",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Changing strings in files", "Subsection"],
+
+Cell["\<\
+This works on each line in the file.  Very handy for making substitutions in \
+a set of files and much easier to use than horrible Unix find command with \
+sed or whatever.\
+\>", "Text"],
+
+Cell[BoxData[
+    \(\(\(stringReplaceInFile[file1_, file2_, reprule_Rule] := 
+      stringReplaceInFile[file1, 
+        file2, {reprule}]\)\(;\)\(stringReplaceInFile[file1_, file2_, 
+        reprules : {Rule__}] := 
+      Module[{f1, f2, lines, newlines}, \n\t\tf1\  = \ 
+          OpenRead[file1]; \n\t\tlines = 
+          ReadList[f1, 
+            Record]; \n\t\tnewlines\  = \ \(StringReplace[#, 
+                reprules]\  &\) /@ \ lines; \n\t\tClose[f1]; \n\t\tf2 = 
+          OpenWrite[file2, DOSTextFormat \[Rule] False]; \n\t\tDo[
+          WriteString[f2, \ newlines[\([k]\)], "\<\n\>"], {k, 1, 
+            Length[newlines]}]; \n\t\tClose[
+          f2]\n\t\t]\)\(;\)\(\n\)\)\)], "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Changing files from DOS format to Unix", "Subsection"],
+
+Cell["Just a special case of above function with a trivial rule.", "Text"],
+
+Cell[BoxData[
+    \(DOStoUnix[file_] := 
+      stringReplaceInFile[file, 
+        file, {"\<DDD\>" \[Rule] "\<DDD\>"}]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(DOStoUnix[files_List] := DOStoUnix /@ files\)], "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Domain of a function", "Subsection"],
+
+Cell[BoxData[
+    \(domain[f_] := Cases[DownValues[f], HoldPattern[f[j_]] -> j, {3}]\)], 
+  "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Formatted usage messages", "Subsection"],
+
+Cell[TextData[{
+  "This is taken from the ",
+  StyleBox["Mathematica",
+    FontSlant->"Italic"],
+  " Demos Formatting section in the Help browser."
+}], "Text"],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{"UsageNotebook", "[", 
+        RowBox[{"cmds", ":", 
+          RowBox[{"{", "__String", "}"}]}], "]"}], " ", ":=", 
+      RowBox[{"NotebookPut", "[", 
+        RowBox[{"Notebook", "[", 
+          RowBox[{
+            RowBox[{"Flatten", "[", 
+              RowBox[{
+                RowBox[{
+                  RowBox[{"{", 
+                    RowBox[{
+                      RowBox[{"Cell", "[", 
+                        RowBox[{"#", ",", "\"\<Section\>\""}], "]"}], ",", 
+                      RowBox[{"Cell", "[", 
+                        RowBox[{
+                          RowBox[{
+                            RowBox[{
+                              RowBox[{"MessageName", "[", 
+                                RowBox[{"#", ",", "\"\<usage\>\""}], "]"}], 
+                              "&"}], "[", 
+                            RowBox[{"ToExpression", "[", "#", "]"}], "]"}], 
+                          ",", "\"\<Text\>\""}], "]"}]}], "}"}], "&"}], "/@", 
+                "cmds"}], "]"}], ",", 
+            RowBox[{"StyleDefinitions", "\[Rule]", "\"\<Report.nb\>\""}]}], 
+          "]"}], "]"}]}]], "Input",
+  InitializationCell->True],
+
+Cell[TextData[{
+  "Here is another function which writes cells directly into the current \
+notebook.  It's taken from the ",
+  StyleBox["Mathematica",
+    FontSlant->"Italic"],
+  " Demos Formatting section in the Help browser."
+}], "Text"],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{"UsageCells", "[", 
+        RowBox[{"cmds", ":", 
+          RowBox[{"{", "__String", "}"}]}], "]"}], " ", ":=", 
+      RowBox[{"Scan", "[", 
+        RowBox[{
+          RowBox[{
+            RowBox[{"(", 
+              RowBox[{
+                RowBox[{"StylePrint", "[", 
+                  RowBox[{"#", ",", "\"\<Subsection\>\""}], "]"}], ";", 
+                RowBox[{"StylePrint", "[", 
+                  RowBox[{
+                    RowBox[{
+                      RowBox[{
+                        RowBox[{"MessageName", "[", 
+                          RowBox[{"#", ",", "\"\<usage\>\""}], "]"}], "&"}], 
+                      "[", 
+                      RowBox[{"ToExpression", "[", "#", "]"}], "]"}], ",", 
+                    "\"\<Text\>\""}], "]"}]}], ")"}], "&"}], ",", "cmds"}], 
+        "]"}]}]], "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Package trailer", "Subsection"],
+
+Cell["End the private context.", "Text",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(End[\ ]\ \ \ \ \ \ \ \ \)\)], "Input",
+  InitializationCell->True],
+
+Cell["Protect exported symbols.", "Text",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(Protect[\ onPC, dirJoin, bumpFile, bumpFileName, makeShortLinks, 
+      shortFileName, stringReplaceInFile, domain]\ \ \ \ \)\)], "Input",
+  InitializationCell->True],
+
+Cell["End the package context.", "Text"],
+
+Cell[BoxData[
+    \(\(EndPackage[\ ]\ \ \)\)], "Input",
+  InitializationCell->True]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Applications of this package", "Section",
+  CellTags->"applications"],
+
+Cell[CellGroupData[{
+
+Cell["Directory names", "Subsection"],
+
+Cell[TextData[{
+  Cell[BoxData[
+      \(AfsHomeDirectory["\<grote\>"]\)], "Input"],
+  "\n",
+  Cell[BoxData[
+      \("P:\\cern.ch\\user\\g\\grote\\"\)], "Output"]
+}], "Text"],
+
+Cell["\<\
+The default is to return the current user's AFS home directory\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(AfsHomeDirectory[]\)], "Input"],
+
+Cell[BoxData[
+    \("P:\\cern.ch\\user\\j\\jowett\\"\)], "Output"]
+}, Open  ]],
+
+Cell[TextData[{
+  "The function ",
+  StyleBox["dirJoin", "Input"],
+  " is obsolete (replaced by ",
+  StyleBox["ToFileName", "Input"],
+  " in ",
+  StyleBox["Mathematica",
+    FontSlant->"Italic"],
+  " 3.0);  it is still here for backwards compatibility."
+}], "Text"],
+
+Cell["This example should work on Unix:", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(dirJoin["\</afs/cern.ch/user/\>", "\</j/jowett/public/\>"]\)], "Input"],
+
+Cell[BoxData[
+    \("/afs/cern.ch/user/\\/j/jowett/public/"\)], "Output"]
+}, Open  ]],
+
+Cell["This example should work on Windows:", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(dirJoin["\<J:\\math\\\>", "\<\\JMJUtils\\BumpEtc.m\>"]\)], "Input"],
+
+Cell[BoxData[
+    \("J:\\math\\JMJUtils\\BumpEtc.m"\)], "Output"]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["File Name conversions", "Subsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(toUnixFileName[
+      "\<P:\cern.ch\user\j\jowett\public\lhc98\V6.-2\xorbitIP2.mad\>"]\)], 
+  "Input"],
+
+Cell[BoxData[
+    \("/afs/cern.ch/user/j/jowett/public/lhc98/V6.-2/xorbitIP2.mad"\)], 
+  "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(toWindowsFileName[
+      "\</afs/cern.ch/user/j/jowett/public/lhc98/V6.-2/xorbitIP2.mad\>"]\)], 
+  "Input"],
+
+Cell[BoxData[
+    \("P:\\cern.ch\\user\\j\\jowett\\public\\lhc98\\V6.-2\\xorbitIP2.mad"\)], 
+  "Output"]
+}, Open  ]],
+
+Cell["This only works when the complete file path is specified:", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(toWindowsFileName["\<~/xorbitIP2.mad\>"]\)], "Input"],
+
+Cell[BoxData[
+    \("~\\xorbitIP2.mad"\)], "Output"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Calling Windows Explorer", "Subsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"explorer", "[", "\"\<C:\\\\temp\>\"", "]"}]], "Input"],
+
+Cell[BoxData["\<\"C:\\\\temp\"\>"], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"explorer", "[", 
+      RowBox[{"{", 
+        RowBox[{"\"\<C:\>\"", ",", "\"\<\\\\temp\>\""}], "}"}], 
+      "]"}]], "Input"],
+
+Cell[BoxData["\<\"C:\\\\temp\\\\\"\>"], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"explorer", "[", 
+      RowBox[{"AfsHomeDirectory", "[", "]"}], "]"}]], "Input"],
+
+Cell[BoxData["\<\"P:\\\\cern.ch\\\\user\\\\j\\\\jowett\\\\\"\>"], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{
+    "explorer", "[", "\"\<P:\\\\cern.ch\\\\user\\\\j\\\\jowett\\\\\>\"", " ", 
+      "]"}]], "Input"],
+
+Cell[BoxData["\<\"P:\\\\cern.ch\\\\user\\\\j\\\\jowett\\\\\"\>"], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{
+    "explorer", "[", "\"\</afs/cern.ch/user/j/jowett/public\>\"", 
+      "]"}]], "Input"],
+
+Cell[BoxData["\<\"P:\\\\cern.ch\\\\user\\\\j\\\\jowett\\\\public\"\>"], \
+"Output"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Finding the source of a package", "Subsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(packageSourceDirectory["\<Tree\>"]\)], "Input"],
+
+Cell[BoxData[
+    \({"Z:\\P32\\Mathematica\\3.0.1.1x\\AddOns\\StandardPackages\\\
+DiscreteMath\\"}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(Needs["\<Graphics`MultipleListPlot`\>"]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(packageSourceNotebook["\<MultipleListPlot`\>"]\)], "Input"],
+
+Cell[BoxData[
+    \("Z:\\P32\\Mathematica\\3.0.1.1x\\AddOns\\StandardPackages\\Graphics\\\
+MultipleListPlot`.nb"\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(packageSourceNotebook["\<BumpEtc\>"]\)], "Input"],
+
+Cell[BoxData[
+    \("P:\\cern.ch\\user\\j\\jowett\\public\\math\\JMJUtils\\BumpEtc*.nb"\)], 
+  "Output"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Maintaining backups of files", "Subsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"thispackage", " ", "=", " ", 
+      RowBox[{
+      "ContextToFilename", "[", "\"\<JMJUtils`BumpEtc`\>\"", "]"}]}]], "Input"],
+
+Cell[BoxData["\<\"JMJUtils\\\\BumpEtc.m\"\>"], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"thisPackageDir", "=", 
+      RowBox[{"If", "[", 
+        RowBox[{
+        "onPC", ",", "\"\<C:\\\\math\\\\JMJUtils\>\"", ",", 
+          "\"\</afs/cern.ch/user/j/jowett/public/math/JMJUtils\>\""}], 
+        "]"}]}]], "Input"],
+
+Cell[BoxData["\<\"C:\\\\math\\\\JMJUtils\"\>"], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"SetDirectory", "[", "thisPackageDir", "]"}]], "Input"],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{"SetDirectory", "::", "\<\"cdir\"\>"}], 
+      RowBox[{
+      ":", " "}], "\<\"Cannot set current directory to \
+\\!\\(\\\"C:\\\\\\\\math\\\\\\\\JMJUtils\\\"\\).\"\>"}]], "Message"],
+
+Cell[BoxData["\<\"C:\\\\TEMP\"\>"], "Output"]
+}, Open  ]],
+
+Cell["See what is here:", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"FileNames", "[", "]"}]], "Input"],
+
+Cell[BoxData[
+    RowBox[{"{", 
+      RowBox[{"\<\"Acr10A.tmp\"\>", ",", "\<\"Acr17E.tmp\"\>", 
+        ",", "\<\"AcrBA.tmp\"\>", ",", "\<\"AcrBB.tmp\"\>", 
+        ",", "\<\"AcrE5.tmp\"\>", ",", "\<\"AcrEA.tmp\"\>", 
+        ",", "\<\"AcrF22.tmp\"\>", ",", "\<\"Agenda1.doc\"\>", 
+        ",", "\<\"Agenda.doc\"\>", 
+        ",", "\<\"AutoRecovery save of DampingRingContribution.asd\"\>", 
+        ",", "\<\"AutoRecovery save of ExecutiveSummaryDraft1 for LHCTC.wbk\"\
+\>", ",", "\<\"Backup of ExecutiveSummaryDraft4Word6IG.wbk\"\>", 
+        ",", "\<\"bd86122.nab\"\>", ",", "\<\"BEAM_DYN.DOC\"\>", 
+        ",", "\<\"BOLIDE.GID\"\>", ",", "\<\"CA letter.doc\"\>", 
+        ",", "\<\"cert.db\"\>", ",", "\<\"certni.db\"\>", 
+        ",", "\<\"CLiCrep31.doc\"\>", ",", "\<\"CLiCrep.doc\"\>", 
+        ",", "\<\"clic-tesla1.doc\"\>", ",", "\<\"clic-tesla.doc\"\>", 
+        ",", "\<\"current.nb\"\>", ",", "\<\"~DF1AA.tmp\"\>", 
+        ",", "\<\"~DF2576.tmp\"\>", ",", "\<\"~DF401.tmp\"\>", 
+        ",", "\<\"~DF9051.tmp\"\>", ",", "\<\"~DFB1D3.tmp\"\>", 
+        ",", "\<\"~DFF844.tmp\"\>", ",", "\<\"~DFFFE1.tmp\"\>", 
+        ",", "\<\"diary.org\"\>", 
+        ",", "\<\"DPG-XX-rpt-002  MAD on Windows NT.doc\"\>", 
+        ",", "\<\"Draft3Wff.doc\"\>", ",", "\<\"econ.txt\"\>", 
+        ",", "\<\"Epac2000.doc\"\>", ",", "\<\"Excel8.0\"\>", 
+        ",", "\<\"ExecutiveSummaryDraft3Word6.doc\"\>", 
+        ",", "\<\"FAMILY.ldb\"\>", ",", "\<\"Files to delete.fnd\"\>", 
+        ",", "\<\"hcl41.fon\"\>", ",", "\<\"hcl4F.fon\"\>", 
+        ",", "\<\"hcl51.fon\"\>", ",", "\<\"hcl53.fon\"\>", 
+        ",", "\<\"hcl55.fon\"\>", ",", "\<\"hcl57.fon\"\>", 
+        ",", "\<\"hcl59.fon\"\>", ",", "\<\"hcl8B.fon\"\>", 
+        ",", "\<\"hcl8D.fon\"\>", ",", "\<\"hcl8F.fon\"\>", 
+        ",", "\<\"hcl91.fon\"\>", ",", "\<\"hclB2.fon\"\>", 
+        ",", "\<\"hclB8.fon\"\>", ",", "\<\"hclD0.fon\"\>", 
+        ",", "\<\"hclD2.fon\"\>", ",", "\<\"imageO7O.JPG\"\>", 
+        ",", "\<\"imageREK.JPG\"\>", ",", "\<\"Images\"\>", 
+        ",", "\<\"jad.pdf\"\>", ",", "\<\"JimStrait.xls\"\>", 
+        ",", "\<\"jobanalysisdemo.pdf\"\>", ",", "\<\"jowett.wgp\"\>", 
+        ",", "\<\"junk.m\"\>", ",", "\<\"junkmath.pdf\"\>", 
+        ",", "\<\"junkmath.ps\"\>", ",", "\<\"junk.ps\"\>", 
+        ",", "\<\"key.db\"\>", ",", "\<\"latest.kex\"\>", 
+        ",", "\<\"LetMeType.GID\"\>", ",", "\<\"Links\"\>", 
+        ",", "\<\"mad9test\"\>", ",", "\<\"mfsPalette.jpg\"\>", 
+        ",", "\<\"mlpfont.tmp\"\>", ",", "\<\"mso111.tmp\"\>", 
+        ",", "\<\"mso112.tmp\"\>", ",", "\<\"mso116.tmp\"\>", 
+        ",", "\<\"mso117.tmp\"\>", ",", "\<\"mso118.tmp\"\>", 
+        ",", "\<\"mso119.tmp\"\>", ",", "\<\"mso11A.tmp\"\>", 
+        ",", "\<\"mso11B.tmp\"\>", ",", "\<\"mso11C.tmp\"\>", 
+        ",", "\<\"mso11D.tmp\"\>", ",", "\<\"mso11E.tmp\"\>", 
+        ",", "\<\"mso11F.tmp\"\>", ",", "\<\"mso120.tmp\"\>", 
+        ",", "\<\"mso121.tmp\"\>", ",", "\<\"mso122.tmp\"\>", 
+        ",", "\<\"mso123.tmp\"\>", ",", "\<\"mso124.tmp\"\>", 
+        ",", "\<\"mso125.tmp\"\>", ",", "\<\"mso126.tmp\"\>", 
+        ",", "\<\"mso127.tmp\"\>", ",", "\<\"mso128.tmp\"\>", 
+        ",", "\<\"mso129.tmp\"\>", ",", "\<\"mso12A.tmp\"\>", 
+        ",", "\<\"mso12B.tmp\"\>", ",", "\<\"mso12C.tmp\"\>", 
+        ",", "\<\"mso12D.tmp\"\>", ",", "\<\"mso12E.tmp\"\>", 
+        ",", "\<\"mso12F.tmp\"\>", ",", "\<\"mso130.tmp\"\>", 
+        ",", "\<\"mso131.tmp\"\>", ",", "\<\"mso132.tmp\"\>", 
+        ",", "\<\"mso133.tmp\"\>", ",", "\<\"mso15D.tmp\"\>", 
+        ",", "\<\"mso15E.tmp\"\>", ",", "\<\"mso15F.tmp\"\>", 
+        ",", "\<\"mso160.tmp\"\>", ",", "\<\"Naming for operation.doc\"\>", 
+        ",", "\<\"NetRexx.kld\"\>", ",", "\<\"netscape.hst\"\>", 
+        ",", "\<\"nscomm40\"\>", ",", "\<\"nsmail0P.TMP\"\>", 
+        ",", "\<\"nsmail7A.TMP\"\>", ",", "\<\"nsmail9G.TMP\"\>", 
+        ",", "\<\"nsmail9M.TMP\"\>", ",", "\<\"nsmailBL.TMP\"\>", 
+        ",", "\<\"nsmailGD.TMP\"\>", ",", "\<\"nsmailMK.TMP\"\>", 
+        ",", "\<\"nsmailQ8.TMP\"\>", ",", "\<\"nsmailTB.TMP\"\>", 
+        ",", "\<\"nsmailTO.TMP\"\>", ",", "\<\"OpticsCheckOut.csh\"\>", 
+        ",", "\<\"OpticsCheckOut.m\"\>", ",", "\<\"Phone%20buttons.xls\"\>", 
+        ",", "\<\"postrack.f\"\>", ",", "\<\"programs\"\>", 
+        ",", "\<\"QTWE76.tmp\"\>", ",", "\<\"REXXNOTE.TXT\"\>", 
+        ",", "\<\"rexx.out\"\>", ",", "\<\"rfq_sections2.eps\"\>", 
+        ",", "\<\"rfq_sections2.pdf\"\>", ",", "\<\"rfq_sections2.ps\"\>", 
+        ",", "\<\"sinplot.dat\"\>", ",", "\<\"sl-note.doc\"\>", 
+        ",", "\<\"SpectralPeaksTalk.m\"\>", ",", "\<\"src\"\>", 
+        ",", "\<\"~SRC1702.TMP\"\>", ",", "\<\"~SRC241B.TMP\"\>", 
+        ",", "\<\"~SRC2C2C.TMP\"\>", ",", "\<\"step1\"\>", 
+        ",", "\<\"step2\"\>", ",", "\<\"step3\"\>", ",", "\<\"step4\"\>", 
+        ",", "\<\"step5\"\>", ",", "\<\"step6\"\>", ",", "\<\"step7\"\>", 
+        ",", "\<\"syxn\"\>", ",", "\<\"test.mou\"\>", 
+        ",", "\<\"TEXFORM.DEF\"\>", ",", "\<\"TMJ-2.4\"\>", 
+        ",", "\<\"tokens.log\"\>", ",", "\<\"TrackTableWorkspace\"\>", 
+        ",", "\<\"TRASH\"\>", ",", "\<\"TTR70.tmp\"\>", 
+        ",", "\<\"UnixWindowsClipboard.txt\"\>", ",", "\<\"USPCTCP.CFG\"\>", 
+        ",", "\<\"VBE\"\>", ",", "\<\"WHICH.WBT\"\>", ",", "\<\"Word8.0\"\>", 
+        ",", "\<\"WORK.LDB\"\>", ",", "\<\"~WRD0003.doc\"\>", 
+        ",", "\<\"~WRF0001.tmp\"\>", ",", "\<\"~WRS0000.tmp\"\>", 
+        ",", "\<\"~WRS0115.tmp\"\>", ",", "\<\"~$RO0075.doc\"\>", 
+        ",", "\<\"~$RO2368.doc\"\>"}], "}"}]], "Output"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(bumpFileName["\<BumpEtc.m\>"]\)], "Input"],
+
+Cell[BoxData[
+    \("BumpEtc.m_1997_6_5_18_19_10"\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(bumpFile["\<BumpEtc.m\>"]\)], "Input"],
+
+Cell[BoxData[
+    \("TRASH\\BumpEtc.m_1997_6_5_18_19_10"\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(FileNames[]\)], "Input"],
+
+Cell[BoxData[
+    \({"bumpetc.nb", "TRASH"}\)], "Output"]
+}, Open  ]],
+
+Cell["Show the backup copies that have been saved.", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(FileNames["\<*\>", "\<TRASH\>"]\)], "Input"],
+
+Cell[BoxData[
+    \({"TRASH\\BumpEtc.m_1997_6_5_18_17_12", 
+      "TRASH\\BumpEtc.m_1997_6_5_18_18_52", 
+      "TRASH\\BumpEtc.m_1997_6_5_18_19_10"}\)], "Output"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Shortening file names with links", "Subsection"],
+
+Cell["Here is an example of some rules under the CERN AFS system.", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(linkRules = {\t\n\t\t
+        "\</afs/cern.ch/user/j/jowett/group/lep97/imperf\>" -> \n\t\t\t
+          "\</afs/cern.ch/user/j/jowett/l3\>", \n\t\t
+        "\</afs/cern.ch/eng/lep/imperf/lep97\>" -> \n\t\t\t
+          "\</afs/cern.ch/user/j/jowett/l4\>", \t
+        "\</afs/cern.ch/user/j/jowett/group/lep97/imperf\>" -> \n\t\t\t
+          "\</tmp/l99\>"\t}\)], "Input"],
+
+Cell[BoxData[
+    \({"/afs/cern.ch/user/j/jowett/group/lep97/imperf" \[Rule] 
+        "/afs/cern.ch/user/j/jowett/l3", 
+      "/afs/cern.ch/eng/lep/imperf/lep97" \[Rule] 
+        "/afs/cern.ch/user/j/jowett/l4", 
+      "/afs/cern.ch/user/j/jowett/group/lep97/imperf" \[Rule] "/tmp/l99"}\)], 
+  "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(makeShortLinks[linkRules]\)], "Input"],
+
+Cell[BoxData[
+    InterpretationBox[
+      \("On Unix would link: "\[InvisibleSpace]\("/tmp/l99" \[Rule] 
+          "/afs/cern.ch/user/j/jowett/group/lep97/imperf"\)\),
+      SequenceForm[ 
+      "On Unix would link: ", "/tmp/l99" -> 
+        "/afs/cern.ch/user/j/jowett/group/lep97/imperf"],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[
+      \("On Unix would link: \
+"\[InvisibleSpace]\("/afs/cern.ch/user/j/jowett/l3" \[Rule] 
+          "/afs/cern.ch/user/j/jowett/group/lep97/imperf"\)\),
+      SequenceForm[ 
+      "On Unix would link: ", "/afs/cern.ch/user/j/jowett/l3" -> 
+        "/afs/cern.ch/user/j/jowett/group/lep97/imperf"],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[
+      \("On Unix would link: \
+"\[InvisibleSpace]\("/afs/cern.ch/user/j/jowett/l4" \[Rule] 
+          "/afs/cern.ch/eng/lep/imperf/lep97"\)\),
+      SequenceForm[ 
+      "On Unix would link: ", "/afs/cern.ch/user/j/jowett/l4" -> 
+        "/afs/cern.ch/eng/lep/imperf/lep97"],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    \({Null, Null, Null}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(shortFileName[\t
+      "\</afs/cern.ch/user/j/jowett/group/lep97/imperf/junk.mad\>"]\)], 
+  "Input"],
+
+Cell[BoxData[
+    \("/afs/cern.ch/user/j/jowett/l3/junk.mad"\)], "Output"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Generating new file names", "Subsection"],
+
+Cell["\<\
+Sometimes you want to make a new file with a given extension and want to \
+choose the name automatically.\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"SetDirectory", "[", "$TemporaryPrefix", "]"}]], "Input"],
+
+Cell[BoxData["\<\"C:\\\\TEMP\"\>"], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    RowBox[{"Save", "[", 
+      RowBox[{"\"\<junk.m\>\"", ",", 
+        RowBox[{"{", 
+          RowBox[{"x", ",", "y", ",", "z"}], "}"}]}], "]"}]], "Input"],
+
+Cell["Names of existing .m files", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"FileNames", "[", "\"\<*.m\>\"", "]"}]], "Input"],
+
+Cell[BoxData[
+    RowBox[{"{", 
+      RowBox[{"\<\"junk.m\"\>", ",", "\<\"OpticsCheckOut.m\"\>", 
+        ",", "\<\"SpectralPeaksTalk.m\"\>"}], "}"}]], "Output"]
+}, Open  ]],
+
+Cell["Generate a new name", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"newFileName", "[", "\"\<m\>\"", "]"}]], "Input"],
+
+Cell[BoxData["\<\"autoFile1.m\"\>"], "Output"]
+}, Open  ]],
+
+Cell["All about this package.", "Text"],
+
+Cell[BoxData[
+    RowBox[{"Show", "[", 
+      RowBox[{"Import", "[", 
+        RowBox[{"ToFileName", "[", 
+          RowBox[{
+            RowBox[{"{", 
+              RowBox[{
+                RowBox[{"AfsHomeDirectory", "[", "\"\<jowett\>\"", "]"}], 
+                ",", "\"\<www\>\""}], "}"}], ",", "\"\<BUMP.gif\>\""}], "]"}],
+         "]"}], "]"}]], "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Changing strings throughout a file", "Subsection"],
+
+Cell["First manufacture a file", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(tt = OpenWrite["\<junk.txt\>"]; \n
+    WriteString[tt, "\<This is something to be replaced.\n\>"]\), 
+    \(WriteString[tt, 
+      "\<Change \\alpha to \\beta \neverwhere \\alpha occurs.\>"]\), 
+    \(Close[tt]\)}], "Input"],
+
+Cell[BoxData[
+    \("junk.txt"\)], "Output"]
+}, Open  ]],
+
+Cell["Make a copy with some changes.", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(stringReplaceInFile["\<junk.txt\>", 
+      "\<junk1.txt\>", {"\<something\>" -> "\<SOMETHING\>", 
+        "\<\\alpha\>" -> "\<\\beta\>"}]\)], "Input"],
+
+Cell[BoxData[
+    \("junk1.txt"\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(! \(! junk . txt\)\)\)], "Input"],
+
+Cell["\<\
+This is something to be replaced.
+Change \\alpha to \\beta
+everwhere \\alpha occurs.\
+\>", "Print"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(! \(! junk1 . txt\)\)\)], "Input"],
+
+Cell["\<\
+This is SOMETHING to be replaced.
+Change \\beta to \\beta
+everwhere \\beta occurs.\
+\>", "Print"]
+}, Open  ]],
+
+Cell["\<\
+To apply this to a collection of files, replacing the original files with new \
+versions (be careful, this may be dangerous!)\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\((
+          stringReplaceInFile[#, #, {
+              "\<hpariel.cern.ch\>" -> "\<wwwslap.cern.ch\>"}])\)&\)\ /@
+      FileNames["\<*.html\>"]\)], "Input"],
+
+Cell[BoxData[
+    \({}\)], "Output"]
+}, Open  ]],
+
+Cell["A safer method makes a backup of each file first", "Text"],
+
+Cell[BoxData[
+    \(\(\((bumpFile[#]; \n\t
+          stringReplaceInFile[#, #, {
+              "\<hpariel.cern.ch\>" -> "\<wwwslap.cern.ch\>"}])\)&\)\ /@
+      FileNames["\<*.html\>"]\)], "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Creating system command scripts", "Subsection"],
+
+Cell["Some examples to be created.", "Text"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Domain of a function", "Subsection"],
+
+Cell["\<\
+This is very useful for showing us the values for which a function is \
+defined.  Particularly handy for functional databases.\
+\>", "Text"],
+
+Cell[BoxData[
+    \(g[1] := x + y; \ng[x] := Sin[x - 1]; \ng["\<Fred\>"] = "\<Bill\>"; \n
+    g[y_String] := StringLength[y]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(domain[g]\)], "Input"],
+
+Cell[BoxData[
+    \({1, "Fred", x, y_String, y_}\)], "Output"]
+}, Open  ]]
+}, Closed]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["A palette for the package", "Section"],
+
+Cell[BoxData[GridBox[{
+        {
+          ButtonBox[
+            RowBox[{
+            "AfsHomeDirectory", "[", "\[SelectionPlaceholder]", "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{"explorer", "[", "\[SelectionPlaceholder]", "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{
+            "toWindowsFileName", "[", "\[SelectionPlaceholder]", "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{
+            "toUnixFileName", "[", "\[SelectionPlaceholder]", "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{"UnixLinkQ", "[", "\[SelectionPlaceholder]", "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{"bumpFile", "[", "\[SelectionPlaceholder]", "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{"DOStoUnix", "[", "\[SelectionPlaceholder]", "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{"makeBatchScript", "[", 
+              RowBox[{
+              "\"\<\[SelectionPlaceholder].m\>\"", ",", 
+                "\"\<\[Placeholder].csh\>\""}], "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{"stringReplaceInFile", "[", 
+              RowBox[{"\[SelectionPlaceholder]", ",", "\[Placeholder]", ",", 
+                RowBox[{"{", 
+                  RowBox[{
+                  "\"\<\[Placeholder]\>\"", "\[Rule]", 
+                    "\"\<\[Placeholder]\>\""}], "}"}]}], "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{"domain", "[", "\[SelectionPlaceholder]", "]"}]]}
+        },
+      RowSpacings->0,
+      ColumnSpacings->0,
+      GridDefaultElement:>ButtonBox[ "\\[Placeholder]"]]], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"?", "newFileName"}]], "Input"],
+
+Cell[BoxData["\<\"Global`newFileName\"\>"], "Print"]
+}, Open  ]]
+}, Closed]]
+}, Open  ]]
+},
+FrontEndVersion->"4.0 for Microsoft Windows",
+ScreenRectangle->{{0, 1280}, {0, 926}},
+AutoGeneratedPackage->Automatic,
+ScreenStyleEnvironment->"Working",
+WindowSize->{582, 382},
+WindowMargins->{{160, Automatic}, {Automatic, 156}},
+StyleDefinitions -> Notebook[{
+  
+  Cell[CellGroupData[{
+  Cell["Style Definitions", "Subtitle"],
+  
+  Cell["\<\
+Modify the definitions below to change the default appearance of all cells in \
+a given style.
+Make modifications to any definition using commands in the Format menu.\
+\>", "Text"],
+  
+  Cell[CellGroupData[{
+  
+  Cell["Style Environment Names", "Section"],
+  
+  Cell[StyleData[All, "Working"],
+    PageWidth->WindowWidth,
+    CellBracketOptions->{"Color"->RGBColor[0.4, 0, 0.239994]},
+    ScriptMinSize->9,
+    Background->None],
+  
+  Cell[StyleData[All, "Presentation"],
+    PageWidth->PaperWidth,
+    CellBracketOptions->{"Color"->RGBColor[0, 0, 1]},
+    ScriptMinSize->9],
+  
+  Cell[StyleData[All, "Printout"],
+    PageWidth->PaperWidth,
+    ShowCellLabel->False,
+    ImageSize->{200, 200},
+    PrivateFontOptions->{"FontType"->"Outline"}]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell["Notebook Options", "Section"],
+  
+  Cell["\<\
+The options defined for the style below will be used at the Notebook level.\
+\>", "Text"],
+  
+  Cell[StyleData["Notebook"],
+    PageHeaders->{{Cell[ 
+            TextData[ {
+              CounterBox[ "Page"]}], "PageNumber"], None, Cell[ 
+            TextData[ {
+              ValueBox[ "FileName"]}], "Header"]}, {Cell[ 
+            TextData[ {
+              ValueBox[ "FileName"]}], "Header"], None, Cell[ 
+            TextData[ {
+              CounterBox[ "Page"]}], "PageNumber"]}},
+    CellFrameLabelMargins->6,
+    StyleMenuListing->None]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell["Styles for Headings", "Section"],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Title"],
+    CellFrame->{{0, 0}, {0, 0.25}},
+    CellMargins->{{18, 10}, {0, 20}},
+    CellGroupingRules->{"TitleGrouping", 0},
+    PageBreakBelow->False,
+    CellFrameMargins->6,
+    CellFrameColor->GrayLevel[0],
+    LineSpacing->{0.95, 0},
+    CounterAssignments->{{"Section", 0}, {"Equation", 0}, {"Figure", 0}},
+    FontFamily->"Helvetica",
+    FontSize->36,
+    FontWeight->"Bold",
+    FontColor->RGBColor[1, 0, 0]],
+  
+  Cell[StyleData["Title", "Presentation"],
+    CellMargins->{{20, 10}, {2, 20}},
+    CellFrameMargins->5,
+    FontColor->RGBColor[0, 0, 1]],
+  
+  Cell[StyleData["Title", "Printout"],
+    CellFrame->False,
+    CellMargins->{{18, 30}, {0, 0}},
+    CellFrameMargins->4,
+    TextAlignment->Center,
+    FontFamily->"Times New Roman",
+    FontSize->24,
+    FontColor->GrayLevel[0]]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Subtitle"],
+    CellMargins->{{20, 30}, {2, 10}},
+    CellGroupingRules->{"TitleGrouping", 10},
+    PageBreakBelow->False,
+    CellFrameMargins->{{0, 4}, {8, 4}},
+    LineSpacing->{1, 0},
+    CounterAssignments->{{"Section", 0}, {"Equation", 0}, {"Figure", 0}},
+    FontFamily->"Helvetica",
+    FontSize->24],
+  
+  Cell[StyleData["Subtitle", "Presentation"],
+    CellMargins->{{20, 10}, {2, 10}}],
+  
+  Cell[StyleData["Subtitle", "Printout"],
+    CellMargins->{{18, 30}, {0, 10}},
+    FontFamily->"Times New Roman",
+    FontSize->18]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Section 1"],
+    CellFrame->{{0, 0}, {0, 3}},
+    CellMargins->{{18, 10}, {10, 30}},
+    CellGroupingRules->{"SectionGrouping", 40},
+    PageBreakBelow->False,
+    CellFrameMargins->{{0, 4}, {8, 4}},
+    CellFrameColor->RGBColor[0.4, 0, 0.239994],
+    CounterIncrements->"Section",
+    CounterAssignments->{{"Subsection", 0}, {"Subsubsection", 0}},
+    FontFamily->"Helvetica",
+    FontSize->18,
+    FontWeight->"Bold",
+    FontColor->RGBColor[0, 0, 0.700008]],
+  
+  Cell[StyleData["Section 1", "Presentation"],
+    CellMargins->{{20, 10}, {6, 30}},
+    CellFrameMargins->5],
+  
+  Cell[StyleData["Section 1", "Printout"],
+    CellMargins->{{18, 30}, {4, 30}},
+    CellFrameMargins->4,
+    FontFamily->"Times New Roman",
+    FontSize->14,
+    FontColor->GrayLevel[0]]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Section"],
+    CellFrame->False,
+    CellMargins->{{18, 10}, {10, 30}},
+    CellGroupingRules->{"SectionGrouping", 40},
+    PageBreakBelow->False,
+    CellFrameMargins->4,
+    CellFrameLabels->{{Cell[ 
+            TextData[ {
+              CounterBox[ "Section"]}]], None}, {None, None}},
+    CounterIncrements->"Section",
+    CounterAssignments->{{"Subsection", 0}, {"Subsubsection", 0}},
+    FontFamily->"Helvetica",
+    FontSize->18,
+    FontWeight->"Bold",
+    FontColor->RGBColor[0, 0, 0.700008]],
+  
+  Cell[StyleData["Section", "Presentation"],
+    CellMargins->{{20, 10}, {0, 30}}],
+  
+  Cell[StyleData["Section", "Printout"],
+    CellMargins->{{18, 30}, {0, 30}},
+    CellFrameMargins->5,
+    FontFamily->"Times New Roman",
+    FontSize->14,
+    FontColor->GrayLevel[0]]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Subsection"],
+    CellDingbat->None,
+    CellMargins->{{38, 30}, {2, 20}},
+    CellGroupingRules->{"SectionGrouping", 50},
+    PageBreakBelow->False,
+    CellFrameLabels->{{Cell[ 
+            TextData[ {
+              CounterBox[ "Section"], ".", 
+              CounterBox[ "Subsection"]}]], None}, {None, None}},
+    CounterIncrements->"Subsection",
+    CounterAssignments->{{"Subsubsection", 0}},
+    FontFamily->"Times",
+    FontSize->14,
+    FontWeight->"Bold",
+    FontColor->RGBColor[0, 0.500008, 0.500008]],
+  
+  Cell[StyleData["Subsection", "Presentation"],
+    CellMargins->{{35, 30}, {0, 20}}],
+  
+  Cell[StyleData["Subsection", "Printout"],
+    CellMargins->{{18, 30}, {0, 10}},
+    FontFamily->"Times New Roman",
+    FontSize->12,
+    FontColor->GrayLevel[0]]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Subsubsection"],
+    CellDingbat->None,
+    CellMargins->{{55, 30}, {4, 10}},
+    CellGroupingRules->{"SectionGrouping", 60},
+    PageBreakBelow->False,
+    CellFrameLabels->{{Cell[ 
+            TextData[ {
+              CounterBox[ "Section"], ".", 
+              CounterBox[ "Subsection"], ".", 
+              CounterBox[ "Subsubsection"]}]], None}, {None, None}},
+    CounterIncrements->"Subsubsection",
+    FontFamily->"Times",
+    FontSize->12,
+    FontWeight->"Bold",
+    FontColor->RGBColor[0, 0.4, 0]],
+  
+  Cell[StyleData["Subsubsection", "Presentation"],
+    CellMargins->{{31, 30}, {0, 12}}],
+  
+  Cell[StyleData["Subsubsection", "Printout"],
+    CellMargins->{{18, 30}, {0, 12}},
+    FontSize->10,
+    FontColor->GrayLevel[0]]
+  }, Open  ]]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell["Styles for Body Text", "Section"],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Text"],
+    CellMargins->{{55, 10}, {6, 6}},
+    TextJustification->1,
+    LineSpacing->{1, 2},
+    FontFamily->"Times"],
+  
+  Cell[StyleData["Text", "Presentation"],
+    CellMargins->{{20, 10}, {6, 6}},
+    TextAlignment->Left,
+    TextJustification->0,
+    LineSpacing->{1.3, 0},
+    FontSize->14],
+  
+  Cell[StyleData["Text", "Printout"],
+    CellMargins->{{18, 4}, {4, 4}},
+    LineSpacing->{1, 2},
+    FontSize->11]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Commentary"],
+    CellMargins->{{55, 10}, {2, 6}},
+    TextJustification->1,
+    LineSpacing->{1, 2},
+    FontFamily->"Helvetica",
+    FontSize->10,
+    FontColor->RGBColor[0, 0, 0.4]],
+  
+  Cell[StyleData["Commentary", "Presentation"],
+    CellMargins->{{60, 30}, {2, 6}},
+    TextJustification->1,
+    LineSpacing->{1.3, 0},
+    FontSize->12],
+  
+  Cell[StyleData["Commentary", "Printout"],
+    CellMargins->{{18, 30}, {3, 0}},
+    LineSpacing->{1, 3},
+    FontFamily->"Times",
+    FontSize->10]
+  }, Open  ]]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell["Styles for Input/Output", "Section"],
+  
+  Cell["\<\
+The cells in this section define styles used for input and output to the \
+kernel.  Be careful when modifying, renaming, or removing these styles, \
+because the front end associates special meanings with these style names.\
+\>", "Text"],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Input"],
+    CellFrame->{{3, 0}, {0, 0}},
+    CellMargins->{{55, 10}, {0, 0}},
+    Evaluatable->True,
+    CellGroupingRules->"InputGrouping",
+    CellHorizontalScrolling->True,
+    PageBreakWithin->False,
+    GroupPageBreakWithin->False,
+    CellLabelPositioning->Automatic,
+    CellLabelMargins->{{23, Inherited}, {Inherited, Inherited}},
+    CellFrameColor->RGBColor[0.699992, 0, 0],
+    DefaultFormatType->DefaultInputFormatType,
+    FormatType->InputForm,
+    ShowStringCharacters->True,
+    NumberMarks->True,
+    FontSize->12,
+    FontWeight->"Bold",
+    Background->None],
+  
+  Cell[StyleData["Input", "Presentation"],
+    CellMargins->{{60, 10}, {0, 10}},
+    Background->None],
+  
+  Cell[StyleData["Input", "Printout"],
+    CellMargins->{{55, 10}, {0, 10}},
+    CellOpen->False,
+    FontSize->10,
+    Background->None]
+  }, Open  ]],
+  
+  Cell[StyleData["InlineInput"],
+    Evaluatable->True,
+    CellGroupingRules->"InputGrouping",
+    CellHorizontalScrolling->True,
+    PageBreakWithin->False,
+    GroupPageBreakWithin->False,
+    DefaultFormatType->DefaultInputFormatType,
+    AutoItalicWords->{},
+    FormatType->InputForm,
+    ShowStringCharacters->True,
+    NumberMarks->True,
+    CounterIncrements->"Input",
+    FontWeight->"Bold"],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Output"],
+    CellFrame->False,
+    CellMargins->{{55, 10}, {15, 0}},
+    CellEditDuplicate->True,
+    CellGroupingRules->"OutputGrouping",
+    CellHorizontalScrolling->True,
+    PageBreakWithin->False,
+    GroupPageBreakWithin->False,
+    GeneratedCell->True,
+    CellAutoOverwrite->True,
+    CellLabelMargins->{{23, Inherited}, {Inherited, Inherited}},
+    DefaultFormatType->DefaultOutputFormatType,
+    FormatType->InputForm,
+    FontSize->12,
+    Background->None],
+  
+  Cell[StyleData["Output", "Presentation"],
+    CellMargins->{{60, Inherited}, {10, 0}},
+    Background->None],
+  
+  Cell[StyleData["Output", "Printout"],
+    CellMargins->{{55, Inherited}, {10, 0}},
+    FontSize->10,
+    Background->None]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["InputOnly"],
+    CellFrame->1,
+    CellMargins->{{55, 10}, {15, 0}},
+    Evaluatable->True,
+    CellGroupingRules->"InputGrouping",
+    CellHorizontalScrolling->True,
+    PageBreakWithin->False,
+    GroupPageBreakWithin->False,
+    CellLabelPositioning->Automatic,
+    CellLabelMargins->{{23, Inherited}, {Inherited, Inherited}},
+    DefaultFormatType->DefaultInputFormatType,
+    FormatType->InputForm,
+    ShowStringCharacters->True,
+    NumberMarks->True,
+    FontSize->12,
+    FontWeight->"Bold",
+    Background->GrayLevel[0.966674]],
+  
+  Cell[StyleData["InputOnly", "Presentation"],
+    CellMargins->{{60, Inherited}, {10, 10}}],
+  
+  Cell[StyleData["InputOnly", "Printout"],
+    CellMargins->{{55, Inherited}, {10, 10}},
+    FontSize->10]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Message"],
+    CellFrame->{{1, 1}, {0, 0}},
+    CellDingbat->"\[LongDash]",
+    CellMargins->{{55, 10}, {0, 0}},
+    CellGroupingRules->"OutputGrouping",
+    PageBreakWithin->False,
+    GroupPageBreakWithin->False,
+    GeneratedCell->True,
+    CellAutoOverwrite->True,
+    ShowCellLabel->False,
+    CellLabelMargins->{{23, Inherited}, {Inherited, Inherited}},
+    DefaultFormatType->DefaultOutputFormatType,
+    FormatType->InputForm,
+    StyleMenuListing->None,
+    FontFamily->"Helvetica",
+    FontSize->10,
+    FontSlant->"Oblique",
+    FontColor->GrayLevel[0],
+    Background->GrayLevel[1]],
+  
+  Cell[StyleData["Message", "Presentation"],
+    CellMargins->{{60, Inherited}, {Inherited, Inherited}},
+    LineSpacing->{1, 0}],
+  
+  Cell[StyleData["Message", "Printout"],
+    CellMargins->{{55, Inherited}, {0, 0}},
+    FontSize->8]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Print"],
+    CellFrame->True,
+    CellMargins->{{55, 26}, {1, 6}},
+    CellGroupingRules->"OutputGrouping",
+    CellHorizontalScrolling->True,
+    PageBreakWithin->False,
+    GroupPageBreakWithin->False,
+    GeneratedCell->True,
+    CellAutoOverwrite->True,
+    ShowCellLabel->False,
+    CellLabelMargins->{{23, Inherited}, {Inherited, Inherited}},
+    DefaultFormatType->DefaultOutputFormatType,
+    TextAlignment->Left,
+    FormatType->InputForm,
+    StyleMenuListing->None,
+    FontSize->11,
+    Background->RGBColor[1, 1, 0.699992]],
+  
+  Cell[StyleData["Print", "Presentation"],
+    CellFrame->True,
+    CellMargins->{{60, Inherited}, {10, 2}},
+    Background->RGBColor[1, 1, 0.699992]],
+  
+  Cell[StyleData["Print", "Printout"],
+    CellFrame->True,
+    CellMargins->{{54, Inherited}, {2, 6}},
+    FontSize->10,
+    Background->GrayLevel[0.949996]]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Graphics"],
+    CellFrame->False,
+    CellMargins->{{55, 10}, {0, 0}},
+    CellGroupingRules->"GraphicsGrouping",
+    CellHorizontalScrolling->True,
+    PageBreakWithin->False,
+    GeneratedCell->True,
+    CellAutoOverwrite->True,
+    ShowCellLabel->False,
+    DefaultFormatType->DefaultOutputFormatType,
+    FormatType->InputForm,
+    ImageSize->{288, 288},
+    ImageMargins->{{35, Inherited}, {Inherited, 0}},
+    StyleMenuListing->None,
+    Background->GrayLevel[1]],
+  
+  Cell[StyleData["Graphics", "Presentation"],
+    CellMargins->{{60, Inherited}, {0, 0}},
+    ImageMargins->{{10, 10}, {10, 10}}],
+  
+  Cell[StyleData["Graphics", "Printout"],
+    CellMargins->{{55, Inherited}, {0, 0}},
+    ImageSize->{288, 288}]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["CellLabel"],
+    StyleMenuListing->None,
+    FontFamily->"Helvetica",
+    FontSize->10,
+    FontSlant->"Oblique",
+    FontColor->RGBColor[0, 0, 1]],
+  
+  Cell[StyleData["CellLabel", "Presentation"],
+    CellMargins->{{18, Inherited}, {Inherited, Inherited}}],
+  
+  Cell[StyleData["CellLabel", "Printout"],
+    CellMargins->{{0, Inherited}, {Inherited, Inherited}},
+    FontSize->8]
+  }, Open  ]]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell["Unique Styles", "Section"],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Itemize"],
+    CellDingbat->"\[FilledSmallCircle]",
+    CellMargins->{{74, Inherited}, {Inherited, Inherited}},
+    TextJustification->1,
+    LineSpacing->{1, 2},
+    FontFamily->"Times"],
+  
+  Cell[StyleData["Itemize", "Presentation"],
+    CellMargins->{{20, 10}, {6, 6}},
+    TextAlignment->Left,
+    TextJustification->0,
+    LineSpacing->{1.3, 0},
+    FontSize->14],
+  
+  Cell[StyleData["Itemize", "Presentation"],
+    CellMargins->{{18, 4}, {4, 4}},
+    LineSpacing->{1, 3},
+    FontSize->11]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Author"],
+    CellMargins->{{20, 30}, {45, 5}},
+    CellGroupingRules->{"TitleGrouping", 20},
+    PageBreakBelow->False,
+    CellFrameMargins->{{0, 4}, {8, 4}},
+    TextAlignment->Left,
+    LineSpacing->{1, 0},
+    CounterAssignments->{{"Section", 0}, {"Equation", 0}, {"Figure", 0}},
+    FontFamily->"Helvetica",
+    FontSize->16,
+    FontSlant->"Italic"],
+  
+  Cell[StyleData["Author", "Presentation"],
+    CellMargins->{{20, 30}, {45, 10}},
+    FontSize->18],
+  
+  Cell[StyleData["Author", "Printout"],
+    CellMargins->{{18, 30}, {45, 5}},
+    TextAlignment->Center,
+    FontFamily->"Times New Roman",
+    FontSize->16,
+    FontSlant->"Plain"]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Abstract"],
+    CellFrame->False,
+    CellMargins->{{18, 140}, {4, 30}},
+    LineSpacing->{0.9, 0},
+    FontFamily->"Times",
+    FontSize->12],
+  
+  Cell[StyleData["Abstract", "Presentation"],
+    CellFrame->True,
+    CellMargins->{{20, 10}, {Inherited, 30}}],
+  
+  Cell[StyleData["Abstract", "Printout"],
+    CellMargins->{{90, 115}, {Inherited, Inherited}},
+    TextJustification->1,
+    LineSpacing->{1, 2},
+    FontSize->12]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Caption"],
+    CellMargins->{{55, 10}, {5, 3}},
+    FontFamily->"Helvetica",
+    FontSize->9],
+  
+  Cell[StyleData["Caption", "Presentation"],
+    CellMargins->{{60, 65}, {6, 4}},
+    FontSize->10],
+  
+  Cell[StyleData["Caption", "Printout"],
+    CellMargins->{{55, 55}, {5, 4}},
+    LineSpacing->{1, 2},
+    FontSize->8]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Reference"],
+    CellMargins->{{24, 40}, {6, 6}},
+    TextJustification->1,
+    LineSpacing->{1, 0},
+    FontFamily->"Times"],
+  
+  Cell[StyleData["Reference", "Presentation"],
+    CellMargins->{{20, 40}, {Inherited, 6}},
+    TextJustification->0,
+    LineSpacing->{1, 4},
+    FontSize->12],
+  
+  Cell[StyleData["Reference", "Printout"],
+    CellMargins->{{18, 4}, {4, 4}},
+    FontSize->9]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["PictureGroup"],
+    CellFrame->{{1, 1}, {0, 0}},
+    CellMargins->{{55, Inherited}, {0, 0}},
+    CellGroupingRules->"GraphicsGrouping",
+    CellHorizontalScrolling->True,
+    PageBreakWithin->False,
+    ShowCellLabel->False,
+    ImageMargins->{{35, Inherited}, {Inherited, 0}},
+    StyleMenuListing->None,
+    Background->None],
+  
+  Cell[StyleData["PictureGroup", "Presentation"],
+    CellMargins->{{60, Inherited}, {0, 0}},
+    ImageMargins->{{10, 10}, {10, 10}},
+    Background->None],
+  
+  Cell[StyleData["PictureGroup", "Printout"],
+    CellMargins->{{55, Inherited}, {0, 0}},
+    ImageSize->{288, 288},
+    Background->None]
+  }, Open  ]]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell["Formulas and Programming", "Section"],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["DisplayFormula"],
+    CellMargins->{{55, Inherited}, {Inherited, Inherited}},
+    CellHorizontalScrolling->True,
+    ScriptLevel->0,
+    SingleLetterItalics->True,
+    StyleMenuListing->None,
+    UnderoverscriptBoxOptions->{LimitsPositioning->True}],
+  
+  Cell[StyleData["DisplayFormula", "Presentation"],
+    CellMargins->{{60, 10}, {Inherited, 6}},
+    LineSpacing->{1, 5}],
+  
+  Cell[StyleData["DisplayFormula", "Printout"],
+    CellMargins->{{18, 4}, {4, 4}}]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["ChemicalFormula"],
+    CellMargins->{{55, 10}, {Inherited, 0}},
+    CellHorizontalScrolling->True,
+    TextJustification->1,
+    AutoSpacing->False,
+    ScriptLevel->1,
+    ScriptBaselineShifts->{0.6, Automatic},
+    SingleLetterItalics->False,
+    ZeroWidthTimes->True],
+  
+  Cell[StyleData["ChemicalFormula", "Presentation"],
+    CellMargins->{{60, 10}, {Inherited, 6}}],
+  
+  Cell[StyleData["ChemicalFormula", "Printout"],
+    CellMargins->{{18, 4}, {4, 4}},
+    LineSpacing->{1, 3},
+    FontSize->10]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["Program"],
+    CellMargins->{{55, 10}, {Inherited, 0}},
+    CellHorizontalScrolling->True,
+    FontFamily->"Courier"],
+  
+  Cell[StyleData["Program", "Presentation"],
+    CellMargins->{{60, 10}, {Inherited, 6}}],
+  
+  Cell[StyleData["Program", "Printout"],
+    CellMargins->{{18, 4}, {4, 4}},
+    LineSpacing->{1, 3},
+    FontSize->9.5]
+  }, Open  ]]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell["Styles for Automatic Numbering", "Section"],
+  
+  Cell["\<\
+The following styles are useful for numbered equations, figures, etc.  They \
+automatically give the cell a FrameLabel containing a reference to a \
+particular counter, and also increment that counter.\
+\>", "Text"],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["NumberedEquation"],
+    CellMargins->{{55, 85}, {Inherited, Inherited}},
+    CellFrameLabels->{{None, Cell[ 
+            TextData[ {"(", 
+              CounterBox[ "NumberedEquation"], ")"}]]}, {None, None}},
+    DefaultFormatType->DefaultInputFormatType,
+    CounterIncrements->"NumberedEquation",
+    FormatTypeAutoConvert->False,
+    FontFamily->"Times",
+    FontSize->12],
+  
+  Cell[StyleData["NumberedEquation", "Presentation"],
+    CellMargins->{{60, 10}, {Inherited, 6}},
+    LineSpacing->{1, 0}],
+  
+  Cell[StyleData["NumberedEquation", "Printout"],
+    CellMargins->{{18, 4}, {4, 4}},
+    PageBreakWithin->False]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["BibliographyItem"],
+    CellMargins->{{55, 85}, {Inherited, Inherited}},
+    CellLabelPositioning->Automatic,
+    CellLabelAutoDelete->True,
+    CellFrameLabels->{{Cell[ 
+            TextData[ "[", {
+              CounterBox[ "Bibitem"]}, "]"]], None}, {None, None}},
+    CellBaseline->Baseline,
+    DefaultFormatType->DefaultInputFormatType,
+    CounterIncrements->"Bibitem",
+    FormatTypeAutoConvert->False,
+    FontFamily->"Times",
+    FontSize->12],
+  
+  Cell[StyleData["BibliographyItem", "Presentation"],
+    CellMargins->{{60, 10}, {Inherited, 6}},
+    LineSpacing->{1, 0}],
+  
+  Cell[StyleData["BibliographyItem", "Printout"],
+    CellMargins->{{18, 4}, {4, 4}}]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["NumberedFigure"],
+    CellFrame->1,
+    CellDingbat->None,
+    CellMargins->{{0, 0}, {4, 4}},
+    CellFrameMargins->{{4, 4}, {20, 4}},
+    CellFrameColor->RGBColor[0, 0, 1],
+    CellFrameLabels->{{None, None}, {Cell[ 
+            TextData[ {"Figure ", 
+              CounterBox[ "NumberedFigure"]}], FontWeight -> "Bold"], None}},
+    CellFrameLabelMargins->{{0, 0}, {-20, 0}},
+    CounterIncrements->"NumberedFigure",
+    FormatTypeAutoConvert->False,
+    FontFamily->"Times"],
+  
+  Cell[StyleData["NumberedFigure", "Presentation"],
+    CellMargins->{{60, 80}, {Inherited, 6}},
+    LineSpacing->{1, 0}],
+  
+  Cell[StyleData["NumberedFigure", "Printout"],
+    CellMargins->{{0, 0}, {4, 4}},
+    PageBreakWithin->False,
+    TextAlignment->Center,
+    FontSize->12]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell[StyleData["NumberedTable"],
+    CellMargins->{{0, 0}, {Inherited, Inherited}},
+    CellFrameLabels->{{None, None}, {Cell[ 
+            TextData[ {"Table ", 
+              CounterBox[ "NumberedTable"]}], FontFamily -> "Times", 
+            FontWeight -> "Bold"], None}},
+    TextAlignment->Center,
+    CounterIncrements->"NumberedTable",
+    FormatTypeAutoConvert->False,
+    FontFamily->"Times"],
+  
+  Cell[StyleData["NumberedTable", "Presentation"],
+    CellMargins->{{60, 80}, {Inherited, 6}},
+    LineSpacing->{1, 0}],
+  
+  Cell[StyleData["NumberedTable", "Printout"],
+    CellMargins->{{0, 0}, {4, 4}},
+    PageBreakWithin->False,
+    FontSize->10]
+  }, Open  ]]
+  }, Open  ]],
+  
+  Cell[CellGroupData[{
+  
+  Cell["Styles for Headers and Footers", "Section"],
+  
+  Cell[StyleData["Header"],
+    StyleMenuListing->None,
+    FontFamily->"Helvetica",
+    FontSize->9],
+  
+  Cell[StyleData["PageNumber"],
+    StyleMenuListing->None,
+    FontFamily->"Helvetica",
+    FontSize->9,
+    FontWeight->"Bold"],
+  
+  Cell[StyleData["Footer"],
+    TextAlignment->Center,
+    StyleMenuListing->None,
+    FontFamily->"Helvetica",
+    FontSize->9]
+  }, Closed]]
+  }, Open  ]]
+  }]
+]
+
+
+(***********************************************************************
+Cached data follows.  If you edit this Notebook file directly, not using
+Mathematica, you must remove the line containing CacheID at the top of 
+the file.  The cache data will then be recreated when you save this file 
+from within Mathematica.
+***********************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{
+  "applications"->{
+    Cell[38489, 1149, 75, 1, 37, "Section",
+      CellTags->"applications"]}
+  }
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{
+  {"applications", 81616, 2667}
+  }
+*)
+
+(*NotebookFileOutline
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[1739, 51, 47, 0, 108, "Title"],
+Cell[1789, 53, 34, 0, 39, "Subtitle"],
+
+Cell[CellGroupData[{
+Cell[1848, 57, 31, 0, 63, "Section"],
+Cell[1882, 59, 213, 4, 46, "Text"],
+Cell[2098, 65, 50, 0, 29, "Text"],
+Cell[2151, 67, 84, 1, 18, "Input"],
+Cell[2238, 70, 48, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[2311, 74, 208, 5, 18, "Input"],
+Cell[2522, 81, 99, 1, 32, "Output"]
+}, Open  ]],
+Cell[2636, 85, 162, 6, 29, "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2835, 96, 28, 0, 63, "Section"],
+
+Cell[CellGroupData[{
+Cell[2888, 100, 34, 0, 31, "Subsubsection"],
+Cell[2925, 102, 1765, 27, 641, "Text"]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[4739, 135, 33, 0, 37, "Section"],
+Cell[4775, 137, 378, 7, 88, "Text"],
+
+Cell[CellGroupData[{
+Cell[5178, 148, 36, 0, 41, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[5239, 152, 61, 0, 31, "Subsubsection"],
+Cell[5303, 154, 187, 4, 38, "Input",
+  InitializationCell->True],
+Cell[5493, 160, 103, 2, 18, "Input",
+  InitializationCell->True],
+Cell[5599, 164, 103, 2, 18, "Input",
+  InitializationCell->True],
+Cell[5705, 168, 90, 2, 18, "Input",
+  InitializationCell->True],
+Cell[5798, 172, 116, 2, 18, "Input",
+  InitializationCell->True],
+Cell[5917, 176, 102, 2, 18, "Input",
+  InitializationCell->True],
+Cell[6022, 180, 106, 2, 18, "Input",
+  InitializationCell->True],
+Cell[6131, 184, 300, 5, 98, "Input",
+  InitializationCell->True],
+Cell[6434, 191, 113, 2, 18, "Input",
+  InitializationCell->True],
+Cell[6550, 195, 90, 2, 18, "Input",
+  InitializationCell->True],
+Cell[6643, 199, 173, 3, 78, "Input",
+  InitializationCell->True],
+Cell[6819, 204, 168, 3, 58, "Input",
+  InitializationCell->True],
+Cell[6990, 209, 173, 3, 58, "Input",
+  InitializationCell->True],
+Cell[7166, 214, 101, 2, 58, "Input",
+  InitializationCell->True],
+Cell[7270, 218, 478, 12, 78, "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[7785, 235, 105, 1, 25, "Subsubsection",
+  InitializationCell->True],
+Cell[7893, 238, 122, 3, 18, "Input",
+  InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[8052, 246, 125, 3, 31, "Subsubsection",
+  InitializationCell->True],
+Cell[8180, 251, 233, 5, 58, "Input",
+  InitializationCell->True],
+Cell[8416, 258, 161, 4, 38, "Input",
+  InitializationCell->True],
+Cell[8580, 264, 300, 5, 98, "Input",
+  InitializationCell->True],
+Cell[8883, 271, 241, 5, 78, "Input",
+  InitializationCell->True],
+Cell[9127, 278, 299, 6, 78, "Input",
+  InitializationCell->True],
+Cell[9429, 286, 256, 5, 78, "Input",
+  InitializationCell->True],
+Cell[9688, 293, 410, 7, 118, "Input",
+  InitializationCell->True],
+Cell[10101, 302, 351, 7, 98, "Input",
+  InitializationCell->True],
+Cell[10455, 311, 297, 7, 78, "Input",
+  InitializationCell->True],
+Cell[10755, 320, 406, 8, 138, "Input",
+  InitializationCell->True],
+Cell[11164, 330, 344, 6, 98, "Input",
+  InitializationCell->True],
+Cell[11511, 338, 281, 5, 98, "Input",
+  InitializationCell->True],
+Cell[11795, 345, 229, 5, 58, "Input",
+  InitializationCell->True],
+Cell[12027, 352, 196, 4, 58, "Input",
+  InitializationCell->True],
+Cell[12226, 358, 223, 4, 78, "Input",
+  InitializationCell->True],
+Cell[12452, 364, 208, 4, 58, "Input",
+  InitializationCell->True],
+Cell[12663, 370, 222, 4, 78, "Input",
+  InitializationCell->True],
+Cell[12888, 376, 285, 5, 78, "Input",
+  InitializationCell->True],
+Cell[13176, 383, 431, 7, 138, "Input",
+  InitializationCell->True],
+Cell[13610, 392, 245, 6, 58, "Input",
+  InitializationCell->True],
+Cell[13858, 400, 223, 5, 58, "Input",
+  InitializationCell->True],
+Cell[14084, 407, 303, 7, 78, "Input",
+  InitializationCell->True],
+Cell[14390, 416, 301, 7, 78, "Input",
+  InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[14728, 428, 64, 0, 31, "Subsubsection"],
+Cell[14795, 430, 257, 7, 38, "Input",
+  InitializationCell->True],
+Cell[15055, 439, 236, 6, 38, "Input",
+  InitializationCell->True],
+Cell[15294, 447, 198, 5, 18, "Input",
+  InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[15529, 457, 72, 0, 31, "Subsubsection"],
+Cell[15604, 459, 132, 3, 18, "Input",
+  InitializationCell->True]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[15785, 468, 63, 0, 41, "Subsection"],
+Cell[15851, 470, 127, 3, 46, "Text"],
+
+Cell[CellGroupData[{
+Cell[16003, 477, 119, 2, 18, "Input",
+  InitializationCell->True],
+Cell[16125, 481, 38, 1, 32, "Output"]
+}, Open  ]],
+Cell[16178, 485, 146, 3, 46, "Text"],
+Cell[16327, 490, 606, 15, 99, "Text"],
+Cell[16936, 507, 873, 18, 251, "InputOnly",
+  InitializationCell->True],
+Cell[17812, 527, 115, 3, 29, "Text",
+  InitializationCell->True],
+Cell[17930, 532, 704, 16, 78, "Input",
+  InitializationCell->True],
+Cell[18637, 550, 95, 2, 18, "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[18769, 557, 55, 0, 25, "Subsection"],
+Cell[18827, 559, 1046, 24, 78, "Input",
+  InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[19910, 588, 45, 0, 41, "Subsection"],
+Cell[19958, 590, 94, 2, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[20077, 596, 131, 3, 18, "Input",
+  InitializationCell->True],
+Cell[20211, 601, 38, 1, 32, "Output"]
+}, Open  ]],
+Cell[20264, 605, 454, 11, 58, "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[20755, 621, 109, 4, 26, "Subsection"],
+Cell[20867, 627, 417, 8, 80, "Text"],
+Cell[21287, 637, 415, 7, 80, "Text"],
+Cell[21705, 646, 253, 4, 63, "Text"],
+Cell[21961, 652, 1288, 22, 458, "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[23286, 679, 43, 0, 25, "Subsection"],
+Cell[23332, 681, 44, 0, 29, "Text"],
+Cell[23379, 683, 199, 5, 38, "Input",
+  InitializationCell->True],
+Cell[23581, 690, 239, 5, 38, "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[23857, 700, 61, 0, 25, "Subsection"],
+Cell[23921, 702, 160, 3, 46, "Text"],
+Cell[24084, 707, 1241, 28, 198, "Input",
+  InitializationCell->True],
+Cell[25328, 737, 166, 3, 46, "Text"],
+Cell[25497, 742, 155, 3, 46, "Text"],
+Cell[25655, 747, 213, 5, 18, "Input",
+  InitializationCell->True],
+Cell[25871, 754, 86, 2, 29, "Text"],
+Cell[25960, 758, 191, 5, 18, "Input",
+  InitializationCell->True],
+Cell[26154, 765, 16, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[26195, 769, 84, 1, 31, "Subsubsection"],
+Cell[26282, 772, 1604, 57, 892, "SmallText"]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[27935, 835, 53, 0, 25, "Subsection"],
+Cell[27991, 837, 48, 0, 29, "Text"],
+Cell[28042, 839, 421, 9, 138, "Input",
+  InitializationCell->True],
+Cell[28466, 850, 190, 4, 38, "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[28693, 859, 43, 0, 25, "Subsection"],
+Cell[28739, 861, 500, 9, 97, "Text"],
+Cell[29242, 872, 518, 10, 158, "Input",
+  InitializationCell->True],
+Cell[29763, 884, 241, 4, 63, "Text"],
+Cell[30007, 890, 135, 3, 18, "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[30179, 898, 46, 0, 25, "Subsection"],
+Cell[30228, 900, 134, 4, 30, "Text"],
+Cell[30365, 906, 1029, 23, 98, "Input",
+  InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[31431, 934, 39, 0, 41, "Subsection"],
+Cell[31473, 936, 66, 0, 70, "Text"],
+Cell[31542, 938, 150, 3, 70, "Text"],
+Cell[31695, 943, 179, 4, 70, "InputOnly",
+  InitializationCell->True],
+Cell[31877, 949, 99, 2, 70, "Text"],
+Cell[31979, 953, 360, 7, 70, "InputOnly",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[32376, 965, 47, 0, 25, "Subsection"],
+Cell[32426, 967, 348, 7, 63, "Text"],
+Cell[32777, 976, 821, 14, 351, "InputOnly",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[33635, 995, 47, 0, 25, "Subsection"],
+Cell[33685, 997, 196, 4, 46, "Text"],
+Cell[33884, 1003, 727, 14, 278, "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[34648, 1022, 60, 0, 25, "Subsection"],
+Cell[34711, 1024, 74, 0, 29, "Text"],
+Cell[34788, 1026, 159, 4, 38, "Input",
+  InitializationCell->True],
+Cell[34950, 1032, 104, 2, 18, "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[35091, 1039, 42, 0, 25, "Subsection"],
+Cell[35136, 1041, 128, 3, 18, "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[35301, 1049, 46, 0, 25, "Subsection"],
+Cell[35350, 1051, 159, 5, 29, "Text"],
+Cell[35512, 1058, 1174, 27, 78, "Input",
+  InitializationCell->True],
+Cell[36689, 1087, 239, 6, 46, "Text"],
+Cell[36931, 1095, 881, 22, 58, "Input",
+  InitializationCell->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[37849, 1122, 37, 0, 25, "Subsection"],
+Cell[37889, 1124, 68, 1, 70, "Text",
+  InitializationCell->True],
+Cell[37960, 1127, 88, 2, 70, "Input",
+  InitializationCell->True],
+Cell[38051, 1131, 69, 1, 70, "Text",
+  InitializationCell->True],
+Cell[38123, 1134, 188, 3, 70, "Input",
+  InitializationCell->True],
+Cell[38314, 1139, 40, 0, 70, "Text"],
+Cell[38357, 1141, 83, 2, 70, "Input",
+  InitializationCell->True]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[38489, 1149, 75, 1, 37, "Section",
+  CellTags->"applications"],
+
+Cell[CellGroupData[{
+Cell[38589, 1154, 37, 0, 41, "Subsection"],
+Cell[38629, 1156, 173, 6, 43, "Text"],
+Cell[38805, 1164, 86, 2, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[38916, 1170, 51, 1, 18, "Input"],
+Cell[38970, 1173, 66, 1, 32, "Output"]
+}, Open  ]],
+Cell[39051, 1177, 265, 9, 47, "Text"],
+Cell[39319, 1188, 49, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[39393, 1192, 91, 1, 18, "Input"],
+Cell[39487, 1195, 73, 1, 32, "Output"]
+}, Open  ]],
+Cell[39575, 1199, 52, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[39652, 1203, 87, 1, 18, "Input"],
+Cell[39742, 1206, 65, 1, 32, "Output"]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[39856, 1213, 43, 0, 25, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[39924, 1217, 122, 3, 38, "Input"],
+Cell[40049, 1222, 98, 2, 32, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[40184, 1229, 127, 3, 38, "Input"],
+Cell[40314, 1234, 104, 2, 32, "Output"]
+}, Open  ]],
+Cell[40433, 1239, 73, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[40531, 1243, 73, 1, 18, "Input"],
+Cell[40607, 1246, 52, 1, 32, "Output"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[40708, 1253, 46, 0, 25, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[40779, 1257, 81, 1, 18, "Input"],
+Cell[40863, 1260, 45, 0, 32, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[40945, 1265, 151, 4, 18, "Input"],
+Cell[41099, 1271, 49, 0, 32, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[41185, 1276, 106, 2, 18, "Input"],
+Cell[41294, 1280, 75, 0, 32, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[41406, 1285, 128, 3, 18, "Input"],
+Cell[41537, 1290, 75, 0, 32, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[41649, 1295, 116, 3, 18, "Input"],
+Cell[41768, 1300, 83, 1, 32, "Output"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[41900, 1307, 53, 0, 25, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[41978, 1311, 67, 1, 18, "Input"],
+Cell[42048, 1314, 112, 2, 51, "Output"]
+}, Open  ]],
+Cell[42175, 1319, 72, 1, 18, "Input"],
+
+Cell[CellGroupData[{
+Cell[42272, 1324, 79, 1, 18, "Input"],
+Cell[42354, 1327, 126, 2, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[42517, 1334, 69, 1, 18, "Input"],
+Cell[42589, 1337, 104, 2, 32, "Output"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[42742, 1345, 50, 0, 25, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[42817, 1349, 151, 3, 18, "Input"],
+Cell[42971, 1354, 56, 0, 32, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[43064, 1359, 252, 6, 38, "Input"],
+Cell[43319, 1367, 57, 0, 32, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[43413, 1372, 81, 1, 18, "Input"],
+Cell[43497, 1375, 222, 5, 14, "Message"],
+Cell[43722, 1382, 45, 0, 32, "Output"]
+}, Open  ]],
+Cell[43782, 1385, 33, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[43840, 1389, 60, 1, 18, "Input"],
+Cell[43903, 1392, 5564, 87, 735, "Output"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[49504, 1484, 62, 1, 22, "Input"],
+Cell[49569, 1487, 63, 1, 32, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[49669, 1493, 58, 1, 18, "Input"],
+Cell[49730, 1496, 70, 1, 32, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[49837, 1502, 44, 1, 18, "Input"],
+Cell[49884, 1505, 57, 1, 32, "Output"]
+}, Open  ]],
+Cell[49956, 1509, 60, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[50041, 1513, 64, 1, 18, "Input"],
+Cell[50108, 1516, 162, 3, 70, "Output"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[50319, 1525, 54, 0, 25, "Subsection"],
+Cell[50376, 1527, 75, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[50476, 1531, 390, 7, 138, "Input"],
+Cell[50869, 1540, 303, 6, 108, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[51209, 1551, 58, 1, 18, "Input"],
+Cell[51270, 1554, 326, 7, 57, "Print"],
+Cell[51599, 1563, 370, 8, 57, "Print"],
+Cell[51972, 1573, 346, 8, 57, "Print"],
+Cell[52321, 1583, 52, 1, 32, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[52410, 1589, 120, 3, 38, "Input"],
+Cell[52533, 1594, 74, 1, 32, "Output"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[52656, 1601, 47, 0, 25, "Subsection"],
+Cell[52706, 1603, 129, 3, 46, "Text"],
+
+Cell[CellGroupData[{
+Cell[52860, 1610, 83, 1, 18, "Input"],
+Cell[52946, 1613, 45, 0, 32, "Output"]
+}, Open  ]],
+Cell[53006, 1616, 170, 4, 18, "Input"],
+Cell[53179, 1622, 42, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[53246, 1626, 75, 1, 18, "Input"],
+Cell[53324, 1629, 161, 3, 32, "Output"]
+}, Open  ]],
+Cell[53500, 1635, 35, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[53560, 1639, 75, 1, 18, "Input"],
+Cell[53638, 1642, 46, 0, 32, "Output"]
+}, Open  ]],
+Cell[53699, 1645, 39, 0, 29, "Text"],
+Cell[53741, 1647, 360, 9, 38, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[54138, 1661, 56, 0, 25, "Subsection"],
+Cell[54197, 1663, 40, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[54262, 1667, 245, 5, 98, "Input"],
+Cell[54510, 1674, 44, 1, 32, "Output"]
+}, Open  ]],
+Cell[54569, 1678, 46, 0, 29, "Text"],
+
+Cell[CellGroupData[{
+Cell[54640, 1682, 170, 3, 38, "Input"],
+Cell[54813, 1687, 45, 1, 32, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[54895, 1693, 55, 1, 18, "Input"],
+Cell[54953, 1696, 109, 4, 71, "Print"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[55099, 1705, 56, 1, 18, "Input"],
+Cell[55158, 1708, 107, 4, 71, "Print"]
+}, Open  ]],
+Cell[55280, 1715, 149, 3, 46, "Text"],
+
+Cell[CellGroupData[{
+Cell[55454, 1722, 179, 4, 58, "Input"],
+Cell[55636, 1728, 36, 1, 32, "Output"]
+}, Open  ]],
+Cell[55687, 1732, 64, 0, 29, "Text"],
+Cell[55754, 1734, 196, 4, 78, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[55987, 1743, 53, 0, 25, "Subsection"],
+Cell[56043, 1745, 44, 0, 29, "Text"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[56124, 1750, 42, 0, 25, "Subsection"],
+Cell[56169, 1752, 150, 3, 46, "Text"],
+Cell[56322, 1757, 137, 2, 78, "Input"],
+
+Cell[CellGroupData[{
+Cell[56484, 1763, 42, 1, 18, "Input"],
+Cell[56529, 1766, 62, 1, 32, "Output"]
+}, Open  ]]
+}, Closed]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[56652, 1774, 44, 0, 63, "Section"],
+Cell[56699, 1776, 1591, 45, 165, "Input"],
+
+Cell[CellGroupData[{
+Cell[58315, 1825, 57, 1, 18, "Input"],
+Cell[58375, 1828, 52, 0, 39, "Print"]
+}, Open  ]]
+}, Closed]]
+}, Open  ]]
+}
+]
+*)
+
+
+
+
+(***********************************************************************
+End of Mathematica Notebook file.
+***********************************************************************)
+

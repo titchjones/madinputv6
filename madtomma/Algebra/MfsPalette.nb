@@ -1,0 +1,214 @@
+(***********************************************************************
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used on any computer system with Mathematica 4.0,
+MathReader 4.0, or any compatible application. The data for the notebook 
+starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do one of 
+the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing the 
+word CacheID, otherwise Mathematica-compatible applications may try to 
+use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+***********************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[      4974,        145]*)
+(*NotebookOutlinePosition[      6492,        196]*)
+(*  CellTagsIndexPosition[      6448,        192]*)
+(*WindowFrame->Palette*)
+
+
+
+Notebook[{
+Cell[BoxData[GridBox[{
+        {
+          ButtonBox[
+            StyleBox[
+              RowBox[{"Needs", "[", "\"\<Madtomma`Mfs`Mfs`\>\"", "]"}],
+              "Input"]]},
+        {
+          ButtonBox[
+            RowBox[{"mfsInterpret", "[", "\[SelectionPlaceholder]", "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{"tfsRead", "[", "\[SelectionPlaceholder]", "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{"mfsKeyNames", "[", "\[SelectionPlaceholder]", "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{"mfsKeyValue", "[", 
+              RowBox[{"\[SelectionPlaceholder]", ",", "\[Placeholder]"}], 
+              "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{
+            "mfsColumnNames", "[", "\[SelectionPlaceholder]", "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{"mfsColumn", "[", 
+              RowBox[{
+              "\[SelectionPlaceholder]", ",", "\"\<\[Placeholder]\>\""}], 
+              "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{"mfsColumn", "[", 
+              RowBox[{"\[SelectionPlaceholder]", ",", 
+                RowBox[{"{", 
+                  RowBox[{
+                  "\"\<\[Placeholder]\>\"", ",", "\"\<\[Placeholder]\>\""}], 
+                  "}"}]}], "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{"mfsMember", "[", 
+              RowBox[{
+              "\[SelectionPlaceholder]", ",", "\"\<\[Placeholder]\>\"", ",", 
+                "\"\<\[Placeholder]\>\""}], "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{"mfsRange", "[", 
+              RowBox[{
+              "\[SelectionPlaceholder]", ",", "\"\<\[Placeholder]\>\"", ",", 
+                RowBox[{"{", 
+                  RowBox[{"\[Placeholder]", ",", "\[Placeholder]"}], "}"}]}], 
+              "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{"mfsSelect", "[", 
+              RowBox[{"\[SelectionPlaceholder]", ",", "\[Placeholder]"}], 
+              "]"}]]},
+        {
+          ButtonBox[
+            RowBox[{"mfsColumnValue", "[", 
+              RowBox[{
+              "\[SelectionPlaceholder]", ",", "\[Placeholder]", ",", 
+                "\"\<\[Placeholder]\>\""}], "]"}]]}
+        },
+      RowSpacings->0,
+      ColumnSpacings->0,
+      GridDefaultElement:>ButtonBox[ "\\[Placeholder]"]]], NotebookDefault,
+  CellFrame->{{1, 1}, {0, 1}},
+  CellMargins->{{Inherited, Inherited}, {5, Inherited}},
+  CellBracketOptions->{"Color"->RGBColor[0.4, 0, 0.239994]},
+  Evaluatable->True,
+  CellGroupingRules->"InputGrouping",
+  CellHorizontalScrolling->True,
+  PageBreakAbove->True,
+  PageBreakWithin->False,
+  GroupPageBreakWithin->False,
+  CellLabelPositioning->Automatic,
+  CellLabelMargins->{{11, Inherited}, {Inherited, Inherited}},
+  DefaultFormatType->DefaultInputFormatType,
+  InputAutoReplacements->{
+    "->"->"\[Rule]", ":>"->"\[RuleDelayed]", "<="->"\[LessEqual]", 
+      ">="->"\[GreaterEqual]", "!="->"\[NotEqual]", "=="->"\[Equal]", 
+      Inherited},
+  LineSpacing->{1.25, 0},
+  AutoItalicWords->{},
+  FormatType->InputForm,
+  ScriptMinSize->9,
+  ShowStringCharacters->True,
+  NumberMarks->True,
+  CounterIncrements->"Input",
+  StyleMenuListing->None,
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold",
+  Background->None]
+},
+FrontEndVersion->"4.0 for Microsoft Windows",
+ScreenRectangle->{{0, 1024}, {0, 723}},
+ClosingAutoSave->True,
+AutoGeneratedPackage->Automatic,
+Editable->False,
+ScreenStyleEnvironment->"Working",
+WindowToolbars->{},
+InitializationCellEvaluation->False,
+CellGrouping->Automatic,
+PageWidth->474,
+WindowSize->{Fit, Fit},
+WindowMargins->{{Automatic, 99}, {231, Automatic}},
+WindowFrame->"Palette",
+WindowElements->{},
+WindowFrameElements->"CloseBox",
+WindowClickSelect->False,
+ScrollingOptions->{"PagewiseScrolling"->True},
+PrintingCopies->1,
+PrintingPageRange->{Automatic, Automatic},
+PrintingOptions->{"GraphicsPrintingFormat"->"DownloadPostScript"},
+PrivateNotebookOptions->{"ColorPalette"->{RGBColor, 128}},
+ShowCellBracket->False,
+CellMargins->{{0, 0}, {Inherited, 0}},
+Active->True,
+CellOpen->True,
+ShowCellLabel->False,
+ShowCellTags->False,
+ImageMargins->{{0, Inherited}, {Inherited, 0}},
+RenderingOptions->{"ObjectDithering"->True,
+"RasterDithering"->False},
+PrivateFontOptions->{"FontType"->"Outline"},
+Magnification->1
+]
+
+
+(***********************************************************************
+Cached data follows.  If you edit this Notebook file directly, not using
+Mathematica, you must remove the line containing CacheID at the top of 
+the file.  The cache data will then be recreated when you save this file 
+from within Mathematica.
+***********************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1718, 49, 3252, 94, 211, NotebookDefault,
+  Evaluatable->True,
+  CellGroupingRules->"InputGrouping",
+  PageBreakAbove->True,
+  PageBreakWithin->False,
+  CounterIncrements->"Input"]
+}
+]
+*)
+
+
+
+
+(***********************************************************************
+End of Mathematica Notebook file.
+***********************************************************************)
+

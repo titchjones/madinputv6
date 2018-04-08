@@ -1,0 +1,28 @@
+comment
+
+  Inserting beam-beam elements
+endcomment
+
+COGUESS,automatic=True
+!--------------------------------------------------------------- max MAD line -!
+assign,print=term
+
+poolload,filename=&
+"ideal.pool"
+
+select,optics,full
+optics,centre,filename="seq.tfs",column=name,s,L
+
+twiss
+seqedit, sequence=LEP
+Bs1: B2L.QD26.R2,L=0.4067574521,E2=0
+Bs2: B2L.QD26.R2,L=11.55-0.4067574521,E1=0
+remove,element=B2L.QD26.R2
+install,element=Bs1,at=4092.108379,FROM=IP1
+install,element=Bs2,at=4097.883379,FROM=IP1
+endedit
+use LEP
+twiss
+
+stop
+!!
