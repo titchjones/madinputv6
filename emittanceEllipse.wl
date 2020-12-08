@@ -27,16 +27,14 @@ emittanceGaussian::usage="emittanceGaussian[P] returns emittance, ellipse parame
 Begin["`Private`"]
 
 
-If[$CCompiler=={},
-$CCompiler={"Compiler"->GenericCCompiler,"CompilerInstallation"->"C:\\TDM-GCC-64\\bin","CompilerName"->"x86_64-w64-mingw32-gcc.exe"};
-]
+(* ::Text:: *)
+(*If[$CCompiler == {},*)
+(* $CCompiler = {"Compiler" -> GenericCCompiler, "CompilerInstallation" -> "C:\\TDM-GCC-64\\bin", "CompilerName" -> "x86_64-w64-mingw32-gcc.exe"};*)
+(* ]*)
 
 
-$CCompiler={"Compiler"->GenericCCompiler,"CompilerInstallation"->"C:\\TDM-GCC-64\\bin","CompilerName"->"x86_64-w64-mingw32-gcc.exe"}
-
-
-(* ::Input:: *)
-(*$CCompiler={"Compiler"->GenericCCompiler,"CompilerInstallation"->"C:\\cygwin\\bin","CompilerName"->"gcc.exe"}*)
+(* ::Text:: *)
+(*$CCompiler = CCompilers[][[1]]*)
 
 
 cellipse=Compile[{{x,_Real},{y,_Real},{a,_Real},{b,_Real},{\[Alpha],_Real},{x0,_Real},{y0,_Real}},
@@ -76,33 +74,36 @@ Select[cellipseParticles[M[[1]],M[[2]],a,b,\[Alpha],x0,y0],#[[-1]]<=1&][[All,{1,
 
 
 Clear[minFunc];
-minFunc=Compile[{{P,_Real,2},{a,_Real},{b,_Real},{c,_Real},{confidence,_Real},{normaliser,_Real}},
-0.01Abs[(\[Pi] a b)/normaliser]+(N[(Length[cellipseCut[P,N[Abs[a]],N[Abs[b]],N[c],0,0]]/.{0->1})/Length[P[[1]]]]-confidence)^2,CompilationTarget->"C",Parallelization->True
+minFunc=Compile[{{P,_Real,2},{a,_Real},{b,_Real},{c,_Real},{x0,_Real},{px0,_Real},{confidence,_Real},{normaliser,_Real}},
+Abs[(\[Pi] a b)/normaliser]+1000(N[(Length[cellipseCut[P,N[Abs[a]],N[Abs[b]],N[c],x0,px0]]/.{0->1})/Length[P[[1]]]]-confidence)^2,CompilationTarget->"C",Parallelization->True
 ];
 
 
 Clear[emittanceEllipseOptimise];
 
 
-emittanceEllipseOptimise[{ain_Real,bin_Real,cin_Real},P_,tol_,confidence_,opts___Rule]:=Block[{a=ain,b=bin,c=cin,func, simplexans,normaliser,maxcount,count=0},
-maxcount=Global`Iterations/.{opts}/.{Global`Iterations->5};
-simplexans={a,b,c};
+emittanceEllipseOptimise[{ain_Real,bin_Real,cin_Real, x0in_Real:0, px0in_Real:0},P_,tol_,confidence_,opts___Rule]:=Block[{a=ain,b=bin,c=cin,x0=x0in,px0=px0in,func, simplexans,normaliser,maxcount,count=0,x,y,z},
+maxcount=Global`Iterations/.{opts}/.{Global`Iterations->20};
+simplexans={a,b,c,x0,px0};
 normaliser=confidence \[Pi] (Max[P[[1]]]-Min[P[[1]]])(Max[P[[2]]]-Min[P[[2]]]);
 func=minFunc[P, Sequence @@ #, confidence,normaliser] &;
-simplexfit=func[{ain,bin,cin}];
+simplexfit=func[{ain,bin,cin,x0,px0}];
+{simplexfit, simplexans} = SimplexOptimise3[Length[simplexans], {\[Pi]{Min[P[[1]]],Max[P[[1]]]},\[Pi]{Min[P[[2]]],Max[P[[2]]]},{0,2\[Pi]},{Min[P[[1]]],Max[P[[1]]]},{Min[P[[2]]],Max[P[[2]]]}}, 1000, func, Verbose -> False,Global`StartSimplex->simplexans];
+Prnt[simplexans];
+count+=1;
 While[Abs[(\[Pi] a b)/normaliser] simplexfit>tol&&count<maxcount,
-  {simplexfit, simplexans} = SimplexOptimise3[3, {0.5,2}#&/@simplexans, 1000, func, Verbose -> False,Global`StartSimplex->simplexans];
+  {simplexfit, simplexans} = SimplexOptimise3[Length[simplexans], {0.5,2}#&/@simplexans, 1000, func, Verbose -> False,Global`StartSimplex->simplexans];
 count+=1;
 ];
 simplexans]
 
 
-emittanceEllipseOptimise[P_,tol_,confidence_,opts___Rule]:=Block[{func,simplexfit, simplexans,normaliser,a, b, c},
+emittanceEllipseOptimise[P_,tol_,confidence_,opts___Rule]:=Block[{func,simplexfit, simplexans,normaliser,a, b, c, x0, px0},
 normaliser=confidence \[Pi] (Max[P[[1]]]-Min[P[[1]]])(Max[P[[2]]]-Min[P[[2]]]);
 func=minFunc[P, Sequence @@ #, confidence,normaliser] &;
-{simplexfit, simplexans} = SimplexOptimise3[3, {{0, Max[P[[1]]]}, {0, Max[P[[2]]]}, {-0.1,0.1}}, 1000, func, Verbose -> False,Global`StartSimplex->simplexans];
-  {a, b, c} = simplexans;
-emittanceEllipseOptimise[{a,b,c},P,tol,confidence,opts]
+{simplexfit, simplexans} = SimplexOptimise3[5, {{0, Max[P[[1]]]}, {0, Max[P[[2]]]}, {-0.1,0.1}, {Min[P[[1]]],Max[P[[1]]]},{Min[P[[2]]],Max[P[[2]]]}}, 1000, func, Verbose -> False,Global`StartSimplex->simplexans];
+  {a, b, c, x0, px0} = simplexans;
+emittanceEllipseOptimise[{a,b,c, x0, px0},P,tol,confidence,opts]
 ]
 
 
@@ -115,22 +116,22 @@ emittanceEllipseOptimise[Null,P_,tol_,confidence_,opts___Rule]/;NumericQ[{a,b,c}
 Clear[emittanceEllipseParameters];
 
 
-emittanceEllipseParameters[P_,{a_,b_,c_,x0_:0,y0_:0},confidence_]:=Block[{xans,yans,emit,\[Beta],\[Gamma],\[Alpha],conf},
+emittanceEllipseParameters[P_,{a_,b_,c_,x0_:0.,px0_:0.},confidence_]:=Block[{xans,yans,emit,\[Beta],\[Gamma],\[Alpha],conf},
 xans=1/Sqrt[Cos[c]^2/a^2+Sin[c]^2/b^2];
 yans=1/Sqrt[Cos[c]^2/b^2+Sin[c]^2/a^2];
 emit=Abs[(a b)];
 \[Beta]=emit/yans^2;
 \[Gamma]=emit/xans^2;
 \[Alpha]=Sign[c] Sqrt[\[Beta] \[Gamma]-1];
-conf=N@(Length[cellipseCut[P, N[Abs[a]], N[Abs[b]], N[c], 0., 0.]]/Length[P[[1]]]);
-{{emit,conf},{a,b,c},{\[Alpha],\[Beta],\[Gamma]}}
+conf=N@(Length[cellipseCut[P, N[Abs[a]], N[Abs[b]], N[c], x0, px0]]/Length[P[[1]]]);
+{{emit,conf},{a,b,c, x0, px0},{\[Alpha],\[Beta],\[Gamma]}}
 ]
 
 
 Clear[emittanceEllipse];
 
 
-emittanceEllipse[{a_,b_,c_},P_,tol_,confidence_,opts___Rule]/;NumericQ[{a,b,c}]===False&&ListQ[{a,b,c}]===False:=Block[{},
+emittanceEllipse[{a_,b_,c_,x0_:0.,px0_:0.},P_,tol_,confidence_,opts___Rule]/;NumericQ[{a,b,c}]===False&&ListQ[{a,b,c}]===False:=Block[{},
 emittanceEllipse[P,tol,confidence,opts]
 ]
 
@@ -145,20 +146,20 @@ emittanceEllipse[P,tol,confidence,opts]
 ]
 
 
-emittanceEllipse[{{emit_,conf_},{a_Real,b_Real,c_Real},{\[Alpha]_,\[Beta]_,\[Gamma]_}},P_,tol_,confidence_,opts___Rule]:=Block[{},
-emittanceEllipse[{a,b,c},P,tol,confidence,opts]
+emittanceEllipse[{{emit_,conf_},{a_Real,b_Real,c_Real, x0_Real:0., px0_Real:0.},{\[Alpha]_,\[Beta]_,\[Gamma]_}},P_,tol_,confidence_,opts___Rule]:=Block[{},
+emittanceEllipse[{a,b,c,x0,px0},P,tol,confidence,opts]
 ]
 
 
-emittanceEllipse[{ain_Real,bin_Real,cin_Real},P_,tol_,confidence_Real | confidence_Integer,opts___Rule]:=Block[{a=ain,b=bin,c=cin,x0=0,y0=0,xans,yans,emit,\[Beta],\[Gamma],\[Alpha]},
-{a,b,c}=emittanceEllipseOptimise[{ain,bin,cin},P,tol,confidence,opts];
-emittanceEllipseParameters[P,{a,b,c},confidence]
+emittanceEllipse[{ain_Real,bin_Real,cin_Real, x0in_Real:0., px0in_Real:0.},P_,tol_,confidence_Real | confidence_Integer,opts___Rule]:=Block[{a=ain,b=bin,c=cin,x0=x0in,px0=px0in,xans,yans,emit,\[Beta],\[Gamma],\[Alpha]},
+{a,b,c,x0,px0}=emittanceEllipseOptimise[{ain,bin,cin, x0in, px0in},P,tol,confidence,opts];
+emittanceEllipseParameters[P,{a,b,c,x0,px0},confidence]
 ]
 
 
-emittanceEllipse[P_,tol_,confidence_Real | confidence_Integer,opts___Rule]:=Block[{a,b,c,x0=0,y0=0,xans,yans,emit,\[Beta],\[Gamma],\[Alpha]},
-{a,b,c}=emittanceEllipseOptimise[P,tol,confidence,opts];
-emittanceEllipseParameters[P,{a,b,c},confidence]
+emittanceEllipse[P_,tol_,confidence_Real | confidence_Integer,opts___Rule]:=Block[{a,b,c,x0=0,px0=0,xans,yans,emit,\[Beta],\[Gamma],\[Alpha]},
+{a,b,c,x0,px0}=emittanceEllipseOptimise[P,tol,confidence,opts];
+emittanceEllipseParameters[P,{a,b,c,x0,px0},confidence]
 ]
 
 
@@ -169,17 +170,17 @@ maxeigenvecpos=Position[eigenvalues,Max[eigenvalues]][[1,1]];
 maxeigenvec=eigenvectors[[maxeigenvecpos]];
 maxeigenval=eigenvalues[[maxeigenvecpos]];
 angle=ArcTan[maxeigenvec[[1]],maxeigenvec[[2]]];
-ellipseparams=Join[Sqrt[eigenvalues],{angle}];
+ellipseparams=Join[Sqrt[eigenvalues],{angle, 0., 0.}];
 twissparams={-#[[1,2]],#[[1,1]],#[[2,2]]}&[cov/Sqrt[Det[cov]]];
 {{Sqrt[Det[cov]],N[1-Exp[-1^2/2]]},ellipseparams,twissparams}
 ]
 
 
 Clear[emittanceEllipsePlot];
-emittanceEllipsePlot[P_,{{emit_,confidence_},{a_,b_,c_},{\[Alpha]_,\[Beta]_,\[Gamma]_}},opts___] := Block[{in,out,\[Epsilon]=emit/\[Pi]},
-in=cellipseCutParticles[P, N[Abs[a]], N[Abs[b]], N[c], 0., 0.];
+emittanceEllipsePlot[P_,{{emit_,confidence_},{a_,b_,c_,x0_,px0_},{\[Alpha]_,\[Beta]_,\[Gamma]_}},opts___] := Block[{in,out,\[Epsilon]=emit/\[Pi]},
+in=cellipseCutParticles[P, N[Abs[a]], N[Abs[b]], N[c], x0, px0];
 out=Complement[Transpose[P],in];
-addGraphics[ListPlot[{in,out}, FilterRules[{opts}, Options[ListPlot]], Joined -> {False}, PlotRange -> All,PlotLabel->ToString[N[100 Length[in]/Length[P[[1]]]]]<>"% Emittance = "<>ToString[numberRight[ 10^6 emit,5]]<>" mm-mrad"], {{Opacity[0.2], Translate[Rotate[Disk[{0, 0}, Abs@{a, b}], c], {0, 0}]
+addGraphics[ListPlot[{in,out}, FilterRules[{opts}, Options[ListPlot]], Joined -> {False}, PlotRange -> All,PlotLabel->ToString[N[100 Length[in]/Length[P[[1]]]]]<>"% Emittance = "<>ToString[numberRight[ 10^6 emit,5]]<>" mm-mrad"], {{Opacity[0.2], Translate[Rotate[Disk[{0,0}, Abs@{a, b}], c], {x0, px0}]
 (*,Red,Opacity[1],PointSize[0.02],Point[-{Sqrt[\[Epsilon] \[Beta]],-\[Alpha]Sqrt[\[Epsilon]/\[Beta]]}],Point[-{-\[Alpha]Sqrt[\[Epsilon]/\[Gamma]],Sqrt[\[Epsilon] \[Gamma]]}],Point[-{0,Sqrt[\[Epsilon]/\[Beta]]}],Point[-{Sqrt[\[Epsilon]/\[Gamma]],0}]*)}}, opts]
   ]
 

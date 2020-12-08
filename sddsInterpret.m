@@ -173,11 +173,12 @@ sddsInterpret::badpages="Pages `1` are not less than or equal to number of pages
 
 
 (* ::Input::Initialization:: *)
-sddsBinaryInterpretFunction[file_InputStream,opts___]:=Block[{verbose,$headers={},pages=0,parametertypes,parameternames,columnnames,columntypes,prefix,append,parseparametertype,assignparameterdata,parseparametername,parsecolumntype,parsecolumnname,columns,parameters,norows,strlen,columntypesbin,ans,choosepages,capitals,choosepageorig,choosepage},
+sddsBinaryInterpretFunction[file_InputStream,opts___]:=Block[{verbose,$headers={},pages=0,parametertypes,parameternames,columnnames,columntypes,prefix,append,parseparametertype,assignparameterdata,parseparametername,parsecolumntype,parsecolumnname,columns,parameters,norows,strlen,columntypesbin,ans,choosepages,capitals,choosepageorig,choosepage,group1},
 capitals=Global`MakeCapitals/.{opts}/.{Global`MakeCapitals->False};
 verbose=Global`sddsVerbose/.{opts}/.{Global`sddsVerbose->False};
 prefix=Global`sddsPrefix/.{opts}/.{Global`sddsPrefix->""};
 append = Global`sddsPostfix /. {opts} /. {Global`sddsPostfix ->""};
+group1 = Global`sddsGroup /. {opts} /. {Global`sddsGroup ->False};
 fmtbinrules={"double"->"Real64","long"->"Integer32"};
 $namereplacerules={"/"->""};
 parseparametertype[col_]:=If[Length[Select[StringSplit[col,{","," "}],StringMatchQ[#1,"*fixed_value=*"]&]]>0,assignparameterdata[StringCases[Select[StringSplit[col],StringMatchQ[#1,"type=*"]&],"type="~~type:(WordCharacter..)~~","...:>type][[1,1]],StringCases[Select[StringSplit[col,{","," "}],StringMatchQ[#1,"*fixed_value=*"]&],"fixed_value="~~type:((WordCharacter|"-"|WhitespaceCharacter|"\"")..):>type][[1,1]]];{},StringCases[Select[StringSplit[col],StringMatchQ[#1,"type=*"]&],"type="~~type:(WordCharacter..)~~","...:>type][[1,1]]];
@@ -230,7 +231,7 @@ If[Length[Dimensions[parameters]]>1,
 Evaluate[Map[Symbol,parameternames]]=Transpose[parameters[[choosepage]]];,
 Evaluate[Map[Symbol,parameternames]]=parameters];
 Clear[Evaluate[#]]&/@columnnames;
-If[Dimensions[columns][[1]]===1,
+If[Dimensions[columns][[1]]===1&&Not[group1],
 Evaluate[Map[Symbol,columnnames]]=Transpose[Map[Transpose,columns]][[All,1]];,
 Evaluate[Map[Symbol,columnnames]]=Transpose[Map[Transpose,columns[[choosepage]]]];
 ];
@@ -244,11 +245,12 @@ Print["Parameters (Re)Assigned: "<>ToString[parameternames]]
 
 (* ::Input::Initialization:: *)
 Clear[sddsInterpret];
-sddsInterpret[file_,opts___]:=Block[{filedata,choosepage,verbose,capitals,ans,prepend,append,binary=False,pages,orig,choosepageorig},
+sddsInterpret[file_,opts___]/;FileExistsQ[file]:=Block[{filedata,choosepage,verbose,capitals,ans,prepend,append,binary=False,pages,orig,choosepageorig,group1},
 prepend = Global`sddsPrefix /. {opts} /. {Global`sddsPrefix -> ""};
 append = Global`sddsPostfix /. {opts} /. {Global`sddsPostfix -> ""};
 verbose=Global`sddsVerbose/.{opts}/.{Global`sddsVerbose->False};
 capitals=Global`MakeCapitals/.{opts}/.{Global`MakeCapitals->False};
+group1 = Global`sddsGroup /. {opts} /. {Global`sddsGroup ->False};
 pages=If[(ans=FindList[ToString[file],"! page number",AnchoredSearch->True])=={},{-1},ans];
 orig=ReadList[file,{Word},WordSeparators->{"\n"}];
 parameters=getfullcolumn[file,Union[Flatten[(Position[orig,#]&/@FindList[ToString[file],"&parameter",AnchoredSearch->True]),1][[All,1]]]];
@@ -264,7 +266,7 @@ validpages=Select[choosepage,#<=Length[pages]&];
 If[validpages=!=choosepage,Message[sddsInterpret::badpages,Complement[choosepage,validpages]]];
 choosepage=validpages;
 If[choosepage=={},choosepage=Range[Length[pages]]];
-If[Length[pages]>1,
+If[Length[pages]>1&&Not[group1],
 assigndata[#[[1]],#[[2]],opts]&/@MapThread[List,{parsecolumns[columns,opts][[All,1]],Transpose[columndata[selectpage[file,{#}],columns]&/@choosepage]}],
 assigndata[#[[1]],#[[2]],opts]&/@MapThread[List,{parsecolumns[columns,opts][[All,1]],columndata[selectpage[file,choosepage],columns]}]
 ]

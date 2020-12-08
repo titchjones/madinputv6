@@ -29,14 +29,15 @@ Protect[randomVariate];
 
 
 eMatrix[{\[Epsilon]x_,\[Epsilon]y_,\[Delta]p_,ct_},n_]:=Block[{x,y},
-{x=randomVariate[NormalDistribution[0,Sqrt[\[Epsilon]x]],n],randomVariate[NormalDistribution[0,Sqrt[\[Epsilon]x]],n],y=randomVariate[NormalDistribution[0,Sqrt[\[Epsilon]y]],n],randomVariate[NormalDistribution[0,Sqrt[\[Epsilon]y]],n],randomVariate[NormalDistribution[0,ct],n],randomVariate[NormalDistribution[0,\[Delta]p],n]}
+{x=randomVariate[NormalDistribution[0,Sqrt[\[Epsilon]x]],n],randomVariate[NormalDistribution[0,Sqrt[\[Epsilon]x]],n],y=randomVariate[NormalDistribution[0,Sqrt[\[Epsilon]y]],n],randomVariate[NormalDistribution[0,Sqrt[\[Epsilon]y]],n],
+randomVariate[NormalDistribution[0,ct],n],randomVariate[NormalDistribution[0,\[Delta]p],n]}
 ]
 
 
 GaussianBeamGenerator[D_,B_,A_,C_,e_]:=D.B.A.C.e
 
 
-generateGaussianBeamDistribution[n_:1,emittances_List:{1,1,0,10^-3},twiss_List:{0,1,0,1},dispersion_:List{0,0,0,0},coupling_List:{0,0,0,0}]:=Block[{},
+generateGaussianBeamDistribution[n_:1,emittances_List:{1,1,0,10^-3},twiss_List:{0,1,0,1},dispersion_List:{0,0,0,0},coupling_List:{0,0,0,0}]:=Block[{},
 Dinitial=DispersionMatrix[dispersion];
 Binitial=BetaMatrix[twiss[[{2,4}]]];
 Ainitial=AlfaMatrix[twiss[[{1,3}]]];
@@ -50,3 +51,21 @@ End[]
 
 
 EndPackage[]
+
+
+beam=generateGaussianBeamDistribution[100,{1,1,0,10^-3},{0,1,0,1},{0,0,0,0},{0,0,0,0}];
+
+
+Dinitial
+
+
+Binitial
+
+
+Ainitial
+
+
+Cinitial
+
+
+ListPlot[beam[[All,{1,2}]]]

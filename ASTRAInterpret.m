@@ -20,7 +20,7 @@
 
 
 (* ::Input::Initialization:: *)
-BeginPackage["ASTRAInterpreter`"]
+BeginPackage["ASTRAInterpret`"]
 
 
 (* ::Input::Initialization:: *)
@@ -221,7 +221,7 @@ If[verbose,ASTRAPrintColumns[ASTRAColumnsZemit,opts]]
 
 
 (* ::Input::Initialization:: *)
-ASTRAemitInterpret[file_String,opts___Rule]:=Block[{},
+ASTRAemitInterpret[file_String,opts___Rule]/;FileExistsQ[file]:=Block[{},
 ASTRAXemitInterpret[StringReplace[file,{"Yemit"->"Xemit","Zemit"->"Xemit"}],opts];
 ASTRAYemitInterpret[StringReplace[file,{"Xemit"->"Yemit","Zemit"->"Yemit"}],opts];
 ASTRAZemitInterpret[StringReplace[file,{"Xemit"->"Zemit","Yemit"->"Zemit"}],opts];
@@ -229,10 +229,14 @@ ASTRAZemitInterpret[StringReplace[file,{"Xemit"->"Zemit","Yemit"->"Zemit"}],opts
 
 
 (* ::Input::Initialization:: *)
-ASTRAemitInterpret[{files__String},opts___Rule]:=Block[{},
-ASTRAXemitInterpret[StringReplace[{files},{"Yemit"->"Xemit","Zemit"->"Xemit"}],opts];
-ASTRAYemitInterpret[StringReplace[{files},{"Xemit"->"Yemit","Zemit"->"Yemit"}],opts];
-ASTRAZemitInterpret[StringReplace[{files},{"Xemit"->"Zemit","Yemit"->"Zemit"}],opts];
+ASTRAemitInterpret[{infiles__String},opts___Rule]:=Block[{files={}},
+If[FileExistsQ[#],AppendTo[files,#],AppendTo[files,False]]&/@{infiles};
+files=Select[Split[files,#2=!=False&][[1]],#=!=False&&FileByteCount[#]>0&];
+If[Length[files]>0,
+ASTRAXemitInterpret[StringReplace[files,{"Yemit"->"Xemit","Zemit"->"Xemit"}],opts];
+ASTRAYemitInterpret[StringReplace[files,{"Xemit"->"Yemit","Zemit"->"Yemit"}],opts];
+ASTRAZemitInterpret[StringReplace[files,{"Xemit"->"Zemit","Yemit"->"Zemit"}],opts];
+]
 ]
 
 

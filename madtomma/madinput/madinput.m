@@ -2660,7 +2660,7 @@ imonitorWrite[bpm_]:=MADFileWrite[MADString[ToString[Part[bpm,1]]<>": IMONITOR, 
 
 
 (* ::Input::Initialization:: *)
-monitorWrite[bpm_]:=MADFileWrite[MADString[ToString[Part[bpm,1]]<>": MONITOR"<>If[Part[bpm,7]=!="",", Type="<>ToString[Part[bpm,7]],""]<>If[Evaluate[Symbol@(ToString[Part[bpm,1]]<>"Extra")][[5]]=!=0,",Tilt="<>(ToString[Evaluate[Symbol@(ToString[Part[bpm,1]]<>"Extra")][[5]]]),""]<>";\n"]]
+monitorWrite[bpm_]:=MADFileWrite[MADString[ToString[Part[bpm,1]]<>": MONITOR, L="<>ToString[Part[bpm,3]]<>If[Part[bpm,7]=!="",", Type="<>ToString[Part[bpm,7]],""]<>If[Evaluate[Symbol@(ToString[Part[bpm,1]]<>"Extra")][[5]]=!=0,",Tilt="<>(ToString[Evaluate[Symbol@(ToString[Part[bpm,1]]<>"Extra")][[5]]]),""]<>";\n"]]
 
 
 (* ::Input::Initialization:: *)
@@ -3390,17 +3390,17 @@ _,anglesum]&/@Drop[Prepend[lattice,{0,0,0,"",0}],-1]),findrotations=Table[0.,{Le
 
 findrotationsv=(sum1=0;(sum1+=If[vbends===True,-Sin[#[[5]]],Cos[#[[5]]]]#1[[3]]&)/@Drop[Prepend[lattice,{0,0,0,"",0}],-1]);
 
-cc={0,0,0};RM=IdentityMatrix[3];startangle=0;
+(*cc={0,0,0};RM=IdentityMatrix[3];
 prepositions=(
-v=RotationMatrix[startangle,{0,Sin[#[[5]]],Cos[#[[5]]]}].{#[[2]]*If[bends===True,sinc[#[[3]]],1],-#[[2]]*If[bends===True,cosc[#[[3]]],0],0};
-rm=Switch[#[[1]],
-"dipole",If[bends===True,RotationMatrix[Sin[#[[5]]]#[[3]],{0,1,0}].RotationMatrix[Cos[#[[5]]]#[[3]],{0,0,1}],IdentityMatrix[3]],
-"quadrupole",If[bends===True&&errors===True,angle=GetMADErrors[Evaluate[#[[-1,1]]],"dx"]*#[[-1,3]]*#[[-1,4]];RotationMatrix[0,{1,1,1}].RotationMatrix[angle,{0,0,1}],IdentityMatrix[3]],
+v=RotationMatrix[startangle,{0,Sin[#[[5]]],Cos[#[[5]]]}].{#\[LeftDoubleBracket]2\[RightDoubleBracket]*If[bends===True,sinc[#\[LeftDoubleBracket]3\[RightDoubleBracket]],1],-#\[LeftDoubleBracket]2\[RightDoubleBracket]*If[bends===True,cosc[#\[LeftDoubleBracket]3\[RightDoubleBracket]],0],0};
+rm=Switch[#\[LeftDoubleBracket]1\[RightDoubleBracket],
+"dipole",If[bends===True,RotationMatrix[Sin[#[[5]]]#\[LeftDoubleBracket]3\[RightDoubleBracket],{0,1,0}].RotationMatrix[Cos[#[[5]]]#\[LeftDoubleBracket]3\[RightDoubleBracket],{0,0,1}],IdentityMatrix[3]],
+"quadrupole",If[bends===True&&errors===True,angle=GetMADErrors[Evaluate[#\[LeftDoubleBracket]-1,1\[RightDoubleBracket]],"dx"]*#\[LeftDoubleBracket]-1,3\[RightDoubleBracket]*#\[LeftDoubleBracket]-1,4\[RightDoubleBracket];RotationMatrix[0,{1,1,1}].RotationMatrix[angle,{0,0,1}],IdentityMatrix[3]],
 _,IdentityMatrix[3]];
 RM=RM.rm;
 cc+=RM.v)&/@lattice;
-prepositions2=Transpose[{prepositions[[All,1]],prepositions[[All,2]],prepositions[[All,3]]}];
-prepositions2=prepositions[[All,{1,3}]];
+prepositions2=Transpose[{prepositions\[LeftDoubleBracket]All,1\[RightDoubleBracket],prepositions\[LeftDoubleBracket]All,2\[RightDoubleBracket],prepositions\[LeftDoubleBracket]All,3\[RightDoubleBracket]}];
+prepositions2=prepositions\[LeftDoubleBracket]All,{1,3}\[RightDoubleBracket];*)
 (*
 cc={0,0,0};RM=IdentityMatrix[3];
 prepositions=(
@@ -3437,7 +3437,9 @@ x={({
  {0},
  {0}
 })};
-localXYZ=IdentityMatrix[3];
+localXYZ=IdentityMatrix[3];localXYZ[[1,1]]=startangle;
+{x,localXYZ}=xform[{-startangle,0,0},{x[[-1]],localXYZ}];
+x={x};
 Block[{},
 {x1,localXYZ}=xform[{If[bends,-#[[3]],0],-#[[5]],#[[2]]},{x[[-1]],localXYZ}];
 AppendTo[x,x1]]&/@lattice;

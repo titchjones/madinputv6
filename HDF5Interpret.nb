@@ -1,0 +1,334 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     12775,        326]
+NotebookOptionsPosition[     11347,        292]
+NotebookOutlinePosition[     11726,        308]
+CellTagsIndexPosition[     11683,        305]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"BeginPackage", "[", "\"\<HDF5Interpret`\>\"", "]"}], 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.570780182204387*^9, 
+  3.8061238395876737`*^9},ExpressionUUID->"3afce46e-9a60-47bd-869b-\
+7145cf039ed1"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"HDF5Interpret", "::", "usage"}], "=", 
+   "\"\<HDF5Interpret[\\\"filename\\\"] interprets an HDF5 SimFrame Formatted \
+File\>\""}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.8061238415457077`*^9, 
+  3.8061238493948164`*^9}},ExpressionUUID->"8016f097-067f-4b21-b25e-\
+c44c57b2dff1"],
+
+Cell["Print[\"SDDS 22nd January 2009 12:21\"]", "Text",
+ InitializationCell->True,
+ CellChangeTimes->{{3.473151631552535*^9, 3.4731516689902744`*^9}, 
+   3.553605211481345*^9},ExpressionUUID->"b708c0ba-ba54-4328-98e3-\
+7c259925e269"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"7a3eeba1-202b-4313-87d6-6f2fc3a32bc8"],
+
+Cell[BoxData["\<\"sddsInterpret`Private`\"\>"], "Output",
+ CellChangeTimes->{{3.4462032243253145`*^9, 3.446203245511941*^9}, 
+   3.4462033359624453`*^9, 3.4462035534422073`*^9, 3.4462035952298527`*^9, 
+   3.4462038252484803`*^9, {3.446203875510826*^9, 3.44620389181604*^9}, 
+   3.446203959592923*^9, 3.4462040050328217`*^9, 3.4462040646284027`*^9, 
+   3.4462041014196987`*^9, {3.4462042281123066`*^9, 3.446204236810418*^9}, 
+   3.4462042861569786`*^9, 3.4462043694134874`*^9, {3.447411184729615*^9, 
+   3.4474112026672297`*^9}, 3.4474114989347515`*^9, 3.472302784030156*^9, 
+   3.5704326810936947`*^9, 3.570433575480995*^9, 3.5704336419387007`*^9, 
+   3.5707801877129383`*^9, 
+   3.6784323108707666`*^9},ExpressionUUID->"eace4a03-0b70-4ba7-b9e1-\
+8b761d1a7886"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"HDF5Interpret", "[", 
+   RowBox[{"filename_", ",", "opts___Rule"}], "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "unrotate", ",", "verbose", ",", "cols", ",", "startposition", ",", 
+      "rotation", ",", "prepend", ",", "append", ",", "beamdata", ",", 
+      "paramnames"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"unrotate", "=", 
+      RowBox[{
+       RowBox[{"Global`HDF5Normalise", "/.", 
+        RowBox[{"{", "opts", "}"}]}], "/.", 
+       RowBox[{"{", 
+        RowBox[{"Global`HDF5Normalise", "\[Rule]", "True"}], "}"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"verbose", "=", 
+      RowBox[{
+       RowBox[{"Global`HDF5Verbose", "/.", 
+        RowBox[{"{", "opts", "}"}]}], "/.", 
+       RowBox[{"{", 
+        RowBox[{"Global`HDF5Verbose", "\[Rule]", "False"}], "}"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"prepend", " ", "=", " ", 
+      RowBox[{
+       RowBox[{"Global`HDF5Prefix", " ", "/.", " ", 
+        RowBox[{"{", "opts", "}"}]}], " ", "/.", " ", 
+       RowBox[{"{", 
+        RowBox[{"Global`HDF5Prefix", " ", "->", " ", "\"\<\>\""}], "}"}]}]}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"append", " ", "=", " ", 
+      RowBox[{
+       RowBox[{"Global`HDF5Postfix", " ", "/.", " ", 
+        RowBox[{"{", "opts", "}"}]}], " ", "/.", " ", 
+       RowBox[{"{", 
+        RowBox[{"Global`HDF5Postfix", " ", "->", " ", "\"\<\>\""}], "}"}]}]}],
+      ";", "\[IndentingNewLine]", 
+     RowBox[{"cols", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"prepend", "<>", 
+         RowBox[{"ToString", "[", "#", "]"}], "<>", "append"}], "&"}], "/@", 
+       RowBox[{"Import", "[", 
+        RowBox[{"filename", ",", "\"\</beam/columns\>\""}], "]"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Clear", "[", 
+        RowBox[{"Evaluate", "[", "#", "]"}], "]"}], "&"}], "/@", "cols"}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"beamdata", "=", 
+      RowBox[{"Transpose", "[", 
+       RowBox[{"Import", "[", 
+        RowBox[{"filename", ",", "\"\</beam/beam\>\""}], "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"startposition", "=", 
+      RowBox[{"Import", "[", 
+       RowBox[{"filename", ",", "\"\</Parameters/Starting_Position\>\""}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"rotation", "=", 
+      RowBox[{"Import", "[", 
+       RowBox[{"filename", ",", "\"\</Parameters/Rotation\>\""}], "]"}]}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{"unrotate", ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"beamdata", "[", 
+          RowBox[{"[", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2", ",", "3"}], "}"}], "]"}], "]"}], "=", 
+         RowBox[{"Transpose", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"#", "-", "startposition"}], "&"}], "/@", 
+             RowBox[{"Transpose", "[", 
+              RowBox[{"beamdata", "[", 
+               RowBox[{"[", 
+                RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3"}], "}"}], "]"}], "]"}], 
+              "]"}]}], ")"}], ".", 
+           RowBox[{"RotationMatrix", "[", 
+            RowBox[{"rotation", ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1", ",", "0"}], "}"}]}], "]"}]}], "]"}]}], 
+        ";", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"beamdata", "[", 
+          RowBox[{"[", 
+           RowBox[{"{", 
+            RowBox[{"4", ",", "5", ",", "6"}], "}"}], "]"}], "]"}], "=", 
+         RowBox[{"Transpose", "[", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"#", "&"}], "/@", 
+              RowBox[{"Transpose", "[", 
+               RowBox[{"beamdata", "[", 
+                RowBox[{"[", 
+                 RowBox[{"{", 
+                  RowBox[{"4", ",", "5", ",", "6"}], "}"}], "]"}], "]"}], 
+               "]"}]}], ")"}], ".", 
+            RowBox[{"RotationMatrix", "[", 
+             RowBox[{"rotation", ",", 
+              RowBox[{"{", 
+               RowBox[{"0", ",", "1", ",", "0"}], "}"}]}], "]"}]}], ")"}], 
+          "]"}]}], ";"}]}], "\[IndentingNewLine]", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"MapThread", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"Evaluate", "[", 
+           RowBox[{"Symbol", "@", "#1"}], "]"}], "=", "#2"}], ")"}], "&"}], 
+       ",", 
+       RowBox[{"{", 
+        RowBox[{"cols", ",", "beamdata"}], "}"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"params", "=", 
+      RowBox[{"Import", "[", 
+       RowBox[{"filename", ",", "\"\</Parameters\>\""}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"paramnames", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"prepend", "<>", 
+         RowBox[{"ToString", "[", "#", "]"}], "<>", "append"}], "&"}], "/@", 
+       RowBox[{"Keys", "[", "params", "]"}]}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Clear", "[", 
+        RowBox[{"Evaluate", "[", 
+         RowBox[{"StringReplace", "[", 
+          RowBox[{"#1", ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"\"\<_\>\"", "\[Rule]", "\"\<\[Sterling]\>\""}], ",", 
+             RowBox[{"\"\<-\>\"", "\[Rule]", "\"\<$\>\""}]}], "}"}]}], "]"}], 
+         "]"}], "]"}], "&"}], "/@", "paramnames"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"MapThread", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"Evaluate", "[", 
+           RowBox[{"Symbol", "@", 
+            RowBox[{"StringReplace", "[", 
+             RowBox[{"#1", ",", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"\"\<_\>\"", "\[Rule]", "\"\<\[Sterling]\>\""}], ",", 
+                RowBox[{"\"\<-\>\"", "\[Rule]", "\"\<$\>\""}]}], "}"}]}], 
+             "]"}]}], "]"}], "=", "#2"}], ")"}], "&"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"paramnames", ",", 
+         RowBox[{"Values", "[", "params", "]"}]}], "}"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{"verbose", ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"Print", "[", 
+         RowBox[{"\"\<Parameter(s) Assigned: \>\"", ",", "paramnames"}], 
+         "]"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"Print", "[", 
+         RowBox[{"\"\<Variables(s) Assigned: \>\"", ",", "cols"}], "]"}], 
+        ";"}]}], "\[IndentingNewLine]", "]"}], ";"}]}], "\[IndentingNewLine]",
+    "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.730637773625193*^9, 3.7306378249589243`*^9}, {
+   3.730638057265089*^9, 3.7306381085956845`*^9}, {3.730638806993997*^9, 
+   3.730639059607725*^9}, {3.730639105378725*^9, 3.7306391667897253`*^9}, {
+   3.730639197720725*^9, 3.7306392565497255`*^9}, {3.730639331942725*^9, 
+   3.7306394014837255`*^9}, {3.7306397825457172`*^9, 3.730639852292632*^9}, {
+   3.7306398825163345`*^9, 3.7306399448063207`*^9}, {3.755861145250273*^9, 
+   3.755861157457494*^9}, {3.8061237691257367`*^9, 3.806123772440801*^9}, {
+   3.806124305408263*^9, 3.8061243250654306`*^9}, {3.806124366460619*^9, 
+   3.806124440709941*^9}, {3.8061244865214667`*^9, 3.806124510400241*^9}, 
+   3.8061245426526146`*^9},ExpressionUUID->"56346d47-6c6f-4127-be0b-\
+2427fed9af99"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"End", "[", "]"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"5f0dfb92-ef9f-43e6-b9da-7901c2543c3a"],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"End", "::", "noctx"}], "MessageName"], ":", 
+  " ", "\<\"No previous context defined. \\!\\(\\*ButtonBox[\\\"\
+\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/End/noctx\\\", ButtonNote -> \
+\\\"End::noctx\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{
+  3.573223355175153*^9},ExpressionUUID->"d7669a9b-162c-4125-9172-\
+f7baddb27932"],
+
+Cell[BoxData["\<\"Global`\"\>"], "Output",
+ CellChangeTimes->{{3.446203224434927*^9, 3.446203245605895*^9}, 
+   3.4462033360406475`*^9, 3.44620355353605*^9, 3.446203595339288*^9, 
+   3.4462038253579164`*^9, {3.446203875620262*^9, 3.4462038919410896`*^9}, 
+   3.446203959733604*^9, 3.44620400514224*^9, 3.4462040647377143`*^9, 
+   3.4462041015290103`*^9, {3.446204228206002*^9, 3.44620423691973*^9}, 
+   3.446204286281906*^9, 3.446204369522842*^9, {3.447411184823366*^9, 
+   3.4474112027609806`*^9}, 3.4723027872488856`*^9, 3.5704335755449824`*^9, {
+   3.5704336382864313`*^9, 3.5704336420056877`*^9}, 3.570780187785945*^9, 
+   3.5732233551761527`*^9},ExpressionUUID->"91926228-6747-4c6c-abac-\
+11e379f952fa"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"EndPackage", "[", "]"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"2ad64594-2c4e-443c-9e6f-c5f74e46643f"]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{775, 872},
+WindowMargins->{{Automatic, -1295}, {-49, Automatic}},
+FrontEndVersion->"12.0 for Microsoft Windows (64-bit) (April 8, 2019)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 260, 7, 44, "Input",ExpressionUUID->"3afce46e-9a60-47bd-869b-7145cf039ed1",
+ InitializationCell->True],
+Cell[821, 29, 352, 9, 64, "Input",ExpressionUUID->"8016f097-067f-4b21-b25e-c44c57b2dff1",
+ InitializationCell->True],
+Cell[1176, 40, 233, 4, 34, "Text",ExpressionUUID->"b708c0ba-ba54-4328-98e3-7c259925e269",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1434, 48, 159, 3, 44, "Input",ExpressionUUID->"7a3eeba1-202b-4313-87d6-6f2fc3a32bc8",
+ InitializationCell->True],
+Cell[1596, 53, 761, 11, 32, "Output",ExpressionUUID->"eace4a03-0b70-4ba7-b9e1-8b761d1a7886"]
+}, Open  ]],
+Cell[2372, 67, 7492, 186, 615, "Input",ExpressionUUID->"56346d47-6c6f-4127-be0b-2427fed9af99",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[9889, 257, 136, 3, 44, "Input",ExpressionUUID->"5f0dfb92-ef9f-43e6-b9da-7901c2543c3a",
+ InitializationCell->True],
+Cell[10028, 262, 446, 10, 21, "Message",ExpressionUUID->"d7669a9b-162c-4125-9172-f7baddb27932"],
+Cell[10477, 274, 708, 10, 32, "Output",ExpressionUUID->"91926228-6747-4c6c-abac-11e379f952fa"]
+}, Open  ]],
+Cell[11200, 287, 143, 3, 44, "Input",ExpressionUUID->"2ad64594-2c4e-443c-9e6f-c5f74e46643f",
+ InitializationCell->True]
+}
+]
+*)
+

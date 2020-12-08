@@ -121,7 +121,7 @@ ToExpression["{{NAME="<> StringReplace[StringReplace[list,replacerules2],replace
 Global`NAME=StringReplace[ToString[Global`NAME],{"."->"$"}];
 AppendTo[ElementList,{ToString[Global`NAME],list2}];
 ToExpression["MADErrors["<>ToString[Global`NAME]<>"]={}"];
-quad[Evaluate[Global`NAME],Evaluate[Global`L],Evaluate[Global`K1],Evaluate[Global`TYPE],Global`XAp->Global`APER,Global`YAp->Global`APER,Global`Tilt->Evaluate[If[!NumberQ[Global`TILT],"TILT",Global`TILT]]]]
+quad[Evaluate[Global`NAME],Evaluate[Global`L],Evaluate[FullForm[Global`K1]],Evaluate[Global`TYPE],Global`XAp->Global`APER,Global`YAp->Global`APER,Global`Tilt->Evaluate[If[!NumberQ[Global`TILT],"TILT",Global`TILT]]]]
 
 
 (* ::Input::Initialization:: *)
@@ -332,6 +332,17 @@ rfc[Evaluate[Global`NAME],Global`L,Global`TYPE,Global`MADVolt->Global`VOLT,Globa
 
 
 (* ::Input::Initialization:: *)
+lcavRead[list2_,elementname___:""]:=Block[{Global`NAME,Global`TYPE="",Global`L=0,list,Global`DELTAE=0,Global`FREQ=0,Global`PHI0=0},
+If[elementname=="",clearFunc[list2],clearFunc[elementname]];
+list=ReplaceExponent[ToString[list2]];
+ToExpression["{{NAME="<>StringReplace[StringReplace[list,replacerules2],replacerules2]<>"}}"];
+Global`NAME=StringReplace[ToString[Global`NAME],{"."->"$"}];
+AppendTo[ElementList,{ToString[Global`NAME],list2}];
+(*Print[{Evaluate[Global`NAME],Global`L,Global`TYPE,Global`MADVolt\[Rule]Global`VOLT,Global`Lag\[Rule]Global`LAG,Global`Harmon\[Rule]Global`HARMON}];*)
+lcav[Evaluate[Global`NAME],Global`L,Global`TYPE,Global`VoltageGain->Global`DELTAE,Global`CavityPhase->Global`PHI0,Global`Frequency->Global`FREQ]]
+
+
+(* ::Input::Initialization:: *)
 constRead[list2_]:=Block[{list},
 clearFunc[list2];
 list=ReplaceExponent[ToString[list2]];
@@ -407,7 +418,7 @@ Switch[(Symbol@Evaluate[element[[1]]])[[1,2]],
 
 
 (* ::Input::Initialization:: *)
-typesListMAD={{"*:QUA*",quadRead},{"*:SBEN*",sbendRead},{"*:RBEN*",rbendRead},{"*:SEX*",sextRead},{"*:OCT*",octRead},{"*:DRI*",driftRead},{"*:BPM*",NullRead},{"*:KIC*",kickRead},{"*:HKI*",hkickRead},{"*:VKI*",vkickRead},{"*:MPO*",multipoleRead},{"*:MUL*",multipoleRead},{"*:MAR*",markerRead},{"*:RCO*",rcollRead},{"*:ECO*",ecollRead},{"*:WIR*",wireRead},{"*:WS*",wireRead},{"*:INS*",instrumentRead},{"*:MON*",monitorRead},{"*:IMON*",imonitorRead},{"*:PRO*",profileRead},{"*:*RFC*",rfcRead},{"*:=*",constRead},{"*:CONST*",constRead},{"*:SOL*",solRead},{"*:MAT*",matrixRead}}
+typesListMAD={{"*:QUA*",quadRead},{"*:SBEN*",sbendRead},{"*:RBEN*",rbendRead},{"*:SEX*",sextRead},{"*:OCT*",octRead},{"*:DRI*",driftRead},{"*:BPM*",NullRead},{"*:KIC*",kickRead},{"*:HKI*",hkickRead},{"*:VKI*",vkickRead},{"*:MPO*",multipoleRead},{"*:MUL*",multipoleRead},{"*:MAR*",markerRead},{"*:RCO*",rcollRead},{"*:ECO*",ecollRead},{"*:WIR*",wireRead},{"*:WS*",wireRead},{"*:INS*",instrumentRead},{"*:MON*",monitorRead},{"*:IMON*",imonitorRead},{"*:PRO*",profileRead},{"*:*RFC*",rfcRead},{"*:*LCAV*",lcavRead},{"*:=*",constRead},{"*:CONST*",constRead},{"*:SOL*",solRead},{"*:MAT*",matrixRead}}
 
 
 (* ::Input::Initialization:: *)

@@ -90,10 +90,12 @@ $replacementrules={"@"->"\[Sterling]","|"->"$"};
 
 
 (* ::Input::Initialization:: *)
-gdfBinaryInterpret[filein_, opts___] := Block[{verbose, ans, append, tmpans, tmpdata, tmparray,prepend},
+gdfBinaryInterpret[filein_, opts___] := Block[{verbose, ans, append, tmpans, tmpdata, tmparray,prepend,dotime,doposition,temporaryarrays=Association[],temporaryvalues=Association[]},
 verbose = Global`gdfVerbose /. {opts} /. {Global`gdfVerbose -> False};
 prepend = Global`gdfPrefix /. {opts} /. {Global`gdfPrefix -> ""};
 append = Global`gdfPostfix /. {opts} /. {Global`gdfPostfix -> ""};
+dotime=Global`gdfTime/. {opts} /. {Global`gdfTime ->True};
+doposition=Global`gdfPosition/. {opts} /. {Global`gdfPosition ->True};
 file = OpenRead[filein, BinaryFormat -> True];
                       
 ID = BinaryRead[file, "UnsignedInteger32"];
@@ -119,10 +121,12 @@ lastarr = False;
 $name = Table[BinaryRead[file, "UnsignedInteger8"], {16}];
 $time = AbsoluteTime[];
 While[Not[MemberQ[$name, EndOfFile]],
+positiondata=timedata=False;
 $name = FromCharacterCode[Take[$name, Position[$name, 0][[1, 1]] - 1]];
 $name = StringReplace[$name, $replacementrules];
-If[$name==="time",append="t",
-If[$name==="position",append="p"]];
+(*Print[$name];*)
+If[$name==="time",append="t";timedata=True,
+If[$name==="position",append="p";positiondata=True]];
 $name = StringJoin[prepend,$name, append];
 $type = BinaryRead[file, "UnsignedInteger32"];
 $size = BinaryRead[file, "UnsignedInteger32"];
@@ -133,7 +137,8 @@ issVal = BitAnd[$type, t$sval] > 0;
 isArray = BitAnd[$type, t$arr] > 0;
  datType = BitAnd[$type, 255];
 
-If[issVal,Switch[datType,
+If[issVal,
+Switch[datType,
 t$dbl, tmpans = BinaryRead[file, "Real64"];,
 t$null, tmpans = Null;,
 t$ascii, tmpdata = BinaryReadList[file, "UnsignedInteger8", $size];tmpans = FromCharacterCode[Take[tmpdata, Position[tmpdata, 0][[1, 1]] - 1]],
@@ -144,29 +149,29 @@ tmpans = FromCharacterCode[Take[tmpdata, Position[tmpdata, 0][[1, 1]] - 1]]
 ]];
 
 If[MemberQ[parameternames, $name],
-tmparr = Evaluate[Symbol@$name];
-Clear[Evaluate[$name]];
-Evaluate[(Symbol@$name)] = {Sequence @@ tmparr, tmpans};,
+AppendTo[temporaryvalues[$name],tmpans];
+,
 AppendTo[parameternames, $name];
-Clear[Evaluate[$name]];
-Evaluate[(Symbol@$name)] = {tmpans};
+AppendTo[temporaryvalues,$name->{tmpans}];
 ]
 ];
 
-If[isArray,
+If[isArray&&$size>0,
 tmpans = BinaryReadList[file, "Real64", $size/8];
 If[MemberQ[columnnames, $name],
-tmparr = Evaluate[Symbol@$name];
-Clear[Evaluate[$name]];
-Evaluate[(Symbol@$name)] = {Sequence @@ tmparr, tmpans};,
+AppendTo[temporaryarrays[$name],tmpans];
+,
 AppendTo[columnnames, $name];
-Clear[Evaluate[$name]];
-Evaluate[(Symbol@$name)] = {tmpans};
+AppendTo[temporaryarrays,$name->{tmpans}];
 ];
 ];
 lastarr = isArray;
 $name = Table[BinaryRead[file, "UnsignedInteger8"], {16}]
 ];
+(Clear[Evaluate[#]];
+Evaluate[(Symbol@#)]=temporaryvalues[#])&/@Keys[temporaryvalues];
+(Clear[Evaluate[#]];
+Evaluate[(Symbol@#)]=temporaryarrays[#])&/@Keys[temporaryarrays];
 If[verbose,
 Print["Variables (Re)Assigned: " <> ToString[Union[columnnames]]];
 Print["Parameters (Re)Assigned: " <> ToString[Union[parameternames]]]
@@ -206,6 +211,7 @@ Table[BinaryRead[file, "UnsignedInteger8"], {2}];
 level = 1;
 lastarr = False;
 $name = Table[BinaryRead[file, "UnsignedInteger8"], {16}];
+(*Print[$name];*)
 $time = AbsoluteTime[];
 While[Not[MemberQ[$name, EndOfFile]], $name = FromCharacterCode[Take[$name, Position[$name, 0][[1, 1]] - 1]];     $name = StringReplace[$name, $replacementrules];
 If[$name==="time",append="t",

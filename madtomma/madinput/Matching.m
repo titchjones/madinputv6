@@ -19,81 +19,107 @@
 
 
 
+(* ::Input::Initialization:: *)
 BeginPackage["Madtomma`MADInput`Matching`",{"Optimise`SimplexOptimise`","Optimise`EPOptimisev3`"}];
 
 
+(* ::Input::Initialization:: *)
 Coupled::usage="Coupled[parameter,pos,weight]\nCouples the points at pos using parameter."
 
 
+(* ::Input::Initialization:: *)
 EqualTo::usage="Equals[parameter1,parameter2,weight]\nWeights the difference in parameter1 and parameter2."
 
 
+(* ::Input::Initialization:: *)
 LessThan::usage="LessThan[parameter,upperlimit,weight]\nWeights according to whether parameter is greater than upperlimit."
 
 
+(* ::Input::Initialization:: *)
 SmallerThan::usage="SmallerThan[parameter,upperlimit,weightbad,weightgood]\nWeights according to whether parameter is greater than upperlimit. If less, returns a negative value weighted with weightgood."
 
 
+(* ::Input::Initialization:: *)
 GreaterThan::usage="GreaterThan[parameter,lowerlimit,weight]\nWeights according to whether parameter is less than lowerlimit."
 
 
+(* ::Input::Initialization:: *)
 BiggerThan::usage="BiggerThan[parameter,lowerlimit,weightbad,weightgood]\nWeights according to whether parameter is less than lowerlimit. If greater, returns a negative value weighted with weightgood."
 
 
+(* ::Input::Initialization:: *)
 Between::usage="Between[parameter,lowerlimit,upperlimit,weight]\nWeights according to whether parameter is between lowerlimt and upperlimit."
 
 
+(* ::Input::Initialization:: *)
 EqualToClosest::usage="EqualsClosest[parameter,equalsList,weight]\nWeights according to how close parameter is to the nearest value of equalsList."
 
 
+(* ::Input::Initialization:: *)
 Constraints::usage="Constraints[constraintsList]\nReturns a root sum square of the constraints listed in constraintsList.\nConstraints should be in the form {<constraintType>,parameter1,...}."
 
 
+(* ::Input::Initialization:: *)
 ConstraintsIndividual::usage="Constraints[constraintsList]\nReturns a list of the constraint values listed in constraintsList.\nConstraints should be in the form {<constraintType>,parameter1,...}."
 
 
+(* ::Input::Initialization:: *)
 Begin["`Private`"]
 
 
+(* ::Input::Initialization:: *)
 Coupled[parameters_,pos_Integer,weight_]:=If[(ans=Chop[Total[Abs[#[[1]]-Rest[#]]]&[Map[#[[pos]]&,parameters]],10^-4])===0,0,Abs[weight ans]^2]
 
 
+(* ::Input::Initialization:: *)
 Coupled[parameter_,pos_List,weight_]:=If[(ans=Chop[Total[Abs[#[[1]]-Rest[#]]]&[parameter[[pos]]],10^-4])===0,0,Abs[weight ans]^2]
 
 
+(* ::Input::Initialization:: *)
 If[$VersionNumber<10.3,EqualTo[parameter1_,parameter2_,weight_]:=If[(ans=Chop[parameter1-parameter2])===0,0,Abs[weight ans]^2]]
 
 
+(* ::Input::Initialization:: *)
 If[$VersionNumber<10.3,EqualTo[parameter1_List,parameter2_List,weight_]:=If[(ans=Total[Abs[Chop[parameter1-parameter2]]])===0,0,Abs[weight ans]^2]]
 
 
+(* ::Input::Initialization:: *)
 If[$VersionNumber<10.3,LessThan[parameter1_,parameter2_,weight_]:=If[parameter1<parameter2,0,(weight Abs[(parameter1-parameter2)])^2]]
 
 
+(* ::Input::Initialization:: *)
 If[$VersionNumber<10.3,LessThan[parameter1_List,parameter2_,weight_]:=If[And@@(#<=parameter2&/@parameter1),0,(weight Total[If[#<parameter2,0,Abs[#-parameter2]]&/@parameter1])^2]]
 
 
+(* ::Input::Initialization:: *)
 If[$VersionNumber<10.3,SmallerThan[parameter_,limit_,weightbad_,weightgood_:1]:=If[parameter<limit,-(weightgood  (limit-parameter))^2,(weightbad  (parameter-limit))^2]]
 
 
+(* ::Input::Initialization:: *)
 If[$VersionNumber<10.3,SmallerThan[parameter_List,limit_,weightbad_,weightgood_:1]:=-Total[If[#<limit,(weightgood  (limit-#)),(weightbad  (#-limit))]&/@parameter]^2]
 
 
+(* ::Input::Initialization:: *)
 If[$VersionNumber<10.3,GreaterThan[parameter1_,parameter2_,weight_]:=If[parameter1>parameter2,0,Abs[weight(parameter2-parameter1)]^2]]
 
 
+(* ::Input::Initialization:: *)
 If[$VersionNumber<10.3,GreaterThan[parameter1_List,parameter2_,weight_]:=If[And@@(#>=parameter2&/@parameter1),0,(weight Total[If[#>parameter2,0,Abs[parameter2-#]]&/@parameter1])^2]]
 
 
+(* ::Input::Initialization:: *)
 If[$VersionNumber<10.3,BiggerThan[parameter_,limit_,weightbad_,weightgood_:1]:=If[parameter>limit,-(weightgood  (parameter-limit))^2,(weightbad  (limit-parameter))^2]]
 
 
+(* ::Input::Initialization:: *)
 If[$VersionNumber<10.3,Between[parameter_,lowerlimit_,upperlimit_,weight_]:=(If[parameter>upperlimit,parameter-upperlimit,If[parameter<lowerlimit,lowerlimit-parameter,0]]weight)^2]
 
 
+(* ::Input::Initialization:: *)
 If[$VersionNumber<10.3,EqualToClosest[parameter_,equals_List,weight_]:=Min[If[(ans=Chop[parameter-#])===0,0,(weight ans)^2]&/@equals]]
 
 
+(* ::Input::Initialization:: *)
 If[$VersionNumber>=10.3,
 analyseConstraints[constraintsList_List]:=Switch[#[[1]],
 LessThan,
@@ -105,7 +131,7 @@ If[LessThan[#[[2]]][#[[3]]],(#[[4]]Abs[#[[2]]-#[[3]]])^2,0]
 SmallerThan,
 If[ListQ[#[[2]]],
 Block[{input=#},
-Total[If[LessThan[#][input[[3]]],(input[[4]]Abs[(#-input[[3]])])^2,(input[[5]]Abs[(input[[3]]-#)])]&/@input[[2]]]^2],
+Total[If[LessThan[#][input[[3]]],(input[[4]]Abs[(#-input[[3]])])^2,-(input[[5]]Abs[(input[[3]]-#)])^2]&/@input[[2]]]],
 If[LessThan[#[[2]]][#[[3]]],(#[[4]]Abs[#[[2]]-#[[3]]])^2,-(#[[5]]Abs[#[[3]]-#[[2]]])^2]
 ],
 GreaterThan,
@@ -117,7 +143,7 @@ If[GreaterThan[#[[2]]][#[[3]]],(#[[4]]Abs[#[[2]]-#[[3]]])^2,0]
 BiggerThan,
 If[ListQ[#[[2]]],
 Block[{input=#},
-Total[If[GreaterThan[#][input[[3]]],(input[[4]]Abs[(#-input[[3]])])^2,(input[[5]]Abs[(input[[3]]-#)])]&/@input[[2]]]^2],
+Total[If[GreaterThan[#][input[[3]]],(input[[4]]Abs[(#-input[[3]])])^2,-(input[[5]]Abs[(input[[3]]-#)])^2]&/@input[[2]]]],
 If[GreaterThan[#[[2]]][#[[3]]],(#[[4]]Abs[#[[2]]-#[[3]]])^2,-(#[[5]]Abs[#[[3]]-#[[2]]])^2]
 ],
 EqualTo,
@@ -135,21 +161,25 @@ If[!Between[#[[2]],{#[[3]],#[[4]]}],If[GreaterThan[#[[4]]][#[[2]]],#[[2]]-#[[4]]
 ]&/@constraintsList]
 
 
+(* ::Input::Initialization:: *)
 If[$VersionNumber<10.3,
 Constraints[constraints_List]:=If[#>0,Sqrt[#],-Sqrt[Abs[#]]]&[Plus@@(First[#][Sequence@@Rest[#]]&/@constraints)],
 Constraints[constraints_List]:=If[#>0,Sqrt[#],-Sqrt[Abs[#]]]&[Plus@@analyseConstraints[constraints]]
 ]
 
 
+(* ::Input::Initialization:: *)
 If[$VersionNumber<10.3,
 ConstraintsIndividual[constraints_List]:=(If[#>0,Sqrt[#],-Sqrt[Abs[#]]]&[#[[1]][Sequence@@Rest[#]]]&/@constraints),
 ConstraintsIndividual[constraints_List]:=N[(If[#>0,Sqrt[#],-Sqrt[Abs[#]]]&/@analyseConstraints[constraints])]
 ]
 
 
+(* ::Input::Initialization:: *)
 End[]
 
 
+(* ::Input::Initialization:: *)
 EndPackage[]
 
 
